@@ -23,13 +23,25 @@ class PublishingSchedulingAgent {
 
   async setupYouTubeAPI() {
     try {
+      if (typeof this.credentials?.reloadTokens === 'function') {
+        await this.credentials.reloadTokens();
+      }
       const auth = this.credentials.getYouTubeAuth();
       this.youtube = google.youtube({ version: 'v3', auth });
       this.logger.info('YouTube API initialized');
+      return true;
     } catch (error) {
-      this.logger.error('Failed to initialize YouTube API:', error);
-      throw error;
+      this.youtube = null;
+      this.logger.warn(`YouTube API not yet authenticated (${error.message}). Offline queueing active: videos will be created, stored locally and backed up to Google Drive, then uploaded when authorized.`);
+      return false;
     }
+  }
+
+  async checkAndPublishDueVideos() {
+    if (!this.youtube) {
+      await this.setupYouTubeAPI();
+    }
+    return this.processPublishQueue();
   }
 
   async loadPublishQueue() {
@@ -68,7 +80,7 @@ class PublishingSchedulingAgent {
       const scheduleEntry = {
         productionId: productionData.id,
         title: productionData.script.title,
-        publishTime: productionData.scheduledPublishTime,
+        publishTime: productionData.scheduledPublishTime || new Date().toISOString(),
         status: 'scheduled',
         priority: productionData.priority,
         metadata: {
@@ -197,6 +209,12 @@ class PublishingSchedulingAgent {
   }
 
   async uploadToYouTube(scheduleEntry) {
+    if (!this.youtube) {
+      await this.setupYouTubeAPI();
+    }
+    if (!this.youtube) {
+      throw new Error('YouTube API not authenticated. Please authorize YouTube or wait for tokens.');
+    }
     const { metadata } = scheduleEntry;
     const validation = assertValidYouTubeMetadata(metadata.seo);
     if (validation.warnings.length) {
@@ -204,6 +222,9 @@ class PublishingSchedulingAgent {
     }
     const safeMetadata = validation.value;
     
+    const privacy = metadata.privacyStatus || process.env.DEFAULT_PRIVACY_STATUS || 'private';
+    const isFutureSchedule = scheduleEntry.publishTime && new Date(scheduleEntry.publishTime) > new Date(Date.now() + 5 * 60 * 1000);
+
     // Prepare video metadata
     const videoMetadata = {
       snippet: {
@@ -215,12 +236,15 @@ class PublishingSchedulingAgent {
         defaultAudioLanguage: safeMetadata.defaultAudioLanguage
       },
       status: {
-        privacyStatus: metadata.privacyStatus || process.env.DEFAULT_PRIVACY_STATUS || 'private',
-        publishAt: scheduleEntry.publishTime,
+        privacyStatus: privacy,
         selfDeclaredMadeForKids: false,
         containsSyntheticMedia: metadata.containsSyntheticMedia === true
       }
     };
+
+    if (privacy === 'private' && isFutureSchedule) {
+      videoMetadata.status.publishAt = new Date(scheduleEntry.publishTime).toISOString();
+    }
     
     // Resolve the file before marking the network upload as attempted.
     const videoStream = await this.getVideoStream(metadata.video.path);
@@ -232,6 +256,10 @@ class PublishingSchedulingAgent {
         body: videoStream
       }
     });
+
+    if (videoStream && typeof videoStream.destroy === 'function') {
+      videoStream.destroy();
+    }
     
     const videoId = videoUpload.data.id;
     this.logger.info(`Video uploaded with ID: ${videoId}`);
@@ -250,8 +278,97 @@ class PublishingSchedulingAgent {
     if (metadata.captions && metadata.captions.path) {
       await this.uploadCaptions(videoId, metadata.captions.path);
     }
-    
+
+    // Automatically categorize in technology playlist (Python, Java, TypeScript, etc.)
+    await this.categorizeInPlaylist(videoId, safeMetadata.title, safeMetadata.tags);
+
+    // Auto-delete local media assets post-upload to preserve disk space
+    await this.cleanupLocalMediaAssets(scheduleEntry);
+
     return videoUpload.data;
+  }
+
+  async cleanupLocalMediaAssets(scheduleEntry) {
+    this.logger.info(`Cleaning up local media assets for production: ${scheduleEntry.productionId || scheduleEntry.title || scheduleEntry.id}`);
+    const meta = scheduleEntry.metadata || {};
+    const videoPath = meta.video?.path;
+    const filesToDelete = [
+      videoPath,
+      meta.audio?.path,
+      meta.captions?.path,
+      videoPath ? `${videoPath}.assembly.json` : null,
+      videoPath ? videoPath.replace(/\.mp4$/, '_visual.mp4') : null
+    ].filter(Boolean);
+
+    for (const filePath of filesToDelete) {
+      try {
+        if (filePath && fsSync.existsSync(filePath)) {
+          await fs.unlink(filePath);
+          this.logger.info(`Deleted local asset post-upload: ${filePath}`);
+        }
+      } catch (err) {
+        this.logger.warn(`Could not delete local asset ${filePath}: ${err.message}`);
+      }
+    }
+  }
+
+  async categorizeInPlaylist(videoId, title = '', tags = []) {
+    if (!this.youtube || !this.youtube.playlists || !videoId) return;
+    try {
+      const text = `${title} ${Array.isArray(tags) ? tags.join(' ') : ''}`.toLowerCase();
+      let targetPlaylistTitle = 'Full Stack Software Engineering';
+
+      if (text.includes('python')) {
+        targetPlaylistTitle = 'Python Programming Masterclasses & Tutorials';
+      } else if (text.includes('java') && !text.includes('javascript')) {
+        targetPlaylistTitle = 'Java Enterprise & Core Programming';
+      } else if (text.includes('typescript') || text.includes('javascript') || text.includes(' ts ') || text.includes(' js ')) {
+        targetPlaylistTitle = 'TypeScript & Modern JavaScript';
+      } else if (text.includes('ai') || text.includes('machine learning') || text.includes('deep learning') || text.includes('neural') || text.includes('transformer')) {
+        targetPlaylistTitle = 'Artificial Intelligence & Machine Learning';
+      }
+
+      this.logger.info(`Categorizing video ${videoId} into playlist: "${targetPlaylistTitle}"`);
+
+      const playlistsRes = await this.youtube.playlists.list({
+        part: 'snippet',
+        mine: true,
+        maxResults: 50
+      });
+
+      let playlist = playlistsRes.data.items?.find(p => p.snippet.title.toLowerCase() === targetPlaylistTitle.toLowerCase());
+
+      if (!playlist) {
+        this.logger.info(`Creating new playlist on YouTube: "${targetPlaylistTitle}"`);
+        const createRes = await this.youtube.playlists.insert({
+          part: 'snippet,status',
+          requestBody: {
+            snippet: {
+              title: targetPlaylistTitle,
+              description: `Official comprehensive tutorials and code masterclasses for ${targetPlaylistTitle}.`
+            },
+            status: { privacyStatus: 'public' }
+          }
+        });
+        playlist = createRes.data;
+      }
+
+      await this.youtube.playlistItems.insert({
+        part: 'snippet',
+        requestBody: {
+          snippet: {
+            playlistId: playlist.id,
+            resourceId: {
+              kind: 'youtube#video',
+              videoId: videoId
+            }
+          }
+        }
+      });
+      this.logger.info(`Successfully added video ${videoId} to playlist "${targetPlaylistTitle}"`);
+    } catch (err) {
+      this.logger.warn(`Could not add video to playlist: ${err.message}`);
+    }
   }
 
   async isNarrationReady(audio = {}) {

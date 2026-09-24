@@ -191,7 +191,7 @@ async function run() {
       logger.info('Uploading directly to YouTube...');
       const scheduleEntry = {
         productionId: productionData.id,
-        publishTime: new Date().toISOString(),
+        publishTime: null,
         metadata: {
           seo,
           thumbnail: { path: thumbnailPath },
