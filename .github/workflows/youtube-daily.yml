@@ -1,0 +1,71 @@
+name: Daily YouTube Video Automation
+
+on:
+  # Schedule: Runs 10 times a day (every 2 hours: 06:00, 08:00, 10:00, 12:00, 14:00, 16:00, 18:00, 20:00, 22:00, 00:00 UTC)
+  schedule:
+    - cron: '0 6,8,10,12,14,16,18,20,22,0 * * *'
+
+  # Manual Trigger: Allows 1-click execution from GitHub website or mobile app
+  workflow_dispatch:
+    inputs:
+      video_count:
+        description: 'Number of videos to generate in this run'
+        required: true
+        default: '1'
+      topic:
+        description: 'Specific topic (optional, leave empty for AI auto-strategy)'
+        required: false
+        default: ''
+
+concurrency:
+  group: youtube-automation
+  cancel-in-progress: false
+
+jobs:
+  produce-and-publish:
+    name: Create, Upload to YouTube & Purge
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Verify FFmpeg Installation
+        run: |
+          ffmpeg -version
+
+      - name: Install Project Dependencies
+        run: npm ci
+
+      - name: Run Video Pipeline (Create ➔ Upload ➔ Delete)
+        env:
+          # AI Service Keys
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          
+          # YouTube Data API Credentials
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          DEFAULT_PRIVACY_STATUS: ${{ secrets.DEFAULT_PRIVACY_STATUS || 'public' }}
+          
+          # Video Engine Settings
+          VIDEO_PROVIDER: "slideshow"
+          VIDEO_RESOLUTION: "720p"
+          NODE_ENV: "production"
+        run: |
+          COUNT="${{ inputs.video_count || '1' }}"
+          TOPIC="${{ inputs.topic || '' }}"
+          
+          if [ -n "$TOPIC" ]; then
+            node scripts/run-pipeline.js --count="$COUNT" --topic="$TOPIC"
+          else
+            node scripts/run-pipeline.js --count="$COUNT"
+          fi

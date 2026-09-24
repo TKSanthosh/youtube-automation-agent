@@ -33,6 +33,23 @@ class CredentialManager {
     } catch (error) {
       this.credentials = {};
     }
+
+    const clientId = process.env.YOUTUBE_CLIENT_ID || process.env.GOOGLE_CLIENT_ID;
+    const clientSecret = process.env.YOUTUBE_CLIENT_SECRET || process.env.GOOGLE_CLIENT_SECRET;
+    if (clientId && clientSecret) {
+      this.credentials.youtube = this.credentials.youtube || {};
+      this.credentials.youtube.client_id = clientId;
+      this.credentials.youtube.client_secret = clientSecret;
+      this.credentials.youtube.redirect_uris = this.credentials.youtube.redirect_uris || [
+        'urn:ietf:wg:oauth:2.0:oob',
+        'http://localhost:3001/youtube/callback'
+      ];
+    }
+
+    if (process.env.GEMINI_API_KEY) {
+      this.credentials.gemini = this.credentials.gemini || {};
+      this.credentials.gemini.apiKey = process.env.GEMINI_API_KEY;
+    }
   }
 
   async loadTokens() {
@@ -41,6 +58,12 @@ class CredentialManager {
       this.tokens = JSON.parse(data);
     } catch (error) {
       this.tokens = {};
+    }
+
+    if (process.env.YOUTUBE_REFRESH_TOKEN) {
+      this.tokens.youtube = this.tokens.youtube || {};
+      this.tokens.youtube.refresh_token = process.env.YOUTUBE_REFRESH_TOKEN;
+      this.tokens.youtube.scope = this.tokens.youtube.scope || 'https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube';
     }
   }
 
@@ -536,7 +559,16 @@ class CredentialManager {
     return missing;
   }
 
-  async validateAll() {
+  async reloadTokens() {
+    try {
+      await this.loadTokens();
+      return Boolean(this.tokens?.youtube);
+    } catch (_err) {
+      return false;
+    }
+  }
+
+  async validateAll(options = {}) {
     try {
       await this.loadCredentials();
       await this.loadTokens();
@@ -554,6 +586,10 @@ class CredentialManager {
 
     // Validate YouTube tokens
     if (!this.tokens.youtube) {
+      if (options.allowMissingTokens) {
+        console.log(chalk.yellow('\n⚠️  YouTube authentication token pending. Continuing in autonomous background mode — videos will be created, cached, synced to Google Drive, and uploaded when authorized.'));
+        return true;
+      }
       console.log(chalk.yellow('\n⚠️  YouTube authentication required'));
       return false;
     }

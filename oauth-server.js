@@ -85,7 +85,21 @@ class OAuthServer {
     };
     
     fs.writeFileSync(tokensPath, JSON.stringify(tokenData, null, 2));
-    console.log(chalk.green('✅ Tokens saved successfully!'));
+    console.log(chalk.green('✅ Tokens saved in config/tokens.json!'));
+
+    if (tokens.refresh_token) {
+      const envPath = path.join(__dirname, '.env');
+      let envContent = fs.existsSync(envPath) ? fs.readFileSync(envPath, 'utf8') : '';
+      if (envContent.includes('YOUTUBE_REFRESH_TOKEN=')) {
+        envContent = envContent.replace(/YOUTUBE_REFRESH_TOKEN=.*/g, `YOUTUBE_REFRESH_TOKEN=${tokens.refresh_token}`);
+      } else {
+        envContent += `\nYOUTUBE_REFRESH_TOKEN=${tokens.refresh_token}\n`;
+      }
+      fs.writeFileSync(envPath, envContent);
+      console.log(chalk.green('✅ Saved YOUTUBE_REFRESH_TOKEN in .env!'));
+      console.log(chalk.cyan.bold('\n🔑 Your YOUTUBE_REFRESH_TOKEN for GitHub Secrets:'));
+      console.log(chalk.yellow.bold(tokens.refresh_token) + '\n');
+    }
   }
 
   async startMainApplication() {

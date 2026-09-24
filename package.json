@@ -7,6 +7,7 @@
     "start": "node index.js",
     "setup": "node setup.js",
     "walkthrough": "node walkthrough.js",
+    "pipeline": "node scripts/run-pipeline.js",
     "growth:snapshot": "node scripts/growth/snapshot-github.js",
     "scheduler": "node schedules/daily-automation.js",
     "test": "node test.js",
