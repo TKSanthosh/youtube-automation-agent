@@ -190,7 +190,6 @@ class AIVideoGenerator {
     }
 
     return await this.generateFallbackToneAudio(outputPath);
-    }
   }
 
   async generateElevenLabsTTS(text, outputPath) {
