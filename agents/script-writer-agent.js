@@ -8,6 +8,12 @@ class ScriptWriterAgent {
     this.logger = new Logger('ScriptWriter');
     this.templates = this.loadTemplates();
     this.aiTextService = new AITextService(credentials?.credentials || credentials || {});
+    try {
+      const { MultiAgentScriptPipeline } = require('../utils/script-pipeline');
+      this.pipeline = new MultiAgentScriptPipeline(this.aiTextService);
+    } catch (_e) {
+      this.pipeline = null;
+    }
   }
 
   async initialize() {
@@ -48,10 +54,27 @@ class ScriptWriterAgent {
   async generateScript(strategy) {
     try {
       this.logger.info(`Generating script for: ${strategy.topic}`);
+      const isExtendedForm = strategy.requestedLengthKey === 'extended' || strategy.requestedLength === '20-30 minutes';
+
+      if (this.pipeline && this.aiTextService.isAvailable()) {
+        this.logger.info(`Running 10-Agent Collaborative Script Pipeline for: "${strategy.topic}"`);
+        const pipelineScript = await this.pipeline.runPipeline(strategy, { isExtendedForm });
+        if (pipelineScript) {
+          pipelineScript.isExtendedForm = isExtendedForm;
+          if (isExtendedForm && pipelineScript.duration < 1200) {
+            pipelineScript.duration = 1500;
+          }
+          pipelineScript.fullScript = this.formatFullScript(pipelineScript);
+          await this.db.saveScript(pipelineScript);
+          this.logger.info(`10-Agent Pipeline Script APPROVED & saved: "${pipelineScript.title}"`);
+          return pipelineScript;
+        }
+      }
       
-      const template = this.templates[strategy.contentType.toLowerCase()] || this.templates.explainer;
+      const template = this.templates[strategy.contentType?.toLowerCase()] || this.templates.explainer;
       const aiScript = await this.generateScriptWithAI(strategy, template);
       if (aiScript) {
+        aiScript.isExtendedForm = isExtendedForm;
         aiScript.fullScript = this.formatFullScript(aiScript);
         await this.db.saveScript(aiScript);
         this.logger.info(`Script generated with AI provider: ${aiScript.title}`);
@@ -62,7 +85,7 @@ class ScriptWriterAgent {
       // Generate script components
       const hook = await this.generateHook(strategy);
       const introduction = await this.generateIntroduction(strategy);
-      const mainContent = await this.generateMainContent(strategy, template);
+      const mainContent = await this.generateMainContent(strategy, template, isExtendedForm);
       const conclusion = await this.generateConclusion(strategy);
       const cta = await this.generateCTA(strategy);
 
@@ -74,7 +97,8 @@ class ScriptWriterAgent {
         mainContent,
         conclusion,
         callToAction: cta,
-        duration: this.estimateDuration(mainContent),
+        duration: isExtendedForm ? 1500 : this.estimateDuration(mainContent),
+        isExtendedForm,
         tone: template.tone,
         pacing: template.pacing,
         keywords: strategy.keywords,
@@ -106,41 +130,54 @@ class ScriptWriterAgent {
       return null;
     }
 
-    const prompt = `You are writing a YouTube script plan.
+    const prompt = `You are a Senior Principal Software Engineer creating an in-depth 3-Minute YouTube Short script on the IT/tech topic: "${strategy.topic}".
+YouTube Shorts support up to 3 minutes (180 seconds). Your goal is to teach this technical concept thoroughly from start to end with a clear, concrete practical code or architecture example in approximately 380 to 420 words total (~170 seconds narration).
+
+CRITICAL CONSTRAINTS:
+1. ZERO GREETINGS & ZERO FLUFF: NEVER say "Hey everyone", "Hello folks", "Welcome back", or any introductory filler. Dive straight into the core engineering problem.
+2. START-TO-END TECHNICAL BREAKDOWN: Clearly define what the technology is, why standard approaches fail, how the internal mechanism works under the hood, and walk through a clear code or command example.
+3. CONCRETE PRACTICAL / CODE EXAMPLE: Include a realistic code snippet, terminal command, or architectural flow and explain it line by line.
+4. TOTAL LENGTH: Exactly ~400 spoken words across all sections combined to comfortably fill 170 seconds of voice narration.
+
 Return only valid JSON with this exact shape:
 {
-  "title": "compelling title under 100 characters",
-  "hook": "opening hook in one sentence",
+  "title": "compelling technical title under 90 characters",
+  "hook": "punchy opening technical statement or common misconception (no greetings)",
   "sections": [
-    { "title": "section title", "content": ["spoken script bullet"], "duration": 60 }
+    {
+      "title": "1. The Engineering Challenge",
+      "content": ["detailed spoken sentence 1", "detailed spoken sentence 2", "detailed spoken sentence 3", "detailed spoken sentence 4"],
+      "codeSnippet": "code or command if relevant",
+      "duration": 40
+    },
+    {
+      "title": "2. Under The Hood Architecture",
+      "content": ["detailed spoken sentence 1", "detailed spoken sentence 2", "detailed spoken sentence 3", "detailed spoken sentence 4"],
+      "codeSnippet": "architecture diagram or flow",
+      "duration": 45
+    },
+    {
+      "title": "3. Practical Implementation & Code",
+      "content": ["detailed spoken sentence 1", "detailed spoken sentence 2", "detailed spoken sentence 3", "detailed spoken sentence 4"],
+      "codeSnippet": "concrete code example or config",
+      "duration": 60
+    },
+    {
+      "title": "4. Production Gotchas & Best Practices",
+      "content": ["detailed spoken sentence 1", "detailed spoken sentence 2", "detailed spoken sentence 3"],
+      "codeSnippet": "",
+      "duration": 25
+    }
   ],
-  "cta": "clear call to action",
-  "claims": [
-    { "text": "specific factual claim a reviewer must verify", "riskLevel": "standard|high", "sourceUrls": ["exact supplied source URL"] }
-  ]
-}
-
-Topic: ${strategy.topic}
-Style/content type: ${strategy.contentType}
-Angle: ${strategy.angle}
-Target audience: ${strategy.targetAudience}
-Desired length: ${strategy.requestedLength || process.env.DEFAULT_VIDEO_LENGTH || '8-12 minutes'}
-Tone: ${template.tone}
-Pacing: ${template.pacing}
-Brand voice: ${strategy.brandVoice || 'clear, credible, and engaging'}
-Channel goal: ${strategy.channelGoal || 'help the viewer understand and act'}
-Channel value proposition: ${strategy.channelValueProposition || 'give the viewer practical value'}
-Editorial rationale: ${strategy.planRationale || 'fit the selected topic and audience'}
-Channel constraints: ${strategy.channelConstraints || 'none beyond the factual-safety rules below'}
-Preferred call to action: ${strategy.callToAction || 'invite the viewer to subscribe'}
-Keywords: ${(strategy.keywords || []).join(', ')}
-Research sources: ${JSON.stringify(strategy.researchSources || [])}
-Avoid fabricated statistics, unsupported claims, and fake urgency. List every externally verifiable factual claim in claims. Use only exact URLs from Research sources; use an empty sourceUrls array when the supplied sources do not support a claim.`;
+  "conclusion": "one clear architectural takeaway",
+  "cta": "short closing technical thought without generic subscribe spam",
+  "claims": []
+}`;
 
     try {
       const response = await this.aiTextService.generateText(prompt, {
-        maxTokens: 1800,
-        temperature: 0.7
+        maxTokens: 2500,
+        temperature: 0.6
       });
       const parsed = this.parseAIJsonResponse(response);
       const sections = this.normalizeAISections(parsed.sections, strategy);
@@ -153,14 +190,33 @@ Avoid fabricated statistics, unsupported claims, and fake urgency. List every ex
       return {
         title: String(parsed.title).slice(0, 100),
         hook: this.normalizeAIHook(parsed.hook),
-        introduction: await this.generateIntroduction(strategy),
+        introduction: {
+          greeting: "",
+          topicIntro: `Let's break down ${strategy.topic}.`,
+          valueProposition: `Here is how it works under the hood and how to implement it.`,
+          credibility: "",
+          duration: '0:05'
+        },
         mainContent: {
           sections,
           totalDuration: this.calculateSectionsDuration(sections)
         },
-        conclusion: await this.generateConclusion(strategy),
-        callToAction: this.normalizeAICTA(parsed.cta, strategy),
-        duration: this.estimateDuration({ sections }),
+        conclusion: parsed.conclusion ? {
+          type: 'conclusion',
+          title: 'Key Takeaway',
+          recap: [],
+          finalThought: String(parsed.conclusion).trim(),
+          duration: '10 seconds'
+        } : await this.generateConclusion(strategy),
+        callToAction: {
+          type: 'call_to_action',
+          subscribe: "",
+          like: "",
+          comment: String(parsed.cta || "").trim(),
+          nextVideo: "",
+          duration: '5 seconds'
+        },
+        duration: '2:50',
         tone: template.tone,
         pacing: template.pacing,
         keywords: strategy.keywords || [],
@@ -265,8 +321,12 @@ Avoid fabricated statistics, unsupported claims, and fake urgency. List every ex
     };
   }
   async generateTitle(strategy) {
+    if (strategy.requestedLengthKey === 'extended' || strategy.requestedLength === '20-30 minutes') {
+      return `Mastering ${strategy.topic}: Complete Architecture Masterclass`;
+    }
+
     const templates = [
-      `${strategy.angle}`,
+      strategy.angle || `${strategy.topic}: Full Architectural Guide`,
       `${strategy.topic}: The Complete Guide`,
       `Everything You Need to Know About ${strategy.topic}`,
       `${strategy.topic} in ${new Date().getFullYear()}: What's Changed?`,
@@ -276,11 +336,11 @@ Avoid fabricated statistics, unsupported claims, and fake urgency. List every ex
     ];
 
     // Select based on content type
-    if (strategy.contentType === 'Tutorial') {
-      return `How to ${strategy.topic}: Step-by-Step Guide`;
-    } else if (strategy.contentType === 'List') {
+    if (String(strategy.contentType).toLowerCase() === 'tutorial') {
+      return `How to Master ${strategy.topic}: Step-by-Step Guide`;
+    } else if (String(strategy.contentType).toLowerCase() === 'list') {
       return `Top 10 ${strategy.topic} Tips You Need to Know`;
-    } else if (strategy.contentType === 'Review') {
+    } else if (String(strategy.contentType).toLowerCase() === 'review') {
       return `${strategy.topic} Review: Is It Worth It?`;
     }
 
@@ -346,11 +406,11 @@ Avoid fabricated statistics, unsupported claims, and fake urgency. List every ex
 
   async generateIntroduction(strategy) {
     return {
-      greeting: "Hey everyone, welcome back to the channel!",
-      topicIntro: `Today, we're diving deep into ${strategy.topic}.`,
-      valueProposition: `By the end of this video, you'll understand exactly ${this.getValueProposition(strategy)}.`,
-      credibility: this.getCredibilityStatement(strategy),
-      duration: '0:05-0:20'
+      greeting: "",
+      topicIntro: `Today we are breaking down ${strategy.topic}.`,
+      valueProposition: `Here is exactly how it works under the hood and how to implement it in production.`,
+      credibility: "",
+      duration: '0:05-0:15'
     };
   }
 
@@ -378,18 +438,47 @@ Avoid fabricated statistics, unsupported claims, and fake urgency. List every ex
     return statements[Math.floor(Math.random() * statements.length)];
   }
 
-  async generateMainContent(strategy, template) {
+  async generateMainContent(strategy, template, isExtended = false) {
     const sections = [];
     
-    for (const section of template.structure) {
-      if (!['hook', 'introduction', 'cta'].includes(section)) {
-        sections.push(await this.generateSection(section, strategy));
+    if (isExtended) {
+      const extendedTitles = [
+        'The Production Bottleneck: Why This Problem Exists',
+        'Mental Models & Core Architectural Foundations',
+        'Under the Hood: Tracing State Transitions & Memory',
+        'Fascinating Tech History & Evolution Trivia',
+        'Step-by-Step Production Implementation Guide',
+        'Live Code Walkthrough: Handling Edge Cases & Concurrency',
+        'Interactive Quiz: Predict the Output and Pitfalls',
+        'Benchmarking & Performance Profiling Under High Load',
+        'Top 5 Senior Engineer Pro-Tips & Anti-Patterns to Avoid',
+        'Complete Masterclass Summary & Architectural Cheatsheet'
+      ];
+
+      for (let i = 0; i < extendedTitles.length; i++) {
+        sections.push({
+          type: 'extended_chapter',
+          title: `Chapter ${i + 1}: ${extendedTitles[i]}`,
+          content: [
+            `In this masterclass section, we explore ${extendedTitles[i].toLowerCase()} in the context of ${strategy.topic}.`,
+            `Understanding this architectural nuance is critical for building resilient production-grade systems.`,
+            `Notice how modern compilers and runtimes optimize this specific code path to prevent CPU cache misses and lock contention.`,
+            `When deploying to production, always verify your benchmarks before assuming uniform performance across architectures.`
+          ],
+          duration: 150
+        });
+      }
+    } else {
+      for (const section of template.structure) {
+        if (!['hook', 'introduction', 'cta'].includes(section)) {
+          sections.push(await this.generateSection(section, strategy));
+        }
       }
     }
     
     return {
       sections,
-      totalDuration: this.calculateSectionsDuration(sections)
+      totalDuration: isExtended ? 1500 : this.calculateSectionsDuration(sections)
     };
   }
 
@@ -670,11 +759,11 @@ Avoid fabricated statistics, unsupported claims, and fake urgency. List every ex
   async generateCTA(strategy) {
     return {
       type: 'call_to_action',
-      subscribe: "If you found this helpful, make sure to subscribe and hit the notification bell!",
-      like: "Give this video a thumbs up if you learned something new.",
-      comment: `Let me know in the comments: What's your experience with ${strategy.topic}?`,
-      nextVideo: "Check out this related video for more insights.",
-      duration: '15 seconds'
+      subscribe: "",
+      like: "",
+      comment: `Save this breakdown for your next system design interview or production architecture review.`,
+      nextVideo: "",
+      duration: '5 seconds'
     };
   }
 

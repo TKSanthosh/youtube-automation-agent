@@ -27,9 +27,10 @@ class SEOOptimizerAgent {
     }
   }
 
-  async optimize(script, strategy) {
+  async optimize(script, strategy = {}) {
     try {
       this.logger.info(`Optimizing SEO for: ${script.title}`);
+      strategy.keywords = Array.isArray(strategy.keywords) ? strategy.keywords : (strategy.topic ? [strategy.topic] : ['tech']);
       
       const aiSEO = await this.generateSEOWithAI(script, strategy);
       let title, description, tags;
@@ -46,6 +47,35 @@ class SEOOptimizerAgent {
         
         // Extract and optimize tags
         tags = await this.generateTags(script, strategy);
+      }
+      
+      const isExtended = strategy.requestedLengthKey === 'extended' || strategy.requestedLength === '20-30 minutes' || script?.isExtendedForm;
+      const isLong = strategy.requestedLengthKey === 'long' || isExtended;
+
+      if (isExtended) {
+        if (!tags.includes('FullCourse')) tags.push('FullCourse');
+        if (!tags.includes('Masterclass')) tags.push('Masterclass');
+        if (!tags.includes('Programming')) tags.push('Programming');
+        if (!description.includes('#FullCourse')) {
+          description += '\n\n🎓 #FullCourse #Masterclass #Programming #TechEducation';
+        }
+      }
+
+      if (isLong) {
+        title = title.replace(/#Shorts/gi, '').trim();
+        description = description.replace(/#Shorts/gi, '').trim();
+        tags = tags.filter(t => t.toLowerCase() !== 'shorts' && t.toLowerCase() !== '#shorts');
+      } else {
+        if (!title.toLowerCase().includes('#shorts')) {
+          title = `${title.slice(0, 90)} #Shorts`;
+        }
+        if (!description.toLowerCase().includes('#shorts')) {
+          description = `${description}\n\n#Shorts #Tech #Coding #SoftwareEngineering #SystemDesign`;
+        }
+        if (!tags.includes('Shorts')) tags.push('Shorts');
+        if (!tags.includes('Tech')) tags.push('Tech');
+        if (!tags.includes('Coding')) tags.push('Coding');
+        if (!tags.includes('SoftwareEngineering')) tags.push('SoftwareEngineering');
       }
       
       // Generate hashtags
@@ -224,13 +254,15 @@ Keep tags under YouTube's 500 character total guidance. Avoid fabricated statist
     let description = '';
     
     // First 125 characters - most important for SEO
-    const hook = `${script.title} - In this video, you'll discover ${strategy.angle.toLowerCase()}.`;
+    const angleText = (strategy.angle || strategy.topic || 'key architectural concepts').toLowerCase();
+    const hook = `${script.title} - In this video, you'll discover ${angleText}.`;
     description += hook + '\n\n';
     
     // Video overview
     description += '📺 WHAT YOU\'LL LEARN:\n';
-    if (script.mainContent && script.mainContent.sections) {
-      script.mainContent.sections.slice(0, 5).forEach(section => {
+    const sections = (script.mainContent && script.mainContent.sections) || script.sections || [];
+    if (sections.length > 0) {
+      sections.slice(0, 5).forEach(section => {
         if (section.title) {
           description += `• ${section.title}\n`;
         }
@@ -242,8 +274,8 @@ Keep tags under YouTube's 500 character total guidance. Avoid fabricated statist
     description += '⏱️ TIMESTAMPS:\n';
     description += '00:00 Introduction\n';
     let timestamp = 20;
-    if (script.mainContent && script.mainContent.sections) {
-      script.mainContent.sections.forEach(section => {
+    if (sections.length > 0) {
+      sections.forEach(section => {
         const minutes = Math.floor(timestamp / 60);
         const seconds = timestamp % 60;
         description += `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${section.title || 'Section'}\n`;
@@ -256,7 +288,7 @@ Keep tags under YouTube's 500 character total guidance. Avoid fabricated statist
     description += '📝 ABOUT THIS VIDEO:\n';
     description += `This comprehensive guide on ${strategy.topic} covers everything you need to know. `;
     description += `Whether you're a beginner or advanced, you'll find valuable insights about ${strategy.keywords.slice(0, 3).join(', ')}. `;
-    description += `Perfect for ${strategy.targetAudience}.\n\n`;
+    description += `Perfect for ${strategy.targetAudience || 'developers, software engineers, and tech learners'}.\n\n`;
     
     // Links section
     description += '🔗 USEFUL LINKS:\n';

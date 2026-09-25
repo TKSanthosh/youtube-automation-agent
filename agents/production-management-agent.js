@@ -159,21 +159,29 @@ class ProductionManagementAgent {
     
     // Add hook
     if (script.hook) {
-      ttsText += `${script.hook.text}\n\n`;
+      const hookText = typeof script.hook === 'string' ? script.hook : (script.hook.text || '');
+      const cleanHook = hookText.replace(/^(hey everyone|hello folks|welcome back|hi guys|hello friends)[,!]?\s*/i, '').trim();
+      if (cleanHook) ttsText += `${cleanHook}\n\n`;
     }
     
-    // Add introduction
+    // Add introduction (no greetings or credibility fluff)
     if (script.introduction) {
-      ttsText += `${script.introduction.greeting}\n`;
-      ttsText += `${script.introduction.topicIntro}\n`;
-      ttsText += `${script.introduction.valueProposition}\n`;
-      ttsText += `${script.introduction.credibility}\n\n`;
+      if (typeof script.introduction === 'string') {
+        const cleanIntro = script.introduction.replace(/^(hey everyone|hello folks|welcome back|hi guys|hello friends)[,!]?\s*/i, '').trim();
+        if (cleanIntro) ttsText += `${cleanIntro}\n\n`;
+      } else {
+        if (script.introduction.topicIntro) ttsText += `${script.introduction.topicIntro}\n`;
+        if (script.introduction.valueProposition) ttsText += `${script.introduction.valueProposition}\n\n`;
+      }
     }
     
     // Add main content
-    if (script.mainContent && script.mainContent.sections) {
-      script.mainContent.sections.forEach((section, index) => {
-        ttsText += `Section ${index + 1}: ${section.title}\n`;
+    const sections = (script.mainContent && script.mainContent.sections) || script.sections || [];
+    if (sections.length > 0) {
+      sections.forEach((section, index) => {
+        if (section.title) {
+          ttsText += `${section.title}\n`;
+        }
         
         if (Array.isArray(section.content)) {
           section.content.forEach(line => {
@@ -200,19 +208,31 @@ class ProductionManagementAgent {
     
     // Add conclusion
     if (script.conclusion) {
-      script.conclusion.recap.forEach(line => {
-        if (typeof line === 'string') {
-          ttsText += `${line}\n`;
+      if (typeof script.conclusion === 'string') {
+        ttsText += `\n${script.conclusion}\n\n`;
+      } else {
+        if (Array.isArray(script.conclusion.recap)) {
+          script.conclusion.recap.forEach(line => {
+            if (typeof line === 'string') {
+              ttsText += `${line}\n`;
+            }
+          });
         }
-      });
-      ttsText += `\n${script.conclusion.finalThought}\n\n`;
+        if (script.conclusion.finalThought) {
+          ttsText += `\n${script.conclusion.finalThought}\n\n`;
+        }
+      }
     }
     
     // Add CTA
     if (script.callToAction) {
-      ttsText += `${script.callToAction.subscribe}\n`;
-      ttsText += `${script.callToAction.like}\n`;
-      ttsText += `${script.callToAction.comment}\n`;
+      if (typeof script.callToAction === 'string') {
+        ttsText += `${script.callToAction}\n`;
+      } else {
+        if (script.callToAction.subscribe) ttsText += `${script.callToAction.subscribe}\n`;
+        if (script.callToAction.like) ttsText += `${script.callToAction.like}\n`;
+        if (script.callToAction.comment) ttsText += `${script.callToAction.comment}\n`;
+      }
     }
     
     return ttsText;

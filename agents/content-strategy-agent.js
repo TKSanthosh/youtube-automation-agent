@@ -48,31 +48,8 @@ class ContentStrategyAgent {
   }
 
   async fetchYouTubeTrends() {
-    // Use YouTube API to fetch trending videos
-    const youtube = this.credentials.getYouTubeClient();
-    
-    try {
-      const response = await youtube.videos.list({
-        part: 'snippet,statistics',
-        chart: 'mostPopular',
-        maxResults: 50,
-        regionCode: process.env.YOUTUBE_REGION || 'US'
-      });
-
-      return response.data.items.map(video => ({
-        videoId: video.id,
-        title: video.snippet.title,
-        tags: video.snippet.tags || [],
-        viewCount: parseInt(video.statistics?.viewCount, 10) || 0,
-        category: video.snippet.categoryId,
-        publishedAt: video.snippet.publishedAt,
-        publisher: video.snippet.channelTitle || 'YouTube',
-        url: `https://www.youtube.com/watch?v=${video.id}`
-      }));
-    } catch (error) {
-      this.logger.error('Failed to fetch YouTube trends:', error);
-      return [];
-    }
+    // Avoid burning precious YouTube Data API upload quota on trends list calls
+    return [];
   }
 
   async analyzeCompetitors() {
@@ -391,7 +368,7 @@ Do not invent trend data, statistics, sources, URLs, or factual claims. Use only
 
   normalizeAutonomousPlan(plan, channelStrategy, targetCount, research = {}) {
     const formats = new Set(['explainer', 'tutorial', 'list', 'review', 'story']);
-    const lengths = new Set(['short', 'medium', 'long']);
+    const lengths = new Set(['short', 'medium', 'long', 'extended']);
     const allowedSourceUrls = new Set((research.sourceCatalog || []).map(source => source.url));
     const pillars = channelStrategy.contentPillars || [];
     const seen = new Set();
@@ -430,20 +407,18 @@ Do not invent trend data, statistics, sources, URLs, or factual claims. Use only
       .slice(0, 10)
       .map(topic => topic.topic)
       .join(', ');
-    const prompt = `You are selecting a YouTube content strategy.
+    const prompt = `You are selecting a YouTube Shorts content strategy focused strictly on IT Technologies, Software Engineering, DevOps, Cloud, and System Design.
 Return only valid JSON with this exact shape:
 {
-  "topic": "specific video topic",
-  "angle": "distinct content angle",
-  "targetAudience": "specific audience",
-  "contentType": "Tutorial|Explainer|List|Review|Story|News",
-  "keywords": ["keyword"]
+  "topic": "specific IT technology or architectural concept (e.g., Docker Multi-Stage Builds, Kubernetes Pod Lifecycle, Redis Caching, Kafka Event Streaming, SQL Indexing B-Trees, JWT Token Rotation, Circuit Breaker Pattern)",
+  "angle": "in-depth 3-minute practical breakdown explaining the concept from start to end with a clear code or architecture example",
+  "targetAudience": "software engineers, DevOps engineers, developers, IT students",
+  "contentType": "Tutorial",
+  "keywords": ["IT", "coding", "software engineering", "tech", "architecture"]
 }
 
 Requested topic: ${requestedTopic || 'none'}
-Trending topics available: ${trendingTopics || 'Technology Trends'}
-Channel target audience: ${process.env.TARGET_AUDIENCE || 'General audience interested in educational content'}
-Avoid fabricated claims and unsupported numbers.`;
+Channel niche: Pure IT Technologies, System Design, Cloud & Software Engineering. Must be a concrete concept explainable in 3 minutes with clear technical examples. Zero fluff.`;
 
     try {
       const response = await this.aiTextService.generateText(prompt, {
@@ -532,21 +507,24 @@ Avoid fabricated claims and unsupported numbers.`;
 
   getEvergreenFallbackTopics() {
     return [
-      'Time Management Strategies That Actually Work',
-      'Beginner Mistakes to Avoid When Learning a New Skill',
-      'How to Start a Side Project With Zero Budget',
-      'Simple Habits That Improve Focus and Productivity',
-      'How to Learn Anything Faster Using Proven Study Techniques',
-      'Practical Ways to Save Money Every Month',
-      'How Artificial Intelligence Is Changing Everyday Life',
-      'The Science of Building Habits That Stick',
-      'How to Give a Presentation People Actually Remember',
-      'Getting Started With Investing: A Beginner Roadmap',
-      'Digital Minimalism: Reclaiming Your Attention',
-      'How to Negotiate Anything: Tactics That Work',
-      'The Psychology of Procrastination and How to Beat It',
-      'Remote Work Productivity: Setting Up for Success',
-      'How to Read More Books Without Finding Extra Time'
+      'Docker Multi-Stage Builds: Slash Container Image Sizes',
+      'Kubernetes Pod Lifecycle & Health Probes Explained',
+      'Consistent Hashing in Distributed System Design',
+      'How Redis In-Memory Caching and TTL Works',
+      'Kafka vs RabbitMQ: Event Streaming vs Message Queues',
+      'Database Indexing Under the Hood: B-Trees vs Hash Indexes',
+      'JWT Authentication & Refresh Token Rotation Explained',
+      'WebSockets vs Server-Sent Events vs Long Polling',
+      'CAP Theorem in Distributed Systems: Tradeoffs in Practice',
+      'Reverse Proxy vs Load Balancer: Nginx Architecture',
+      'Linux Process Signals: Graceful Shutdown with SIGTERM',
+      'SQL ACID Transactions & Database Isolation Levels',
+      'Microservices Circuit Breaker Pattern Explained',
+      'Database Connection Pooling: Preventing Connection Leaks',
+      'Memory Management: Stack vs Heap in Modern Runtimes',
+      'Git Under the Hood: Blobs, Trees, and Commits',
+      'REST vs gRPC: When to Use Protocol Buffers in Production',
+      'API Rate Limiting: Token Bucket vs Leaky Bucket Algorithms'
     ];
   }
 

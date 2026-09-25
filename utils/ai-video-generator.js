@@ -564,9 +564,9 @@ class AIVideoGenerator {
 
     try {
       const page = await browser.newPage();
-      await page.setViewportSize({ width: 1920, height: 1080 });
+      await page.setViewportSize({ width: 1080, height: 1920 });
 
-      // Create HTML for slideshow (only real image files can be embedded)
+      // Create HTML for slideshow
       const imageAssets = await this.filterImageAssets(visualAssets);
       await page.setContent(this.createSlideshowHTML(script, imageAssets));
 
@@ -574,8 +574,7 @@ class AIVideoGenerator {
       await page.addStyleTag({ content: '* { transition: none !important; animation: none !important; }' });
       await page.waitForTimeout(1000); // Wait for assets to load
 
-      // Capture ONE still per slide instead of screenshotting at 30fps —
-      // FFmpeg turns the stills into a crossfaded video in seconds.
+      // Capture ONE still per slide
       const slideCount = await page.evaluate(() => document.querySelectorAll('.slide').length);
       await fs.mkdir(slidesDir, { recursive: true });
 
@@ -593,11 +592,16 @@ class AIVideoGenerator {
       }
 
       const videoPath = outputPath.replace('.mp4', '_visual.mp4');
-      const duration = this.calculateScriptDuration(script);
+      const audioDuration = await this.getAudioDuration(audioPath);
+      const scriptDuration = this.calculateScriptDuration(script);
+      let duration = audioDuration > 10 ? audioDuration : scriptDuration;
+      // Guarantee strictly <= 178 seconds for YouTube Shorts qualification (< 180s)
+      if (duration > 176) duration = 176;
+      if (duration < 150) duration = 165;
       await this.renderSlidesToVideo(stills, duration, videoPath);
 
       // Add audio
-      await this.addAudioToVideo(videoPath, audioPath, outputPath);
+      await this.addAudioToVideo(videoPath, audioPath, outputPath, { loopVideo: true });
 
       return outputPath;
     } finally {
@@ -710,224 +714,377 @@ class AIVideoGenerator {
     return images;
   }
 
+  async getAudioDuration(audioPath) {
+    if (!audioPath) return 170;
+    try {
+      const { exec } = require('child_process');
+      const util = require('util');
+      const execPromise = util.promisify(exec);
+      const { stdout } = await execPromise(`ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${audioPath}"`);
+      const dur = parseFloat(String(stdout).trim());
+      if (Number.isFinite(dur) && dur > 0) {
+        return Math.min(176, Math.max(30, Math.ceil(dur)));
+      }
+    } catch (_err) {
+      // ffprobe unavailable or errored
+    }
+    return 170;
+  }
+
+  escapeHTML(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   createSlideshowHTML(script, visualAssets) {
     return `
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
     <style>
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            width: 1920px;
-            height: 1080px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Arial', sans-serif;
+        }
+        body {
+            width: 1080px;
+            height: 1920px;
+            background: #090d16;
+            background-image: 
+                radial-gradient(circle at 50% 15%, rgba(56, 189, 248, 0.18) 0%, transparent 60%),
+                radial-gradient(circle at 80% 85%, rgba(168, 85, 247, 0.18) 0%, transparent 60%),
+                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #f1f5f9;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .slide {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 1080px;
+            height: 1920px;
+            padding: 100px 70px;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
             opacity: 0;
-            transition: opacity 2s ease-in-out;
+            transition: opacity 1s ease-in-out;
         }
         
         .slide.active {
             opacity: 1;
         }
         
-        .content {
+        .top-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #38bdf8;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 14px 28px;
+            border-radius: 9999px;
+            margin-bottom: 40px;
+        }
+
+        .title-card {
             text-align: center;
-            color: white;
-            max-width: 80%;
+            max-width: 940px;
         }
         
-        h1 {
-            font-size: 72px;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        h1.main-title {
+            font-size: 68px;
+            line-height: 1.25;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: #ffffff;
+            margin-bottom: 40px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
-        h2 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        .subtitle {
+            font-size: 34px;
+            line-height: 1.5;
+            color: #94a3b8;
+            margin-bottom: 50px;
         }
-        
-        p {
+
+        .hero-feature-box {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            text-align: left;
+            backdrop-filter: blur(12px);
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 32px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 24px;
+        }
+        .feature-item:last-child {
+            margin-bottom: 0;
+        }
+        .feature-icon {
             font-size: 36px;
-            line-height: 1.4;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
-        .background-image {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .section-card {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.3;
-            z-index: -1;
+            max-width: 960px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
         }
         
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
+        h2.section-header {
+            font-size: 52px;
+            font-weight: 800;
+            color: #38bdf8;
+            margin-bottom: 35px;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(56, 189, 248, 0.3);
+        }
+        
+        .content-card {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid #334155;
+            border-radius: 20px;
+            padding: 36px 40px;
             width: 100%;
-            height: 100%;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .content-text {
+            font-size: 32px;
+            line-height: 1.55;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+        .content-text:last-child {
+            margin-bottom: 0;
+        }
+        
+        .code-container {
+            width: 100%;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 20px;
             overflow: hidden;
-            z-index: -1;
+            margin-top: 15px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.7);
         }
         
-        .particle {
-            position: absolute;
-            background: rgba(255,255,255,0.8);
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #161b22;
+            padding: 18px 24px;
+            border-bottom: 1px solid #30363d;
+        }
+        
+        .dot {
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
+            display: inline-block;
+        }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+        
+        .file-title {
+            color: #8b949e;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 24px;
+            margin-left: 12px;
         }
         
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        .code-block {
+            padding: 28px 32px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 26px;
+            line-height: 1.55;
+            color: #58a6ff;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .takeaway-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+            border: 2px solid #38bdf8;
+            border-radius: 24px;
+            padding: 50px 40px;
+            text-align: center;
+            max-width: 940px;
+            box-shadow: 0 0 50px rgba(56, 189, 248, 0.2);
+        }
+        
+        .takeaway-title {
+            font-size: 48px;
+            font-weight: 800;
+            color: #34d399;
+            margin-bottom: 30px;
+        }
+        
+        .takeaway-text {
+            font-size: 36px;
+            line-height: 1.6;
+            color: #f8fafc;
+            margin-bottom: 40px;
+        }
+        
+        .takeaway-footer {
+            font-size: 28px;
+            color: #94a3b8;
+            font-weight: 500;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
-    <div class="particles"></div>
-    
-    <!-- Title Slide -->
+    <!-- Slide 1: High-Impact Vertical Title Card -->
     <div class="slide active">
-        ${visualAssets[0] ? `<img class="background-image" src="${visualAssets[0]}" />` : ''}
-        <div class="content">
-            <h1>${script.title}</h1>
-            <p>Ethereal Dreamscript</p>
+        <div class="top-badge">⚡ 3-Minute Technical Deep Dive</div>
+        <div class="title-card">
+            <h1 class="main-title">${this.escapeHTML(script.title)}</h1>
+            <p class="subtitle">${this.escapeHTML(script.hook?.text || script.hook || 'Start to End IT Concept & Practical Code Example')}</p>
+            <div class="hero-feature-box">
+                <div class="feature-item"><span class="feature-icon">🔍</span> Architectural Overview</div>
+                <div class="feature-item"><span class="feature-icon">⚙️</span> Under-The-Hood Mechanics</div>
+                <div class="feature-item"><span class="feature-icon">💻</span> Working Code / CLI Walkthrough</div>
+                <div class="feature-item"><span class="feature-icon">🚀</span> Production Best Practices</div>
+            </div>
         </div>
     </div>
     
     ${this.generateContentSlides(script, visualAssets).join('')}
     
-    <!-- Subscribe Slide -->
+    <!-- Final Slide: Engineering Takeaway -->
     <div class="slide">
-        <div class="content">
-            <h2>✨ Subscribe for More Stories ✨</h2>
-            <p>New content daily at 2:00 PM</p>
+        <div class="takeaway-card">
+            <div class="top-badge">💡 Senior Engineer Takeaway</div>
+            <div class="takeaway-title">Production Rule of Thumb</div>
+            <p class="takeaway-text">${this.escapeHTML(script.conclusion?.finalThought || 'Master this pattern to build resilient, scalable production infrastructure.')}</p>
+            <div class="takeaway-footer">📌 Save for System Design & Coding Interviews</div>
         </div>
     </div>
-    
-    <script>
-        // Create floating particles
-        function createParticles() {
-            const container = document.querySelector('.particles');
-            for (let i = 0; i < 20; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.width = (Math.random() * 4 + 2) + 'px';
-                particle.style.height = particle.style.width;
-                particle.style.animationDelay = Math.random() * 6 + 's';
-                container.appendChild(particle);
-            }
-        }
-        
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        
-        function advanceAnimation() {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
-        }
-        
-        window.advanceAnimation = advanceAnimation;
-        createParticles();
-    </script>
 </body>
 </html>`;
   }
 
   generateContentSlides(script, visualAssets) {
     const slides = [];
+    const sections = (script.mainContent && script.mainContent.sections) || script.sections || [];
     
-    if (script.mainContent && script.mainContent.sections) {
-      script.mainContent.sections.forEach((section, index) => {
-        const assetIndex = Math.min(index + 1, visualAssets.length - 1);
-        
-        slides.push(`
-        <div class="slide">
-            ${visualAssets[assetIndex] ? `<img class="background-image" src="${visualAssets[assetIndex]}" />` : ''}
-            <div class="content">
-                <h2>${section.title}</h2>
-                ${this.formatSectionContent(section)}
-            </div>
-        </div>`);
-      });
-    }
+    sections.forEach((section, index) => {
+      const codeSnippet = section.codeSnippet || this.extractCodeSnippet(section);
+      slides.push(`
+      <div class="slide">
+          <div class="top-badge">⚙️ Concept Breakdown • Part ${index + 1}</div>
+          <div class="section-card">
+              <h2 class="section-header">${this.escapeHTML(section.title || `Section ${index + 1}`)}</h2>
+              <div class="content-card">
+                  ${this.formatSectionContentHTML(section)}
+              </div>
+              ${codeSnippet ? `
+              <div class="code-container">
+                  <div class="code-header">
+                      <span class="dot red"></span>
+                      <span class="dot yellow"></span>
+                      <span class="dot green"></span>
+                      <span class="file-title">terminal / code</span>
+                  </div>
+                  <pre class="code-block"><code>${this.escapeHTML(codeSnippet)}</code></pre>
+              </div>` : ''}
+          </div>
+      </div>`);
+    });
     
     return slides;
   }
 
-  formatSectionContent(section) {
+  formatSectionContentHTML(section) {
+    if (Array.isArray(section.content)) {
+      return section.content.slice(0, 4).map(line => 
+        `<p class="content-text">• ${this.escapeHTML(line)}</p>`
+      ).join('');
+    }
+    if (section.steps && Array.isArray(section.steps)) {
+      return section.steps.slice(0, 3).map((step, sIdx) => 
+        `<p class="content-text"><strong>Step ${sIdx + 1}:</strong> ${this.escapeHTML(step.title || step.description || step)}</p>`
+      ).join('');
+    }
     if (section.items && Array.isArray(section.items)) {
       return section.items.slice(0, 3).map(item => 
-        `<p>${item.number}. ${item.title}</p>`
+        `<p class="content-text"><strong>#${item.number || ''}:</strong> ${this.escapeHTML(item.title || item.description || item)}</p>`
       ).join('');
     }
-    
-    if (section.steps && Array.isArray(section.steps)) {
-      return section.steps.slice(0, 3).map(step => 
-        `<p>${step.title}</p>`
-      ).join('');
-    }
-    
     if (typeof section.content === 'string') {
-      return `<p>${section.content.slice(0, 200)}${section.content.length > 200 ? '...' : ''}</p>`;
+      return `<p class="content-text">${this.escapeHTML(section.content.slice(0, 300))}</p>`;
     }
-    
-    return '<p>Content coming soon...</p>';
+    return '<p class="content-text">Deep-dive technical breakdown in progress...</p>';
+  }
+
+  extractCodeSnippet(section) {
+    if (section.codeSnippet) return section.codeSnippet;
+    if (Array.isArray(section.content)) {
+      const codeLine = section.content.find(line => typeof line === 'string' && (line.includes('{') || line.includes('function') || line.includes('const ') || line.includes('docker ') || line.includes('kubectl ') || line.includes('SELECT ')));
+      if (codeLine) return codeLine;
+    }
+    return null;
   }
 
   calculateScriptDuration(script) {
-    // Estimate duration based on word count (average 150 words per minute)
     let totalWords = 0;
-    
-    if (script.hook) totalWords += script.hook.text.split(' ').length;
+    if (script.hook) totalWords += String(script.hook.text || script.hook).split(/\s+/).length;
     if (script.introduction) {
-      totalWords += (script.introduction.greeting || '').split(' ').length;
-      totalWords += (script.introduction.topicIntro || '').split(' ').length;
+      totalWords += String(script.introduction.topicIntro || '').split(/\s+/).length;
+      totalWords += String(script.introduction.valueProposition || '').split(/\s+/).length;
     }
-    
-    if (script.mainContent && script.mainContent.sections) {
-      script.mainContent.sections.forEach(section => {
-        if (typeof section.content === 'string') {
-          totalWords += section.content.split(' ').length;
-        }
-        if (section.items) {
-          section.items.forEach(item => {
-            totalWords += (item.title + ' ' + item.description).split(' ').length;
-          });
-        }
-        if (section.steps) {
-          section.steps.forEach(step => {
-            totalWords += (step.title + ' ' + step.description).split(' ').length;
-          });
-        }
-      });
-    }
-    
+    const sections = (script.mainContent && script.mainContent.sections) || script.sections || [];
+    sections.forEach(section => {
+      if (Array.isArray(section.content)) {
+        section.content.forEach(c => totalWords += String(c).split(/\s+/).length);
+      } else if (typeof section.content === 'string') {
+        totalWords += section.content.split(/\s+/).length;
+      }
+    });
     if (script.conclusion) {
-      totalWords += script.conclusion.finalThought.split(' ').length;
+      totalWords += String(script.conclusion.finalThought || script.conclusion).split(/\s+/).length;
     }
-    
-    // Convert to duration (150 words per minute)
-    return Math.max(30, Math.ceil((totalWords / 150) * 60));
+    // Convert to duration (average 140 words per minute for technical explanation)
+    // Guarantee strictly between 165 and 176 seconds (< 180s for Shorts)
+    const estimated = Math.ceil((totalWords / 140) * 60);
+    return Math.min(176, Math.max(165, estimated));
   }
 
   async addAudioToVideo(videoPath, audioPath, outputPath, options = {}) {
