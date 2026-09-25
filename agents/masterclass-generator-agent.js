@@ -94,7 +94,7 @@ class MasterclassGeneratorAgent {
     ];
   }
 
-  async generateMasterclass(requestedTopic = null) {
+  async generateMasterclass(requestedTopic = null, maxChapters = null) {
     this.logger.info(`Starting Masterclass curriculum generation...`);
     const catalog = this.getMasterclassCatalog();
     let courseMeta = null;
@@ -109,12 +109,18 @@ class MasterclassGeneratorAgent {
 
     this.logger.info(`Selected Masterclass: "${courseMeta.topic}"`);
 
+    let targetChapters = courseMeta.chapters;
+    if (Number.isInteger(maxChapters) && maxChapters > 0) {
+      targetChapters = targetChapters.slice(0, maxChapters);
+      this.logger.info(`Chapter limit applied: generating ${targetChapters.length} chapters.`);
+    }
+
     const chapters = [];
     let cumulativeSeconds = 0;
     const timestamps = [];
 
-    for (let i = 0; i < courseMeta.chapters.length; i++) {
-      const ch = courseMeta.chapters[i];
+    for (let i = 0; i < targetChapters.length; i++) {
+      const ch = targetChapters[i];
       const hours = Math.floor(cumulativeSeconds / 3600);
       const minutes = Math.floor((cumulativeSeconds % 3600) / 60);
       const seconds = cumulativeSeconds % 60;
@@ -126,8 +132,8 @@ class MasterclassGeneratorAgent {
         keyConcept: ch.keyConcept
       });
 
-      this.logger.info(`Generating Chapter ${i + 1}/${courseMeta.chapters.length}: "${ch.title}" [${formattedTimestamp}]`);
-      const chapterData = await this.generateChapterContent(courseMeta.topic, ch, i + 1, courseMeta.chapters.length);
+      this.logger.info(`Generating Chapter ${i + 1}/${targetChapters.length}: "${ch.title}" [${formattedTimestamp}]`);
+      const chapterData = await this.generateChapterContent(courseMeta.topic, ch, i + 1, targetChapters.length);
       chapters.push(chapterData);
       cumulativeSeconds += chapterData.estimatedSeconds;
     }

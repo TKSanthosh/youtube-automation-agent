@@ -17,12 +17,16 @@ const logger = new Logger('MasterclassPipeline');
 function parseArgs() {
   const args = process.argv.slice(2);
   const options = {
-    topic: null
+    topic: null,
+    chapters: null
   };
 
   for (const arg of args) {
     if (arg.startsWith('--topic=')) {
       options.topic = arg.split('=')[1];
+    }
+    if (arg.startsWith('--chapters=')) {
+      options.chapters = parseInt(arg.split('=')[1], 10);
     }
   }
 
@@ -63,7 +67,7 @@ async function run() {
 
   // 1. Generate full curriculum & teacher lecture scripts
   logger.info('Designing course curriculum & writing instructor lecture...');
-  const course = await masterclassAgent.generateMasterclass(options.topic);
+  const course = await masterclassAgent.generateMasterclass(options.topic, options.chapters);
 
   console.log(chalk.green.bold(`\n📚 Course: ${course.title}`));
   console.log(chalk.white(`   Chapters: ${course.chapters.length}`));

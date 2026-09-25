@@ -22,13 +22,19 @@ class AnalyticsOptimizationAgent {
 
   async setupAnalyticsAPI() {
     try {
+      if (typeof this.credentials?.reloadTokens === 'function') {
+        await this.credentials.reloadTokens();
+      }
       const auth = this.credentials.getYouTubeAuth();
       this.youtubeAnalytics = google.youtubeAnalytics({ version: 'v2', auth });
       this.youtube = google.youtube({ version: 'v3', auth });
       this.logger.info('YouTube Analytics API initialized');
+      return true;
     } catch (error) {
-      this.logger.error('Failed to initialize Analytics API:', error);
-      throw error;
+      this.youtubeAnalytics = null;
+      this.youtube = null;
+      this.logger.warn(`YouTube Analytics API not yet authenticated (${error.message}). Running in offline/pending mode.`);
+      return false;
     }
   }
 

@@ -1703,7 +1703,7 @@ class SystemTest {
       if (!emptyWaiverRejected) throw new Error('A claim waiver without a reviewer note was accepted');
     } finally {
       await db.close();
-      await fs.rm(directory, { recursive: true, force: true });
+      await fs.rm(directory, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 }).catch(() => {});
     }
 
     this.logger.info('Research and provenance desk test completed successfully');
@@ -3215,7 +3215,9 @@ class SystemTest {
     // Passing the CredentialManager itself leaves the engagement studio permanently
     // in fallback mode on installs with no provider environment variables.
     const savedEnv = process.env.OPENAI_API_KEY;
+    const savedGemini = process.env.GEMINI_API_KEY;
     delete process.env.OPENAI_API_KEY;
+    delete process.env.GEMINI_API_KEY;
     try {
       const configured = new AITextService({
         aiProvider: { provider: 'openai', apiKey: 'test-key', model: 'gpt-5.6' }
@@ -3233,6 +3235,8 @@ class SystemTest {
     } finally {
       if (savedEnv === undefined) delete process.env.OPENAI_API_KEY;
       else process.env.OPENAI_API_KEY = savedEnv;
+      if (savedGemini === undefined) delete process.env.GEMINI_API_KEY;
+      else process.env.GEMINI_API_KEY = savedGemini;
     }
   }
 

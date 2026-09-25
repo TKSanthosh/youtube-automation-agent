@@ -12,6 +12,10 @@ on:
         description: 'Course Topic (e.g., Master Docker, Master Java, Master Computer Science, Master Kubernetes, Master System Design, or leave empty for auto-curriculum)'
         required: false
         default: ''
+      chapters:
+        description: 'Number of chapters (leave empty for all 8 chapters, or e.g. 2 for quick validation)'
+        required: false
+        default: ''
 
 concurrency:
   group: youtube-masterclass
@@ -56,8 +60,12 @@ jobs:
           NODE_ENV: "production"
         run: |
           TOPIC="${{ inputs.topic || '' }}"
+          CHAPTERS="${{ inputs.chapters || '' }}"
+          CMD="node scripts/run-masterclass.js"
           if [ -n "$TOPIC" ]; then
-            node scripts/run-masterclass.js --topic="$TOPIC"
-          else
-            node scripts/run-masterclass.js
+            CMD="$CMD --topic=\"$TOPIC\""
           fi
+          if [ -n "$CHAPTERS" ]; then
+            CMD="$CMD --chapters=$CHAPTERS"
+          fi
+          eval $CMD

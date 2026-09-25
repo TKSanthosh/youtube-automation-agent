@@ -592,7 +592,7 @@ class AIVideoGenerator {
       }
 
       const videoPath = outputPath.replace('.mp4', '_visual.mp4');
-      const audioDuration = await this.getAudioDuration(audioPath);
+      const audioDuration = await this.getAudioDuration(audioPath, { shortsMode: true });
       const scriptDuration = this.calculateScriptDuration(script);
       let duration = audioDuration > 10 ? audioDuration : scriptDuration;
       // Guarantee strictly <= 178 seconds for YouTube Shorts qualification (< 180s)
@@ -714,8 +714,8 @@ class AIVideoGenerator {
     return images;
   }
 
-  async getAudioDuration(audioPath) {
-    if (!audioPath) return 170;
+  async getAudioDuration(audioPath, options = {}) {
+    if (!audioPath) return options.shortsMode ? 170 : 0;
     try {
       const { exec } = require('child_process');
       const util = require('util');
@@ -723,12 +723,15 @@ class AIVideoGenerator {
       const { stdout } = await execPromise(`ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${audioPath}"`);
       const dur = parseFloat(String(stdout).trim());
       if (Number.isFinite(dur) && dur > 0) {
-        return Math.min(176, Math.max(30, Math.ceil(dur)));
+        if (options.shortsMode) {
+          return Math.min(176, Math.max(30, Math.ceil(dur)));
+        }
+        return Math.ceil(dur);
       }
     } catch (_err) {
       // ffprobe unavailable or errored
     }
-    return 170;
+    return options.shortsMode ? 170 : 0;
   }
 
   escapeHTML(str) {
@@ -786,6 +789,18 @@ class AIVideoGenerator {
         
         .slide.active {
             opacity: 1;
+        }
+        
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.12;
+            z-index: 0;
+            pointer-events: none;
         }
         
         .top-badge {
@@ -973,8 +988,9 @@ class AIVideoGenerator {
 <body>
     <!-- Slide 1: High-Impact Vertical Title Card -->
     <div class="slide active">
-        <div class="top-badge">⚡ 3-Minute Technical Deep Dive</div>
-        <div class="title-card">
+        ${visualAssets && visualAssets[0] ? `<img class="background-image" src="${visualAssets[0]}" />` : ''}
+        <div class="top-badge" style="position:relative; z-index:1;">⚡ 3-Minute Technical Deep Dive</div>
+        <div class="title-card" style="position:relative; z-index:1;">
             <h1 class="main-title">${this.escapeHTML(script.title)}</h1>
             <p class="subtitle">${this.escapeHTML(script.hook?.text || script.hook || 'Start to End IT Concept & Practical Code Example')}</p>
             <div class="hero-feature-box">
@@ -990,7 +1006,8 @@ class AIVideoGenerator {
     
     <!-- Final Slide: Engineering Takeaway -->
     <div class="slide">
-        <div class="takeaway-card">
+        ${visualAssets && visualAssets.length > 1 ? `<img class="background-image" src="${visualAssets[visualAssets.length - 1]}" />` : ''}
+        <div class="takeaway-card" style="position:relative; z-index:1;">
             <div class="top-badge">💡 Senior Engineer Takeaway</div>
             <div class="takeaway-title">Production Rule of Thumb</div>
             <p class="takeaway-text">${this.escapeHTML(script.conclusion?.finalThought || 'Master this pattern to build resilient, scalable production infrastructure.')}</p>
@@ -1001,16 +1018,18 @@ class AIVideoGenerator {
 </html>`;
   }
 
-  generateContentSlides(script, visualAssets) {
+  generateContentSlides(script, visualAssets = []) {
     const slides = [];
     const sections = (script.mainContent && script.mainContent.sections) || script.sections || [];
     
     sections.forEach((section, index) => {
       const codeSnippet = section.codeSnippet || this.extractCodeSnippet(section);
+      const asset = (visualAssets && visualAssets.length > 0) ? visualAssets[(index + 1) % visualAssets.length] : null;
       slides.push(`
       <div class="slide">
-          <div class="top-badge">⚙️ Concept Breakdown • Part ${index + 1}</div>
-          <div class="section-card">
+          ${asset ? `<img class="background-image" src="${asset}" />` : ''}
+          <div class="top-badge" style="position:relative; z-index:1;">⚙️ Concept Breakdown • Part ${index + 1}</div>
+          <div class="section-card" style="position:relative; z-index:1;">
               <h2 class="section-header">${this.escapeHTML(section.title || `Section ${index + 1}`)}</h2>
               <div class="content-card">
                   ${this.formatSectionContentHTML(section)}
@@ -1279,7 +1298,8 @@ class AIVideoGenerator {
         // 1. Synthesize chapter narration
         const chapterAudioPath = path.join(tempDir, `chapter_${i}_audio.mp3`);
         await this.generateTTSAudio(ch.spokenNarration, chapterAudioPath);
-        const chapterDuration = await this.getAudioDuration(chapterAudioPath);
+        const chapterDuration = (await this.getAudioDuration(chapterAudioPath)) || ch.estimatedSeconds || 120;
+        ch.actualDuration = chapterDuration;
 
         // 2. Generate and capture slide HTML (1920x1080 Landscape)
         const slideHtml = this.createMasterclassSlideHTML(masterclassData, ch, i + 1, masterclassData.chapters.length);
@@ -1290,12 +1310,11 @@ class AIVideoGenerator {
         const slideImagePath = path.join(tempDir, `chapter_${i}_slide.png`);
         await page.screenshot({ path: slideImagePath });
 
-        // 3. Render chapter segment with FFmpeg
+        // 3. Render chapter segment with FFmpeg (video loops slide image until audio ends)
         const segmentVideoPath = path.join(tempDir, `chapter_${i}_segment.mp4`);
         await runFFmpeg([
           '-y',
           '-loop', '1',
-          '-t', Number(chapterDuration).toFixed(2),
           '-i', slideImagePath,
           '-i', chapterAudioPath,
           '-c:v', 'libx264',
@@ -1310,12 +1329,32 @@ class AIVideoGenerator {
         chapterFiles.push(segmentVideoPath);
       }
 
+      // Re-calculate real timestamps based on actual audio durations
+      let cumulativeSeconds = 0;
+      const realTimestamps = [];
+      for (let i = 0; i < masterclassData.chapters.length; i++) {
+        const ch = masterclassData.chapters[i];
+        const hours = Math.floor(cumulativeSeconds / 3600);
+        const minutes = Math.floor((cumulativeSeconds % 3600) / 60);
+        const seconds = cumulativeSeconds % 60;
+        const formattedTimestamp = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        realTimestamps.push({
+          timestamp: formattedTimestamp,
+          title: ch.title,
+          keyConcept: ch.keyConcept
+        });
+        cumulativeSeconds += (ch.actualDuration || ch.estimatedSeconds || 120);
+      }
+      masterclassData.timestamps = realTimestamps;
+      masterclassData.totalEstimatedSeconds = cumulativeSeconds;
+      masterclassData.formattedDuration = `${Math.floor(cumulativeSeconds / 3600)}h ${Math.floor((cumulativeSeconds % 3600) / 60)}m`;
+
       // 4. Concatenate all chapter segments into the full course video
       const concatListFile = path.join(tempDir, 'concat_chapters.txt');
       const concatContent = chapterFiles.map(f => `file '${path.resolve(f).replace(/\\/g, '/').replace(/'/g, "'\\''")}'`).join('\n');
       await fs.writeFile(concatListFile, concatContent);
 
-      this.logger.info(`Concatenating ${chapterFiles.length} chapters into final masterclass video...`);
+      this.logger.info(`Concatenating ${chapterFiles.length} chapters into final masterclass video (~${masterclassData.formattedDuration})...`);
       await runFFmpeg([
         '-y',
         '-f', 'concat',

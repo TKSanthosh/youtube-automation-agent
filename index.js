@@ -87,7 +87,7 @@ class YouTubeAutomationAgent {
       // Load credentials
       this.logger.info('Loading credentials...');
       this.credentials = new CredentialManager();
-      const credentialsValid = await this.credentials.validateAll();
+      const credentialsValid = await this.credentials.validateAll({ allowMissingTokens: true });
       this.readiness = new ProductionReadinessService(this.db, this.credentials);
       
       if (!credentialsValid) {
@@ -279,8 +279,8 @@ class YouTubeAutomationAgent {
       value.style = allowedStyles.has(style.toLowerCase()) ? style.toLowerCase() : style || null;
     }
 
-    if (!['short', 'medium', 'long'].includes(value.length)) {
-      return { valid: false, status: 400, error: 'length must be short, medium, or long' };
+    if (!['short', 'medium', 'long', 'extended'].includes(value.length)) {
+      return { valid: false, status: 400, error: 'length must be short, medium, long, or extended' };
     }
 
     if (body.strategyContext !== undefined && body.strategyContext !== null) {
@@ -395,6 +395,51 @@ class YouTubeAutomationAgent {
         uptime: process.uptime(),
         timestamp: new Date().toISOString()
       });
+    });
+
+    // Autopilot status
+    this.app.get('/api/autopilot/status', (req, res) => {
+      res.json({
+        running: this.autoPilot ? this.autoPilot.isRunning : false,
+        stats: this.autoPilot ? this.autoPilot.sessionStats : null,
+        youtubeAuthenticated: Boolean(this.credentials?.tokens?.youtube),
+        storage: 'enforced_10gb_cap'
+      });
+    });
+
+    // YouTube OAuth initiation route
+    let activeAuthServer = null;
+    this.app.get('/auth/youtube', async (req, res) => {
+      try {
+        const { ModernAuth } = require('./modern-auth');
+        const credentials = JSON.parse(await fs.readFile(path.join(__dirname, 'config', 'credentials.json'), 'utf8'));
+        const port = 3001;
+        const redirectUri = `http://localhost:${port}/youtube/callback`;
+        const { google } = require('googleapis');
+        const oauth2Client = new google.auth.OAuth2(
+          credentials.youtube.client_id,
+          credentials.youtube.client_secret,
+          redirectUri
+        );
+        if (!activeAuthServer) {
+          activeAuthServer = new ModernAuth();
+          await activeAuthServer.startTempServer(port, oauth2Client);
+        }
+        const authUrl = oauth2Client.generateAuthUrl({
+          access_type: 'offline',
+          scope: [
+            'https://www.googleapis.com/auth/youtube.upload',
+            'https://www.googleapis.com/auth/youtube',
+            'https://www.googleapis.com/auth/youtube.readonly',
+            'https://www.googleapis.com/auth/yt-analytics.readonly',
+            'https://www.googleapis.com/auth/youtube.force-ssl'
+          ],
+          prompt: 'consent'
+        });
+        return res.redirect(authUrl);
+      } catch (err) {
+        return res.status(500).send(`Authentication error: ${err.message}`);
+      }
     });
 
     // Manual content generation
@@ -1407,10 +1452,17 @@ class YouTubeAutomationAgent {
   }
 
   async generateContent(topic = null, style = null, length = 'medium', options = {}) {
+    if (topic && typeof topic === 'object') {
+      const obj = topic;
+      topic = obj.topic || null;
+      style = obj.style || null;
+      length = obj.length || 'medium';
+      options = { ...obj, ...(obj.options || {}) };
+    }
     this.logger.info('Starting content generation pipeline...');
     const { jobId = null, strategyContext = {} } = options;
     const profile = await this.db.getChannelProfile() || {};
-    const lengthLabels = { short: '2-4 minutes', medium: '8-12 minutes', long: '15-20 minutes' };
+    const lengthLabels = { short: '2-4 minutes', medium: '8-12 minutes', long: '15-20 minutes', extended: '20-30 minutes' };
 
     // Step 1: Strategy
     const strategy = await this.runGenerationStage(jobId, 'strategy', 10, async () => {
@@ -1487,7 +1539,7 @@ class YouTubeAutomationAgent {
 
     // Step 6: Quality and approval gate
     return this.runGenerationStage(jobId, 'quality_review', 90, async () => {
-      const approvalRequired = await this.db.getSetting('approval_required') !== 'false';
+      const approvalRequired = options.autoApprove ? false : (await this.db.getSetting('approval_required') !== 'false');
       const packagingExperiment = approvalRequired
         ? await this.preparePackagingExperiment(thumbnail, productionData, seoData, script)
         : null;
@@ -1810,6 +1862,12 @@ class YouTubeAutomationAgent {
         console.log(chalk.yellow('\n⚙️  Setup is required. The dashboard is available; run npm run walkthrough to enable generation.'));
       } else {
         console.log(chalk.yellow('\n🤖 Automation is active. Approved content will be published on schedule.'));
+        if (process.env.AUTOPILOT !== 'false') {
+          console.log(chalk.cyan('🚀 Launching Endless Auto-Pilot (Continuous 24/7 Generation & Publishing)...'));
+          const { EndlessAutoPilot } = require('./utils/endless-autopilot');
+          this.autoPilot = new EndlessAutoPilot({}, this.db);
+          this.autoPilot.start(this, this.agents.publishing);
+        }
       }
     });
   }

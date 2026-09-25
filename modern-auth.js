@@ -19,9 +19,9 @@ class ModernAuth {
     try {
       const credentials = JSON.parse(fs.readFileSync(this.credentialsPath));
       
-      // Use a random high port to avoid conflicts
-      const port = 8000 + Math.floor(Math.random() * 1000);
-      const redirectUri = `http://localhost:${port}/callback`;
+      // Use port 3001 and /youtube/callback to match Google Cloud Console authorized redirect URIs
+      const port = 3001;
+      const redirectUri = `http://localhost:${port}/youtube/callback`;
       
       const oauth2Client = new google.auth.OAuth2(
         credentials.youtube.client_id,
@@ -69,11 +69,11 @@ class ModernAuth {
         this.resolveAuth = resolve;
         this.rejectAuth = reject;
         
-        // Set timeout
+        // Set timeout to 1 hour
         setTimeout(() => {
           this.cleanup();
-          reject(new Error('Authentication timeout (5 minutes)'));
-        }, 300000); // 5 minutes
+          reject(new Error('Authentication timeout (1 hour)'));
+        }, 3600000); // 1 hour
       });
       
     } catch (error) {
@@ -86,7 +86,7 @@ class ModernAuth {
     this.server = http.createServer(async (req, res) => {
       const url = new URL(req.url, `http://localhost:${port}`);
       
-      if (url.pathname === '/callback') {
+      if (url.pathname === '/callback' || url.pathname === '/youtube/callback') {
         const code = url.searchParams.get('code');
         const error = url.searchParams.get('error');
         
@@ -123,7 +123,9 @@ class ModernAuth {
             
             console.log(chalk.green('\n✅ Authentication successful!'));
             this.cleanup();
-            this.resolveAuth(tokens);
+            if (typeof this.resolveAuth === 'function') {
+              this.resolveAuth(tokens);
+            }
             
           } catch (tokenError) {
             res.writeHead(500, { 'Content-Type': 'text/html' });
@@ -131,7 +133,9 @@ class ModernAuth {
               <h1>❌ Token Exchange Failed</h1>
               <p>${tokenError.message}</p>
             `);
-            this.rejectAuth(tokenError);
+            if (typeof this.rejectAuth === 'function') {
+              this.rejectAuth(tokenError);
+            }
           }
         }
       } else {
@@ -148,13 +152,28 @@ class ModernAuth {
       }
     });
     
-    this.server.listen(port, 'localhost');
-    console.log(chalk.gray(`Temporary OAuth server started on port ${port}`));
+    return new Promise((resolve) => {
+      this.server.on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+          console.log(chalk.gray(`OAuth server already running on port ${port}`));
+          resolve();
+        } else {
+          console.error(chalk.red('OAuth server error:'), err.message);
+          resolve();
+        }
+      });
+      this.server.listen(port, 'localhost', () => {
+        console.log(chalk.gray(`Temporary OAuth server started on port ${port}`));
+        resolve();
+      });
+    });
   }
   
   cleanup() {
     if (this.server) {
-      this.server.close();
+      try {
+        this.server.close();
+      } catch (_e) {}
       this.server = null;
     }
   }
@@ -226,4 +245,5 @@ if (require.main === module) {
   runAuth();
 }
 
-module.exports = { ModernAuth };
+module.exports = ModernAuth;
+module.exports.ModernAuth = ModernAuth;
