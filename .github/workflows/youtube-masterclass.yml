@@ -1,0 +1,63 @@
+name: Weekly IT Masterclass Automation
+
+on:
+  # Schedule: Runs twice a week (Wednesdays & Sundays at 14:15 UTC)
+  schedule:
+    - cron: '15 14 * * 0,3'
+
+  # Manual Trigger: 1-click execution to produce a full masterclass course on demand
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Course Topic (e.g., Master Docker, Master Java, Master Computer Science, Master Kubernetes, Master System Design, or leave empty for auto-curriculum)'
+        required: false
+        default: ''
+
+concurrency:
+  group: youtube-masterclass
+  cancel-in-progress: false
+
+jobs:
+  produce-and-publish-masterclass:
+    name: Create, Upload & Purge Weekly Masterclass
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+          ffmpeg -version
+
+      - name: Install Project Dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium & System Dependencies
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Masterclass Pipeline (16:9 1080p, Timestamps, Upload & Purge)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
+          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
+          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
+          DEFAULT_PRIVACY_STATUS: ${{ secrets.DEFAULT_PRIVACY_STATUS || 'public' }}
+          NODE_ENV: "production"
+        run: |
+          TOPIC="${{ inputs.topic || '' }}"
+          if [ -n "$TOPIC" ]; then
+            node scripts/run-masterclass.js --topic="$TOPIC"
+          else
+            node scripts/run-masterclass.js
+          fi

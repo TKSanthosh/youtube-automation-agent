@@ -600,8 +600,8 @@ class AIVideoGenerator {
       if (duration < 150) duration = 165;
       await this.renderSlidesToVideo(stills, duration, videoPath);
 
-      // Add audio
-      await this.addAudioToVideo(videoPath, audioPath, outputPath, { loopVideo: true });
+      // Add audio with strict Shorts cutoff (175s max, strictly < 180s)
+      await this.addAudioToVideo(videoPath, audioPath, outputPath, { loopVideo: true, maxDuration: 175 });
 
       return outputPath;
     } finally {
@@ -636,7 +636,7 @@ class AIVideoGenerator {
           '-f', 'concat',
           '-safe', '0',
           '-i', concatFile,
-          '-vf', 'format=yuv420p',
+          '-vf', 'scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black,format=yuv420p',
           '-c:v', 'libx264',
           '-preset', 'ultrafast',
           '-r', '30',
@@ -657,7 +657,7 @@ class AIVideoGenerator {
     }
 
     if (stills.length === 1) {
-      args.push('-vf', 'format=yuv420p', '-c:v', 'libx264', videoPath);
+      args.push('-vf', 'scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black,format=yuv420p', '-c:v', 'libx264', videoPath);
       await runFFmpeg(args);
       return videoPath;
     }
@@ -671,7 +671,7 @@ class AIVideoGenerator {
       filters.push(`${prev}[${i}:v]xfade=transition=fade:duration=${fade}:offset=${offset}${out}`);
       prev = out;
     }
-    filters.push(`${prev}format=yuv420p[vfinal]`);
+    filters.push(`${prev}scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black,format=yuv420p[vfinal]`);
 
     args.push(
       '-filter_complex', filters.join(';'),
@@ -1107,7 +1107,8 @@ class AIVideoGenerator {
       : outputPath;
 
     const videoInput = options.loopVideo ? ['-stream_loop', '-1', '-i', videoPath] : ['-i', videoPath];
-    await runFFmpeg(['-y', ...videoInput, '-i', audioPath, '-map', '0:v:0', '-map', '1:a:0', '-c:v', 'copy', '-c:a', 'aac', '-shortest', muxPath]);
+    const durationArgs = options.maxDuration ? ['-t', String(options.maxDuration)] : [];
+    await runFFmpeg(['-y', ...videoInput, '-i', audioPath, '-map', '0:v:0', '-map', '1:a:0', '-c:v', 'copy', '-c:a', 'aac', '-shortest', ...durationArgs, muxPath]);
 
     if (muxPath !== outputPath) {
       await fs.rename(muxPath, outputPath);
@@ -1256,6 +1257,264 @@ class AIVideoGenerator {
       fileSize: 1024,
       simulated: true
     };
+  }
+
+  async generateMasterclassVideo(masterclassData, outputPath) {
+    this.logger.info(`Starting Masterclass 16:9 video assembly: "${masterclassData.title}"`);
+    const tempDir = path.join(path.dirname(outputPath), `masterclass_${Date.now()}`);
+    await fs.mkdir(tempDir, { recursive: true });
+
+    const { chromium } = require('playwright');
+    const browser = await chromium.launch();
+    const chapterFiles = [];
+
+    try {
+      const page = await browser.newPage();
+      await page.setViewportSize({ width: 1920, height: 1080 });
+
+      for (let i = 0; i < masterclassData.chapters.length; i++) {
+        const ch = masterclassData.chapters[i];
+        this.logger.info(`Producing Chapter ${i + 1}/${masterclassData.chapters.length}: "${ch.title}"`);
+
+        // 1. Synthesize chapter narration
+        const chapterAudioPath = path.join(tempDir, `chapter_${i}_audio.mp3`);
+        await this.generateTTSAudio(ch.spokenNarration, chapterAudioPath);
+        const chapterDuration = await this.getAudioDuration(chapterAudioPath);
+
+        // 2. Generate and capture slide HTML (1920x1080 Landscape)
+        const slideHtml = this.createMasterclassSlideHTML(masterclassData, ch, i + 1, masterclassData.chapters.length);
+        await page.setContent(slideHtml);
+        await page.addStyleTag({ content: '* { transition: none !important; animation: none !important; }' });
+        await page.waitForTimeout(500);
+
+        const slideImagePath = path.join(tempDir, `chapter_${i}_slide.png`);
+        await page.screenshot({ path: slideImagePath });
+
+        // 3. Render chapter segment with FFmpeg
+        const segmentVideoPath = path.join(tempDir, `chapter_${i}_segment.mp4`);
+        await runFFmpeg([
+          '-y',
+          '-loop', '1',
+          '-t', Number(chapterDuration).toFixed(2),
+          '-i', slideImagePath,
+          '-i', chapterAudioPath,
+          '-c:v', 'libx264',
+          '-preset', 'ultrafast',
+          '-pix_fmt', 'yuv420p',
+          '-vf', 'scale=1920:1080',
+          '-c:a', 'aac',
+          '-shortest',
+          segmentVideoPath
+        ]);
+
+        chapterFiles.push(segmentVideoPath);
+      }
+
+      // 4. Concatenate all chapter segments into the full course video
+      const concatListFile = path.join(tempDir, 'concat_chapters.txt');
+      const concatContent = chapterFiles.map(f => `file '${path.resolve(f).replace(/\\/g, '/').replace(/'/g, "'\\''")}'`).join('\n');
+      await fs.writeFile(concatListFile, concatContent);
+
+      this.logger.info(`Concatenating ${chapterFiles.length} chapters into final masterclass video...`);
+      await runFFmpeg([
+        '-y',
+        '-f', 'concat',
+        '-safe', '0',
+        '-i', concatListFile,
+        '-c', 'copy',
+        outputPath
+      ]);
+
+      this.logger.info(`Masterclass video successfully rendered: ${outputPath}`);
+      return outputPath;
+    } finally {
+      await browser.close().catch(() => {});
+      for (const f of chapterFiles) {
+        await fs.unlink(f).catch(() => {});
+      }
+      await fs.rm(tempDir, { recursive: true, force: true }).catch(() => {});
+    }
+  }
+
+  createMasterclassSlideHTML(masterclassData, chapter, chapterNum, totalChapters) {
+    return `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            width: 1920px;
+            height: 1080px;
+            background: #0d1117;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.12) 0%, transparent 40%),
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #f1f5f9;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 50px 70px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 25px;
+            margin-bottom: 35px;
+        }
+        .course-badge {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #38bdf8;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 10px 22px;
+            border-radius: 9999px;
+        }
+        .chapter-counter {
+            color: #94a3b8;
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .main-layout {
+            display: flex;
+            gap: 40px;
+            flex: 1;
+            height: calc(100% - 120px);
+        }
+
+        .left-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        h1.chapter-title {
+            font-size: 46px;
+            font-weight: 800;
+            line-height: 1.25;
+            color: #ffffff;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .bullet-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .bullet-card {
+            background: rgba(22, 27, 34, 0.85);
+            border-left: 5px solid #38bdf8;
+            border-radius: 12px;
+            padding: 20px 25px;
+            font-size: 26px;
+            line-height: 1.45;
+            color: #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .right-col {
+            flex: 1.15;
+            display: flex;
+            flex-direction: column;
+        }
+        .editor-window {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 16px;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        }
+        .window-header {
+            background: #0d1117;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #30363d;
+        }
+        .dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+        .file-tab {
+            color: #8b949e;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 18px;
+            margin-left: 12px;
+        }
+        .code-content {
+            padding: 30px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 22px;
+            line-height: 1.6;
+            color: #7ee787;
+            white-space: pre-wrap;
+            word-break: break-all;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #64748b;
+            font-size: 18px;
+            font-weight: 500;
+            padding-top: 15px;
+            border-top: 1px solid #21262d;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="course-badge">🎓 ${this.escapeHTML(masterclassData.shortTopic)} Masterclass</div>
+        <div class="chapter-counter">Chapter ${chapterNum} of ${totalChapters}</div>
+    </div>
+    <div class="main-layout">
+        <div class="left-col">
+            <h1 class="chapter-title">${this.escapeHTML(chapter.title)}</h1>
+            <div class="bullet-container">
+                ${(chapter.slideBullets || []).map(b => `<div class="bullet-card">💡 ${this.escapeHTML(b)}</div>`).join('')}
+            </div>
+        </div>
+        <div class="right-col">
+            <div class="editor-window">
+                <div class="window-header">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                    <span class="file-tab">example.code</span>
+                </div>
+                <pre class="code-content"><code>${this.escapeHTML(chapter.codeSnippet)}</code></pre>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div>Byte By Byte • System Design & DevOps Bootcamp</div>
+        <div>Full Video Course • Timestamps in Description</div>
+    </div>
+</body>
+</html>`;
   }
 }
 

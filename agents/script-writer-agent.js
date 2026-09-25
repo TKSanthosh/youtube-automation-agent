@@ -131,13 +131,13 @@ class ScriptWriterAgent {
     }
 
     const prompt = `You are a Senior Principal Software Engineer creating an in-depth 3-Minute YouTube Short script on the IT/tech topic: "${strategy.topic}".
-YouTube Shorts support up to 3 minutes (180 seconds). Your goal is to teach this technical concept thoroughly from start to end with a clear, concrete practical code or architecture example in approximately 380 to 420 words total (~170 seconds narration).
+YouTube Shorts strictly support up to 3 minutes (180 seconds). Your goal is to teach this technical concept thoroughly from start to end with a clear, concrete practical code or architecture example in approximately 280 to 320 words total (~140-160 seconds narration).
 
 CRITICAL CONSTRAINTS:
 1. ZERO GREETINGS & ZERO FLUFF: NEVER say "Hey everyone", "Hello folks", "Welcome back", or any introductory filler. Dive straight into the core engineering problem.
 2. START-TO-END TECHNICAL BREAKDOWN: Clearly define what the technology is, why standard approaches fail, how the internal mechanism works under the hood, and walk through a clear code or command example.
 3. CONCRETE PRACTICAL / CODE EXAMPLE: Include a realistic code snippet, terminal command, or architectural flow and explain it line by line.
-4. TOTAL LENGTH: Exactly ~400 spoken words across all sections combined to comfortably fill 170 seconds of voice narration.
+4. TOTAL LENGTH: Between 280 and 320 spoken words across all sections combined. Must be strictly under 175 seconds total speech to guarantee it qualifies as a YouTube Short.
 
 Return only valid JSON with this exact shape:
 {
