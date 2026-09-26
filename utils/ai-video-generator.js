@@ -59,7 +59,7 @@ class AIVideoGenerator {
       : null);
   }
 
-  async generateTTSAudio(text, outputPath) {
+  async generateTTSAudio(text, outputPath, options = {}) {
     this.logger.info('Generating TTS audio...');
     this.lastNarrationResult = null;
     let provider = 'simulation';
@@ -76,19 +76,12 @@ class AIVideoGenerator {
           this.logger.warn(`ElevenLabs TTS failed: ${e.message}`);
         }
       }
-      if (!generatedPath && this.openai) {
-        try {
-          provider = 'openai';
-          model = process.env.OPENAI_TTS_MODEL || 'tts-1';
-          generatedPath = await this.generateOpenAITTS(text, outputPath);
-        } catch (e) {
-          this.logger.warn(`OpenAI TTS failed: ${e.message}`);
-        }
-      }
       if (!generatedPath) {
         try {
           provider = 'msedge-neural';
-          model = process.env.MSEDGE_TTS_VOICE || 'en-US-ChristopherNeural';
+          const { voice: rotatedVoice, gender } = this.getRotatedVoice(options);
+          model = rotatedVoice;
+          this.logger.info(`Synthesizing narration with ${model} (${gender === 'ladies' ? 'Female/Lady' : 'Male/Gent'} instructor)...`);
           generatedPath = await this.generateMsEdgeTTS(text, outputPath, model);
         } catch (e) {
           this.logger.warn(`MsEdge Neural TTS failed: ${e.message}`);
@@ -133,6 +126,176 @@ class AIVideoGenerator {
       };
       return synthPath;
     }
+  }
+
+  getRotatedVoice(options = {}) {
+    if (process.env.MSEDGE_TTS_VOICE) {
+      return { voice: process.env.MSEDGE_TTS_VOICE, gender: 'custom' };
+    }
+
+    const fsSync = require('fs');
+    const path = require('path');
+    const stateFile = path.join(__dirname, '..', 'data', 'voice_state.json');
+
+    const gentsVoices = [
+      'en-US-ChristopherNeural', // Authoritative, warm senior male engineer
+      'en-US-GuyNeural',         // Dynamic, conversational male presenter
+      'en-US-AndrewNeural',      // Analytical, sharp tech lead
+      'en-US-BrianNeural'        // Approachable, engaging male educator
+    ];
+    const ladiesVoices = [
+      'en-US-AriaNeural',        // Clear, professional female tech instructor
+      'en-US-JennyNeural',       // Warm, natural conversational female mentor
+      'en-US-AvaNeural',         // Crisp, energetic modern female presenter
+      'en-US-EmmaNeural'         // Articulate, expressive female teacher
+    ];
+
+    let lastGender = 'gents';
+    let gentIndex = 0;
+    let ladyIndex = 0;
+
+    try {
+      if (fsSync.existsSync(stateFile)) {
+        const raw = JSON.parse(fsSync.readFileSync(stateFile, 'utf8'));
+        lastGender = raw.lastGender || 'gents';
+        gentIndex = Number.isInteger(raw.gentIndex) ? raw.gentIndex : 0;
+        ladyIndex = Number.isInteger(raw.ladyIndex) ? raw.ladyIndex : 0;
+      }
+    } catch (_e) {
+      // Ignore read error
+    }
+
+    // Toggle gender between ladies and gents across different videos
+    let nextGender = options.gender || (lastGender === 'gents' ? 'ladies' : 'gents');
+    let selectedVoice = '';
+
+    if (nextGender === 'ladies') {
+      const idx = ladyIndex % ladiesVoices.length;
+      selectedVoice = ladiesVoices[idx];
+      ladyIndex = (idx + 1) % ladiesVoices.length;
+    } else {
+      nextGender = 'gents';
+      const idx = gentIndex % gentsVoices.length;
+      selectedVoice = gentsVoices[idx];
+      gentIndex = (idx + 1) % gentsVoices.length;
+    }
+
+    try {
+      fsSync.mkdirSync(path.dirname(stateFile), { recursive: true });
+      fsSync.writeFileSync(stateFile, JSON.stringify({
+        lastGender: nextGender,
+        lastVoice: selectedVoice,
+        gentIndex,
+        ladyIndex,
+        updatedAt: new Date().toISOString()
+      }, null, 2));
+    } catch (_e) {
+      // Ignore write error
+    }
+
+    return { voice: selectedVoice, gender: nextGender };
+  }
+
+  getRotatedTheme() {
+    const fsSync = require('fs');
+    const path = require('path');
+    const stateFile = path.join(__dirname, '..', 'data', 'theme_state.json');
+
+    const themes = [
+      {
+        name: 'Cyber Cyan',
+        accent: '#00f2fe', accentRGB: '0, 242, 254',
+        bg: '#0a0e17',
+        bgGradient: 'radial-gradient(ellipse at 30% 20%, rgba(0,242,254,0.15) 0%, transparent 55%), radial-gradient(ellipse at 75% 80%, rgba(0,180,216,0.10) 0%, transparent 50%)',
+        secondary: '#38bdf8', secondaryRGB: '56, 189, 248',
+        gridColor: 'rgba(0, 242, 254, 0.04)',
+        codeColor: '#7ee787',
+        badgeBg: 'rgba(0, 242, 254, 0.12)',
+        cardBorder: '#164e63',
+        cardBg: 'rgba(10, 30, 50, 0.92)',
+        headerGradient: 'linear-gradient(135deg, #00f2fe 0%, #38bdf8 50%, #ffffff 100%)',
+        emoji: '⚡'
+      },
+      {
+        name: 'Emerald Matrix',
+        accent: '#10b981', accentRGB: '16, 185, 129',
+        bg: '#061a14',
+        bgGradient: 'radial-gradient(ellipse at 40% 25%, rgba(16,185,129,0.18) 0%, transparent 55%), radial-gradient(ellipse at 70% 75%, rgba(52,211,153,0.08) 0%, transparent 50%)',
+        secondary: '#34d399', secondaryRGB: '52, 211, 153',
+        gridColor: 'rgba(16, 185, 129, 0.04)',
+        codeColor: '#a5f3fc',
+        badgeBg: 'rgba(16, 185, 129, 0.14)',
+        cardBorder: '#065f46',
+        cardBg: 'rgba(6, 26, 20, 0.92)',
+        headerGradient: 'linear-gradient(135deg, #10b981 0%, #34d399 50%, #ffffff 100%)',
+        emoji: '🌿'
+      },
+      {
+        name: 'Obsidian Violet',
+        accent: '#c084fc', accentRGB: '192, 132, 252',
+        bg: '#0f0728',
+        bgGradient: 'radial-gradient(ellipse at 35% 30%, rgba(192,132,252,0.18) 0%, transparent 55%), radial-gradient(ellipse at 65% 80%, rgba(139,92,246,0.10) 0%, transparent 50%)',
+        secondary: '#a78bfa', secondaryRGB: '167, 139, 250',
+        gridColor: 'rgba(192, 132, 252, 0.04)',
+        codeColor: '#fbbf24',
+        badgeBg: 'rgba(192, 132, 252, 0.14)',
+        cardBorder: '#4c1d95',
+        cardBg: 'rgba(15, 7, 40, 0.92)',
+        headerGradient: 'linear-gradient(135deg, #c084fc 0%, #a78bfa 50%, #ffffff 100%)',
+        emoji: '🔮'
+      },
+      {
+        name: 'Sunset Amber',
+        accent: '#f97316', accentRGB: '249, 115, 22',
+        bg: '#180b06',
+        bgGradient: 'radial-gradient(ellipse at 45% 25%, rgba(249,115,22,0.18) 0%, transparent 55%), radial-gradient(ellipse at 60% 80%, rgba(251,146,60,0.08) 0%, transparent 50%)',
+        secondary: '#fb923c', secondaryRGB: '251, 146, 60',
+        gridColor: 'rgba(249, 115, 22, 0.04)',
+        codeColor: '#86efac',
+        badgeBg: 'rgba(249, 115, 22, 0.14)',
+        cardBorder: '#7c2d12',
+        cardBg: 'rgba(24, 11, 6, 0.92)',
+        headerGradient: 'linear-gradient(135deg, #f97316 0%, #fb923c 50%, #ffffff 100%)',
+        emoji: '🔥'
+      },
+      {
+        name: 'Electric Sapphire',
+        accent: '#3b82f6', accentRGB: '59, 130, 246',
+        bg: '#081226',
+        bgGradient: 'radial-gradient(ellipse at 50% 20%, rgba(59,130,246,0.18) 0%, transparent 55%), radial-gradient(ellipse at 30% 85%, rgba(96,165,250,0.10) 0%, transparent 50%)',
+        secondary: '#60a5fa', secondaryRGB: '96, 165, 250',
+        gridColor: 'rgba(59, 130, 246, 0.04)',
+        codeColor: '#f0abfc',
+        badgeBg: 'rgba(59, 130, 246, 0.14)',
+        cardBorder: '#1e3a5f',
+        cardBg: 'rgba(8, 18, 38, 0.92)',
+        headerGradient: 'linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #ffffff 100%)',
+        emoji: '💎'
+      }
+    ];
+
+    let themeIndex = 0;
+    try {
+      if (fsSync.existsSync(stateFile)) {
+        const raw = JSON.parse(fsSync.readFileSync(stateFile, 'utf8'));
+        themeIndex = Number.isInteger(raw.themeIndex) ? raw.themeIndex : 0;
+      }
+    } catch (_e) { /* ignore */ }
+
+    const selected = themes[themeIndex % themes.length];
+    const nextIndex = (themeIndex + 1) % themes.length;
+
+    try {
+      fsSync.mkdirSync(path.dirname(stateFile), { recursive: true });
+      fsSync.writeFileSync(stateFile, JSON.stringify({
+        themeIndex: nextIndex,
+        lastTheme: selected.name,
+        updatedAt: new Date().toISOString()
+      }, null, 2));
+    } catch (_e) { /* ignore */ }
+
+    this.logger.info(`Visual theme selected: ${selected.name} (${selected.emoji})`);
+    return selected;
   }
 
   async generateMsEdgeTTS(text, outputPath, voiceName = 'en-US-ChristopherNeural') {
@@ -791,6 +954,8 @@ class AIVideoGenerator {
       return this.createMultiSlideShortsHTML(script, visualAssets);
     }
 
+    const theme = this.getRotatedTheme();
+
     return `
 <!DOCTYPE html>
 <html>
@@ -805,12 +970,11 @@ class AIVideoGenerator {
         body {
             width: 1080px;
             height: 1920px;
-            background: #090d16;
+            background: ${theme.bg};
             background-image: 
-                radial-gradient(circle at 50% 15%, rgba(56, 189, 248, 0.18) 0%, transparent 60%),
-                radial-gradient(circle at 80% 85%, rgba(168, 85, 247, 0.18) 0%, transparent 60%),
-                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+                ${theme.bgGradient},
+                linear-gradient(${theme.gridColor} 1px, transparent 1px),
+                linear-gradient(90deg, ${theme.gridColor} 1px, transparent 1px);
             background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             color: #f1f5f9;
@@ -853,9 +1017,9 @@ class AIVideoGenerator {
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            background: rgba(56, 189, 248, 0.15);
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            color: #38bdf8;
+            background: ${theme.badgeBg};
+            border: 1px solid rgba(${theme.accentRGB}, 0.4);
+            color: ${theme.accent};
             font-size: 26px;
             font-weight: 700;
             letter-spacing: 2px;
@@ -927,10 +1091,10 @@ class AIVideoGenerator {
         h2.section-header {
             font-size: 52px;
             font-weight: 800;
-            color: #38bdf8;
+            color: ${theme.accent};
             margin-bottom: 35px;
             line-height: 1.2;
-            text-shadow: 0 2px 10px rgba(56, 189, 248, 0.3);
+            text-shadow: 0 2px 10px rgba(${theme.accentRGB}, 0.3);
         }
         
         .content-card {
@@ -994,25 +1158,25 @@ class AIVideoGenerator {
             font-family: 'Consolas', 'Courier New', monospace;
             font-size: 26px;
             line-height: 1.55;
-            color: #58a6ff;
+            color: ${theme.codeColor};
             white-space: pre-wrap;
             word-break: break-all;
         }
         
         .takeaway-card {
             background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
-            border: 2px solid #38bdf8;
+            border: 2px solid ${theme.accent};
             border-radius: 24px;
             padding: 50px 40px;
             text-align: center;
             max-width: 940px;
-            box-shadow: 0 0 50px rgba(56, 189, 248, 0.2);
+            box-shadow: 0 0 50px rgba(${theme.accentRGB}, 0.2);
         }
         
         .takeaway-title {
             font-size: 48px;
             font-weight: 800;
-            color: #34d399;
+            color: ${theme.secondary};
             margin-bottom: 30px;
         }
         
@@ -1124,17 +1288,39 @@ class AIVideoGenerator {
   }
 
   createMultiSlideShortsHTML(script, visualAssets = []) {
+    const theme = this.getRotatedTheme();
+
+    const slideBadges = [
+      { icon: '🔥', label: '01. The Problem', color: '#ef4444' },
+      { icon: '⚙️', label: '02. The Architecture', color: theme.accent },
+      { icon: '💻', label: '03. Live Code', color: '#22c55e' },
+      { icon: '💡', label: '04. Senior Rule of Thumb', color: '#eab308' },
+      { icon: '🚀', label: '05. Deep Dive', color: theme.secondary }
+    ];
+
+    const slideDecorations = [
+      // Slide 1: floating alert icons
+      `<div class="deco-float deco-float-1">⚠️</div><div class="deco-float deco-float-2">🐛</div><div class="deco-float deco-float-3">💥</div>`,
+      // Slide 2: mini architecture nodes
+      `<div class="deco-arch"><div class="arch-node" style="border-color:${theme.accent}">📡</div><div class="arch-line" style="background:${theme.accent}"></div><div class="arch-node" style="border-color:${theme.secondary}">⚙️</div><div class="arch-line" style="background:${theme.secondary}"></div><div class="arch-node" style="border-color:${theme.accent}">💾</div></div>`,
+      // Slide 3: terminal cursor blink
+      `<div class="deco-terminal"><span class="term-prompt" style="color:${theme.accent}">$</span> <span class="term-cursor">_</span></div>`,
+      // Slide 4: achievement badge
+      `<div class="deco-achievement" style="border-color:${theme.accent}"><span class="achieve-icon">🏆</span><span class="achieve-text" style="color:${theme.accent}">KEY TAKEAWAY</span></div>`,
+      // Slide 5 fallback
+      `<div class="deco-float deco-float-1">🚀</div>`
+    ];
+
     const slidesHTML = script.slides.map((slide, idx) => {
       const asset = (visualAssets && visualAssets.length > 0) ? visualAssets[idx % visualAssets.length] : null;
-      let badge = '⚡ Technical Deep Dive';
-      if (idx === 0) badge = '🔥 01. The Problem';
-      else if (idx === 1) badge = '⚙️ 02. The Architecture';
-      else if (idx === 2) badge = '💻 03. Live Code';
-      else if (idx === 3) badge = '💡 04. Senior Rule of Thumb';
+      const badge = slideBadges[idx] || slideBadges[0];
+      const deco = slideDecorations[idx] || '';
 
-      const bulletsHTML = (slide.bulletPoints || []).map(b => 
-        `<div class="bullet-card">💡 ${this.escapeHTML(b)}</div>`
-      ).join('');
+      const bulletsHTML = (slide.bulletPoints || []).map((b, bIdx) => {
+        const bulletIcons = ['💡', '⚡', '🔑', '📌', '✨'];
+        const icon = bulletIcons[bIdx % bulletIcons.length];
+        return `<div class="bullet-card" style="border-left-color: ${theme.accent}; animation-delay: ${bIdx * 0.15}s">${icon} ${this.escapeHTML(b)}</div>`;
+      }).join('');
 
       const diagramHTML = (idx === 1 || slide.diagram) ? this.renderDiagramHTML(slide, script.title) : '';
 
@@ -1151,14 +1337,21 @@ class AIVideoGenerator {
 
       return `
       <div class="slide ${idx === 0 ? 'active' : ''}">
+          <div class="scanline"></div>
           ${asset ? `<img class="background-image" src="${asset}" />` : ''}
-          <div class="top-badge" style="position:relative; z-index:1;">${badge}</div>
-          <div class="section-card" style="position:relative; z-index:1;">
+          <div class="slide-particles">
+            <div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div>
+            <div class="particle p4"></div><div class="particle p5"></div>
+          </div>
+          ${deco}
+          <div class="top-badge" style="background: ${badge.color}22; border-color: ${badge.color}66; color: ${badge.color};">${badge.icon} ${badge.label}</div>
+          <div class="section-card">
               <h2 class="section-header">${this.escapeHTML(slide.headline)}</h2>
               ${bulletsHTML ? `<div class="bullet-container">${bulletsHTML}</div>` : ''}
               ${diagramHTML}
               ${codeHTML}
           </div>
+          <div class="slide-number" style="color: ${theme.accent}40">${String(idx + 1).padStart(2, '0')}</div>
       </div>`;
     }).join('\n');
 
@@ -1168,16 +1361,45 @@ class AIVideoGenerator {
 <head>
     <meta charset="utf-8">
     <style>
+        @keyframes pulse-glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(${theme.accentRGB}, 0.15); }
+          50% { box-shadow: 0 0 40px rgba(${theme.accentRGB}, 0.35), 0 0 80px rgba(${theme.accentRGB}, 0.10); }
+        }
+        @keyframes scanline-sweep {
+          0% { top: -5%; }
+          100% { top: 105%; }
+        }
+        @keyframes float-drift {
+          0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+          50% { transform: translateY(-20px) rotate(8deg); opacity: 1; }
+        }
+        @keyframes shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        @keyframes cursor-blink {
+          0%, 49% { opacity: 1; }
+          50%, 100% { opacity: 0; }
+        }
+        @keyframes particle-float {
+          0% { transform: translateY(0) translateX(0) scale(1); opacity: 0.3; }
+          50% { transform: translateY(-40px) translateX(15px) scale(1.3); opacity: 0.6; }
+          100% { transform: translateY(-80px) translateX(-10px) scale(0.8); opacity: 0; }
+        }
+        @keyframes slide-in-up {
+          0% { transform: translateY(30px); opacity: 0; }
+          100% { transform: translateY(0); opacity: 1; }
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             width: 1080px;
             height: 1920px;
-            background: #090d16;
-            background-image: 
-                radial-gradient(circle at 50% 15%, rgba(56, 189, 248, 0.18) 0%, transparent 60%),
-                radial-gradient(circle at 80% 85%, rgba(168, 85, 247, 0.18) 0%, transparent 60%),
-                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background: ${theme.bg};
+            background-image:
+                ${theme.bgGradient},
+                linear-gradient(${theme.gridColor} 1px, transparent 1px),
+                linear-gradient(90deg, ${theme.gridColor} 1px, transparent 1px);
             background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             color: #f1f5f9;
@@ -1186,6 +1408,35 @@ class AIVideoGenerator {
             align-items: center;
             justify-content: center;
         }
+
+        /* Animated scanline overlay */
+        .scanline {
+            position: absolute;
+            top: -5%;
+            left: 0;
+            width: 100%;
+            height: 5%;
+            background: linear-gradient(to bottom, transparent, rgba(${theme.accentRGB}, 0.06), transparent);
+            z-index: 2;
+            pointer-events: none;
+            animation: scanline-sweep 6s linear infinite;
+        }
+
+        /* Floating particles */
+        .slide-particles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .particle {
+          position: absolute;
+          width: 6px; height: 6px;
+          background: ${theme.accent};
+          border-radius: 50%;
+          animation: particle-float 8s ease-in-out infinite;
+        }
+        .p1 { left: 10%; top: 80%; animation-delay: 0s; }
+        .p2 { left: 30%; top: 85%; animation-delay: 1.5s; }
+        .p3 { left: 55%; top: 90%; animation-delay: 3s; }
+        .p4 { left: 75%; top: 82%; animation-delay: 4.5s; }
+        .p5 { left: 90%; top: 88%; animation-delay: 6s; }
+
         .slide {
             position: absolute;
             width: 1080px;
@@ -1199,33 +1450,44 @@ class AIVideoGenerator {
             transition: opacity 1s ease-in-out;
         }
         .slide.active { opacity: 1; }
+
         .background-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.12;
-            z-index: 0;
-            pointer-events: none;
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover; opacity: 0.10;
+            z-index: 0; pointer-events: none;
+            filter: saturate(1.3);
         }
+
+        /* Large faded slide number watermark */
+        .slide-number {
+          position: absolute;
+          bottom: 60px; right: 60px;
+          font-size: 200px;
+          font-weight: 900;
+          opacity: 0.08;
+          pointer-events: none;
+          z-index: 0;
+          font-family: monospace;
+        }
+
         .top-badge {
+            position: relative; z-index: 3;
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            background: rgba(56, 189, 248, 0.15);
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            color: #38bdf8;
             font-size: 26px;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
             padding: 14px 28px;
             border-radius: 9999px;
+            border: 1px solid;
             margin-bottom: 40px;
+            animation: pulse-glow 3s ease-in-out infinite;
         }
         .section-card {
+            position: relative; z-index: 3;
             width: 100%;
             max-width: 960px;
             display: flex;
@@ -1235,10 +1497,9 @@ class AIVideoGenerator {
         h2.section-header {
             font-size: 52px;
             font-weight: 800;
-            color: #ffffff;
             margin-bottom: 35px;
             line-height: 1.25;
-            background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+            background: ${theme.headerGradient};
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -1250,35 +1511,36 @@ class AIVideoGenerator {
             margin-bottom: 25px;
         }
         .bullet-card {
-            background: rgba(15, 23, 42, 0.9);
-            border-left: 6px solid #38bdf8;
+            background: ${theme.cardBg};
+            border-left: 6px solid ${theme.accent};
             border-radius: 16px;
             padding: 28px 34px;
             font-size: 32px;
             line-height: 1.5;
             color: #e2e8f0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: slide-in-up 0.6s ease-out both;
         }
+
+        /* Diagram styling */
         .diagram-container {
             width: 100%;
-            background: rgba(15, 23, 42, 0.95);
-            border: 2px solid #38bdf8;
+            background: ${theme.cardBg};
+            border: 2px solid ${theme.accent};
             border-radius: 20px;
             padding: 26px 22px;
             margin-top: 15px;
             margin-bottom: 20px;
-            box-shadow: 0 10px 35px rgba(56, 189, 248, 0.2);
+            box-shadow: 0 10px 35px rgba(${theme.accentRGB}, 0.2);
+            animation: pulse-glow 4s ease-in-out infinite;
         }
         .diagram-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #38bdf8;
+            font-size: 24px; font-weight: 700;
+            color: ${theme.accent};
             text-transform: uppercase;
             letter-spacing: 1.5px;
             margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
         }
         .diagram-nodes-grid {
             display: grid;
@@ -1287,35 +1549,19 @@ class AIVideoGenerator {
             margin-bottom: 16px;
         }
         .diagram-node-card {
-            background: #1e293b;
-            border: 1px solid #475569;
+            background: rgba(${theme.accentRGB}, 0.08);
+            border: 1px solid ${theme.cardBorder};
             border-radius: 14px;
             padding: 16px 18px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
+            display: flex; align-items: center; gap: 14px;
         }
-        .diagram-node-icon {
-            font-size: 32px;
-            line-height: 1;
-        }
-        .diagram-node-info {
-            display: flex;
-            flex-direction: column;
-        }
-        .diagram-node-name {
-            font-size: 22px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-        .diagram-node-role {
-            font-size: 16px;
-            color: #94a3b8;
-            margin-top: 3px;
-        }
+        .diagram-node-icon { font-size: 32px; line-height: 1; }
+        .diagram-node-info { display: flex; flex-direction: column; }
+        .diagram-node-name { font-size: 22px; font-weight: 700; color: #ffffff; }
+        .diagram-node-role { font-size: 16px; color: #94a3b8; margin-top: 3px; }
         .diagram-flow-bar {
-            background: rgba(56, 189, 248, 0.12);
-            border: 1px dashed #38bdf8;
+            background: rgba(${theme.accentRGB}, 0.12);
+            border: 1px dashed ${theme.accent};
             border-radius: 12px;
             padding: 12px 18px;
             color: #e2e8f0;
@@ -1324,19 +1570,19 @@ class AIVideoGenerator {
             font-weight: 600;
             text-align: center;
         }
+
+        /* Code block */
         .code-container {
             width: 100%;
             background: #0d1117;
-            border: 1px solid #30363d;
+            border: 1px solid ${theme.cardBorder};
             border-radius: 20px;
             overflow: hidden;
             margin-top: 15px;
             box-shadow: 0 12px 35px rgba(0,0,0,0.7);
         }
         .code-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
             background: #161b22;
             padding: 18px 24px;
             border-bottom: 1px solid #30363d;
@@ -1356,10 +1602,71 @@ class AIVideoGenerator {
             font-family: 'Consolas', 'Courier New', monospace;
             font-size: 26px;
             line-height: 1.55;
-            color: #7ee787;
+            color: ${theme.codeColor};
             white-space: pre-wrap;
             word-break: break-all;
         }
+
+        /* Decorative elements */
+        .deco-float {
+          position: absolute;
+          font-size: 48px;
+          z-index: 1;
+          pointer-events: none;
+          animation: float-drift 4s ease-in-out infinite;
+        }
+        .deco-float-1 { top: 12%; right: 10%; animation-delay: 0s; }
+        .deco-float-2 { top: 25%; left: 8%; animation-delay: 1s; }
+        .deco-float-3 { bottom: 18%; right: 15%; animation-delay: 2s; }
+
+        /* Architecture decoration */
+        .deco-arch {
+          position: absolute;
+          bottom: 140px; left: 50%;
+          transform: translateX(-50%);
+          display: flex; align-items: center; gap: 0;
+          z-index: 1; pointer-events: none;
+          opacity: 0.6;
+        }
+        .arch-node {
+          width: 56px; height: 56px;
+          border: 2px solid;
+          border-radius: 14px;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 24px;
+          background: rgba(0,0,0,0.4);
+        }
+        .arch-line {
+          width: 40px; height: 3px;
+          opacity: 0.5;
+        }
+
+        /* Terminal cursor */
+        .deco-terminal {
+          position: absolute;
+          bottom: 150px; left: 70px;
+          font-family: 'Consolas', monospace;
+          font-size: 28px;
+          z-index: 1;
+          opacity: 0.5;
+        }
+        .term-prompt { font-weight: 700; }
+        .term-cursor { animation: cursor-blink 1s step-end infinite; }
+
+        /* Achievement badge */
+        .deco-achievement {
+          position: absolute;
+          top: 120px; right: 60px;
+          border: 2px solid;
+          border-radius: 16px;
+          padding: 10px 20px;
+          display: flex; align-items: center; gap: 10px;
+          background: rgba(0,0,0,0.5);
+          z-index: 1;
+          animation: pulse-glow 3s ease-in-out infinite;
+        }
+        .achieve-icon { font-size: 28px; }
+        .achieve-text { font-size: 16px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
     </style>
 </head>
 <body>
