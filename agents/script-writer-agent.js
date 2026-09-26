@@ -908,10 +908,10 @@ Return ONLY valid JSON matching this exact structure:
     
     // Metadata
     fullScript += '═'.repeat(50) + '\n';
-    fullScript += `ESTIMATED DURATION: ${script.duration}\n`;
-    fullScript += `TONE: ${script.tone}\n`;
-    fullScript += `PACING: ${script.pacing}\n`;
-    fullScript += `KEYWORDS: ${script.keywords.join(', ')}\n`;
+    if (script.duration) fullScript += `ESTIMATED DURATION: ${script.duration}\n`;
+    if (script.tone) fullScript += `TONE: ${script.tone}\n`;
+    if (script.pacing) fullScript += `PACING: ${script.pacing}\n`;
+    if (Array.isArray(script.keywords)) fullScript += `KEYWORDS: ${script.keywords.join(', ')}\n`;
     
     return fullScript;
   }

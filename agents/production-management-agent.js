@@ -594,7 +594,8 @@ class ProductionManagementAgent {
     
     // Conclusion
     if (script.conclusion) {
-      const conclusionText = script.conclusion.recap.join(' ') + ' ' + script.conclusion.finalThought;
+      const recapPart = Array.isArray(script.conclusion.recap) ? script.conclusion.recap.join(' ') : (script.conclusion.recap || '');
+      const conclusionText = `${recapPart} ${script.conclusion.finalThought || ''}`.trim();
       processText(conclusionText, currentTime, 30);
       currentTime += 30;
     }
