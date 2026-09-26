@@ -822,67 +822,89 @@ Return ONLY valid JSON matching this exact structure:
     fullScript += '═'.repeat(50) + '\n\n';
     
     // Hook
-    fullScript += `[${script.hook.duration}] HOOK\n`;
-    fullScript += `${script.hook.text}\n\n`;
+    if (script.hook) {
+      const hookDur = script.hook.duration || '10s';
+      const hookText = script.hook.text || script.hook;
+      fullScript += `[${hookDur}] HOOK\n${hookText}\n\n`;
+    }
     
     // Introduction
-    fullScript += `[${script.introduction.duration}] INTRODUCTION\n`;
-    fullScript += `${script.introduction.greeting}\n`;
-    fullScript += `${script.introduction.topicIntro}\n`;
-    fullScript += `${script.introduction.valueProposition}\n`;
-    fullScript += `${script.introduction.credibility}\n\n`;
+    if (script.introduction) {
+      const introDur = script.introduction.duration || '15s';
+      fullScript += `[${introDur}] INTRODUCTION\n`;
+      if (script.introduction.greeting) fullScript += `${script.introduction.greeting}\n`;
+      if (script.introduction.topicIntro) fullScript += `${script.introduction.topicIntro}\n`;
+      if (script.introduction.valueProposition) fullScript += `${script.introduction.valueProposition}\n`;
+      if (script.introduction.credibility) fullScript += `${script.introduction.credibility}\n\n`;
+    }
     
     // Main Content
-    fullScript += 'MAIN CONTENT\n';
-    fullScript += '─'.repeat(30) + '\n\n';
-    
-    for (const section of script.mainContent.sections) {
-      fullScript += `[${this.formatDuration(section.duration)}] ${section.title.toUpperCase()}\n`;
+    const sections = (script.mainContent && script.mainContent.sections) || script.sections || [];
+    if (sections.length > 0) {
+      fullScript += 'MAIN CONTENT\n';
+      fullScript += '─'.repeat(30) + '\n\n';
       
-      if (Array.isArray(section.content)) {
-        section.content.forEach(line => {
-          fullScript += `${line}\n`;
-        });
-      } else if (section.steps) {
-        section.steps.forEach(step => {
-          fullScript += `\n${step.title}\n`;
-          fullScript += `${step.description}\n`;
-          fullScript += `💡 ${step.tip}\n`;
-        });
-      } else if (section.items) {
-        section.items.forEach(item => {
-          fullScript += `\n#${item.number}: ${item.title}\n`;
-          fullScript += `${item.description}\n`;
-          fullScript += `Impact: ${item.impact}\n`;
-        });
-      } else if (section.points) {
-        section.points.forEach(point => {
-          fullScript += `• ${point}\n`;
-        });
-      } else {
-        fullScript += `${section.content}\n`;
+      for (const section of sections) {
+        const secDuration = section.duration ? this.formatDuration(section.duration) : '30s';
+        fullScript += `[${secDuration}] ${(section.title || 'SECTION').toUpperCase()}\n`;
+        
+        if (Array.isArray(section.content)) {
+          section.content.forEach(line => {
+            fullScript += `${line}\n`;
+          });
+        } else if (section.spokenNarration) {
+          fullScript += `${section.spokenNarration}\n`;
+        } else if (section.steps) {
+          section.steps.forEach(step => {
+            fullScript += `\n${step.title}\n`;
+            fullScript += `${step.description}\n`;
+            fullScript += `💡 ${step.tip}\n`;
+          });
+        } else if (section.items) {
+          section.items.forEach(item => {
+            fullScript += `\n#${item.number}: ${item.title}\n`;
+            fullScript += `${item.description}\n`;
+            fullScript += `Impact: ${item.impact}\n`;
+          });
+        } else if (section.points) {
+          section.points.forEach(point => {
+            fullScript += `• ${point}\n`;
+          });
+        } else if (section.content) {
+          fullScript += `${section.content}\n`;
+        }
+        
+        if (section.visuals) {
+          fullScript += `\n[VISUALS: ${section.visuals.join(', ')}]\n`;
+        }
+        
+        fullScript += '\n';
       }
-      
-      if (section.visuals) {
-        fullScript += `\n[VISUALS: ${section.visuals.join(', ')}]\n`;
-      }
-      
-      fullScript += '\n';
     }
     
     // Conclusion
-    fullScript += `[${script.conclusion.duration}] CONCLUSION\n`;
-    script.conclusion.recap.forEach(line => {
-      fullScript += `${line}\n`;
-    });
-    fullScript += `\n${script.conclusion.finalThought}\n\n`;
+    if (script.conclusion) {
+      const conclDuration = script.conclusion.duration || '15s';
+      fullScript += `[${conclDuration}] CONCLUSION\n`;
+      if (Array.isArray(script.conclusion.recap)) {
+        script.conclusion.recap.forEach(line => {
+          fullScript += `${line}\n`;
+        });
+      }
+      if (script.conclusion.finalThought) {
+        fullScript += `\n${script.conclusion.finalThought}\n\n`;
+      }
+    }
     
     // Call to Action
-    fullScript += `[${script.callToAction.duration}] CALL TO ACTION\n`;
-    fullScript += `${script.callToAction.subscribe}\n`;
-    fullScript += `${script.callToAction.like}\n`;
-    fullScript += `${script.callToAction.comment}\n`;
-    fullScript += `${script.callToAction.nextVideo}\n\n`;
+    if (script.callToAction) {
+      const ctaDuration = script.callToAction.duration || '5s';
+      fullScript += `[${ctaDuration}] CALL TO ACTION\n`;
+      if (script.callToAction.subscribe) fullScript += `${script.callToAction.subscribe}\n`;
+      if (script.callToAction.like) fullScript += `${script.callToAction.like}\n`;
+      if (script.callToAction.comment) fullScript += `${script.callToAction.comment}\n`;
+      if (script.callToAction.nextVideo) fullScript += `${script.callToAction.nextVideo}\n\n`;
+    }
     
     // Metadata
     fullScript += '═'.repeat(50) + '\n';
