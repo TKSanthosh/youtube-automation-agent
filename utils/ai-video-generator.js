@@ -595,9 +595,9 @@ class AIVideoGenerator {
       const audioDuration = await this.getAudioDuration(audioPath, { shortsMode: true });
       const scriptDuration = this.calculateScriptDuration(script);
       let duration = audioDuration > 10 ? audioDuration : scriptDuration;
-      // Guarantee strictly <= 175 seconds for YouTube Shorts qualification (< 180s)
+      // Guarantee strictly between 150s (2m30s) and 175s (<180s) for YouTube Shorts qualification
       if (duration > 175) duration = 175;
-      if (duration < 140) duration = 150;
+      if (duration < 150) duration = 150;
 
       // Compute exact per-slide duration array based on the narration word count of each slide
       const slideDurations = this.calculateSlideDurations(script, slideCount, duration);

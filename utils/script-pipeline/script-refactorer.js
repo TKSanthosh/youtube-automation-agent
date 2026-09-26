@@ -20,11 +20,14 @@ Audit Feedback to incorporate:
 ${JSON.stringify(auditFeedback).slice(0, 1500)}
 
 REFACTORING MANDATES:
-1. Write for the EAR, not the eye. Use punchy, conversational, authoritative speech.
-2. Zero passive corporate jargon.
-3. Every chapter must open with purpose and end with a bridge to the next concept.
-4. Seamlessly incorporate code callouts and visual cues.
-5. Emphasize "why this matters" before "how it works".
+1. Write for the EAR, not the eye. Use punchy, conversational, authoritative speech with witty developer analogies.
+2. ZERO SLIDE READING: Spoken sentences must NEVER repeat or read verbatim any on-screen text. The speaker talks directly to the viewer, referencing the screen ("Notice on line 4...", "Here is what happens under the hood...").
+3. 100% COMPLETE PEDAGOGICAL CLOSURE: Do not leave any concept promised in the opening unfinished. Resolve every point raised with code and practical insight.
+4. STRICT TIMING (SHORTS): For Shorts, ensure total spoken content is 340-370 words (~155-170 seconds, strictly between 2m30s and 3m) across 4 chapters (durations: 40s, 45s, 50s, 35s).
+5. Zero passive corporate jargon and zero repetitive filler.
+6. Every chapter must open with purpose and end with a bridge to the next concept.
+7. Seamlessly incorporate code callouts and visual cues.
+8. Emphasize "why this matters" before "how it works".
 
 Provide a JSON response with the refactored script:
 {

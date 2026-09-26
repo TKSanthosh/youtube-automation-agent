@@ -7,17 +7,17 @@ class HeadReviewer {
     this.minApprovalScore = 85;
   }
 
-  async evaluate(script, hostileReview, topic) {
+  async evaluate(script, hostileReview, _topic) {
     this.logger.info(`Editor-in-Chief final gate evaluation for: "${script.title}"`);
     const prompt = `You are the Editor-in-Chief and Final Authority of a premier Tech Education channel.
 You have the final say on whether a script proceeds to visual production.
 
 EVALUATION CRITERIA:
-1. Pedagogical Clarity (25%): Can a beginner follow the intuition before the deep dive?
-2. Technical Accuracy (25%): Are terminology, algorithms, and complexity strictly correct?
-3. Visual Potential (20%): Does each chapter feature explicit diagrams and data flows rather than static walls of text?
-4. Engagement & Retention (20%): Does it start strong without generic filler? Does it keep momentum?
-5. Practical Value (10%): Does it show real-world code and industry usage?
+1. Pedagogical Clarity & 100% Complete Resolution (25%): Can a beginner follow the intuition before the deep dive? Did every point mentioned in the hook get completely resolved by the end with zero cliffhangers or missing pieces? (REJECT if incomplete!).
+2. Natural Teacher Delivery (20%): Does the narration speak directly to the viewer with real developer analogies? Does it strictly avoid reading slides verbatim?
+3. Technical Accuracy (20%): Are terminology, algorithms, and complexity strictly correct?
+4. Visual Potential & Pacing (20%): Does each chapter feature explicit diagrams and data flows rather than static walls of text?
+5. Practical Value & Timing (15%): Does it show real-world code and industry usage? Does it fit the strict duration window (340-370 words, 2.5-3m for Shorts)?
 
 Script Overview:
 Title: ${script.title}

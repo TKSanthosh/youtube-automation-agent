@@ -16,15 +16,18 @@ Title: ${script.title}
 Hook: ${script.hook?.text || script.hook}
 Sections: ${JSON.stringify((script.sections || []).slice(0, 8)).slice(0, 3500)}
 
-Ruthlessly evaluate against these 8 questions:
+Ruthlessly evaluate against these 11 questions:
 1. Is anything technically inaccurate or hand-wavy?
 2. Does the hook grab attention in 5 seconds, or does it sound like standard AI filler?
-3. Are there boring stretches where the viewer will drop off?
-4. Are concepts defined without explaining WHY they exist?
-5. Are there enough concrete visual cues and code demonstrations?
-6. Are transitions between sections natural or jarring?
-7. Will a beginner genuinely understand the mechanism after watching?
-8. Is this video significantly better than competing YouTube tutorials?
+3. Did the hook/intro overpromise multiple topics and leave them incomplete or cut off at the end? (REJECT if incomplete!)
+4. Is there 100% complete pedagogical resolution—did every question and concept raised get fully resolved with practical code and closure?
+5. Does the teacher voice read bullet points verbatim? (REJECT if verbatim reading occurs—must be natural, conversational commentary!)
+6. Are there boring stretches where the viewer will drop off, or repetitive loops?
+7. Are concepts defined without explaining WHY they exist?
+8. Are there enough concrete visual cues and code demonstrations?
+9. Are transitions between sections natural or jarring?
+10. Will a beginner genuinely understand the mechanism after watching?
+11. Is the script strictly timed (for Shorts: 340-370 words, ~155-170s, strictly between 2m30s and 3m)?
 
 Provide a JSON response:
 {

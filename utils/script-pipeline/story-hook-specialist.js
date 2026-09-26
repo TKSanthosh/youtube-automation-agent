@@ -14,6 +14,7 @@ Audience Questions: ${JSON.stringify(audience.questionsNaturallyAsked)}
 
 RULES FOR HOOKS:
 - ABSOLUTELY NO generic greetings like "Hello everyone, welcome back to the channel", "In this video we will discuss...", "Today I am going to show you..."
+- ANTI-OVERPROMISING MANDATE: The hook MUST focus strictly on ONE singular, specific technical problem or mechanism that will be 100% taught and resolved in this video. NEVER promise a wide multi-topic curriculum (e.g. do not say "we will cover orchestration, networking, storage, and secrets"). If the topic is broad, scope it strictly as Part 1 for that singular piece.
 - The opening 5-15 seconds must hook curiosity IMMEDIATELY with an unexpected insight, a critical bug, an invisible mechanism, or a thought-provoking challenge.
 - Create 4 distinct hook archetypes:
   1. The "Invisible Mechanism" hook (Revealing what happens behind the scenes)

@@ -67,6 +67,17 @@ class ScriptWriterAgent {
           pipelineScript.sections = pipelineScript.sections || [];
           pipelineScript.mainContent = pipelineScript.mainContent || { sections: pipelineScript.sections };
           pipelineScript.keywords = pipelineScript.keywords || strategy.keywords || [];
+          if (!Array.isArray(pipelineScript.slides) || pipelineScript.slides.length === 0) {
+            pipelineScript.slides = (pipelineScript.sections || []).map((sec, idx) => ({
+              slideNumber: idx + 1,
+              headline: sec.visual?.headline || sec.title || `Concept ${idx + 1}`,
+              bulletPoints: Array.isArray(sec.content)
+                ? sec.content.slice(0, 3).map(s => String(s).replace(/^[-*•\d.]+\s*/, '').trim()).filter(Boolean)
+                : [String(sec.content || '')],
+              codeSnippet: sec.visual?.codeSnippet || sec.codeSnippet || '',
+              teacherNarration: sec.spokenNarration || (Array.isArray(sec.content) ? sec.content.join(' ') : String(sec.content || ''))
+            }));
+          }
           pipelineScript.fullScript = this.formatFullScript(pipelineScript);
           await this.db.saveScript(pipelineScript);
           this.logger.info(`10-Agent Pipeline Script APPROVED & saved: "${pipelineScript.title}"`);
@@ -133,34 +144,41 @@ class ScriptWriterAgent {
       return null;
     }
 
-    const prompt = `You are a renowned principal software architect and passionate tech educator creating a 3-Minute YouTube Short on: "${strategy.topic}".
-Your goal is to teach this technical concept clearly and practically so that even junior developers immediately get it, while senior engineers appreciate the depth.
+    const prompt = `You are a renowned principal software architect and passionate tech educator creating a YouTube Short on: "${strategy.topic}".
+Your goal is to teach this technical concept clearly, thoroughly, and completely so that even junior developers immediately get it, while senior engineers appreciate the depth.
 
-CRITICAL INSTRUCTIONS FOR VOICE, HUMOR & PEDAGOGY:
-1. TALK LIKE A REAL HUMAN TEACHER:
-   - Speak conversationally, warmly, and with high energy.
-   - Use funny, relatable real-world analogies (e.g., comparing database locks to two polite people refusing to walk through a door first, or cache invalidation to updating restaurant menus during a rush).
-   - Reference relatable developer struggles (e.g., getting paged at 3 AM on a Friday, containers eating all local disk space, memory leaks crashing production).
-   - Keep explanations simple and intuitive before showing code.
+CRITICAL CONSTRAINTS FOR DURATION & COMPLETENESS:
+1. STRICT DURATION WINDOW: The video narration MUST be between 2 minutes 30 seconds (150 seconds) and 2 minutes 55 seconds (175 seconds).
+   - Total spoken narration across all 4 slides MUST be between 340 and 370 words (~155 to 170 seconds at 130 wpm).
+   - NEVER make the script shorter than 2 minutes 30 seconds (at least 340 words)!
+   - NEVER exceed 3 minutes (180 seconds, max 375 words) so it qualifies strictly as a YouTube Short!
 
-2. NEVER READ THE SLIDE VERBATIM:
-   - The slide displays concise bullet points and sleek code as visual anchors.
-   - The teacher's voice MUST NOT read the bullet points word-for-word! Instead, talk directly to the student and refer to the screen: "Take a look at line 3 on your screen...", "Notice what happens when this flag is toggled...", "As you can see in the diagram..."
+2. ZERO OVERPROMISING IN THE HOOK / INTRO:
+   - In the opening hook, introduce ONLY the singular, specific problem that this exact video will solve.
+   - NEVER promise a huge laundry list of topics (e.g., do not say "we will cover deployment, networking, databases, and monitoring").
+   - Pick ONE concrete problem and solve it with 100% depth.
 
-3. ZERO REPETITION & ZERO GREETINGS:
-   - NEVER say "Hey everyone", "Hello folks", or "Welcome back". Dive straight into the core engineering problem.
-   - DO NOT repeat what you just explained in previous sections. Every slide must advance the explanation with fresh intuition.
+3. 100% COMPLETE PEDAGOGICAL CLOSURE (NO INCOMPLETE VIDEOS):
+   - Every single question, problem, and concept raised in Slide 1 MUST be completely explained, walked through with real code, and definitively resolved by the end of Slide 4.
+   - The viewer must never feel that the video cut off abruptly or left the explanation half-finished.
+   - PART-BY-PART SCOPING: If the topic is inherently massive (like Consul, Kafka, Kubernetes), explicitly title this video "Part 1: The Core Mechanism", ensure that Part 1 is 100% self-contained and completely explains that specific piece, and conclude with: "In Part 2, we will tackle the automated failover, but now your core mechanism is battle-tested."
 
-4. 4 DISTINCT PROGRESSIVE SLIDES (Total Narration: 270-310 words across all 4 slides combined, ~140-160s, strictly under 175s for YouTube Shorts):
-   - Slide 1: The Problem & Real-Life Nightmare (The painful or funny failure mode; 60-70 words)
-   - Slide 2: Under-The-Hood Architecture & The Analogy (Intuitive mental model; 70-80 words)
-   - Slide 3: Practical Code / CLI Implementation (Walk through the code shown on screen line by line; 80-90 words)
-   - Slide 4: Senior Dev Rule of Thumb & Gotchas (Memorable takeaway and gotcha to avoid; 45-55 words)
+4. TALK LIKE A REAL HUMAN TEACHER:
+   - Speak warmly, conversationally, and with high energy.
+   - Use funny, relatable real-world developer analogies (e.g. debugging at 2 AM, caffeine-fueled refactors, production outages caused by a missing semicolon).
+   - NEVER read the slide bullet points verbatim! The slides are visual anchors; you talk directly to the student and walk through what is on the screen ("Look at line 3 on your screen...", "Notice what happens when this flag is toggled...").
+   - ZERO REPETITION: Do not repeat what you said in previous slides. Advance the teaching with fresh insights every slide.
+
+4 PROGRESSIVE SLIDES (Total: 340-370 words):
+- Slide 1: The Specific Problem & Relatable Nightmare (Focus on 1 concrete pain point; 80-90 words)
+- Slide 2: Under-The-Hood Architecture & The Analogy (Intuitive mental model; 90-100 words)
+- Slide 3: Practical Implementation & Code Walkthrough (Explain the code on screen line-by-line; 100-110 words)
+- Slide 4: Senior Dev Rule of Thumb, Gotchas & Complete Resolution (Full closure and key takeaway; 70-80 words)
 
 Return ONLY valid JSON matching this exact structure:
 {
-  "title": "Compelling technical title under 80 characters",
-  "hook": "Opening statement capturing the real-world engineering problem (no greetings)",
+  "title": "Compelling technical title under 80 characters (include Part 1 if multi-part)",
+  "hook": "Opening statement capturing the singular, specific real-world problem (no greetings)",
   "slides": [
     {
       "slideNumber": 1,
@@ -171,7 +189,7 @@ Return ONLY valid JSON matching this exact structure:
         "The hidden bottleneck devs miss in code review"
       ],
       "codeSnippet": "",
-      "teacherNarration": "Conversational, witty, energetic teacher explanation of the problem with a relatable developer struggle (60-70 words). Does NOT read the slide bullets."
+      "teacherNarration": "Conversational, witty, energetic teacher explanation of the problem with a relatable developer struggle (80-90 words). Does NOT read the slide bullets."
     },
     {
       "slideNumber": 2,
@@ -182,7 +200,7 @@ Return ONLY valid JSON matching this exact structure:
         "State transitions & memory layout"
       ],
       "codeSnippet": "",
-      "teacherNarration": "Conversational teacher explanation with a brilliant real-world analogy and zero slide reading (70-80 words)."
+      "teacherNarration": "Conversational teacher explanation with a brilliant real-world analogy and zero slide reading (90-100 words)."
     },
     {
       "slideNumber": 3,
@@ -193,7 +211,7 @@ Return ONLY valid JSON matching this exact structure:
         "Graceful fallback on timeout"
       ],
       "codeSnippet": "10-14 lines of clean practical code or config",
-      "teacherNarration": "Teacher walks through the code shown on screen line by line explaining why each line matters (80-90 words)."
+      "teacherNarration": "Teacher walks through the code shown on screen line by line explaining why each line matters (100-110 words)."
     },
     {
       "slideNumber": 4,
@@ -204,7 +222,7 @@ Return ONLY valid JSON matching this exact structure:
         "Key benchmark to monitor"
       ],
       "codeSnippet": "",
-      "teacherNarration": "Memorable concluding rule of thumb without generic subscribe begging (45-55 words)."
+      "teacherNarration": "Memorable concluding rule of thumb providing complete pedagogical closure and resolution without generic subscribe begging (70-80 words)."
     }
   ],
   "conclusion": "One-line golden rule of thumb for senior engineers"
