@@ -150,7 +150,10 @@ async function run() {
     try {
       // 1. Generate Strategy & Topic
       logger.info('Brainstorming topic & strategy...');
-      const strategy = await strategyAgent.generateContentStrategy(options.topic);
+      const topicForCycle = options.topic
+        ? (options.count > 1 ? `${options.topic} (Part ${i})` : options.topic)
+        : null;
+      const strategy = await strategyAgent.generateContentStrategy(topicForCycle);
       console.log(chalk.white(`   📌 Topic: ${strategy.topic}`));
 
       // 2. Generate Script

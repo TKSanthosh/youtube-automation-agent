@@ -85,6 +85,15 @@ class AIVideoGenerator {
           this.logger.warn(`OpenAI TTS failed: ${e.message}`);
         }
       }
+      if (!generatedPath) {
+        try {
+          provider = 'msedge-neural';
+          model = process.env.MSEDGE_TTS_VOICE || 'en-US-ChristopherNeural';
+          generatedPath = await this.generateMsEdgeTTS(text, outputPath, model);
+        } catch (e) {
+          this.logger.warn(`MsEdge Neural TTS failed: ${e.message}`);
+        }
+      }
       if (!generatedPath && this.gemini) {
         try {
           provider = 'gemini';
@@ -124,6 +133,35 @@ class AIVideoGenerator {
       };
       return synthPath;
     }
+  }
+
+  async generateMsEdgeTTS(text, outputPath, voiceName = 'en-US-ChristopherNeural') {
+    this.logger.info(`Synthesizing neural voice via MsEdgeTTS (${voiceName})...`);
+    const { MsEdgeTTS, OUTPUT_FORMAT } = require('msedge-tts');
+    const tts = new MsEdgeTTS();
+    await tts.setMetadata(voiceName, OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3);
+
+    const cleanText = (text || '').replace(/\s+/g, ' ').trim();
+    if (!cleanText) throw new Error('Cannot synthesize empty text');
+
+    const fsSync = require('fs');
+    const { audioStream } = tts.toStream(cleanText);
+    const out = fsSync.createWriteStream(outputPath);
+    audioStream.pipe(out);
+
+    await new Promise((resolve, reject) => {
+      out.on('finish', resolve);
+      out.on('error', reject);
+      audioStream.on('error', reject);
+    });
+
+    tts.close();
+
+    if (fsSync.existsSync(outputPath) && fsSync.statSync(outputPath).size > 1000) {
+      this.logger.info(`Neural audio generated successfully: ${outputPath} (${(fsSync.statSync(outputPath).size / 1024).toFixed(1)} KB)`);
+      return outputPath;
+    }
+    throw new Error('Generated neural audio file was missing or empty');
   }
 
   async generateFallbackToneAudio(outputPath) {
@@ -1026,6 +1064,65 @@ class AIVideoGenerator {
 </html>`;
   }
 
+  renderDiagramHTML(slide, _topic = '') {
+    const raw = slide.diagram;
+    let title = 'System Architecture & Data Flow';
+    let nodes = [];
+    let flowLabel = '';
+
+    if (raw && typeof raw === 'object' && Array.isArray(raw.nodes) && raw.nodes.length > 0) {
+      title = raw.title || title;
+      nodes = raw.nodes.map(n => typeof n === 'string' ? { name: n, role: 'System Component', icon: '⚙️' } : {
+        name: n.name || n.label || 'Service',
+        role: n.role || n.type || 'Component',
+        icon: n.icon || '⚙️'
+      });
+      flowLabel = raw.flowLabel || raw.flow || '';
+    } else if (typeof raw === 'string' && raw.trim().length > 0) {
+      flowLabel = raw.trim();
+      nodes = [
+        { name: 'Traffic Ingress', role: 'API Request', icon: '🌐' },
+        { name: 'Core Controller', role: 'State Engine', icon: '⚙️' },
+        { name: 'Worker Execution', role: 'Runtime Pods', icon: '📦' },
+        { name: 'Persistence Layer', role: 'Database / Cache', icon: '💾' }
+      ];
+    } else {
+      nodes = [
+        { name: 'Client App', role: 'End User / SDK', icon: '📱' },
+        { name: 'Ingress / Gateway', role: 'Routing & Rate Limit', icon: '🛡️' },
+        { name: 'Service Pods', role: 'Compute & Logic', icon: '⚙️' },
+        { name: 'Database / State', role: 'Persistent Store', icon: '💾' }
+      ];
+      flowLabel = 'Client ➔ Ingress (TLS) ➔ Service Replicas ➔ DB Engine';
+    }
+
+    const nodesHTML = nodes.slice(0, 4).map(node => `
+      <div class="diagram-node-card">
+        <div class="diagram-node-icon">${node.icon || '⚙️'}</div>
+        <div class="diagram-node-info">
+          <div class="diagram-node-name">${this.escapeHTML(node.name)}</div>
+          <div class="diagram-node-role">${this.escapeHTML(node.role)}</div>
+        </div>
+      </div>
+    `).join('');
+
+    return `
+      <div class="diagram-container">
+        <div class="diagram-title">
+          <span style="font-size: 26px;">📐</span> ${this.escapeHTML(title)}
+        </div>
+        <div class="diagram-nodes-grid">
+          ${nodesHTML}
+        </div>
+        ${flowLabel ? `
+          <div class="diagram-flow-bar">
+            <span>⚡</span> ${this.escapeHTML(flowLabel)}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
   createMultiSlideShortsHTML(script, visualAssets = []) {
     const slidesHTML = script.slides.map((slide, idx) => {
       const asset = (visualAssets && visualAssets.length > 0) ? visualAssets[idx % visualAssets.length] : null;
@@ -1038,6 +1135,8 @@ class AIVideoGenerator {
       const bulletsHTML = (slide.bulletPoints || []).map(b => 
         `<div class="bullet-card">💡 ${this.escapeHTML(b)}</div>`
       ).join('');
+
+      const diagramHTML = (idx === 1 || slide.diagram) ? this.renderDiagramHTML(slide, script.title) : '';
 
       const codeHTML = slide.codeSnippet ? `
         <div class="code-container">
@@ -1057,6 +1156,7 @@ class AIVideoGenerator {
           <div class="section-card" style="position:relative; z-index:1;">
               <h2 class="section-header">${this.escapeHTML(slide.headline)}</h2>
               ${bulletsHTML ? `<div class="bullet-container">${bulletsHTML}</div>` : ''}
+              ${diagramHTML}
               ${codeHTML}
           </div>
       </div>`;
@@ -1158,6 +1258,71 @@ class AIVideoGenerator {
             line-height: 1.5;
             color: #e2e8f0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .diagram-container {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid #38bdf8;
+            border-radius: 20px;
+            padding: 26px 22px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 35px rgba(56, 189, 248, 0.2);
+        }
+        .diagram-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .diagram-nodes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        .diagram-node-card {
+            background: #1e293b;
+            border: 1px solid #475569;
+            border-radius: 14px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .diagram-node-icon {
+            font-size: 32px;
+            line-height: 1;
+        }
+        .diagram-node-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .diagram-node-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+        .diagram-node-role {
+            font-size: 16px;
+            color: #94a3b8;
+            margin-top: 3px;
+        }
+        .diagram-flow-bar {
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px dashed #38bdf8;
+            border-radius: 12px;
+            padding: 12px 18px;
+            color: #e2e8f0;
+            font-size: 20px;
+            font-family: 'Consolas', monospace;
+            font-weight: 600;
+            text-align: center;
         }
         .code-container {
             width: 100%;

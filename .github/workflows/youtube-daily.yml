@@ -1,15 +1,15 @@
 name: Daily YouTube Video Automation
 
 on:
-  # Schedule: Runs every 2 hours at minute 17 (off-peak minute avoids GitHub global queue delays)
+  # Schedule: Runs 10 times daily at peak global viewer engagement hours
   schedule:
-    - cron: '17 */2 * * *'
+    - cron: '15 1,3,6,8,11,13,16,18,21,23 * * *'
 
-  # Manual Trigger: Allows 1-click execution from GitHub website or mobile app
+  # Manual Trigger: Allows 1-click execution from GitHub website or mobile app (1 to 10 videos)
   workflow_dispatch:
     inputs:
       video_count:
-        description: 'Number of videos to generate in this run'
+        description: 'Number of videos to generate in this run (1 to 10)'
         required: true
         default: '1'
       topic:

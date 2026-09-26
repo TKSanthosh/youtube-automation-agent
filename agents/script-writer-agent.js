@@ -167,11 +167,12 @@ CRITICAL CONSTRAINTS FOR DURATION & COMPLETENESS:
    - Speak warmly, conversationally, and with high energy.
    - Use funny, relatable real-world developer analogies (e.g. debugging at 2 AM, caffeine-fueled refactors, production outages caused by a missing semicolon).
    - NEVER read the slide bullet points verbatim! The slides are visual anchors; you talk directly to the student and walk through what is on the screen ("Look at line 3 on your screen...", "Notice what happens when this flag is toggled...").
+   - CRITICAL VISUAL COHERENCE: If your narration says "look at the diagram" or "see the flow on screen", Slide 2 MUST include the exact architecture "diagram" object with 4 concrete nodes and a flowLabel matching your exact explanation! Never mention visual diagrams that are not rendered on screen!
    - ZERO REPETITION: Do not repeat what you said in previous slides. Advance the teaching with fresh insights every slide.
 
 4 PROGRESSIVE SLIDES (Total: 340-370 words):
 - Slide 1: The Specific Problem & Relatable Nightmare (Focus on 1 concrete pain point; 80-90 words)
-- Slide 2: Under-The-Hood Architecture & The Analogy (Intuitive mental model; 90-100 words)
+- Slide 2: Under-The-Hood Architecture & The Analogy (Intuitive mental model with visual diagram; 90-100 words)
 - Slide 3: Practical Implementation & Code Walkthrough (Explain the code on screen line-by-line; 100-110 words)
 - Slide 4: Senior Dev Rule of Thumb, Gotchas & Complete Resolution (Full closure and key takeaway; 70-80 words)
 
@@ -199,8 +200,18 @@ Return ONLY valid JSON matching this exact structure:
         "Core architectural mechanism",
         "State transitions & memory layout"
       ],
+      "diagram": {
+        "title": "Architecture & Data Flow",
+        "nodes": [
+          {"name": "Client / Ingress", "role": "Traffic Entry", "icon": "🌐"},
+          {"name": "Controller / Router", "role": "State Machine", "icon": "⚙️"},
+          {"name": "Worker Node / Pod", "role": "Execution Unit", "icon": "📦"},
+          {"name": "Storage / State", "role": "Persistent Storage", "icon": "💾"}
+        ],
+        "flowLabel": "Client (HTTPS) ➔ Controller ➔ Worker Pods ➔ State"
+      },
       "codeSnippet": "",
-      "teacherNarration": "Conversational teacher explanation with a brilliant real-world analogy and zero slide reading (90-100 words)."
+      "teacherNarration": "Conversational teacher explanation with a brilliant real-world analogy and zero slide reading (90-100 words). If you point to what is on screen, discuss the exact architecture nodes displayed on this slide."
     },
     {
       "slideNumber": 3,
@@ -304,6 +315,7 @@ Return ONLY valid JSON matching this exact structure:
         type: slide.type || (idx === 0 ? 'problem' : idx === 2 ? 'code' : idx === 3 ? 'takeaway' : 'architecture'),
         headline: String(slide.headline || `Part ${idx + 1}`).trim(),
         bulletPoints: Array.isArray(slide.bulletPoints) ? slide.bulletPoints.map(b => String(b).trim()).filter(Boolean) : [String(slide.headline || '')],
+        diagram: slide.diagram || null,
         codeSnippet: String(slide.codeSnippet || '').trim(),
         teacherNarration: String(slide.teacherNarration || slide.narration || '').trim()
       }));
