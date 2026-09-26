@@ -64,6 +64,9 @@ class ScriptWriterAgent {
           if (isExtendedForm && pipelineScript.duration < 1200) {
             pipelineScript.duration = 1500;
           }
+          pipelineScript.sections = pipelineScript.sections || [];
+          pipelineScript.mainContent = pipelineScript.mainContent || { sections: pipelineScript.sections };
+          pipelineScript.keywords = pipelineScript.keywords || strategy.keywords || [];
           pipelineScript.fullScript = this.formatFullScript(pipelineScript);
           await this.db.saveScript(pipelineScript);
           this.logger.info(`10-Agent Pipeline Script APPROVED & saved: "${pipelineScript.title}"`);

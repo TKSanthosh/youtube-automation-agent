@@ -751,17 +751,17 @@ class Database {
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         id,
-        script.title,
-        JSON.stringify(script.hook),
-        JSON.stringify(script.introduction),
-        JSON.stringify(script.mainContent),
-        JSON.stringify(script.conclusion),
-        JSON.stringify(script.callToAction),
-        script.fullScript,
-        script.duration,
-        script.tone,
-        script.pacing,
-        JSON.stringify(script.keywords)
+        script.title || 'Untitled',
+        JSON.stringify(script.hook || {}),
+        JSON.stringify(script.introduction || {}),
+        JSON.stringify(script.mainContent || { sections: script.sections || script.slides || [] }),
+        JSON.stringify(script.conclusion || {}),
+        JSON.stringify(script.callToAction || {}),
+        script.fullScript || '',
+        script.duration || '3:00',
+        script.tone || 'educational',
+        script.pacing || 'engaging',
+        JSON.stringify(script.keywords || [])
       ]
     );
     return id;
