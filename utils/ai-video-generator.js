@@ -595,10 +595,14 @@ class AIVideoGenerator {
       const audioDuration = await this.getAudioDuration(audioPath, { shortsMode: true });
       const scriptDuration = this.calculateScriptDuration(script);
       let duration = audioDuration > 10 ? audioDuration : scriptDuration;
-      // Guarantee strictly <= 178 seconds for YouTube Shorts qualification (< 180s)
-      if (duration > 176) duration = 176;
-      if (duration < 150) duration = 165;
-      await this.renderSlidesToVideo(stills, duration, videoPath);
+      // Guarantee strictly <= 175 seconds for YouTube Shorts qualification (< 180s)
+      if (duration > 175) duration = 175;
+      if (duration < 140) duration = 150;
+
+      // Compute exact per-slide duration array based on the narration word count of each slide
+      const slideDurations = this.calculateSlideDurations(script, slideCount, duration);
+      this.logger.info(`Rendering ${stills.length} slides with synchronized durations: ${slideDurations.join(', ')}s (total: ${duration}s)`);
+      await this.renderSlidesToVideo(stills, slideDurations, videoPath);
 
       // Add audio with strict Shorts cutoff (175s max, strictly < 180s)
       await this.addAudioToVideo(videoPath, audioPath, outputPath, { loopVideo: true, maxDuration: 175 });
@@ -744,7 +748,11 @@ class AIVideoGenerator {
       .replace(/'/g, '&#39;');
   }
 
-  createSlideshowHTML(script, visualAssets) {
+  createSlideshowHTML(script, visualAssets = []) {
+    if (Array.isArray(script.slides) && script.slides.length > 0) {
+      return this.createMultiSlideShortsHTML(script, visualAssets);
+    }
+
     return `
 <!DOCTYPE html>
 <html>
@@ -1016,6 +1024,214 @@ class AIVideoGenerator {
     </div>
 </body>
 </html>`;
+  }
+
+  createMultiSlideShortsHTML(script, visualAssets = []) {
+    const slidesHTML = script.slides.map((slide, idx) => {
+      const asset = (visualAssets && visualAssets.length > 0) ? visualAssets[idx % visualAssets.length] : null;
+      let badge = '⚡ Technical Deep Dive';
+      if (idx === 0) badge = '🔥 01. The Problem';
+      else if (idx === 1) badge = '⚙️ 02. The Architecture';
+      else if (idx === 2) badge = '💻 03. Live Code';
+      else if (idx === 3) badge = '💡 04. Senior Rule of Thumb';
+
+      const bulletsHTML = (slide.bulletPoints || []).map(b => 
+        `<div class="bullet-card">💡 ${this.escapeHTML(b)}</div>`
+      ).join('');
+
+      const codeHTML = slide.codeSnippet ? `
+        <div class="code-container">
+            <div class="code-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+                <span class="file-title">terminal / code</span>
+            </div>
+            <pre class="code-block"><code>${this.escapeHTML(slide.codeSnippet)}</code></pre>
+        </div>` : '';
+
+      return `
+      <div class="slide ${idx === 0 ? 'active' : ''}">
+          ${asset ? `<img class="background-image" src="${asset}" />` : ''}
+          <div class="top-badge" style="position:relative; z-index:1;">${badge}</div>
+          <div class="section-card" style="position:relative; z-index:1;">
+              <h2 class="section-header">${this.escapeHTML(slide.headline)}</h2>
+              ${bulletsHTML ? `<div class="bullet-container">${bulletsHTML}</div>` : ''}
+              ${codeHTML}
+          </div>
+      </div>`;
+    }).join('\n');
+
+    return `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            width: 1080px;
+            height: 1920px;
+            background: #090d16;
+            background-image: 
+                radial-gradient(circle at 50% 15%, rgba(56, 189, 248, 0.18) 0%, transparent 60%),
+                radial-gradient(circle at 80% 85%, rgba(168, 85, 247, 0.18) 0%, transparent 60%),
+                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #f1f5f9;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slide {
+            position: absolute;
+            width: 1080px;
+            height: 1920px;
+            padding: 100px 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .slide.active { opacity: 1; }
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.12;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .top-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #38bdf8;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 14px 28px;
+            border-radius: 9999px;
+            margin-bottom: 40px;
+        }
+        .section-card {
+            width: 100%;
+            max-width: 960px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        h2.section-header {
+            font-size: 52px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 35px;
+            line-height: 1.25;
+            background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .bullet-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            margin-bottom: 25px;
+        }
+        .bullet-card {
+            background: rgba(15, 23, 42, 0.9);
+            border-left: 6px solid #38bdf8;
+            border-radius: 16px;
+            padding: 28px 34px;
+            font-size: 32px;
+            line-height: 1.5;
+            color: #e2e8f0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .code-container {
+            width: 100%;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 15px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.7);
+        }
+        .code-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #161b22;
+            padding: 18px 24px;
+            border-bottom: 1px solid #30363d;
+        }
+        .dot { width: 16px; height: 16px; border-radius: 50%; display: inline-block; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+        .file-title {
+            color: #8b949e;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 24px;
+            margin-left: 12px;
+        }
+        .code-block {
+            padding: 28px 32px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 26px;
+            line-height: 1.55;
+            color: #7ee787;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    ${slidesHTML}
+</body>
+</html>`;
+  }
+
+  calculateSlideDurations(script, slideCount, totalDuration) {
+    if (slideCount <= 1) return [totalDuration];
+
+    let wordCounts = [];
+    if (Array.isArray(script.slides) && script.slides.length > 0) {
+      wordCounts = script.slides.map(s => {
+        const text = s.teacherNarration || s.spokenNarration || '';
+        return Math.max(10, text.split(/\s+/).filter(Boolean).length);
+      });
+    } else {
+      const sections = (script.mainContent && script.mainContent.sections) || script.sections || [];
+      if (sections.length > 0) {
+        const hookWords = Math.max(10, String(script.hook?.text || script.hook || '').split(/\s+/).filter(Boolean).length);
+        const secWords = sections.map(s => {
+          const text = s.spokenNarration || (Array.isArray(s.content) ? s.content.join(' ') : String(s.content || ''));
+          return Math.max(15, text.split(/\s+/).filter(Boolean).length);
+        });
+        const conclWords = Math.max(10, String(script.conclusion?.finalThought || script.conclusion || '').split(/\s+/).filter(Boolean).length);
+        wordCounts = [hookWords, ...secWords, conclWords];
+      }
+    }
+
+    while (wordCounts.length < slideCount) wordCounts.push(20);
+    wordCounts = wordCounts.slice(0, slideCount);
+
+    const totalWords = wordCounts.reduce((sum, w) => sum + w, 0);
+    let rawDurations = wordCounts.map(w => Math.max(4, (w / totalWords) * totalDuration));
+    const rawSum = rawDurations.reduce((sum, d) => sum + d, 0);
+    return rawDurations.map(d => Number(((d / rawSum) * totalDuration).toFixed(2)));
   }
 
   generateContentSlides(script, visualAssets = []) {

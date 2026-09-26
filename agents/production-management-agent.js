@@ -155,6 +155,26 @@ class ProductionManagementAgent {
   }
 
   formatScriptForTTS(script) {
+    // If structured per-slide narration is available, use it directly (zero repetition, zero fluff)
+    if (Array.isArray(script.slides) && script.slides.length > 0) {
+      const slideNarrations = script.slides
+        .map(slide => String(slide.teacherNarration || slide.spokenNarration || '').trim())
+        .filter(Boolean);
+      if (slideNarrations.length > 0) {
+        return slideNarrations.join('\n\n');
+      }
+    }
+
+    const sections = (script.mainContent && script.mainContent.sections) || script.sections || [];
+    if (sections.length > 0 && sections.some(s => s.spokenNarration)) {
+      const sectionNarrations = sections
+        .map(s => String(s.spokenNarration || '').trim())
+        .filter(Boolean);
+      if (sectionNarrations.length > 0) {
+        return sectionNarrations.join('\n\n');
+      }
+    }
+
     let ttsText = '';
     
     // Add hook
@@ -176,7 +196,6 @@ class ProductionManagementAgent {
     }
     
     // Add main content
-    const sections = (script.mainContent && script.mainContent.sections) || script.sections || [];
     if (sections.length > 0) {
       sections.forEach((section, index) => {
         if (section.title) {

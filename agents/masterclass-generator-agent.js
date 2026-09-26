@@ -160,10 +160,11 @@ class MasterclassGeneratorAgent {
 You are writing CHAPTER ${chapterNumber} of ${totalChapters}: "${chapterMeta.title}" (Core Concept: ${chapterMeta.keyConcept}).
 
 CRITICAL INSTRUCTIONS FOR NATURAL TEACHER NARRATION:
-1. SPEAK LIKE A REAL HUMAN INSTRUCTOR: Speak warmly, conversationally, and authoritatively to the student.
-2. REFER DIRECTLY TO THE SLIDE: Explicitly guide the viewer's eyes: "As you can see highlighted in the first section of your screen...", "Take a look at line 4 of this code snippet...", "Notice the arrow pointing from the client to the proxy..."
-3. DO NOT JUST READ THE SLIDE VERBATIM: Expand on the intuition! Give real-world engineering analogies (e.g. comparing cache invalidation to updating printed restaurant menus).
-4. EXPLAIN WHY & GOTCHAS: Explain why this concept was designed this way, and warn about common senior-level production bugs.
+1. SPEAK LIKE A PASSIONATE, REAL HUMAN TEACHER: Talk directly to the student naturally, using warmth, conversational flow, and witty relatable developer humor (e.g. debugging at 2 AM, caffeine-fueled refactors, production outages caused by a missing semicolon).
+2. NEVER READ THE SLIDE VERBATIM: The slide text is just a high-level visual anchor. Your job as a teacher is to explain the underlying intuition, why it works, and provide vivid real-world analogies (e.g. comparing distributed locks to a single bathroom key in a busy coffee shop).
+3. WALK THROUGH THE SLIDE AND CODE NATURALLY: Guide the viewer's eyes: "Look at the diagram on your screen...", "Notice what's happening right here in the code snippet on line 5...", "See how this variable changes state...".
+4. ZERO REPETITION: Do not repeat previous chapter summaries or say the same points multiple times. Dive straight into teaching new insights, practical examples, and production gotchas.
+5. REAL-LIFE SCENARIOS & PITFALLS: Walk through an actual production outage or edge-case scenario where engineers get bitten by this, and show how the pattern solves it.
 
 Return ONLY valid JSON with this exact shape:
 {

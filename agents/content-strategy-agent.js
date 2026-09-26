@@ -403,10 +403,14 @@ Do not invent trend data, statistics, sources, URLs, or factual claims. Use only
       return null;
     }
 
-    const trendingTopics = this.trendingTopics
-      .slice(0, 10)
-      .map(topic => topic.topic)
-      .join(', ');
+    let recentTopics = [];
+    try {
+      const rows = await this.db.getAllRows("SELECT topic FROM content_strategies ORDER BY created_at DESC LIMIT 50");
+      if (Array.isArray(rows)) {
+        recentTopics = rows.map(r => r.topic).filter(Boolean);
+      }
+    } catch (_e) {}
+
     const prompt = `You are selecting a YouTube Shorts content strategy focused strictly on IT Technologies, Software Engineering, DevOps, Cloud, and System Design.
 Return only valid JSON with this exact shape:
 {
@@ -418,12 +422,17 @@ Return only valid JSON with this exact shape:
 }
 
 Requested topic: ${requestedTopic || 'none'}
-Channel niche: Pure IT Technologies, System Design, Cloud & Software Engineering. Must be a concrete concept explainable in 3 minutes with clear technical examples. Zero fluff.`;
+Channel niche: Pure IT Technologies, System Design, Cloud & Software Engineering. Must be a concrete concept explainable in 3 minutes with clear technical examples. Zero fluff.
+
+CRITICAL ANTI-DUPLICATION RULE:
+Do NOT select, repeat, or closely replicate any of these recent channel topics:
+${recentTopics.slice(0, 30).map(t => `- ${t}`).join('\n')}
+Pick an entirely fresh, exciting, unaddressed IT concept!`;
 
     try {
       const response = await this.aiTextService.generateText(prompt, {
         maxTokens: 1000,
-        temperature: 0.7
+        temperature: 0.75
       });
       const parsed = this.parseAIJsonResponse(response);
       const topic = String(parsed.topic || requestedTopic || '').trim();
@@ -500,7 +509,10 @@ Channel niche: Pure IT Technologies, System Design, Cloud & Software Engineering
     }
 
     const fallbackTopics = this.getEvergreenFallbackTopics();
-    const pick = fallbackTopics[Math.floor(Math.random() * fallbackTopics.length)];
+    const available = fallbackTopics.filter(t => 
+      !recentTopics.some(r => r.toLowerCase().includes(t.toLowerCase()) || t.toLowerCase().includes(r.toLowerCase()))
+    );
+    const pick = available.length > 0 ? available[0] : fallbackTopics[Math.floor(Math.random() * fallbackTopics.length)];
     this.logger.info(`Template mode: no readable trending topic available — using evergreen topic "${pick}"`);
     return { topic: pick, score: 1 };
   }
@@ -524,7 +536,14 @@ Channel niche: Pure IT Technologies, System Design, Cloud & Software Engineering
       'Memory Management: Stack vs Heap in Modern Runtimes',
       'Git Under the Hood: Blobs, Trees, and Commits',
       'REST vs gRPC: When to Use Protocol Buffers in Production',
-      'API Rate Limiting: Token Bucket vs Leaky Bucket Algorithms'
+      'API Rate Limiting: Token Bucket vs Leaky Bucket Algorithms',
+      'Garbage Collection Internals: Mark and Sweep vs Generational',
+      'TCP 3-Way Handshake and Connection Teardown Explained',
+      'PostgreSQL MVCC: How Vacuuming Prevents Table Bloat',
+      'TLS / SSL Handshake: How HTTPS Secures The Web',
+      'Distributed Caching: Cache Aside vs Write-Through vs Write-Back',
+      'Linux Epoll vs Select: The C10K Problem Solved',
+      'OAuth 2.0 Authorization Code Flow with PKCE Walkthrough'
     ];
   }
 
@@ -653,15 +672,16 @@ Channel niche: Pure IT Technologies, System Design, Cloud & Software Engineering
   }
 
   getRecentTopics() {
-    // Get topics used in last 7 days to avoid repetition
-    return this.historicalPerformance
+    const fromHistory = (this.historicalPerformance || [])
       .filter(content => {
         const contentDate = new Date(content.createdAt);
-        const weekAgo = new Date();
-        weekAgo.setDate(weekAgo.getDate() - 7);
-        return contentDate > weekAgo;
+        const monthAgo = new Date();
+        monthAgo.setDate(monthAgo.getDate() - 30);
+        return contentDate > monthAgo;
       })
       .map(content => content.topic);
+
+    return [...new Set(fromHistory)];
   }
 
   getSeasonalMultiplier(topic) {

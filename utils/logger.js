@@ -11,7 +11,34 @@ class Logger {
   createWinstonLogger() {
     const logDir = path.join(__dirname, '..', 'logs');
     
-    return winston.createLogger({
+    const transports = [];
+    if (process.env.NODE_ENV !== 'test') {
+      transports.push(
+        // Write all logs to combined.log
+        new winston.transports.File({ 
+          filename: path.join(logDir, 'combined.log'),
+          maxsize: 104857600, // 100MB
+          maxFiles: 5,
+        }),
+        // Write error logs to error.log
+        new winston.transports.File({ 
+          filename: path.join(logDir, 'error.log'), 
+          level: 'error',
+          maxsize: 52428800, // 50MB
+          maxFiles: 3,
+        }),
+        // Write agent-specific logs
+        new winston.transports.File({
+          filename: path.join(logDir, `${this.component.toLowerCase()}.log`),
+          maxsize: 20971520, // 20MB
+          maxFiles: 3,
+        })
+      );
+    } else {
+      transports.push(new winston.transports.Console({ silent: true }));
+    }
+
+    const logger = winston.createLogger({
       level: process.env.LOG_LEVEL || 'info',
       format: winston.format.combine(
         winston.format.timestamp(),
@@ -19,62 +46,58 @@ class Logger {
         winston.format.json()
       ),
       defaultMeta: { component: this.component },
-      transports: [
-        // Write all logs to combined.log
-        new winston.transports.File({ 
-          filename: path.join(logDir, 'combined.log'),
-          maxsize: 5242880, // 5MB
-          maxFiles: 5,
-        }),
-        
-        // Write error logs to error.log
-        new winston.transports.File({ 
-          filename: path.join(logDir, 'error.log'), 
-          level: 'error',
-          maxsize: 5242880, // 5MB
-          maxFiles: 3,
-        }),
-        
-        // Write agent-specific logs
-        new winston.transports.File({
-          filename: path.join(logDir, `${this.component.toLowerCase()}.log`),
-          maxsize: 2097152, // 2MB
-          maxFiles: 3,
-        })
-      ]
+      transports
     });
+
+    // Prevent unhandled EPERM errors if another process holds file lock on Windows
+    logger.on('error', () => {});
+    if (logger.transports) {
+      logger.transports.forEach(t => t.on('error', () => {}));
+    }
+
+    return logger;
   }
 
   info(message, ...args) {
-    this.winston.info(message, ...args);
+    try {
+      this.winston.info(message, ...args);
+    } catch (_) {}
     console.log(this.formatConsoleMessage('INFO', message, chalk.blue));
   }
 
   success(message, ...args) {
-    this.winston.info(message, ...args);
+    try {
+      this.winston.info(message, ...args);
+    } catch (_) {}
     console.log(this.formatConsoleMessage('SUCCESS', message, chalk.green));
   }
 
   warn(message, ...args) {
-    this.winston.warn(message, ...args);
+    try {
+      this.winston.warn(message, ...args);
+    } catch (_) {}
     console.log(this.formatConsoleMessage('WARN', message, chalk.yellow));
   }
 
   error(message, error = null, ...args) {
-    if (error) {
-      this.winston.error(message, { error: error.message, stack: error.stack, ...args });
-    } else {
-      this.winston.error(message, ...args);
-    }
+    try {
+      if (error) {
+        this.winston.error(message, { error: error.message, stack: error.stack, ...args });
+      } else {
+        this.winston.error(message, ...args);
+      }
+    } catch (_) {}
     console.log(this.formatConsoleMessage('ERROR', message, chalk.red));
-    if (error && process.env.NODE_ENV !== 'production') {
+    if (error && process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
       console.error(chalk.red(error.stack));
     }
   }
 
   debug(message, ...args) {
-    this.winston.debug(message, ...args);
-    if (process.env.NODE_ENV !== 'production') {
+    try {
+      this.winston.debug(message, ...args);
+    } catch (_) {}
+    if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
       console.log(this.formatConsoleMessage('DEBUG', message, chalk.gray));
     }
   }
@@ -114,56 +137,66 @@ class Logger {
 
   // Structured logging for important events
   logEvent(eventType, data = {}) {
-    this.winston.info('System Event', {
-      eventType,
-      timestamp: new Date().toISOString(),
-      ...data
-    });
+    try {
+      this.winston.info('System Event', {
+        eventType,
+        timestamp: new Date().toISOString(),
+        ...data
+      });
+    } catch (_) {}
   }
 
   // Log content generation pipeline
   logContentPipeline(stage, contentId, status, data = {}) {
-    this.winston.info('Content Pipeline', {
-      stage,
-      contentId,
-      status,
-      timestamp: new Date().toISOString(),
-      ...data
-    });
+    try {
+      this.winston.info('Content Pipeline', {
+        stage,
+        contentId,
+        status,
+        timestamp: new Date().toISOString(),
+        ...data
+      });
+    } catch (_) {}
   }
 
   // Log publishing events
   logPublishing(action, videoId, status, data = {}) {
-    this.winston.info('Publishing Event', {
-      action,
-      videoId,
-      status,
-      timestamp: new Date().toISOString(),
-      ...data
-    });
+    try {
+      this.winston.info('Publishing Event', {
+        action,
+        videoId,
+        status,
+        timestamp: new Date().toISOString(),
+        ...data
+      });
+    } catch (_) {}
   }
 
   // Log analytics events
   logAnalytics(videoId, metrics, insights = []) {
-    this.winston.info('Analytics Update', {
-      videoId,
-      metrics,
-      insights,
-      timestamp: new Date().toISOString()
-    });
+    try {
+      this.winston.info('Analytics Update', {
+        videoId,
+        metrics,
+        insights,
+        timestamp: new Date().toISOString()
+      });
+    } catch (_) {}
   }
 
   // Log errors with context
   logErrorWithContext(error, context = {}) {
-    this.winston.error('System Error', {
-      error: {
-        message: error.message,
-        stack: error.stack,
-        name: error.name
-      },
-      context,
-      timestamp: new Date().toISOString()
-    });
+    try {
+      this.winston.error('System Error', {
+        error: {
+          message: error.message,
+          stack: error.stack,
+          name: error.name
+        },
+        context,
+        timestamp: new Date().toISOString()
+      });
+    } catch (_) {}
   }
 }
 

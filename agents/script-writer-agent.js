@@ -130,93 +130,135 @@ class ScriptWriterAgent {
       return null;
     }
 
-    const prompt = `You are a Senior Principal Software Engineer creating an in-depth 3-Minute YouTube Short script on the IT/tech topic: "${strategy.topic}".
-YouTube Shorts strictly support up to 3 minutes (180 seconds). Your goal is to teach this technical concept thoroughly from start to end with a clear, concrete practical code or architecture example in approximately 280 to 320 words total (~140-160 seconds narration).
+    const prompt = `You are a renowned principal software architect and passionate tech educator creating a 3-Minute YouTube Short on: "${strategy.topic}".
+Your goal is to teach this technical concept clearly and practically so that even junior developers immediately get it, while senior engineers appreciate the depth.
 
-CRITICAL CONSTRAINTS:
-1. ZERO GREETINGS & ZERO FLUFF: NEVER say "Hey everyone", "Hello folks", "Welcome back", or any introductory filler. Dive straight into the core engineering problem.
-2. START-TO-END TECHNICAL BREAKDOWN: Clearly define what the technology is, why standard approaches fail, how the internal mechanism works under the hood, and walk through a clear code or command example.
-3. CONCRETE PRACTICAL / CODE EXAMPLE: Include a realistic code snippet, terminal command, or architectural flow and explain it line by line.
-4. TOTAL LENGTH: Between 280 and 320 spoken words across all sections combined. Must be strictly under 175 seconds total speech to guarantee it qualifies as a YouTube Short.
+CRITICAL INSTRUCTIONS FOR VOICE, HUMOR & PEDAGOGY:
+1. TALK LIKE A REAL HUMAN TEACHER:
+   - Speak conversationally, warmly, and with high energy.
+   - Use funny, relatable real-world analogies (e.g., comparing database locks to two polite people refusing to walk through a door first, or cache invalidation to updating restaurant menus during a rush).
+   - Reference relatable developer struggles (e.g., getting paged at 3 AM on a Friday, containers eating all local disk space, memory leaks crashing production).
+   - Keep explanations simple and intuitive before showing code.
 
-Return only valid JSON with this exact shape:
+2. NEVER READ THE SLIDE VERBATIM:
+   - The slide displays concise bullet points and sleek code as visual anchors.
+   - The teacher's voice MUST NOT read the bullet points word-for-word! Instead, talk directly to the student and refer to the screen: "Take a look at line 3 on your screen...", "Notice what happens when this flag is toggled...", "As you can see in the diagram..."
+
+3. ZERO REPETITION & ZERO GREETINGS:
+   - NEVER say "Hey everyone", "Hello folks", or "Welcome back". Dive straight into the core engineering problem.
+   - DO NOT repeat what you just explained in previous sections. Every slide must advance the explanation with fresh intuition.
+
+4. 4 DISTINCT PROGRESSIVE SLIDES (Total Narration: 270-310 words across all 4 slides combined, ~140-160s, strictly under 175s for YouTube Shorts):
+   - Slide 1: The Problem & Real-Life Nightmare (The painful or funny failure mode; 60-70 words)
+   - Slide 2: Under-The-Hood Architecture & The Analogy (Intuitive mental model; 70-80 words)
+   - Slide 3: Practical Code / CLI Implementation (Walk through the code shown on screen line by line; 80-90 words)
+   - Slide 4: Senior Dev Rule of Thumb & Gotchas (Memorable takeaway and gotcha to avoid; 45-55 words)
+
+Return ONLY valid JSON matching this exact structure:
 {
-  "title": "compelling technical title under 90 characters",
-  "hook": "punchy opening technical statement or common misconception (no greetings)",
-  "sections": [
+  "title": "Compelling technical title under 80 characters",
+  "hook": "Opening statement capturing the real-world engineering problem (no greetings)",
+  "slides": [
     {
-      "title": "1. The Engineering Challenge",
-      "content": ["detailed spoken sentence 1", "detailed spoken sentence 2", "detailed spoken sentence 3", "detailed spoken sentence 4"],
-      "codeSnippet": "code or command if relevant",
-      "duration": 40
-    },
-    {
-      "title": "2. Under The Hood Architecture",
-      "content": ["detailed spoken sentence 1", "detailed spoken sentence 2", "detailed spoken sentence 3", "detailed spoken sentence 4"],
-      "codeSnippet": "architecture diagram or flow",
-      "duration": 45
-    },
-    {
-      "title": "3. Practical Implementation & Code",
-      "content": ["detailed spoken sentence 1", "detailed spoken sentence 2", "detailed spoken sentence 3", "detailed spoken sentence 4"],
-      "codeSnippet": "concrete code example or config",
-      "duration": 60
-    },
-    {
-      "title": "4. Production Gotchas & Best Practices",
-      "content": ["detailed spoken sentence 1", "detailed spoken sentence 2", "detailed spoken sentence 3"],
+      "slideNumber": 1,
+      "type": "problem",
+      "headline": "01. The Production Nightmare",
+      "bulletPoints": [
+        "Why standard naive implementations fail",
+        "The hidden bottleneck devs miss in code review"
+      ],
       "codeSnippet": "",
-      "duration": 25
+      "teacherNarration": "Conversational, witty, energetic teacher explanation of the problem with a relatable developer struggle (60-70 words). Does NOT read the slide bullets."
+    },
+    {
+      "slideNumber": 2,
+      "type": "architecture",
+      "headline": "02. Under The Hood: The Mental Model",
+      "bulletPoints": [
+        "Core architectural mechanism",
+        "State transitions & memory layout"
+      ],
+      "codeSnippet": "",
+      "teacherNarration": "Conversational teacher explanation with a brilliant real-world analogy and zero slide reading (70-80 words)."
+    },
+    {
+      "slideNumber": 3,
+      "type": "code",
+      "headline": "03. Practical Implementation",
+      "bulletPoints": [
+        "Thread-safe execution pattern",
+        "Graceful fallback on timeout"
+      ],
+      "codeSnippet": "10-14 lines of clean practical code or config",
+      "teacherNarration": "Teacher walks through the code shown on screen line by line explaining why each line matters (80-90 words)."
+    },
+    {
+      "slideNumber": 4,
+      "type": "takeaway",
+      "headline": "04. Senior Dev Rule of Thumb",
+      "bulletPoints": [
+        "Production gotcha to avoid",
+        "Key benchmark to monitor"
+      ],
+      "codeSnippet": "",
+      "teacherNarration": "Memorable concluding rule of thumb without generic subscribe begging (45-55 words)."
     }
   ],
-  "conclusion": "one clear architectural takeaway",
-  "cta": "short closing technical thought without generic subscribe spam",
-  "claims": []
+  "conclusion": "One-line golden rule of thumb for senior engineers"
 }`;
 
     try {
       const response = await this.aiTextService.generateText(prompt, {
         maxTokens: 2500,
-        temperature: 0.6
+        temperature: 0.65
       });
       const parsed = this.parseAIJsonResponse(response);
-      const sections = this.normalizeAISections(parsed.sections, strategy);
+      const slides = this.normalizeAISlides(parsed, strategy);
+      const sections = slides.map(s => ({
+        type: 'ai_generated',
+        title: s.headline,
+        content: s.bulletPoints,
+        codeSnippet: s.codeSnippet,
+        spokenNarration: s.teacherNarration,
+        duration: Math.ceil(((s.teacherNarration || '').split(/\s+/).filter(Boolean).length / 135) * 60)
+      }));
 
-      if (!parsed.title || !parsed.hook || sections.length === 0) {
+      if (!parsed.title || slides.length === 0) {
         throw new Error('AI script response missing required fields');
       }
 
       this.logger.info(`Using AI script generation via ${this.aiTextService.providerName}`);
       return {
         title: String(parsed.title).slice(0, 100),
-        hook: this.normalizeAIHook(parsed.hook),
+        hook: this.normalizeAIHook(parsed.hook || slides[0]?.teacherNarration?.slice(0, 100) || strategy.topic),
+        slides,
         introduction: {
           greeting: "",
-          topicIntro: `Let's break down ${strategy.topic}.`,
-          valueProposition: `Here is how it works under the hood and how to implement it.`,
+          topicIntro: "",
+          valueProposition: "",
           credibility: "",
-          duration: '0:05'
+          duration: '0:00'
         },
         mainContent: {
           sections,
           totalDuration: this.calculateSectionsDuration(sections)
         },
-        conclusion: parsed.conclusion ? {
+        conclusion: {
           type: 'conclusion',
           title: 'Key Takeaway',
           recap: [],
-          finalThought: String(parsed.conclusion).trim(),
+          finalThought: String(parsed.conclusion || slides[slides.length - 1]?.headline || '').trim(),
           duration: '10 seconds'
-        } : await this.generateConclusion(strategy),
+        },
         callToAction: {
           type: 'call_to_action',
           subscribe: "",
           like: "",
-          comment: String(parsed.cta || "").trim(),
+          comment: "",
           nextVideo: "",
-          duration: '5 seconds'
+          duration: '0 seconds'
         },
-        duration: '2:50',
+        duration: '2:40',
         tone: template.tone,
         pacing: template.pacing,
         keywords: strategy.keywords || [],
@@ -224,7 +266,7 @@ Return only valid JSON with this exact shape:
         metadata: {
           strategy,
           generatedAt: new Date().toISOString(),
-          version: '1.0',
+          version: '2.0',
           generationSource: 'ai'
         }
       };
@@ -234,31 +276,34 @@ Return only valid JSON with this exact shape:
     }
   }
 
-  parseAIJsonResponse(response) {
-    const text = String(response || '').trim();
-    const withoutFences = text
-      .replace(/^```(?:json)?\s*/i, '')
-      .replace(/```$/i, '')
-      .trim();
-
-    try {
-      return JSON.parse(withoutFences);
-    } catch (error) {
-      const match = withoutFences.match(/\{[\s\S]*\}/);
-      if (!match) {
-        throw error;
-      }
-      return JSON.parse(match[0]);
+  normalizeAISlides(parsed, strategy) {
+    if (Array.isArray(parsed.slides) && parsed.slides.length > 0) {
+      return parsed.slides.slice(0, 5).map((slide, idx) => ({
+        slideNumber: idx + 1,
+        type: slide.type || (idx === 0 ? 'problem' : idx === 2 ? 'code' : idx === 3 ? 'takeaway' : 'architecture'),
+        headline: String(slide.headline || `Part ${idx + 1}`).trim(),
+        bulletPoints: Array.isArray(slide.bulletPoints) ? slide.bulletPoints.map(b => String(b).trim()).filter(Boolean) : [String(slide.headline || '')],
+        codeSnippet: String(slide.codeSnippet || '').trim(),
+        teacherNarration: String(slide.teacherNarration || slide.narration || '').trim()
+      }));
     }
-  }
 
-  normalizeAIHook(hook) {
-    const text = typeof hook === 'object' && hook !== null ? hook.text : hook;
-    return {
-      type: 'ai',
-      text: String(text).trim(),
-      duration: '0:00-0:05'
-    };
+    // Fallback if AI returned legacy sections
+    if (Array.isArray(parsed.sections) && parsed.sections.length > 0) {
+      return parsed.sections.slice(0, 4).map((sec, idx) => {
+        const rawContent = Array.isArray(sec.content) ? sec.content : [sec.content];
+        return {
+          slideNumber: idx + 1,
+          type: idx === 2 ? 'code' : 'architecture',
+          headline: String(sec.title || `0${idx + 1}. Concept`).trim(),
+          bulletPoints: rawContent.slice(0, 3).map(c => String(c).trim()),
+          codeSnippet: String(sec.codeSnippet || '').trim(),
+          teacherNarration: rawContent.join(' ')
+        };
+      });
+    }
+
+    return [];
   }
 
   normalizeAISections(sections, strategy) {
@@ -281,10 +326,12 @@ Return only valid JSON with this exact shape:
           type: 'ai_generated',
           title: String(section.title || `${strategy.topic} Part ${index + 1}`).trim(),
           content,
-          duration: parseInt(section.duration, 10) || 60
+          codeSnippet: String(section.codeSnippet || '').trim(),
+          spokenNarration: section.spokenNarration || String(section.teacherNarration || content.join(' ')).trim(),
+          duration: parseInt(section.duration, 10) || 40
         };
       })
-      .filter(section => section.title && section.content.length > 0);
+      .filter(section => section.title && (section.content.length > 0 || section.spokenNarration));
   }
 
   normalizeAIClaims(claims, sources) {
