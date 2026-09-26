@@ -276,7 +276,7 @@ Return ONLY valid JSON matching this exact structure:
     }
   }
 
-  normalizeAISlides(parsed, strategy) {
+  normalizeAISlides(parsed, _strategy) {
     if (Array.isArray(parsed.slides) && parsed.slides.length > 0) {
       return parsed.slides.slice(0, 5).map((slide, idx) => ({
         slideNumber: idx + 1,
@@ -803,7 +803,7 @@ Return ONLY valid JSON matching this exact structure:
     };
   }
 
-  async generateCTA(strategy) {
+  async generateCTA(_strategy) {
     return {
       type: 'call_to_action',
       subscribe: "",

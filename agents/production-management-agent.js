@@ -197,7 +197,7 @@ class ProductionManagementAgent {
     
     // Add main content
     if (sections.length > 0) {
-      sections.forEach((section, index) => {
+      sections.forEach((section, _index) => {
         if (section.title) {
           ttsText += `${section.title}\n`;
         }
