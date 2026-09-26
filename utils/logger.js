@@ -1,5 +1,6 @@
 const winston = require('winston');
 const path = require('path');
+const fs = require('fs');
 const chalk = require('chalk');
 
 class Logger {
@@ -10,6 +11,13 @@ class Logger {
 
   createWinstonLogger() {
     const logDir = path.join(__dirname, '..', 'logs');
+    if (!fs.existsSync(logDir)) {
+      try {
+        fs.mkdirSync(logDir, { recursive: true });
+      } catch (_) {
+        // ignore
+      }
+    }
     
     const transports = [];
     if (process.env.NODE_ENV !== 'test') {

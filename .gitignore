@@ -27,7 +27,8 @@ data/*.db-journal
 *.db-wal
 
 # Logs
-logs/
+logs/*
+!logs/.gitkeep
 *.log
 
 # Temporary files
