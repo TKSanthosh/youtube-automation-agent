@@ -79,7 +79,7 @@ class AIVideoGenerator {
       if (!generatedPath && this.openai) {
         try {
           provider = 'openai';
-          model = 'gpt-4o-mini-tts';
+          model = process.env.OPENAI_TTS_MODEL || 'tts-1';
           generatedPath = await this.generateOpenAITTS(text, outputPath);
         } catch (e) {
           this.logger.warn(`OpenAI TTS failed: ${e.message}`);
@@ -232,7 +232,7 @@ class AIVideoGenerator {
 
   async generateOpenAITTS(text, outputPath) {
     const response = await this.openai.audio.speech.create({
-      model: "gpt-4o-mini-tts",
+      model: process.env.OPENAI_TTS_MODEL || "tts-1",
       voice: "coral",
       input: text,
       speed: 1.0
