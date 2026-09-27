@@ -622,7 +622,61 @@ class Database {
         value TEXT NOT NULL,
         description TEXT,
         updated_at TEXT DEFAULT CURRENT_TIMESTAMP
-      )`
+      )`,
+
+      // Trend Insights from real-time search & tech discovery
+      `CREATE TABLE IF NOT EXISTS trend_insights (
+        id TEXT PRIMARY KEY,
+        keyword TEXT NOT NULL,
+        category TEXT NOT NULL,
+        search_query TEXT,
+        search_volume_indicator TEXT DEFAULT 'medium',
+        trend_source TEXT NOT NULL,
+        metadata TEXT NOT NULL DEFAULT '{}',
+        discovered_at TEXT DEFAULT CURRENT_TIMESTAMP
+      )`,
+
+      // Dynamic AI Content Suggestions for video generation
+      `CREATE TABLE IF NOT EXISTS ai_content_suggestions (
+        id TEXT PRIMARY KEY,
+        topic TEXT NOT NULL,
+        category TEXT NOT NULL,
+        target_length TEXT NOT NULL DEFAULT 'extended',
+        rationale TEXT NOT NULL,
+        search_evidence TEXT NOT NULL,
+        educational_visuals TEXT NOT NULL DEFAULT '[]',
+        hook_angle TEXT,
+        channel_affinity_score REAL DEFAULT 0,
+        trend_score REAL DEFAULT 0,
+        priority_score REAL DEFAULT 0,
+        status TEXT NOT NULL DEFAULT 'pending',
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        used_at TEXT
+      )`,
+
+      `CREATE INDEX IF NOT EXISTS idx_ai_suggestions_status_priority
+       ON ai_content_suggestions(status, priority_score DESC, created_at DESC)`,
+      `CREATE INDEX IF NOT EXISTS idx_trend_insights_category
+       ON trend_insights(category, discovered_at DESC)`,
+
+      // Continuous Evolutionary Video Quality & Content Enhancement Table
+      `CREATE TABLE IF NOT EXISTS video_quality_enhancements (
+        id TEXT PRIMARY KEY,
+        iteration_number INTEGER NOT NULL,
+        video_id TEXT,
+        title TEXT NOT NULL,
+        category TEXT,
+        target_length TEXT,
+        metrics_analyzed TEXT DEFAULT '{}',
+        content_critique TEXT NOT NULL,
+        lessons_learned TEXT NOT NULL,
+        enhancement_directives TEXT NOT NULL,
+        quality_score REAL DEFAULT 8.0,
+        applied_to_next INTEGER DEFAULT 0,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+      )`,
+      `CREATE INDEX IF NOT EXISTS idx_video_quality_iteration
+       ON video_quality_enhancements(iteration_number DESC, created_at DESC)`
     ];
 
     for (const tableQuery of tables) {
@@ -2879,6 +2933,198 @@ class Database {
       this.logger.error('Database backup failed:', error);
       throw error;
     }
+  }
+
+  // Trend Insights & Dynamic Content Suggestions
+  async saveTrendInsight(insight = {}) {
+    const id = insight.id || this.generateId('trend');
+    await this.executeQuery(
+      `INSERT INTO trend_insights (id, keyword, category, search_query, search_volume_indicator, trend_source, metadata, discovered_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        id,
+        insight.keyword,
+        insight.category || 'General Tech',
+        insight.searchQuery || insight.search_query || insight.keyword,
+        insight.searchVolumeIndicator || insight.search_volume_indicator || 'medium',
+        insight.trendSource || insight.trend_source || 'scout',
+        JSON.stringify(insight.metadata || {}),
+        insight.discoveredAt || new Date().toISOString()
+      ]
+    );
+    return id;
+  }
+
+  async listTrendInsights(limitOrOptions = 50, category = null) {
+    let limit = 50;
+    if (typeof limitOrOptions === 'object' && limitOrOptions !== null) {
+      limit = limitOrOptions.limit || 50;
+      category = limitOrOptions.category || category;
+    } else if (typeof limitOrOptions === 'number') {
+      limit = limitOrOptions;
+    }
+
+    let rows;
+    if (category) {
+      rows = await this.getAllRows(
+        'SELECT * FROM trend_insights WHERE category = ? ORDER BY discovered_at DESC LIMIT ?',
+        [category, limit]
+      );
+    } else {
+      rows = await this.getAllRows(
+        'SELECT * FROM trend_insights ORDER BY discovered_at DESC LIMIT ?',
+        [limit]
+      );
+    }
+
+    return (rows || []).map(r => ({
+      ...r,
+      metadata: this.safeParseJSON(r.metadata, {})
+    }));
+  }
+
+  async saveContentSuggestion(suggestion = {}) {
+    const id = suggestion.id || this.generateId('sugg');
+    await this.executeQuery(
+      `INSERT INTO ai_content_suggestions (
+        id, topic, category, target_length, rationale, search_evidence,
+        educational_visuals, hook_angle, channel_affinity_score, trend_score,
+        priority_score, status, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        id,
+        suggestion.topic,
+        suggestion.category || 'General Tech',
+        suggestion.targetLength || suggestion.target_length || 'short',
+        suggestion.rationale || '',
+        suggestion.searchEvidence || suggestion.search_evidence || '',
+        JSON.stringify(suggestion.educationalVisuals || suggestion.educational_visuals || []),
+        suggestion.hookAngle || suggestion.hook_angle || '',
+        Number(suggestion.channelAffinityScore || suggestion.channel_affinity_score || 0),
+        Number(suggestion.trendScore || suggestion.trend_score || 0),
+        Number(suggestion.priorityScore || suggestion.priority_score || 0),
+        suggestion.status || 'pending',
+        suggestion.createdAt || new Date().toISOString()
+      ]
+    );
+    return id;
+  }
+
+  safeParseJSON(str, fallback = null) {
+    if (!str) return fallback;
+    try {
+      return JSON.parse(str);
+    } catch (_e) {
+      return fallback;
+    }
+  }
+
+  async listContentSuggestions(filter = {}) {
+    let query = 'SELECT * FROM ai_content_suggestions';
+    const params = [];
+    const conditions = [];
+    if (filter.status) {
+      conditions.push('status = ?');
+      params.push(filter.status);
+    }
+    if (filter.target_length) {
+      conditions.push('target_length = ?');
+      params.push(filter.target_length);
+    }
+    if (conditions.length > 0) {
+      query += ' WHERE ' + conditions.join(' AND ');
+    }
+    query += ' ORDER BY priority_score DESC, created_at DESC';
+    if (filter.limit) {
+      query += ' LIMIT ?';
+      params.push(filter.limit);
+    }
+    const rows = await this.getAllRows(query, params);
+    return rows.map(r => ({
+      ...r,
+      educational_visuals: this.safeParseJSON(r.educational_visuals, [])
+    }));
+  }
+
+  async getNextTopContentSuggestion() {
+    const row = await this.getRow(
+      `SELECT * FROM ai_content_suggestions 
+       WHERE status = 'pending' AND (target_length = 'short' OR target_length IS NULL)
+       ORDER BY priority_score DESC, created_at DESC 
+       LIMIT 1`
+    );
+    if (!row) return null;
+    return {
+      ...row,
+      educational_visuals: this.safeParseJSON(row.educational_visuals, [])
+    };
+  }
+
+  async markSuggestionStatus(id, status = 'completed') {
+    return this.executeQuery(
+      'UPDATE ai_content_suggestions SET status = ?, used_at = ? WHERE id = ?',
+      [status, new Date().toISOString(), id]
+    );
+  }
+
+  async saveQualityEnhancement(record = {}) {
+    const id = record.id || this.generateId('enh');
+    await this.executeQuery(
+      `INSERT INTO video_quality_enhancements (
+        id, iteration_number, video_id, title, category, target_length,
+        metrics_analyzed, content_critique, lessons_learned,
+        enhancement_directives, quality_score, applied_to_next, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        id,
+        Number(record.iterationNumber || record.iteration_number || 1),
+        record.videoId || record.video_id || null,
+        record.title || 'Untitled',
+        record.category || 'tech',
+        record.targetLength || record.target_length || 'short',
+        JSON.stringify(record.metricsAnalyzed || record.metrics_analyzed || {}),
+        record.contentCritique || record.content_critique || '',
+        record.lessonsLearned || record.lessons_learned || '',
+        JSON.stringify(record.enhancementDirectives || record.enhancement_directives || {}),
+        Number(record.qualityScore || record.quality_score || 8.0),
+        record.appliedToNext ? 1 : 0,
+        record.createdAt || new Date().toISOString()
+      ]
+    );
+    return id;
+  }
+
+  async getLatestQualityDirectives() {
+    const row = await this.getRow(
+      `SELECT * FROM video_quality_enhancements 
+       ORDER BY iteration_number DESC, created_at DESC 
+       LIMIT 1`
+    );
+    if (!row) return null;
+    return {
+      ...row,
+      metrics_analyzed: this.safeParseJSON(row.metrics_analyzed, {}),
+      enhancement_directives: this.safeParseJSON(row.enhancement_directives, {})
+    };
+  }
+
+  async listQualityEnhancements(limit = 20) {
+    const rows = await this.getAllRows(
+      'SELECT * FROM video_quality_enhancements ORDER BY iteration_number DESC, created_at DESC LIMIT ?',
+      [limit]
+    );
+    return (rows || []).map(r => ({
+      ...r,
+      metrics_analyzed: this.safeParseJSON(r.metrics_analyzed, {}),
+      enhancement_directives: this.safeParseJSON(r.enhancement_directives, {})
+    }));
+  }
+
+  async markQualityEnhancementApplied(id) {
+    return this.executeQuery(
+      'UPDATE video_quality_enhancements SET applied_to_next = 1 WHERE id = ?',
+      [id]
+    );
   }
 
   async getStats() {
