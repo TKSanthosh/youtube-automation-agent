@@ -150,11 +150,59 @@ async function run() {
     try {
       // 1. Generate Strategy & Topic
       logger.info('Brainstorming topic & strategy...');
-      const topicForCycle = options.topic
+      let topicForCycle = options.topic
         ? (options.count > 1 ? `${options.topic} (Part ${i})` : options.topic)
         : null;
+
+      // Ingest top AI suggestion from Trend Intelligence Agent if no topic was manually provided
+      let topSugg = null;
+      if (!topicForCycle) {
+        try {
+          topSugg = await db.getNextTopContentSuggestion();
+          if (topSugg) {
+            topicForCycle = topSugg.topic;
+            await db.markSuggestionStatus(topSugg.id, 'consumed');
+            console.log(chalk.cyan(`   🧠 Consumed AI Trend Suggestion: "${topicForCycle}" [${(topSugg.target_length || 'short').toUpperCase()}]`));
+          } else {
+            const latestFile = path.join(__dirname, '..', 'data', 'latest-suggestion.json');
+            if (fsSync.existsSync(latestFile)) {
+              const latestData = JSON.parse(fsSync.readFileSync(latestFile, 'utf-8'));
+              if (latestData.has_suggestion && latestData.suggestion && !latestData.suggestion._consumed) {
+                topicForCycle = latestData.suggestion.topic;
+                latestData.suggestion._consumed = true;
+                fsSync.writeFileSync(latestFile, JSON.stringify(latestData, null, 2), 'utf-8');
+                console.log(chalk.cyan(`   🧠 Consumed AI Trend File Suggestion: "${topicForCycle}"`));
+              }
+            }
+          }
+        } catch (_suggErr) {
+          // Continue to default strategy generation
+        }
+      }
+
       const strategy = await strategyAgent.generateContentStrategy(topicForCycle);
-      console.log(chalk.white(`   📌 Topic: ${strategy.topic}`));
+      
+      // Apply target length and visual blueprints
+      const targetLen = options.length && options.length !== 'autonomous_ai' 
+        ? options.length 
+        : (topSugg?.target_length || 'short');
+      
+      const lengthLabels = {
+        short: '2-4 minutes',
+        medium: '8-12 minutes',
+        long: '15-20 minutes',
+        extended: '20-30 minutes'
+      };
+
+      strategy.requestedLengthKey = targetLen;
+      strategy.requestedLength = lengthLabels[targetLen] || '2-4 minutes';
+      if (topSugg) {
+        if (topSugg.educational_visuals) strategy.visualGuidance = topSugg.educational_visuals;
+        if (topSugg.hook_angle) strategy.hookAngle = topSugg.hook_angle;
+        if (topSugg.rationale) strategy.planRationale = topSugg.rationale;
+      }
+
+      console.log(chalk.white(`   📌 Topic: ${strategy.topic} [${strategy.requestedLengthKey.toUpperCase()} - ${strategy.requestedLength}]`));
 
       // 2. Generate Script
       logger.info('Writing script & narration...');
@@ -209,6 +257,22 @@ async function run() {
         const uploadRes = await publishingAgent.uploadToYouTube(scheduleEntry);
         youtubeUrl = `https://www.youtube.com/watch?v=${uploadRes.id}`;
         console.log(chalk.green.bold(`   ✅ UPLOAD SUCCESSFUL: ${youtubeUrl}`));
+
+        // Continuous Evolutionary Quality Audit: Evaluate uploaded video to guarantee next video is better
+        try {
+          const { QualityEvolutionService } = require('../utils/quality-evolution-service');
+          const qualityEvolution = new QualityEvolutionService(db, { credentials });
+          await qualityEvolution.analyzeUploadedVideo({
+            videoId: uploadRes.id,
+            title: script.title,
+            category: strategy.category,
+            targetLength: strategy.requestedLengthKey || 'short',
+            scriptSummary: script.narration,
+            hook: script.hook
+          });
+        } catch (evoErr) {
+          logger.warn(`Quality evolution post-upload notice: ${evoErr.message}`);
+        }
 
         results.push({
           title: script.title,

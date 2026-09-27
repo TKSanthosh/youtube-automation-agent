@@ -56,6 +56,23 @@ class ScriptWriterAgent {
       this.logger.info(`Generating script for: ${strategy.topic}`);
       const isExtendedForm = strategy.requestedLengthKey === 'extended' || strategy.requestedLength === '20-30 minutes';
 
+      // Pull latest evolutionary quality directives from the previously uploaded video
+      if (!strategy.qualityDirectives && this.db) {
+        try {
+          const { QualityEvolutionService } = require('../utils/quality-evolution-service');
+          const qualityEvolution = new QualityEvolutionService(this.db, { credentials: this.credentials });
+          const evoRecord = await qualityEvolution.getDirectivesForNextVideo();
+          if (evoRecord && evoRecord.enhancement_directives) {
+            strategy.qualityDirectives = evoRecord.enhancement_directives;
+            strategy.qualityIteration = evoRecord.iteration_number || 1;
+            strategy.previousQualityScore = evoRecord.quality_score || 8.0;
+            this.logger.info(`📈 [Continuous Quality Evolution] Active Iteration #${strategy.qualityIteration} (Target Score > ${strategy.previousQualityScore})`);
+          }
+        } catch (_evoErr) {
+          // Non-fatal, continue with standard generation
+        }
+      }
+
       if (this.pipeline && this.aiTextService.isAvailable()) {
         this.logger.info(`Running 10-Agent Collaborative Script Pipeline for: "${strategy.topic}"`);
         const pipelineScript = await this.pipeline.runPipeline(strategy, { isExtendedForm });
@@ -144,9 +161,18 @@ class ScriptWriterAgent {
       return null;
     }
 
+    const evoBlock = strategy.qualityDirectives ? `
+⚡ MANDATORY CONTINUOUS QUALITY EVOLUTION DIRECTIVES (Iteration #${strategy.qualityIteration || 1}):
+Our channel rule: THIS video MUST surpass our previous upload (previous quality benchmark: ${strategy.previousQualityScore || 8.0}/10).
+- Hook Rule: ${strategy.qualityDirectives.hookRule || 'Start immediately with the high-stakes problem in under 1.5 seconds.'}
+- Audio-Text Synchronization: ${strategy.qualityDirectives.audioTextSyncRule || 'Ensure spoken words sync directly with screen text.'}
+- Pedagogical Density: ${strategy.qualityDirectives.pedagogicalDensity || 'Include concrete, real-world code snippets and visual diagrams.'}
+- Mandatory Upgrades: ${Array.isArray(strategy.qualityDirectives.mandatoryUpgrades) ? strategy.qualityDirectives.mandatoryUpgrades.join('; ') : 'Tighter pacing, zero delay in hook.'}
+` : '';
+
     const prompt = `You are a renowned principal software architect and passionate tech educator creating a YouTube Short on: "${strategy.topic}".
 Your goal is to teach this technical concept clearly, thoroughly, and completely so that even junior developers immediately get it, while senior engineers appreciate the depth.
-
+${evoBlock}
 CRITICAL CONSTRAINTS FOR DURATION & COMPLETENESS:
 1. STRICT DURATION WINDOW: The video narration MUST be between 2 minutes 30 seconds (150 seconds) and 2 minutes 55 seconds (175 seconds).
    - Total spoken narration across all 4 slides MUST be between 340 and 370 words (~155 to 170 seconds at 130 wpm).

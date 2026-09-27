@@ -196,6 +196,22 @@ class PublishingSchedulingAgent {
       
       await this.db.updateScheduleEntry(scheduleEntry);
       await this.syncShortStatus(scheduleEntry, 'published');
+
+      // Continuous Evolutionary Quality Audit: Analyze uploaded video to guarantee next video is better
+      try {
+        const { QualityEvolutionService } = require('../utils/quality-evolution-service');
+        const qualityEvolution = new QualityEvolutionService(this.db, { credentials: this.credentials });
+        await qualityEvolution.analyzeUploadedVideo({
+          videoId: uploadResult.id,
+          title: scheduleEntry.title || scheduleEntry.metadata?.seo?.title,
+          category: scheduleEntry.metadata?.category || 'tech',
+          targetLength: scheduleEntry.metadata?.requestedLengthKey || 'short',
+          scriptSummary: scheduleEntry.metadata?.script?.narration || scheduleEntry.metadata?.seo?.description,
+          hook: scheduleEntry.metadata?.script?.hook
+        });
+      } catch (evoErr) {
+        this.logger.warn(`Continuous quality evolution notice: ${evoErr.message}`);
+      }
       
       // Remove from queue
       this.publishQueue = this.publishQueue.filter(entry => entry.productionId !== scheduleEntry.productionId);

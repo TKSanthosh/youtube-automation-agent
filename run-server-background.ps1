@@ -1,30 +1,32 @@
-# YouTube Automation Agent - Background Runner
+# YouTube Automation Agent - Dual Microservice Background Runner
 $ErrorActionPreference = "SilentlyContinue"
 $projectRoot = $PSScriptRoot
 if (-not $projectRoot) { $projectRoot = "c:\antigravity_projects\youtube-automation-agent" }
 Set-Location $projectRoot
 
-$port = 3456
-$env:PORT = "3456"
-$env:AUTOPILOT = "true"
+$mainPort = 3456
+$intelPort = 3457
 
-# 1. Check if server is already running
-$isRunning = $false
+# 1. Check if both servers are already running
+$mainRunning = $false
+$intelRunning = $false
+
 try {
-    $resp = Invoke-RestMethod -Uri "http://localhost:$port/health" -TimeoutSec 2 -ErrorAction Stop
-    if ($resp.status -eq 'ok' -or $resp.success -eq $true) {
-        $isRunning = $true
-    }
-} catch {
-    $isRunning = $false
-}
+    $resp = Invoke-RestMethod -Uri "http://localhost:$mainPort/health" -TimeoutSec 2 -ErrorAction Stop
+    if ($resp.status -eq 'ok' -or $resp.success -eq $true) { $mainRunning = $true }
+} catch { $mainRunning = $false }
 
-if ($isRunning) {
-    Write-Output "YouTube Automation Agent is already running on port $port."
+try {
+    $respIntel = Invoke-RestMethod -Uri "http://localhost:$intelPort/health" -TimeoutSec 2 -ErrorAction Stop
+    if ($respIntel.status -eq 'ok' -or $respIntel.success -eq $true) { $intelRunning = $true }
+} catch { $intelRunning = $false }
+
+if ($mainRunning -and $intelRunning) {
+    Write-Output "✅ Both Main Agent (:3456) and AI Intelligence Microservice (:3457) are already active."
     exit 0
 }
 
-# 2. Launch Supervisor Watchdog in the background (Runs Indefinitely)
+# 2. Launch Dual Supervisor Watchdog in the background (Runs Indefinitely)
 $watchdogScript = Join-Path $projectRoot "server-watchdog.ps1"
 
 Start-Process -FilePath "powershell.exe" `
@@ -33,10 +35,20 @@ Start-Process -FilePath "powershell.exe" `
               -WindowStyle Hidden
 
 # 3. Wait briefly and verify startup
-Start-Sleep -Seconds 4
+Start-Sleep -Seconds 5
+
 try {
-    $verify = Invoke-RestMethod -Uri "http://localhost:$port/health" -TimeoutSec 3 -ErrorAction Stop
-    Write-Output "✅ YouTube Automation Agent successfully started on http://localhost:$port (Indefinite supervisor active)"
+    $verifyMain = Invoke-RestMethod -Uri "http://localhost:$mainPort/health" -TimeoutSec 3 -ErrorAction Stop
+    Write-Output "✅ Main Video Agent active: http://localhost:$mainPort"
 } catch {
-    Write-Output "⚠️ Agent was launched in background. Check logs/agent_background.log for details."
+    Write-Output "⏳ Main Video Agent initializing in background (port $mainPort)..."
 }
+
+try {
+    $verifyIntel = Invoke-RestMethod -Uri "http://localhost:$intelPort/health" -TimeoutSec 3 -ErrorAction Stop
+    Write-Output "🧠 AI Intelligence Microservice active: http://localhost:$intelPort"
+} catch {
+    Write-Output "⏳ AI Intelligence Microservice initializing in background (port $intelPort)..."
+}
+
+Write-Output "🚀 Dual supervisor watchdog active. Check logs/agent_background.log and logs/intelligence_background.log."

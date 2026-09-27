@@ -1,0 +1,27 @@
+{
+  "iterationNumber": 1,
+  "videoId": "youtube-1",
+  "title": "A",
+  "category": "tech",
+  "targetLength": "short",
+  "metricsAnalyzed": {
+    "analyzedAt": "2026-09-27T18:07:28.892Z",
+    "videoDurationSeconds": null,
+    "totalScenes": null
+  },
+  "contentCritique": "Iteration #1: Narration and concept were strong, but hook delay and transition pacing can be tightened. Text must match spoken audio phonemes instantly with zero silence.",
+  "lessonsLearned": "Viewers drop off when intro takes more than 2 seconds. The next video must reveal the core conflict within the first 1.5 seconds and include side-by-side architecture comparisons.",
+  "enhancementDirectives": {
+    "hookRule": "Start immediately with the high-stakes problem in under 1.5 seconds. Zero 'Hello guys' or channel pleasantries.",
+    "audioTextSyncRule": "Subtitles and visual text cards must render synchronously with audio words. Zero silence buffer.",
+    "pedagogicalDensity": "Include at least one concrete code snippet or system diagram comparing before vs after.",
+    "visualGuidelines": "High-contrast dark mode background with syntax highlighting and kinetic highlight arrows.",
+    "mandatoryUpgrades": [
+      "Cut intro delay to under 1.5 seconds (Iteration #1 standard)",
+      "Enforce 15% higher technical density with real architecture benchmarks",
+      "Ensure slide transitions occur within 3-5 seconds of spoken concept shifts"
+    ]
+  },
+  "qualityScore": 8.2,
+  "appliedToNext": false
+}

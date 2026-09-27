@@ -149,7 +149,6 @@ async function main() {
   // Retrieve saved pending Shorts suggestions and trends from database
   const suggestions = await db.listContentSuggestions({ status: 'pending', target_length: 'short', limit: 50 });
   const trends = await db.listTrendInsights({ limit: 50 });
-  const nextTop = await db.getNextTopContentSuggestion();
 
   logger.info(`✅ Intelligence cycle complete:`);
   logger.info(`   - Scored Trends Discovered: ${trends.length}`);

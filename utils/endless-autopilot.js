@@ -246,9 +246,72 @@ class EndlessAutoPilot {
   }
 
   async getNextTarget() {
+    const fs = require('fs');
+    const path = require('path');
+
+    // 1. Check Local Intelligence Microservice (Port 3457)
+    try {
+      const resp = await fetch('http://127.0.0.1:3457/api/suggestions/next?markUsed=true', {
+        headers: { 'Accept': 'application/json' },
+        signal: AbortSignal.timeout(3000)
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data.success && data.suggestion) {
+          return this.formatTargetFromSuggestion(data.suggestion, 'Microservice (Port 3457)');
+        }
+      }
+    } catch (_e) {
+      // Microservice offline, fall back to next source
+    }
+
+    // 2. Check Database Suggestion Queue (SQLite)
+    if (this.db && typeof this.db.getNextTopContentSuggestion === 'function') {
+      try {
+        const s = await this.db.getNextTopContentSuggestion();
+        if (s) {
+          await this.db.markSuggestionStatus(s.id, 'consumed');
+          return this.formatTargetFromSuggestion(s, 'Local Database Queue');
+        }
+      } catch (_e) {
+        // Fall back to file
+      }
+    }
+
+    // 3. Check Synced Local Data File (Committed by GitHub Actions)
+    const latestFilePath = path.join(__dirname, '..', 'data', 'latest-suggestion.json');
+    if (fs.existsSync(latestFilePath)) {
+      try {
+        const raw = fs.readFileSync(latestFilePath, 'utf-8');
+        const parsed = JSON.parse(raw);
+        if (parsed.has_suggestion && parsed.suggestion && !parsed.suggestion._consumed) {
+          // Mark in-memory/file consumed so we don't repeat endlessly
+          parsed.suggestion._consumed = true;
+          fs.writeFileSync(latestFilePath, JSON.stringify(parsed, null, 2), 'utf-8');
+          return this.formatTargetFromSuggestion(parsed.suggestion, 'Local Synced JSON Feed');
+        }
+      } catch (_e) {
+        // Fall back to remote
+      }
+    }
+
+    // 4. Check Remote GitHub Raw Feed (Real-Time Cloud Communication)
+    try {
+      const githubRawUrl = 'https://raw.githubusercontent.com/TKSanthosh/youtube-automation-agent/main/data/latest-suggestion.json';
+      const ghResp = await fetch(githubRawUrl, { signal: AbortSignal.timeout(4000) });
+      if (ghResp.ok) {
+        const ghData = await ghResp.json();
+        if (ghData.has_suggestion && ghData.suggestion) {
+          return this.formatTargetFromSuggestion(ghData.suggestion, 'GitHub Actions Cloud Feed');
+        }
+      }
+    } catch (_e) {
+      // Fall back to curated list
+    }
+
+    // 5. Fallback to Curated Topics Catalog
     const publishedTopics = await this.getAlreadyPublishedTopics();
     
-    // Find first topic not yet produced
     let topicItem = null;
     for (const candidate of this.curatedTopics) {
       if (!publishedTopics.has(candidate.topic)) {
@@ -257,11 +320,10 @@ class EndlessAutoPilot {
       }
     }
 
-    // If all topics exhausted, let AI generate a fresh one
     if (!topicItem) {
       this.logger.info('All curated topics covered! Letting AI generate a fresh topic.');
       return {
-        topic: null, // null = let ContentStrategyAgent pick via AI
+        topic: null,
         tech: 'ai-selected',
         category: 'AI Selected',
         length: 'short',
@@ -270,7 +332,6 @@ class EndlessAutoPilot {
       };
     }
 
-    // All autopilot runs are Shorts only (per user directive)
     return {
       topic: topicItem.topic,
       tech: topicItem.tech,
@@ -278,6 +339,36 @@ class EndlessAutoPilot {
       length: 'short',
       label: '⚡ 2-3 Min Fast Tech Short (9:16 Vertical)',
       isWidescreen: false
+    };
+  }
+
+  formatTargetFromSuggestion(s, sourceName = 'AI Agent') {
+    const targetLength = s.target_length || s.targetLength || 'short';
+    let label = '⚡ 2-3 Min Fast Tech Short (9:16 Vertical)';
+    let isWidescreen = false;
+
+    if (targetLength === 'extended') {
+      label = '🎥 20-30 Min Extended Masterclass (16:9 4K)';
+      isWidescreen = true;
+    } else if (targetLength === 'long') {
+      label = '📹 15-20 Min In-Depth Tutorial (16:9)';
+      isWidescreen = true;
+    }
+
+    this.logger.info(`🧠 [${sourceName}] Picked AI trend recommendation: "${s.topic}" [${targetLength.toUpperCase()}]`);
+
+    return {
+      topic: s.topic,
+      tech: s.category || 'tech',
+      category: s.category || 'Tech',
+      length: targetLength,
+      label,
+      isWidescreen,
+      rationale: s.rationale || '',
+      searchEvidence: s.search_evidence || s.searchEvidence || '',
+      visualGuidance: s.educational_visuals || s.educationalVisuals || [],
+      hookAngle: s.hook_angle || s.hookAngle || '',
+      fromIntelligenceAgent: true
     };
   }
 
