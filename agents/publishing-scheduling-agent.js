@@ -216,6 +216,32 @@ class PublishingSchedulingAgent {
       throw new Error('YouTube API not authenticated. Please authorize YouTube or wait for tokens.');
     }
     const { metadata } = scheduleEntry;
+
+    // ── Pre-upload deduplication check ──
+    // Skip if a video with the same title was already published to avoid channel spam
+    try {
+      const existingTitle = metadata?.seo?.title || scheduleEntry.title || '';
+      if (existingTitle && this.db) {
+        const existing = await this.db.getRow(
+          `SELECT youtube_id, title FROM publish_schedule 
+           WHERE status = 'published' AND youtube_id IS NOT NULL AND youtube_id != '' 
+           AND title = ? AND id != ?`,
+          [existingTitle, scheduleEntry.id]
+        );
+        if (existing) {
+          this.logger.warn(`⚠️ DUPLICATE DETECTED: "${existingTitle}" already published as ${existing.youtube_id}. Skipping upload.`);
+          await this.db.executeQuery(
+            `UPDATE publish_schedule SET status = 'skipped_duplicate', error_message = ? WHERE id = ?`,
+            [`Duplicate of existing video ${existing.youtube_id}`, scheduleEntry.id]
+          );
+          return { skipped: true, reason: 'duplicate', existingId: existing.youtube_id };
+        }
+      }
+    } catch (dupErr) {
+      this.logger.warn(`Dedup check notice: ${dupErr.message}`);
+      // Non-fatal — proceed with upload if dedup check fails
+    }
+
     const validation = assertValidYouTubeMetadata(metadata.seo);
     if (validation.warnings.length) {
       this.logger.warn(`YouTube metadata warnings: ${validation.warnings.join(' ')}`);
