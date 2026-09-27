@@ -13,15 +13,12 @@ on:
         required: true
         default: '1'
       format:
-        description: 'Video Format / Length'
+        description: 'Video Format / Length (Enforced YouTube Shorts/Reels 2:30-3:00 min)'
         required: true
         type: choice
-        default: 'autonomous_ai'
+        default: 'short'
         options:
-          - 'autonomous_ai'
           - 'short'
-          - 'long'
-          - 'extended'
       topic:
         description: 'Specific topic (leave empty for 100% AI real-time trend discovery)'
         required: false
@@ -104,15 +101,11 @@ jobs:
           NODE_ENV: "production"
         run: |
           COUNT="${{ inputs.video_count || '1' }}"
-          FORMAT="${{ inputs.format || 'autonomous_ai' }}"
           TOPIC="${{ inputs.topic || '' }}"
           
-          CMD="node scripts/run-pipeline.js --count=$COUNT"
+          CMD="node scripts/run-pipeline.js --count=$COUNT --length=short"
           if [ -n "$TOPIC" ]; then
             CMD="$CMD --topic=\"$TOPIC\""
-          fi
-          if [ -n "$FORMAT" ] && [ "$FORMAT" != "autonomous_ai" ]; then
-            CMD="$CMD --length=\"$FORMAT\""
           fi
           
           echo "🎬 Running Production Command: $CMD"
@@ -135,8 +128,8 @@ jobs:
             echo "No state updates to commit."
           else
             git commit -m "chore(ai): evolve video quality directives & update suggestions [skip ci]"
-            git pull --rebase origin main || true
-            git push origin HEAD:main || echo "Push notice: Branch protected or no changes."
+            git pull --rebase origin master || true
+            git push origin HEAD:master || echo "Push notice: Branch protected or no changes."
           fi
 
       # ── Phase 4: Upload Run Artifacts for Audit ──

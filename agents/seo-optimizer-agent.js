@@ -49,34 +49,21 @@ class SEOOptimizerAgent {
         tags = await this.generateTags(script, strategy);
       }
       
-      const isExtended = strategy.requestedLengthKey === 'extended' || strategy.requestedLength === '20-30 minutes' || script?.isExtendedForm;
-      const isLong = strategy.requestedLengthKey === 'long' || isExtended;
-
-      if (isExtended) {
-        if (!tags.includes('FullCourse')) tags.push('FullCourse');
-        if (!tags.includes('Masterclass')) tags.push('Masterclass');
-        if (!tags.includes('Programming')) tags.push('Programming');
-        if (!description.includes('#FullCourse')) {
-          description += '\n\n🎓 #FullCourse #Masterclass #Programming #TechEducation';
-        }
+      // Operator Directive: ALL videos must be strictly uploaded to the REELS / SHORTS section
+      if (!title.toLowerCase().includes('#shorts')) {
+        title = `${title.slice(0, 85)} #Shorts #Reels`;
+      } else if (!title.toLowerCase().includes('#reels')) {
+        title = `${title.slice(0, 92)} #Reels`;
       }
-
-      if (isLong) {
-        title = title.replace(/#Shorts/gi, '').trim();
-        description = description.replace(/#Shorts/gi, '').trim();
-        tags = tags.filter(t => t.toLowerCase() !== 'shorts' && t.toLowerCase() !== '#shorts');
-      } else {
-        if (!title.toLowerCase().includes('#shorts')) {
-          title = `${title.slice(0, 90)} #Shorts`;
-        }
-        if (!description.toLowerCase().includes('#shorts')) {
-          description = `${description}\n\n#Shorts #Tech #Coding #SoftwareEngineering #SystemDesign`;
-        }
-        if (!tags.includes('Shorts')) tags.push('Shorts');
-        if (!tags.includes('Tech')) tags.push('Tech');
-        if (!tags.includes('Coding')) tags.push('Coding');
-        if (!tags.includes('SoftwareEngineering')) tags.push('SoftwareEngineering');
+      if (!description.toLowerCase().includes('#shorts')) {
+        description = `${description}\n\n#Shorts #Reels #Tech #Coding #SoftwareEngineering #SystemDesign`;
       }
+      if (!tags.includes('Shorts')) tags.push('Shorts');
+      if (!tags.includes('Reels')) tags.push('Reels');
+      if (!tags.includes('TechShorts')) tags.push('TechShorts');
+      if (!tags.includes('Tech')) tags.push('Tech');
+      if (!tags.includes('Coding')) tags.push('Coding');
+      if (!tags.includes('SoftwareEngineering')) tags.push('SoftwareEngineering');
       
       // Generate hashtags
       const hashtags = await this.generateHashtags(strategy);
