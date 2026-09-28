@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-09-28T02:46:07.019Z",
+  "updated_at": "2026-09-28T08:21:30.134Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790563567006_0c64c7",
-    "topic": "Python Asyncio vs Threading: When to Stop Blocking Your Code",
+    "id": "sugg_1790583688510_9hrzg5",
+    "topic": "Python AsyncIO vs Threading: When to Stop Blocking",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Developers continually struggle with choosing concurrency models in Python, leading to blocked servers. This video directly resolves the confusion using clean execution timelines.",
+    "rationale": "Developers constantly struggle to choose between concurrency models in Python. Addressing the exact performance boundaries and CPU-bound vs I/O-bound trade-offs drives massive engagement and loop-back watch time.",
     "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
-      "Timelines",
+      "State transitions",
       "Code execution visualization"
     ],
-    "hook_angle": "Stop using threads for I/O-bound tasks until you understand what the GIL is actually destroying in your runtime.",
+    "hook_angle": "Stop using threads for I/O-bound Python tasks until you understand what the GIL is actually destroying behind your back.",
     "channel_affinity_score": 100,
     "trend_score": 95,
-    "priority_score": 98,
+    "priority_score": 97,
     "status": "pending",
-    "created_at": "2026-09-28T02:46:07.006Z",
+    "created_at": "2026-09-28T08:21:28.510Z",
     "used_at": null
   }
 }
