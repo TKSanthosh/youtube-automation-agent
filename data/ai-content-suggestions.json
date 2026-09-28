@@ -1,119 +1,119 @@
 {
-  "updated_at": "2026-09-27T22:52:31.751Z",
+  "updated_at": "2026-09-28T02:46:07.019Z",
   "total_suggestions": 6,
   "suggestions": [
     {
-      "id": "sugg_1790549551739_s75m7m",
-      "topic": "Python AsyncIO vs Threading: When to Stop Blocking Your Loop",
+      "id": "sugg_1790563567006_0c64c7",
+      "topic": "Python Asyncio vs Threading: When to Stop Blocking Your Code",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Developers continually struggle with choosing between threads and asyncio for I/O-bound tasks, leading to frequent performance bottlenecks and deadlocks.",
+      "rationale": "Developers continually struggle with choosing concurrency models in Python, leading to blocked servers. This video directly resolves the confusion using clean execution timelines.",
       "search_evidence": "python asyncio vs threading",
       "educational_visuals": [
-        "State transitions",
-        "Data-flow diagrams"
+        "Timelines",
+        "Code execution visualization"
       ],
-      "hook_angle": "Stop using multi-threading for every Python network request. It's destroying your CPU cache.",
+      "hook_angle": "Stop using threads for I/O-bound tasks until you understand what the GIL is actually destroying in your runtime.",
       "channel_affinity_score": 100,
       "trend_score": 95,
       "priority_score": 98,
       "status": "pending",
-      "created_at": "2026-09-27T22:52:31.739Z",
+      "created_at": "2026-09-28T02:46:07.006Z",
       "used_at": null
     },
     {
-      "id": "sugg_1790549551744_kcamna",
-      "topic": "Mastering the Microservices Circuit Breaker Pattern",
+      "id": "sugg_1790563567011_sgi27h",
+      "topic": "Acing the System Design Interview: Distributed Architectures",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "Cascading failures in distributed architectures make fault tolerance patterns mandatory interview and production knowledge.",
-      "search_evidence": "microservices circuit breaker pattern",
+      "rationale": "System design interviews cause massive anxiety for mid-level engineers leveling up to senior roles. A structured architectural breakdown captures peak search intent.",
+      "search_evidence": "system design interview preparation",
       "educational_visuals": [
         "Architecture diagrams",
-        "State transitions"
+        "Animated system flows"
       ],
-      "hook_angle": "One failing microservice can take down your entire backend. Here is how the Circuit Breaker pattern saves systems.",
+      "hook_angle": "Want to pass your senior system design interview? Stop drawing random boxes and master this core scalability pattern first.",
       "channel_affinity_score": 100,
       "trend_score": 96,
       "priority_score": 97,
       "status": "pending",
-      "created_at": "2026-09-27T22:52:31.744Z",
+      "created_at": "2026-09-28T02:46:07.011Z",
       "used_at": null
     },
     {
-      "id": "sugg_1790549551745_ph3dxn",
-      "topic": "Cracking the Distributed Systems Architecture Interview",
+      "id": "sugg_1790563567013_ty6bn6",
+      "topic": "Microservices Circuit Breaker Pattern: Stop Cascading Failures",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "System design interviews for senior engineering roles focus heavily on scalable distributed topologies and trade-offs.",
-      "search_evidence": "distributed systems architecture styles",
+      "rationale": "Resilience patterns are critical for distributed systems. Implementing a circuit breaker correctly prevents total system outages during downstream API failures.",
+      "search_evidence": "microservices circuit breaker pattern",
       "educational_visuals": [
-        "Architecture diagrams",
-        "Animated system flows"
+        "State transitions",
+        "Architecture diagrams"
       ],
-      "hook_angle": "Stop freezing during system design interviews. Use this 4-step framework for distributed scale.",
-      "channel_affinity_score": 98,
+      "hook_angle": "One downstream service drops, and suddenly your entire microservices architecture collapses like a house of cards.",
+      "channel_affinity_score": 100,
       "trend_score": 94,
       "priority_score": 96,
       "status": "pending",
-      "created_at": "2026-09-27T22:52:31.745Z",
+      "created_at": "2026-09-28T02:46:07.013Z",
       "used_at": null
     },
     {
-      "id": "sugg_1790549551741_ethym",
-      "topic": "Demystifying the Python AsyncIO Event Loop Under the Hood",
+      "id": "sugg_1790563567008_zlswyt",
+      "topic": "Python AsyncIO Event Loop Demystified Under the Hood",
       "category": "Python",
       "target_length": "short",
-      "rationale": "High search volume for event loop mechanics indicates a strong desire for low-level comprehension beyond basic async/await syntax usage.",
+      "rationale": "High search volume surrounds the event loop mechanic. Breaking down task scheduling visually unlocks the mental model for intermediate developers.",
       "search_evidence": "python asyncio event loop",
       "educational_visuals": [
-        "Code execution visualization",
-        "Animated system flows"
+        "Animated system flows",
+        "State transitions"
       ],
-      "hook_angle": "Ever wondered what actually happens inside Python's single-threaded event loop when you await a future?",
+      "hook_angle": "Ever wonder how Python handles ten thousand concurrent connections on a single OS thread? Let's crack open the event loop.",
       "channel_affinity_score": 100,
       "trend_score": 92,
       "priority_score": 95,
       "status": "pending",
-      "created_at": "2026-09-27T22:52:31.741Z",
+      "created_at": "2026-09-28T02:46:07.008Z",
       "used_at": null
     },
     {
-      "id": "sugg_1790549551743_2mqrgl",
-      "topic": "Python Memory Management & Garbage Collection Explained",
+      "id": "sugg_1790563567010_qim2op",
+      "topic": "Mastering Python Memory Management & Garbage Collection",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Memory leaks in long-running Python services perplex mid-level engineers, making reference counting and generational GC hot topics.",
+      "rationale": "Memory leaks in long-running Python daemons cause production crashes. Viewers desperately need actionable insight into reference counting and cyclic garbage collection.",
       "search_evidence": "python memory management and garbage collection",
       "educational_visuals": [
-        "Trees and graphs",
-        "State transitions"
+        "Data-flow diagrams",
+        "Trees and graphs"
       ],
-      "hook_angle": "Why doesn't Python's garbage collector free your RAM immediately? The answer involves reference cycles.",
-      "channel_affinity_score": 95,
+      "hook_angle": "Your Python app is leaking gigabytes of RAM, and standard reference counting won't save you from circular references.",
+      "channel_affinity_score": 100,
       "trend_score": 90,
       "priority_score": 93,
       "status": "pending",
-      "created_at": "2026-09-27T22:52:31.743Z",
+      "created_at": "2026-09-28T02:46:07.010Z",
       "used_at": null
     },
     {
-      "id": "sugg_1790549551747_463ky",
-      "topic": "Building Safe Async Queues in Python for Data Pipelines",
+      "id": "sugg_1790563567014_uuikor",
+      "topic": "Python AsyncIO Queue Pattern: Building Producer-Consumer Flows",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Engineers building asynchronous worker pools need robust patterns for producer-consumer synchronization without blocking execution.",
+      "rationale": "Handling asynchronous pipelines requires clean queue synchronization. Developers searching for asyncio queues need a practical, production-ready snippet.",
       "search_evidence": "python asyncio queue",
       "educational_visuals": [
-        "Data-flow diagrams",
-        "Code execution visualization"
+        "Code execution visualization",
+        "Data-flow diagrams"
       ],
-      "hook_angle": "If you are sharing state across asynchronous tasks in Python without an asyncio Queue, you are asking for race conditions.",
-      "channel_affinity_score": 95,
-      "trend_score": 88,
+      "hook_angle": "Stop writing chaotic coroutines; here is how to coordinate high-throughput producer-consumer pipelines using AsyncIO queues.",
+      "channel_affinity_score": 100,
+      "trend_score": 89,
       "priority_score": 91,
       "status": "pending",
-      "created_at": "2026-09-27T22:52:31.747Z",
+      "created_at": "2026-09-28T02:46:07.014Z",
       "used_at": null
     }
   ]
