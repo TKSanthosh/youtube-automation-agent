@@ -1,123 +1,119 @@
 {
-  "updated_at": "2026-09-28T20:25:37.186Z",
+  "updated_at": "2026-09-28T22:48:06.829Z",
   "total_suggestions": 6,
   "suggestions": [
     {
-      "id": "sugg_1790627137181_8b70mo",
-      "topic": "Python 3.13 Free-Threaded GIL Removal: What Changes for Developers",
-      "category": "Python",
-      "target_length": "short",
-      "rationale": "Python 3.13 free-threading is the biggest Python architectural shift in 20 years.",
-      "search_evidence": "python 3.13 gil removal benchmark",
-      "educational_visuals": [
-        "State transitions",
-        "Animated system flows",
-        "Code execution visualization"
-      ],
-      "hook_angle": "Python finally has true multi-threading without the GIL. But how does it work?",
-      "channel_affinity_score": 85,
-      "trend_score": 95,
-      "priority_score": 95,
-      "status": "pending",
-      "created_at": "2026-09-28T20:25:37.181Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1790627137178_febg8k",
-      "topic": "Model Context Protocol (MCP) in 3 Minutes: The AI Agent Connector Standard",
-      "category": "AI/ML",
-      "target_length": "short",
-      "rationale": "Anthropic MCP is becoming the standard protocol for tool-calling AI agents.",
-      "search_evidence": "model context protocol mcp tutorial",
-      "educational_visuals": [
-        "Architecture diagrams",
-        "Data-flow diagrams"
-      ],
-      "hook_angle": "Every AI agent framework is adopting MCP. Here is how client-server JSON-RPC works.",
-      "channel_affinity_score": 85,
-      "trend_score": 94,
-      "priority_score": 94,
-      "status": "pending",
-      "created_at": "2026-09-28T20:25:37.178Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1790627137174_ezcoh",
-      "topic": "Docker BuildKit Cache Mounts: Cut Image Build Times by 70%",
-      "category": "Docker",
-      "target_length": "short",
-      "rationale": "BuildKit cache mounts eliminate redundant npm/pip downloads on every build.",
-      "search_evidence": "docker buildkit cache mount tutorial",
-      "educational_visuals": [
-        "Process animations",
-        "Timelines",
-        "Code execution visualization"
-      ],
-      "hook_angle": "Stop waiting 10 minutes for Docker builds. Here is the BuildKit secret.",
-      "channel_affinity_score": 85,
-      "trend_score": 92,
-      "priority_score": 92,
-      "status": "pending",
-      "created_at": "2026-09-28T20:25:37.174Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1790627137177_vveq4o",
-      "topic": "Kubernetes Ingress vs Gateway API Explained in 3 Minutes",
-      "category": "Kubernetes",
-      "target_length": "short",
-      "rationale": "Gateway API is replacing Ingress as standard in K8s 1.30+; huge search interest.",
-      "search_evidence": "kubernetes ingress vs gateway api",
-      "educational_visuals": [
-        "Architecture diagrams",
-        "Animated system flows",
-        "Comparisons"
-      ],
-      "hook_angle": "Why Kubernetes officially deprecated standard Ingress in favor of Gateway API.",
-      "channel_affinity_score": 85,
-      "trend_score": 91,
-      "priority_score": 91,
-      "status": "pending",
-      "created_at": "2026-09-28T20:25:37.177Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1790627137182_a3uqnb",
-      "topic": "Database Sharding vs Partitioning in 3 Minutes",
-      "category": "Databases",
-      "target_length": "short",
-      "rationale": "Core system design question with consistently high search volume.",
-      "search_evidence": "database sharding vs partitioning system design",
-      "educational_visuals": [
-        "Architecture diagrams",
-        "Data-flow diagrams",
-        "Comparisons"
-      ],
-      "hook_angle": "When your database hits 100,000 queries per second, this is how you scale storage.",
-      "channel_affinity_score": 85,
-      "trend_score": 90,
-      "priority_score": 90,
-      "status": "pending",
-      "created_at": "2026-09-28T20:25:37.182Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1790627137180_myrbyq",
-      "topic": "Redis Cache Invalidation Patterns: Cache-Aside vs Write-Through",
+      "id": "sugg_1790635686820_ehyht6",
+      "topic": "Ace Your System Design Interview: Distributed Architecture",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "Cache invalidation is a classic system design challenge with high search volume.",
-      "search_evidence": "redis cache aside vs write through",
+      "rationale": "System design interview prep is a perennial high-intent search category. Condensing distributed architecture fundamentals into a tight vertical format unlocks massive algorithmic reach.",
+      "search_evidence": "system design interview preparation",
       "educational_visuals": [
         "Architecture diagrams",
+        "Animated system flows"
+      ],
+      "hook_angle": "Stop failing system design interviews by freezing up on distributed architectural patterns. Here is the exact framework to pass.",
+      "channel_affinity_score": 100,
+      "trend_score": 98,
+      "priority_score": 99,
+      "status": "pending",
+      "created_at": "2026-09-28T22:48:06.820Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1790635686813_wk0qh",
+      "topic": "Python AsyncIO vs Threading: When to Stop Blocking",
+      "category": "Python",
+      "target_length": "short",
+      "rationale": "Python developers frequently hit performance walls with I/O-bound tasks and confuse multi-threading with asynchronous event loops. This Short directly resolves the confusion using a clear mental model and high search volume queries.",
+      "search_evidence": "python asyncio vs threading",
+      "educational_visuals": [
+        "Architecture diagrams",
+        "State transitions"
+      ],
+      "hook_angle": "Stop using threads for I/O-bound Python apps until you see how AsyncIO avoids context-switching hell.",
+      "channel_affinity_score": 100,
+      "trend_score": 95,
+      "priority_score": 98,
+      "status": "pending",
+      "created_at": "2026-09-28T22:48:06.813Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1790635686823_6yb5ll",
+      "topic": "Microservices Circuit Breaker Pattern in Action",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Cascading failures ruin production environments. Providing a clear visual architecture of the circuit breaker pattern directly captures high-intent DevOps and backend engineers.",
+      "search_evidence": "microservices circuit breaker pattern",
+      "educational_visuals": [
+        "State transitions",
         "Data-flow diagrams"
       ],
-      "hook_angle": "There are only two hard things in Computer Science: cache invalidation is one of them.",
-      "channel_affinity_score": 85,
-      "trend_score": 89,
-      "priority_score": 89,
+      "hook_angle": "One down service shouldn't crash your entire microservices mesh. Here is how the Circuit Breaker pattern saves your system.",
+      "channel_affinity_score": 100,
+      "trend_score": 96,
+      "priority_score": 97,
       "status": "pending",
-      "created_at": "2026-09-28T20:25:37.180Z",
+      "created_at": "2026-09-28T22:48:06.823Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1790635686821_5c014",
+      "topic": "Distributed Systems Architecture Styles Explained",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Engineers looking to transition to senior roles actively search for distinct architectural topologies to scale systems reliably under high concurrency.",
+      "search_evidence": "distributed systems architecture styles",
+      "educational_visuals": [
+        "Trees and graphs",
+        "Architecture diagrams"
+      ],
+      "hook_angle": "Monoliths to microservices are just the start. Let's map out the 4 core distributed systems architecture styles you must know.",
+      "channel_affinity_score": 100,
+      "trend_score": 94,
+      "priority_score": 96,
+      "status": "pending",
+      "created_at": "2026-09-28T22:48:06.821Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1790635686816_tkzn56",
+      "topic": "Demystifying the Python AsyncIO Event Loop",
+      "category": "Python",
+      "target_length": "short",
+      "rationale": "Viewers searching for core async mechanisms need a visual breakdown of how single-threaded event loops schedule coroutines without blocking execution.",
+      "search_evidence": "python asyncio event loop",
+      "educational_visuals": [
+        "Code execution visualization",
+        "Animated system flows"
+      ],
+      "hook_angle": "How does Python run thousands of network requests on just one single CPU core? Let's look inside the Event Loop.",
+      "channel_affinity_score": 100,
+      "trend_score": 92,
+      "priority_score": 95,
+      "status": "pending",
+      "created_at": "2026-09-28T22:48:06.816Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1790635686818_udzmuj",
+      "topic": "Python Memory Management & Garbage Collection",
+      "category": "Python",
+      "target_length": "short",
+      "rationale": "Memory leaks in long-running Python applications plague senior and junior devs alike. Explaining reference counting and cyclic garbage collection drives incredible retention.",
+      "search_evidence": "python memory management and garbage collection",
+      "educational_visuals": [
+        "Trees and graphs",
+        "Data-flow diagrams"
+      ],
+      "hook_angle": "Your Python app is quietly leaking RAM. Here is exactly how reference counting and the garbage collector handle your objects.",
+      "channel_affinity_score": 100,
+      "trend_score": 90,
+      "priority_score": 93,
+      "status": "pending",
+      "created_at": "2026-09-28T22:48:06.818Z",
       "used_at": null
     }
   ]
