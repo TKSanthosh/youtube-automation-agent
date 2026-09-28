@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-09-28T12:27:37.581Z",
+  "updated_at": "2026-09-28T20:25:37.186Z",
   "total_suggestions": 6,
   "suggestions": [
     {
-      "id": "sugg_1790598457577_hyhb9x",
+      "id": "sugg_1790627137181_8b70mo",
       "topic": "Python 3.13 Free-Threaded GIL Removal: What Changes for Developers",
       "category": "Python",
       "target_length": "short",
@@ -19,11 +19,11 @@
       "trend_score": 95,
       "priority_score": 95,
       "status": "pending",
-      "created_at": "2026-09-28T12:27:37.577Z",
+      "created_at": "2026-09-28T20:25:37.181Z",
       "used_at": null
     },
     {
-      "id": "sugg_1790598457575_7yzxbs",
+      "id": "sugg_1790627137178_febg8k",
       "topic": "Model Context Protocol (MCP) in 3 Minutes: The AI Agent Connector Standard",
       "category": "AI/ML",
       "target_length": "short",
@@ -38,11 +38,11 @@
       "trend_score": 94,
       "priority_score": 94,
       "status": "pending",
-      "created_at": "2026-09-28T12:27:37.575Z",
+      "created_at": "2026-09-28T20:25:37.178Z",
       "used_at": null
     },
     {
-      "id": "sugg_1790598457572_9x5vzc",
+      "id": "sugg_1790627137174_ezcoh",
       "topic": "Docker BuildKit Cache Mounts: Cut Image Build Times by 70%",
       "category": "Docker",
       "target_length": "short",
@@ -58,11 +58,11 @@
       "trend_score": 92,
       "priority_score": 92,
       "status": "pending",
-      "created_at": "2026-09-28T12:27:37.572Z",
+      "created_at": "2026-09-28T20:25:37.174Z",
       "used_at": null
     },
     {
-      "id": "sugg_1790598457573_2de4i",
+      "id": "sugg_1790627137177_vveq4o",
       "topic": "Kubernetes Ingress vs Gateway API Explained in 3 Minutes",
       "category": "Kubernetes",
       "target_length": "short",
@@ -78,11 +78,11 @@
       "trend_score": 91,
       "priority_score": 91,
       "status": "pending",
-      "created_at": "2026-09-28T12:27:37.573Z",
+      "created_at": "2026-09-28T20:25:37.177Z",
       "used_at": null
     },
     {
-      "id": "sugg_1790598457578_t3oas",
+      "id": "sugg_1790627137182_a3uqnb",
       "topic": "Database Sharding vs Partitioning in 3 Minutes",
       "category": "Databases",
       "target_length": "short",
@@ -98,11 +98,11 @@
       "trend_score": 90,
       "priority_score": 90,
       "status": "pending",
-      "created_at": "2026-09-28T12:27:37.578Z",
+      "created_at": "2026-09-28T20:25:37.182Z",
       "used_at": null
     },
     {
-      "id": "sugg_1790598457576_bvw2sj",
+      "id": "sugg_1790627137180_myrbyq",
       "topic": "Redis Cache Invalidation Patterns: Cache-Aside vs Write-Through",
       "category": "System Design",
       "target_length": "short",
@@ -117,7 +117,7 @@
       "trend_score": 89,
       "priority_score": 89,
       "status": "pending",
-      "created_at": "2026-09-28T12:27:37.576Z",
+      "created_at": "2026-09-28T20:25:37.180Z",
       "used_at": null
     }
   ]

@@ -1,11 +1,11 @@
 {
   "iterationNumber": 1,
-  "videoId": "HmwOo2yTRpI",
-  "title": "Mastering Python AsyncIO vs Threading: When to Stop Blocking Your Loop: Architecture & Code Walkthrough",
+  "videoId": "pwUyWYgR88c",
+  "title": "Mastering Python 3.13 Free-Threaded GIL Removal: What Changes for Developers: Architecture & Code Walkthrough",
   "category": "tech",
   "targetLength": "short",
   "metricsAnalyzed": {
-    "analyzedAt": "2026-09-27T22:52:54.986Z",
+    "analyzedAt": "2026-09-28T20:26:13.899Z",
     "videoDurationSeconds": null,
     "totalScenes": null
   },
@@ -24,5 +24,5 @@
   },
   "qualityScore": 8.2,
   "appliedToNext": false,
-  "id": "enh_1790549574986_8r741i"
+  "id": "enh_1790627173899_9ue4s9"
 }
