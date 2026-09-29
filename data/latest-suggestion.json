@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-09-29T14:49:19.415Z",
+  "updated_at": "2026-09-29T17:21:07.111Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790693357863_lf3ish",
+    "id": "sugg_1790702467101_vu3y8s",
     "topic": "Python AsyncIO vs Threading: When to Stop Blocking",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Developers constantly struggle to choose between concurrency models in Python. Explaining the GIL, cooperative multitasking, and preemptive threads with crystal-clear visual diagrams captures immense search volume and maximizes watch-time.",
+    "rationale": "Developers constantly struggle to choose between concurrency models in I/O-bound apps. This addresses the core confusion around event loops vs OS threads to maximize watch-time and retention.",
     "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
       "State transitions",
       "Code execution visualization"
     ],
-    "hook_angle": "Stop using threads for I/O bound tasks until you understand how the Python GIL is secretly destroying your throughput.",
+    "hook_angle": "Stop using threads for I/O-bound tasks until you understand how the Python GIL and AsyncIO event loop actually handle your requests.",
     "channel_affinity_score": 100,
     "trend_score": 95,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-09-29T14:49:17.863Z",
+    "created_at": "2026-09-29T17:21:07.101Z",
     "used_at": null
   }
 }
