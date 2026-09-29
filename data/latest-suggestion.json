@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-09-29T17:21:07.111Z",
+  "updated_at": "2026-09-29T21:41:50.090Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790702467101_vu3y8s",
-    "topic": "Python AsyncIO vs Threading: When to Stop Blocking",
-    "category": "Python",
+    "id": "sugg_1790718110081_p43pu",
+    "topic": "Ace Your System Design Interview: Scalable Architecture",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Developers constantly struggle to choose between concurrency models in I/O-bound apps. This addresses the core confusion around event loops vs OS threads to maximize watch-time and retention.",
-    "search_evidence": "python asyncio vs threading",
+    "rationale": "High-intent developer traffic surrounds system design interview prep; breaking down core scalable components grabs massive viewership.",
+    "search_evidence": "system design interview prep",
     "educational_visuals": [
-      "State transitions",
-      "Code execution visualization"
+      "Architecture diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "Stop using threads for I/O-bound tasks until you understand how the Python GIL and AsyncIO event loop actually handle your requests.",
+    "hook_angle": "Failing system design interviews? Stop drawing boxes randomly and use this proven 4-step framework used at top tech companies.",
     "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 98,
+    "trend_score": 96,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-09-29T17:21:07.101Z",
+    "created_at": "2026-09-29T21:41:50.081Z",
     "used_at": null
   }
 }
