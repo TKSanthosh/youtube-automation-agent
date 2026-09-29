@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-09-28T22:48:06.829Z",
+  "updated_at": "2026-09-29T03:27:38.934Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790635686820_ehyht6",
-    "topic": "Ace Your System Design Interview: Distributed Architecture",
-    "category": "System Design",
+    "id": "sugg_1790652458847_e9gi8j",
+    "topic": "Python AsyncIO vs Threading: When to Stop Blocking",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "System design interview prep is a perennial high-intent search category. Condensing distributed architecture fundamentals into a tight vertical format unlocks massive algorithmic reach.",
-    "search_evidence": "system design interview preparation",
+    "rationale": "Developers continually confuse I/O-bound concurrency with CPU-bound parallelism, leading to broken server architectures. This short breaks down when to use event loops versus system threads using clear mental models.",
+    "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Animated system flows"
+      "State transitions",
+      "Code execution visualization"
     ],
-    "hook_angle": "Stop failing system design interviews by freezing up on distributed architectural patterns. Here is the exact framework to pass.",
+    "hook_angle": "Stop using threads for I/O-bound tasks until you understand what the Python Global Interpreter Lock is actually doing to your runtime performance.",
     "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "trend_score": 95,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-09-28T22:48:06.820Z",
+    "created_at": "2026-09-29T03:27:38.847Z",
     "used_at": null
   }
 }
