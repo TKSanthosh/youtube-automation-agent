@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-09-29T23:31:11.477Z",
+  "updated_at": "2026-09-30T03:11:22.781Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790724671462_m6ldnv",
-    "topic": "Python AsyncIO Event Loop: Under the Hood of Single-Threaded Concurrency",
-    "category": "Python",
+    "id": "sugg_1790737882773_tie576",
+    "topic": "Cracking the System Design Interview: Distributed Architecture Styles",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Developers struggle to conceptualize how cooperative multitasking actually runs on a single CPU core without blocking, making visual event loop breakdowns extremely high in retention.",
-    "search_evidence": "python asyncio event loop",
+    "rationale": "Captures massive search demand for interview preparation frameworks and distributed system blueprints.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "State transitions",
-      "Code execution visualization"
+      "Architecture diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "Stop writing async/await code blindly. Here is what Python is actually doing inside the event loop behind your back.",
+    "hook_angle": "Stop freezing during system design interviews—here is the exact framework to scale any architecture from zero to millions.",
     "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 98,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-09-29T23:31:11.462Z",
+    "created_at": "2026-09-30T03:11:22.773Z",
     "used_at": null
   }
 }
