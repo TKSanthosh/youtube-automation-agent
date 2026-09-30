@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-09-30T18:52:29.784Z",
+  "updated_at": "2026-09-30T21:42:25.989Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790794349773_a3nl1m",
-    "topic": "Python AsyncIO vs Threading: When to Stop Wasting CPU Cycles",
-    "category": "Python",
+    "id": "sugg_1790804545982_9u57n",
+    "topic": "Nailing the System Design Interview: Distributed Architecture Basics",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Developers constantly misapply threading to I/O-bound tasks, causing GIL contention and deadlocks. This Short directly contrasts threading overhead with AsyncIO's single-threaded event loop to capture high search traffic.",
-    "search_evidence": "python asyncio vs threading",
+    "rationale": "System design interview preparation is a perpetual top search category for software engineers scaling their careers. Providing a structured approach captures immense engagement.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "State transitions",
-      "Data-flow diagrams"
+      "Architecture diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "Still using Python threads for network requests? You're literally throwing away CPU cycles and inviting race conditions.",
-    "channel_affinity_score": 100,
-    "trend_score": 95,
+    "hook_angle": "Most engineers fail system design interviews not because of code, but because they can't justify their distributed trade-offs in the first two minutes.",
+    "channel_affinity_score": 96,
+    "trend_score": 98,
     "priority_score": 97,
     "status": "pending",
-    "created_at": "2026-09-30T18:52:29.773Z",
+    "created_at": "2026-09-30T21:42:25.982Z",
     "used_at": null
   }
 }
