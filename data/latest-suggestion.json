@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-09-30T03:11:22.781Z",
+  "updated_at": "2026-09-30T08:08:33.961Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790737882773_tie576",
-    "topic": "Cracking the System Design Interview: Distributed Architecture Styles",
+    "id": "sugg_1790755713954_8g0rbu",
+    "topic": "Cracking the System Design Interview: Distributed ID Generators",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Captures massive search demand for interview preparation frameworks and distributed system blueprints.",
+    "rationale": "System design interview preparation is a perpetual top search category. Providing an architectural breakdown of distributed unique ID generation (like Snowflake) drives immense replay value.",
     "search_evidence": "system design interview preparation",
     "educational_visuals": [
       "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "Stop freezing during system design interviews—here is the exact framework to scale any architecture from zero to millions.",
-    "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "hook_angle": "If an interviewer asks you to design Twitter's ID generator for 10 million writes per second, auto-incrementing SQL IDs will instantly fail you.",
+    "channel_affinity_score": 98,
+    "trend_score": 95,
+    "priority_score": 96,
     "status": "pending",
-    "created_at": "2026-09-30T03:11:22.773Z",
+    "created_at": "2026-09-30T08:08:33.954Z",
     "used_at": null
   }
 }
