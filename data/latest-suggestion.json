@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-09-30T11:38:51.387Z",
+  "updated_at": "2026-09-30T17:19:27.732Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790768331380_n4gxn",
-    "topic": "Cracking the Distributed Systems Architecture Interview",
-    "category": "System Design",
+    "id": "sugg_1790788767721_jor04s",
+    "topic": "Python AsyncIO vs Threading: When to Stop Using Threads",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "System design interview prep is a perpetual high-demand niche, with engineers looking for concise frameworks to handle massive scale questions.",
-    "search_evidence": "system design interview preparation",
+    "rationale": "Captures high search intent for concurrency bottlenecks while visually demonstrating GIL limitations and cooperative multitasking.",
+    "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
       "Architecture diagrams",
-      "Animated system flows"
+      "Code execution visualization"
     ],
-    "hook_angle": "Failing system design interviews? Here is the exact architectural blueprint senior engineers use to ace scale questions.",
-    "channel_affinity_score": 96,
-    "trend_score": 95,
+    "hook_angle": "Stop using threads for I/O bound Python apps until you see this memory footprint comparison.",
+    "channel_affinity_score": 95,
+    "trend_score": 98,
     "priority_score": 96,
     "status": "pending",
-    "created_at": "2026-09-30T11:38:51.380Z",
+    "created_at": "2026-09-30T17:19:27.721Z",
     "used_at": null
   }
 }
