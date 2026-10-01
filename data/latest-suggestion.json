@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-01T22:10:30.887Z",
+  "updated_at": "2026-10-01T23:44:55.534Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790892630873_imqwzt",
-    "topic": "Python AsyncIO Event Loop: Under the Hood of Single-Thread Concurrency",
-    "category": "Python",
+    "id": "sugg_1790898294651_wcobvm",
+    "topic": "Acing the System Design Interview: Core Frameworks",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Developers struggle to map conceptual concurrency to single-threaded execution, making visual event-loop walk-throughs high-retention winners for search queries.",
-    "search_evidence": "python asyncio event loop",
+    "rationale": "System design interviews cause massive anxiety for mid-level engineers looking to break into senior roles, ensuring high replay value.",
+    "search_evidence": "system design interview prep",
     "educational_visuals": [
-      "State transitions",
-      "Code execution visualization"
+      "Architecture diagrams",
+      "Timelines"
     ],
-    "hook_angle": "Stop guessing why your async Python code is blocking the CPU—here is how the event loop actually schedules tasks in 3 minutes.",
+    "hook_angle": "Stop freezing during system design interviews. Here is the 4-step framework senior engineers use to ace scale questions.",
     "channel_affinity_score": 100,
-    "trend_score": 95,
+    "trend_score": 96,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-01T22:10:30.873Z",
+    "created_at": "2026-10-01T23:44:54.651Z",
     "used_at": null
   }
 }
