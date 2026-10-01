@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-10-01T19:21:04.373Z",
+  "updated_at": "2026-10-01T22:10:30.887Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790882464367_fv1och",
-    "topic": "Cracking the System Design Interview: Distributed Architecture Blueprint",
-    "category": "System Design",
+    "id": "sugg_1790892630873_imqwzt",
+    "topic": "Python AsyncIO Event Loop: Under the Hood of Single-Thread Concurrency",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "System design interview prep is evergreen and high-demand. Breaking down a distributed system topology into digestible architectural rules maximizes watch-time.",
-    "search_evidence": "system design interview prep",
+    "rationale": "Developers struggle to map conceptual concurrency to single-threaded execution, making visual event-loop walk-throughs high-retention winners for search queries.",
+    "search_evidence": "python asyncio event loop",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Animated system flows",
-      "Data-flow diagrams"
+      "State transitions",
+      "Code execution visualization"
     ],
-    "hook_angle": "Stop freezing during system design interviews. Here is the exact architectural blueprinting framework senior engineers use.",
+    "hook_angle": "Stop guessing why your async Python code is blocking the CPU—here is how the event loop actually schedules tasks in 3 minutes.",
     "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "trend_score": 95,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-01T19:21:04.367Z",
+    "created_at": "2026-10-01T22:10:30.873Z",
     "used_at": null
   }
 }
