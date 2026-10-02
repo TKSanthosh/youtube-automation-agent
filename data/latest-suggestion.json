@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-10-02T17:07:10.949Z",
+  "updated_at": "2026-10-02T19:02:41.066Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790960830945_tjfg8i",
-    "topic": "Python 3.13 Free-Threaded GIL Removal: What Changes for Developers",
-    "category": "Python",
+    "id": "sugg_1790967761059_u0xhk4",
+    "topic": "Cracking the System Design Interview: Core Frameworks",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Python 3.13 free-threading is the biggest Python architectural shift in 20 years.",
-    "search_evidence": "python 3.13 gil removal benchmark",
+    "rationale": "High-intent job seekers constantly search for structured, repeatable mental models to ace senior engineering system design loops.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "State transitions",
-      "Animated system flows",
-      "Code execution visualization"
+      "Architecture diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "Python finally has true multi-threading without the GIL. But how does it work?",
-    "channel_affinity_score": 85,
-    "trend_score": 95,
-    "priority_score": 95,
+    "hook_angle": "Failing system design interviews? Stop drawing boxes randomly and use this exact 4-step framework used at top-tier tech companies.",
+    "channel_affinity_score": 100,
+    "trend_score": 96,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-02T17:07:10.945Z",
+    "created_at": "2026-10-02T19:02:41.059Z",
     "used_at": null
   }
 }
