@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-01T23:44:55.534Z",
+  "updated_at": "2026-10-02T03:18:45.834Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790898294651_wcobvm",
-    "topic": "Acing the System Design Interview: Core Frameworks",
+    "id": "sugg_1790911125761_dezjd",
+    "topic": "Acing the System Design Interview: Distributed Architecture",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "System design interviews cause massive anxiety for mid-level engineers looking to break into senior roles, ensuring high replay value.",
-    "search_evidence": "system design interview prep",
+    "rationale": "System design interviews are top-of-mind for engineers transitioning to senior roles. High search volume guarantees broad organic discovery.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
       "Architecture diagrams",
-      "Timelines"
+      "Animated system flows"
     ],
-    "hook_angle": "Stop freezing during system design interviews. Here is the 4-step framework senior engineers use to ace scale questions.",
+    "hook_angle": "Passing a senior system design interview is not about memorizing patterns—it's about handling failure modes.",
     "channel_affinity_score": 100,
     "trend_score": 96,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-01T23:44:54.651Z",
+    "created_at": "2026-10-02T03:18:45.761Z",
     "used_at": null
   }
 }
