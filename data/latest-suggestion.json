@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-02T08:03:00.577Z",
+  "updated_at": "2026-10-02T11:38:38.342Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790928180570_vttf9a",
-    "topic": "Mastering the Microservices Circuit Breaker Pattern",
+    "id": "sugg_1790941118334_sw796k",
+    "topic": "Acing the System Design Interview: Core Frameworks",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "System design interviews and production architectures heavily rely on failure isolation. Demonstrating the closed, open, and half-open states captures peak professional interest.",
-    "search_evidence": "microservices circuit breaker pattern",
+    "rationale": "System design interviews cause high anxiety for mid-to-senior engineers; structured architectural blueprints offer high retention and replay value.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "State transitions",
-      "Architecture diagrams"
+      "Architecture diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "One failing downstream service is about to take down your entire distributed system. Here is how a circuit breaker stops the cascade.",
+    "hook_angle": "Stop freezing up during system design interviews. Here is the exact 4-step framework staff engineers use to pass.",
     "channel_affinity_score": 100,
-    "trend_score": 96,
-    "priority_score": 98,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-02T08:03:00.570Z",
+    "created_at": "2026-10-02T11:38:38.334Z",
     "used_at": null
   }
 }
