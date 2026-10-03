@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-03T13:07:42.604Z",
+  "updated_at": "2026-10-03T15:28:06.256Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791032862596_ryenvn",
-    "topic": "Acing the System Design Interview: Distributed Architectures",
+    "id": "sugg_1791041286249_fyugvg",
+    "topic": "System Design Interview: Scaling Distributed Counters",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Directly feeds into massive search trends around interview prep, offering a blueprint for scalable system components.",
-    "search_evidence": "system design interview preparation",
+    "rationale": "System design interview questions focusing on high-concurrency write bottlenecks are top-of-mind for engineers preparing for senior roles.",
+    "search_evidence": "system design interview questions",
     "educational_visuals": [
       "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "Stop drawing random boxes in your system design interviews; use this framework instead.",
-    "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "hook_angle": "If an interviewer asks you to scale a real-time hit counter for a million QPS, a single database row will instantly fail you.",
+    "channel_affinity_score": 98,
+    "trend_score": 94,
+    "priority_score": 96,
     "status": "pending",
-    "created_at": "2026-10-03T13:07:42.596Z",
+    "created_at": "2026-10-03T15:28:06.249Z",
     "used_at": null
   }
 }
