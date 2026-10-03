@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-03T03:04:48.425Z",
+  "updated_at": "2026-10-03T07:44:07.622Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790996688419_1afn6",
-    "topic": "Cracking the Distributed Systems Architecture Interview",
+    "id": "sugg_1791013447593_ld6ts",
+    "topic": "Cracking the System Design Interview: Core Framework",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Directly targets high-intent search queries for career-driven software engineers looking for structured frameworks to approach open-ended design problems.",
+    "rationale": "System design interview prep is one of the highest-demand niches in software engineering. A concise, structural breakdown maximizes re-watchability and saves viewers hours of confusion.",
     "search_evidence": "system design interview preparation",
     "educational_visuals": [
       "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "Stop freezing up during system design interviews. Here is the 4-step framework top tech companies look for.",
+    "hook_angle": "Failing system design interviews? Stop drawing random boxes and start using this 4-step architectural scaling framework.",
     "channel_affinity_score": 100,
-    "trend_score": 96,
+    "trend_score": 98,
     "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-03T03:04:48.419Z",
+    "created_at": "2026-10-03T07:44:07.593Z",
     "used_at": null
   }
 }

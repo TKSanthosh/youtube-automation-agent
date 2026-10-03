@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-03T03:04:48.425Z",
+  "updated_at": "2026-10-03T07:44:07.622Z",
   "total_trends": 50,
   "channel_engagement": {
     "totalVideosAnalyzed": 0,
@@ -110,7 +110,7 @@
   },
   "trends": [
     {
-      "id": "trend_1790996684434_gre8ne",
+      "id": "trend_1791013443018_lo7ydj",
       "keyword": "How I cut GTA Online loading times by 70%",
       "category": "General Tech",
       "search_query": "How I cut GTA Online loading times by 70%",
@@ -120,10 +120,10 @@
         "points": 3883,
         "url": "https://nee.lv/2021/02/28/How-I-cut-GTA-Online-loading-times-by-70/"
       },
-      "discovered_at": "2026-10-03T03:04:44.434Z"
+      "discovered_at": "2026-10-03T07:44:03.018Z"
     },
     {
-      "id": "trend_1790996684433_xz31nx",
+      "id": "trend_1791013443016_3wqig",
       "keyword": "Replit used legal threats to kill my open-source project",
       "category": "General Tech",
       "search_query": "Replit used legal threats to kill my open-source project",
@@ -133,10 +133,10 @@
         "points": 4022,
         "url": "https://intuitiveexplanations.com/tech/replit/"
       },
-      "discovered_at": "2026-10-03T03:04:44.433Z"
+      "discovered_at": "2026-10-03T07:44:03.016Z"
     },
     {
-      "id": "trend_1790996684432_vbp8a",
+      "id": "trend_1791013443015_cpvo8",
       "keyword": "GPT-4",
       "category": "AI/ML",
       "search_query": "GPT-4",
@@ -146,10 +146,10 @@
         "points": 4091,
         "url": "https://openai.com/research/gpt-4"
       },
-      "discovered_at": "2026-10-03T03:04:44.432Z"
+      "discovered_at": "2026-10-03T07:44:03.015Z"
     },
     {
-      "id": "trend_1790996684431_3d40yp",
+      "id": "trend_1791013443013_vt6p75",
       "keyword": "Google’s copying of the Java SE API was fair use [pdf]",
       "category": "AI/ML",
       "search_query": "Google’s copying of the Java SE API was fair use [pdf]",
@@ -159,23 +159,10 @@
         "points": 4103,
         "url": "https://www.supremecourt.gov/opinions/20pdf/18-956_d18f.pdf"
       },
-      "discovered_at": "2026-10-03T03:04:44.431Z"
+      "discovered_at": "2026-10-03T07:44:03.013Z"
     },
     {
-      "id": "trend_1790996684429_m9j0y",
-      "keyword": "Don't post generated/AI-edited comments. HN is for conversation between humans",
-      "category": "AI/ML",
-      "search_query": "Don't post generated/AI-edited comments. HN is for conversation between humans",
-      "search_volume_indicator": "surging",
-      "trend_source": "hackernews",
-      "metadata": {
-        "points": 4229,
-        "url": "https://news.ycombinator.com/newsguidelines.html#generated"
-      },
-      "discovered_at": "2026-10-03T03:04:44.430Z"
-    },
-    {
-      "id": "trend_1790996684430_wu5ho3",
+      "id": "trend_1791013443012_e0n7n",
       "keyword": "Reflecting on one very, very strange year at Uber",
       "category": "General Tech",
       "search_query": "Reflecting on one very, very strange year at Uber",
@@ -185,10 +172,23 @@
         "points": 4107,
         "url": "https://www.susanjfowler.com/blog/2017/2/19/reflecting-on-one-very-strange-year-at-uber"
       },
-      "discovered_at": "2026-10-03T03:04:44.430Z"
+      "discovered_at": "2026-10-03T07:44:03.012Z"
     },
     {
-      "id": "trend_1790996684429_zo2ljr",
+      "id": "trend_1791013443010_o76j2h",
+      "keyword": "Don't post generated/AI-edited comments. HN is for conversation between humans",
+      "category": "AI/ML",
+      "search_query": "Don't post generated/AI-edited comments. HN is for conversation between humans",
+      "search_volume_indicator": "surging",
+      "trend_source": "hackernews",
+      "metadata": {
+        "points": 4229,
+        "url": "https://news.ycombinator.com/newsguidelines.html#generated"
+      },
+      "discovered_at": "2026-10-03T07:44:03.010Z"
+    },
+    {
+      "id": "trend_1791013443009_u3mb3i",
       "keyword": "YouTube-dl has received a DMCA takedown from RIAA",
       "category": "General Tech",
       "search_query": "YouTube-dl has received a DMCA takedown from RIAA",
@@ -198,10 +198,10 @@
         "points": 4240,
         "url": "https://github.com/github/dmca/blob/master/2020/10/2020-10-23-RIAA.md"
       },
-      "discovered_at": "2026-10-03T03:04:44.429Z"
+      "discovered_at": "2026-10-03T07:44:03.009Z"
     },
     {
-      "id": "trend_1790996684428_vr0bqm",
+      "id": "trend_1791013443007_1bmveb",
       "keyword": "Mechanical Watch",
       "category": "General Tech",
       "search_query": "Mechanical Watch",
@@ -211,10 +211,10 @@
         "points": 4298,
         "url": "https://ciechanow.ski/mechanical-watch/"
       },
-      "discovered_at": "2026-10-03T03:04:44.428Z"
+      "discovered_at": "2026-10-03T07:44:03.007Z"
     },
     {
-      "id": "trend_1790996684427_w52qe9",
+      "id": "trend_1791013443006_ku55wk",
       "keyword": "Bram Moolenaar has died",
       "category": "General Tech",
       "search_query": "Bram Moolenaar has died",
@@ -224,10 +224,10 @@
         "points": 4310,
         "url": "https://groups.google.com/g/vim_announce/c/tWahca9zkt4"
       },
-      "discovered_at": "2026-10-03T03:04:44.427Z"
+      "discovered_at": "2026-10-03T07:44:03.006Z"
     },
     {
-      "id": "trend_1790996684426_dmmjw5",
+      "id": "trend_1791013443005_01gh1",
       "keyword": "Steve Jobs has passed away.",
       "category": "General Tech",
       "search_query": "Steve Jobs has passed away.",
@@ -237,23 +237,10 @@
         "points": 4338,
         "url": "http://www.apple.com/stevejobs/"
       },
-      "discovered_at": "2026-10-03T03:04:44.426Z"
+      "discovered_at": "2026-10-03T07:44:03.005Z"
     },
     {
-      "id": "trend_1790996684425_jxa3iv",
-      "keyword": "Backdoor in upstream xz/liblzma leading to SSH server compromise",
-      "category": "General Tech",
-      "search_query": "Backdoor in upstream xz/liblzma leading to SSH server compromise",
-      "search_volume_indicator": "surging",
-      "trend_source": "hackernews",
-      "metadata": {
-        "points": 4549,
-        "url": "https://www.openwall.com/lists/oss-security/2024/03/29/4"
-      },
-      "discovered_at": "2026-10-03T03:04:44.425Z"
-    },
-    {
-      "id": "trend_1790996684425_jo4knrs",
+      "id": "trend_1791013443003_bmeaws",
       "keyword": "CrowdStrike Update: Windows Bluescreen and Boot Loops",
       "category": "General Tech",
       "search_query": "CrowdStrike Update: Windows Bluescreen and Boot Loops",
@@ -263,10 +250,23 @@
         "points": 4489,
         "url": "https://old.reddit.com/r/crowdstrike/comments/1e6vmkf/bsod_error_in_latest_crowdstrike_update/"
       },
-      "discovered_at": "2026-10-03T03:04:44.425Z"
+      "discovered_at": "2026-10-03T07:44:03.003Z"
     },
     {
-      "id": "trend_1790996684424_mchika",
+      "id": "trend_1791013443002_wndmuw",
+      "keyword": "Backdoor in upstream xz/liblzma leading to SSH server compromise",
+      "category": "General Tech",
+      "search_query": "Backdoor in upstream xz/liblzma leading to SSH server compromise",
+      "search_volume_indicator": "surging",
+      "trend_source": "hackernews",
+      "metadata": {
+        "points": 4549,
+        "url": "https://www.openwall.com/lists/oss-security/2024/03/29/4"
+      },
+      "discovered_at": "2026-10-03T07:44:03.002Z"
+    },
+    {
+      "id": "trend_1791013443000_5qgi9p",
       "keyword": "OpenAI's board has fired Sam Altman",
       "category": "AI/ML",
       "search_query": "OpenAI's board has fired Sam Altman",
@@ -276,10 +276,10 @@
         "points": 5710,
         "url": "https://openai.com/blog/openai-announces-leadership-transition"
       },
-      "discovered_at": "2026-10-03T03:04:44.424Z"
+      "discovered_at": "2026-10-03T07:44:03.000Z"
     },
     {
-      "id": "trend_1790996684423_paxsm75",
+      "id": "trend_1791013442999_rl6b39",
       "keyword": "A Message to Our Customers",
       "category": "General Tech",
       "search_query": "A Message to Our Customers",
@@ -289,10 +289,10 @@
         "points": 5771,
         "url": "http://www.apple.com/customer-letter/"
       },
-      "discovered_at": "2026-10-03T03:04:44.423Z"
+      "discovered_at": "2026-10-03T07:44:02.999Z"
     },
     {
-      "id": "trend_1790996684422_6b3coc",
+      "id": "trend_1791013442997_alb3qk",
       "keyword": "Stephen Hawking has died",
       "category": "General Tech",
       "search_query": "Stephen Hawking has died",
@@ -302,22 +302,10 @@
         "points": 6015,
         "url": "http://www.bbc.com/news/uk-43396008"
       },
-      "discovered_at": "2026-10-03T03:04:44.422Z"
+      "discovered_at": "2026-10-03T07:44:02.997Z"
     },
     {
-      "id": "trend_1790996684421_qjhg8k",
-      "keyword": "github actions ci/cd pipeline step by step guide",
-      "category": "DevOps",
-      "search_query": "github actions ci/cd pipeline step by step guide",
-      "search_volume_indicator": "high",
-      "trend_source": "youtube_search_suggest",
-      "metadata": {
-        "stem": "github actions cicd pipeline"
-      },
-      "discovered_at": "2026-10-03T03:04:44.421Z"
-    },
-    {
-      "id": "trend_1790996684421_w8up0r",
+      "id": "trend_1791013442996_5umde",
       "keyword": "github actions production ci cd pipeline project devops shack",
       "category": "DevOps",
       "search_query": "github actions production ci cd pipeline project devops shack",
@@ -326,10 +314,22 @@
       "metadata": {
         "stem": "github actions cicd pipeline"
       },
-      "discovered_at": "2026-10-03T03:04:44.421Z"
+      "discovered_at": "2026-10-03T07:44:02.996Z"
     },
     {
-      "id": "trend_1790996684420_49ofw",
+      "id": "trend_1791013442994_u8itqe",
+      "keyword": "github actions ci/cd pipeline step by step guide",
+      "category": "DevOps",
+      "search_query": "github actions ci/cd pipeline step by step guide",
+      "search_volume_indicator": "high",
+      "trend_source": "youtube_search_suggest",
+      "metadata": {
+        "stem": "github actions cicd pipeline"
+      },
+      "discovered_at": "2026-10-03T07:44:02.994Z"
+    },
+    {
+      "id": "trend_1791013442993_3jtur",
       "keyword": "github actions ci cd pipeline tutorial",
       "category": "DevOps",
       "search_query": "github actions ci cd pipeline tutorial",
@@ -338,10 +338,10 @@
       "metadata": {
         "stem": "github actions cicd pipeline"
       },
-      "discovered_at": "2026-10-03T03:04:44.420Z"
+      "discovered_at": "2026-10-03T07:44:02.993Z"
     },
     {
-      "id": "trend_1790996684419_mqz68h",
+      "id": "trend_1791013442992_lohzk",
       "keyword": "github actions ci/cd pipeline example",
       "category": "DevOps",
       "search_query": "github actions ci/cd pipeline example",
@@ -350,10 +350,10 @@
       "metadata": {
         "stem": "github actions cicd pipeline"
       },
-      "discovered_at": "2026-10-03T03:04:44.419Z"
+      "discovered_at": "2026-10-03T07:44:02.992Z"
     },
     {
-      "id": "trend_1790996684418_0f3cv",
+      "id": "trend_1791013442990_24lezn",
       "keyword": "github actions ci cd pipeline",
       "category": "DevOps",
       "search_query": "github actions ci cd pipeline",
@@ -362,10 +362,22 @@
       "metadata": {
         "stem": "github actions cicd pipeline"
       },
-      "discovered_at": "2026-10-03T03:04:44.418Z"
+      "discovered_at": "2026-10-03T07:44:02.990Z"
     },
     {
-      "id": "trend_1790996684417_xido3f",
+      "id": "trend_1791013442988_2pouyb",
+      "keyword": "linux compile kernel",
+      "category": "DevOps",
+      "search_query": "linux compile kernel",
+      "search_volume_indicator": "high",
+      "trend_source": "youtube_search_suggest",
+      "metadata": {
+        "stem": "linux eBPF kernel"
+      },
+      "discovered_at": "2026-10-03T07:44:02.988Z"
+    },
+    {
+      "id": "trend_1791013442987_f548w6",
       "keyword": "linux initrd",
       "category": "DevOps",
       "search_query": "linux initrd",
@@ -374,22 +386,10 @@
       "metadata": {
         "stem": "linux eBPF kernel"
       },
-      "discovered_at": "2026-10-03T03:04:44.417Z"
+      "discovered_at": "2026-10-03T07:44:02.987Z"
     },
     {
-      "id": "trend_1790996684417_qsv8qr",
-      "keyword": "linux rt kernel",
-      "category": "DevOps",
-      "search_query": "linux rt kernel",
-      "search_volume_indicator": "high",
-      "trend_source": "youtube_search_suggest",
-      "metadata": {
-        "stem": "linux eBPF kernel"
-      },
-      "discovered_at": "2026-10-03T03:04:44.417Z"
-    },
-    {
-      "id": "trend_1790996684416_6i6qcz",
+      "id": "trend_1791013442986_iz5rs",
       "keyword": "linux ebpf",
       "category": "DevOps",
       "search_query": "linux ebpf",
@@ -398,10 +398,10 @@
       "metadata": {
         "stem": "linux eBPF kernel"
       },
-      "discovered_at": "2026-10-03T03:04:44.416Z"
+      "discovered_at": "2026-10-03T07:44:02.986Z"
     },
     {
-      "id": "trend_1790996684415_nbmhy",
+      "id": "trend_1791013442984_siyru",
       "keyword": "ebpf linux kernel",
       "category": "DevOps",
       "search_query": "ebpf linux kernel",
@@ -410,10 +410,10 @@
       "metadata": {
         "stem": "linux eBPF kernel"
       },
-      "discovered_at": "2026-10-03T03:04:44.415Z"
+      "discovered_at": "2026-10-03T07:44:02.984Z"
     },
     {
-      "id": "trend_1790996684414_e338mp",
+      "id": "trend_1791013442983_a2hibb",
       "keyword": "sharding postgresql",
       "category": "System Design",
       "search_query": "sharding postgresql",
@@ -422,10 +422,10 @@
       "metadata": {
         "stem": "database sharding postgresql"
       },
-      "discovered_at": "2026-10-03T03:04:44.414Z"
+      "discovered_at": "2026-10-03T07:44:02.983Z"
     },
     {
-      "id": "trend_1790996684414_q295g6",
+      "id": "trend_1791013442981_8oqagp",
       "keyword": "database sharding implementation",
       "category": "System Design",
       "search_query": "database sharding implementation",
@@ -434,10 +434,10 @@
       "metadata": {
         "stem": "database sharding postgresql"
       },
-      "discovered_at": "2026-10-03T03:04:44.414Z"
+      "discovered_at": "2026-10-03T07:44:02.981Z"
     },
     {
-      "id": "trend_1790996684413_36boc",
+      "id": "trend_1791013442980_otvvbl",
       "keyword": "database sharding mysql",
       "category": "System Design",
       "search_query": "database sharding mysql",
@@ -446,10 +446,10 @@
       "metadata": {
         "stem": "database sharding postgresql"
       },
-      "discovered_at": "2026-10-03T03:04:44.413Z"
+      "discovered_at": "2026-10-03T07:44:02.980Z"
     },
     {
-      "id": "trend_1790996684412_dt2buw",
+      "id": "trend_1791013442978_g265co",
       "keyword": "database sharding postgres",
       "category": "System Design",
       "search_query": "database sharding postgres",
@@ -458,10 +458,10 @@
       "metadata": {
         "stem": "database sharding postgresql"
       },
-      "discovered_at": "2026-10-03T03:04:44.412Z"
+      "discovered_at": "2026-10-03T07:44:02.978Z"
     },
     {
-      "id": "trend_1790996684411_tvboq",
+      "id": "trend_1791013442977_yybd8f",
       "keyword": "redis cache implementation",
       "category": "System Design",
       "search_query": "redis cache implementation",
@@ -470,22 +470,10 @@
       "metadata": {
         "stem": "redis caching strategies"
       },
-      "discovered_at": "2026-10-03T03:04:44.411Z"
+      "discovered_at": "2026-10-03T07:44:02.977Z"
     },
     {
-      "id": "trend_1790996684410_pmignl",
-      "keyword": "redis caching spring boot",
-      "category": "System Design",
-      "search_query": "redis caching spring boot",
-      "search_volume_indicator": "high",
-      "trend_source": "youtube_search_suggest",
-      "metadata": {
-        "stem": "redis caching strategies"
-      },
-      "discovered_at": "2026-10-03T03:04:44.410Z"
-    },
-    {
-      "id": "trend_1790996684410_k7f9as",
+      "id": "trend_1791013442975_4jexw",
       "keyword": "redis caching tutorial",
       "category": "System Design",
       "search_query": "redis caching tutorial",
@@ -494,10 +482,22 @@
       "metadata": {
         "stem": "redis caching strategies"
       },
-      "discovered_at": "2026-10-03T03:04:44.410Z"
+      "discovered_at": "2026-10-03T07:44:02.975Z"
     },
     {
-      "id": "trend_1790996684409_xmt6us",
+      "id": "trend_1791013442974_o40o58",
+      "keyword": "redis caching spring boot",
+      "category": "System Design",
+      "search_query": "redis caching spring boot",
+      "search_volume_indicator": "high",
+      "trend_source": "youtube_search_suggest",
+      "metadata": {
+        "stem": "redis caching strategies"
+      },
+      "discovered_at": "2026-10-03T07:44:02.974Z"
+    },
+    {
+      "id": "trend_1791013442972_4k9wob",
       "keyword": "redis caching strategies",
       "category": "System Design",
       "search_query": "redis caching strategies",
@@ -506,10 +506,10 @@
       "metadata": {
         "stem": "redis caching strategies"
       },
-      "discovered_at": "2026-10-03T03:04:44.409Z"
+      "discovered_at": "2026-10-03T07:44:02.972Z"
     },
     {
-      "id": "trend_1790996684408_uo1es8",
+      "id": "trend_1791013442971_exq9k5",
       "keyword": "kafka partition consumer",
       "category": "System Design",
       "search_query": "kafka partition consumer",
@@ -518,10 +518,10 @@
       "metadata": {
         "stem": "kafka partition consumer group"
       },
-      "discovered_at": "2026-10-03T03:04:44.408Z"
+      "discovered_at": "2026-10-03T07:44:02.971Z"
     },
     {
-      "id": "trend_1790996684407_76ntxb",
+      "id": "trend_1791013442969_ak1aik",
       "keyword": "kafka partitions and consumer group",
       "category": "System Design",
       "search_query": "kafka partitions and consumer group",
@@ -530,10 +530,10 @@
       "metadata": {
         "stem": "kafka partition consumer group"
       },
-      "discovered_at": "2026-10-03T03:04:44.407Z"
+      "discovered_at": "2026-10-03T07:44:02.969Z"
     },
     {
-      "id": "trend_1790996684406_p45zb",
+      "id": "trend_1791013442968_2wwv56",
       "keyword": "typescript generics tutorial",
       "category": "TypeScript",
       "search_query": "typescript generics tutorial",
@@ -542,10 +542,10 @@
       "metadata": {
         "stem": "typescript performance generics"
       },
-      "discovered_at": "2026-10-03T03:04:44.406Z"
+      "discovered_at": "2026-10-03T07:44:02.968Z"
     },
     {
-      "id": "trend_1790996684405_v8q1dp",
+      "id": "trend_1791013442966_690k1o",
       "keyword": "typescript generics",
       "category": "TypeScript",
       "search_query": "typescript generics",
@@ -554,22 +554,10 @@
       "metadata": {
         "stem": "typescript performance generics"
       },
-      "discovered_at": "2026-10-03T03:04:44.405Z"
+      "discovered_at": "2026-10-03T07:44:02.966Z"
     },
     {
-      "id": "trend_1790996684404_rp57px",
-      "keyword": "typescript basic generics",
-      "category": "TypeScript",
-      "search_query": "typescript basic generics",
-      "search_volume_indicator": "high",
-      "trend_source": "youtube_search_suggest",
-      "metadata": {
-        "stem": "typescript performance generics"
-      },
-      "discovered_at": "2026-10-03T03:04:44.404Z"
-    },
-    {
-      "id": "trend_1790996684404_2bhno",
+      "id": "trend_1791013442946_ryl1sj",
       "keyword": "typescript advanced generics",
       "category": "TypeScript",
       "search_query": "typescript advanced generics",
@@ -578,10 +566,22 @@
       "metadata": {
         "stem": "typescript performance generics"
       },
-      "discovered_at": "2026-10-03T03:04:44.404Z"
+      "discovered_at": "2026-10-03T07:44:02.946Z"
     },
     {
-      "id": "trend_1790996684403_8h6t9d",
+      "id": "trend_1791013442945_517uz",
+      "keyword": "typescript basic generics",
+      "category": "TypeScript",
+      "search_query": "typescript basic generics",
+      "search_volume_indicator": "high",
+      "trend_source": "youtube_search_suggest",
+      "metadata": {
+        "stem": "typescript performance generics"
+      },
+      "discovered_at": "2026-10-03T07:44:02.945Z"
+    },
+    {
+      "id": "trend_1791013442943_pc31e",
       "keyword": "vector database in ai",
       "category": "AI/ML",
       "search_query": "vector database in ai",
@@ -590,10 +590,10 @@
       "metadata": {
         "stem": "vector database similarity search"
       },
-      "discovered_at": "2026-10-03T03:04:44.403Z"
+      "discovered_at": "2026-10-03T07:44:02.943Z"
     },
     {
-      "id": "trend_1790996684402_x506xb",
+      "id": "trend_1791013442942_9rql6j",
       "keyword": "vector database simply explained",
       "category": "AI/ML",
       "search_query": "vector database simply explained",
@@ -602,10 +602,10 @@
       "metadata": {
         "stem": "vector database similarity search"
       },
-      "discovered_at": "2026-10-03T03:04:44.402Z"
+      "discovered_at": "2026-10-03T07:44:02.942Z"
     },
     {
-      "id": "trend_1790996684401_46w1u",
+      "id": "trend_1791013442940_gvslx",
       "keyword": "vector similarity search",
       "category": "AI/ML",
       "search_query": "vector similarity search",
@@ -614,22 +614,10 @@
       "metadata": {
         "stem": "vector database similarity search"
       },
-      "discovered_at": "2026-10-03T03:04:44.401Z"
+      "discovered_at": "2026-10-03T07:44:02.940Z"
     },
     {
-      "id": "trend_1790996684400_qntoyg",
-      "keyword": "ai agent",
-      "category": "AI/ML",
-      "search_query": "ai agent",
-      "search_volume_indicator": "high",
-      "trend_source": "youtube_search_suggest",
-      "metadata": {
-        "stem": "ai agent framework autonomous"
-      },
-      "discovered_at": "2026-10-03T03:04:44.400Z"
-    },
-    {
-      "id": "trend_1790996684400_e8tarr",
+      "id": "trend_1791013442939_qq2fxg",
       "keyword": "vector database similarity search",
       "category": "AI/ML",
       "search_query": "vector database similarity search",
@@ -638,10 +626,22 @@
       "metadata": {
         "stem": "vector database similarity search"
       },
-      "discovered_at": "2026-10-03T03:04:44.400Z"
+      "discovered_at": "2026-10-03T07:44:02.939Z"
     },
     {
-      "id": "trend_1790996684399_zj488t",
+      "id": "trend_1791013442937_n9r3ka",
+      "keyword": "ai agent",
+      "category": "AI/ML",
+      "search_query": "ai agent",
+      "search_volume_indicator": "high",
+      "trend_source": "youtube_search_suggest",
+      "metadata": {
+        "stem": "ai agent framework autonomous"
+      },
+      "discovered_at": "2026-10-03T07:44:02.937Z"
+    },
+    {
+      "id": "trend_1791013442936_lblsl",
       "keyword": "ai agent use cases",
       "category": "AI/ML",
       "search_query": "ai agent use cases",
@@ -650,10 +650,10 @@
       "metadata": {
         "stem": "ai agent framework autonomous"
       },
-      "discovered_at": "2026-10-03T03:04:44.399Z"
+      "discovered_at": "2026-10-03T07:44:02.936Z"
     },
     {
-      "id": "trend_1790996684398_is3vr",
+      "id": "trend_1791013442934_8bw2k",
       "keyword": "autonomous agents in ai",
       "category": "AI/ML",
       "search_query": "autonomous agents in ai",
@@ -662,10 +662,10 @@
       "metadata": {
         "stem": "ai agent framework autonomous"
       },
-      "discovered_at": "2026-10-03T03:04:44.398Z"
+      "discovered_at": "2026-10-03T07:44:02.934Z"
     },
     {
-      "id": "trend_1790996684397_bzi3uf",
+      "id": "trend_1791013442933_r4axwj",
       "keyword": "model context protocol (mcp) tutorial",
       "category": "AI/ML",
       "search_query": "model context protocol (mcp) tutorial",
@@ -674,10 +674,10 @@
       "metadata": {
         "stem": "model context protocol mcp"
       },
-      "discovered_at": "2026-10-03T03:04:44.397Z"
+      "discovered_at": "2026-10-03T07:44:02.933Z"
     },
     {
-      "id": "trend_1790996684395_9muh2",
+      "id": "trend_1791013442931_dufkxa",
       "keyword": "model context protocol (mcp) server",
       "category": "AI/ML",
       "search_query": "model context protocol (mcp) server",
@@ -686,10 +686,10 @@
       "metadata": {
         "stem": "model context protocol mcp"
       },
-      "discovered_at": "2026-10-03T03:04:44.395Z"
+      "discovered_at": "2026-10-03T07:44:02.931Z"
     },
     {
-      "id": "trend_1790996684234_yfcp17",
+      "id": "trend_1791013442930_4ksk6e",
       "keyword": "model context protocol (mcp) clearly explained (why it matters)",
       "category": "AI/ML",
       "search_query": "model context protocol (mcp) clearly explained (why it matters)",
@@ -698,10 +698,10 @@
       "metadata": {
         "stem": "model context protocol mcp"
       },
-      "discovered_at": "2026-10-03T03:04:44.234Z"
+      "discovered_at": "2026-10-03T07:44:02.930Z"
     },
     {
-      "id": "trend_1790996684233_etb6r",
+      "id": "trend_1791013442928_0u8pab",
       "keyword": "model context protocol mcp explained",
       "category": "AI/ML",
       "search_query": "model context protocol mcp explained",
@@ -710,10 +710,10 @@
       "metadata": {
         "stem": "model context protocol mcp"
       },
-      "discovered_at": "2026-10-03T03:04:44.233Z"
+      "discovered_at": "2026-10-03T07:44:02.928Z"
     },
     {
-      "id": "trend_1790996684232_16yg9n",
+      "id": "trend_1791013442927_bxfm3g",
       "keyword": "model context protocol mcp",
       "category": "AI/ML",
       "search_query": "model context protocol mcp",
@@ -722,7 +722,7 @@
       "metadata": {
         "stem": "model context protocol mcp"
       },
-      "discovered_at": "2026-10-03T03:04:44.232Z"
+      "discovered_at": "2026-10-03T07:44:02.927Z"
     }
   ]
 }
