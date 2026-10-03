@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-03T10:51:59.349Z",
+  "updated_at": "2026-10-03T13:07:42.604Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791024719342_9g8akh",
-    "topic": "Cracking the Distributed Systems Architecture Interview",
+    "id": "sugg_1791032862596_ryenvn",
+    "topic": "Acing the System Design Interview: Distributed Architectures",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "High search volume from engineers preparing for FAANG interviews. Translating complex distributed principles into a bite-sized format guarantees high retention.",
-    "search_evidence": "distributed systems architecture",
+    "rationale": "Directly feeds into massive search trends around interview prep, offering a blueprint for scalable system components.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
       "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "If an interviewer asks you to scale a system to 10 million users, don't panic. Use this exact architectural blueprint.",
-    "channel_affinity_score": 98,
-    "trend_score": 96,
-    "priority_score": 97,
+    "hook_angle": "Stop drawing random boxes in your system design interviews; use this framework instead.",
+    "channel_affinity_score": 100,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-03T10:51:59.342Z",
+    "created_at": "2026-10-03T13:07:42.596Z",
     "used_at": null
   }
 }
