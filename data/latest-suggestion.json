@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-03T17:50:39.092Z",
+  "updated_at": "2026-10-03T20:24:01.223Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791049839077_fszy3",
+    "id": "sugg_1791059041044_gji85a",
     "topic": "Python AsyncIO vs Threading: When to Stop Blocking",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Leverages heavy search volume on asyncio vs threading to resolve a classic concurrency misconception, boosting retention through crystal-clear visual contrasts.",
+    "rationale": "Leverages heavy search volume on asyncio vs threading to resolve a classic concurrency confusion with crystal-clear event loop visuals.",
     "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
       "State transitions",
-      "Code execution visualization"
+      "Data-flow diagrams"
     ],
-    "hook_angle": "Stop using threads for I/O bound Python code until you see how AsyncIO's single-threaded event loop actually handles 10,000 concurrent requests without blowing up your RAM.",
+    "hook_angle": "Stop using threads for I/O bound Python code until you see how the event loop actually schedules coroutines.",
     "channel_affinity_score": 100,
     "trend_score": 95,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-03T17:50:39.077Z",
+    "created_at": "2026-10-03T20:24:01.044Z",
     "used_at": null
   }
 }
