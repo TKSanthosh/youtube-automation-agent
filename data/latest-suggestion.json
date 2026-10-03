@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-02T23:36:34.910Z",
+  "updated_at": "2026-10-03T03:04:48.425Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1790984194903_og7ofh",
-    "topic": "Acing the System Design Interview: Core Architecture Blueprint",
+    "id": "sugg_1790996688419_1afn6",
+    "topic": "Cracking the Distributed Systems Architecture Interview",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "High search volume driven by career growth aspirations. Providing a repeatable structural blueprint maximizes saves and re-watches.",
+    "rationale": "Directly targets high-intent search queries for career-driven software engineers looking for structured frameworks to approach open-ended design problems.",
     "search_evidence": "system design interview preparation",
     "educational_visuals": [
       "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "Stop freezing during system design interviews. Here is the exact 4-step framework top tech companies look for.",
+    "hook_angle": "Stop freezing up during system design interviews. Here is the 4-step framework top tech companies look for.",
     "channel_affinity_score": 100,
-    "trend_score": 98,
+    "trend_score": 96,
     "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-02T23:36:34.903Z",
+    "created_at": "2026-10-03T03:04:48.419Z",
     "used_at": null
   }
 }
