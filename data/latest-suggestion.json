@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-04T20:42:19.000Z",
+  "updated_at": "2026-10-04T22:50:54.198Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791146538988_dqlfi9",
-    "topic": "Python AsyncIO vs Threading: When to Stop Using Threads",
-    "category": "Python",
+    "id": "sugg_1791154254191_4xxnr1",
+    "topic": "Distributed Systems Architecture Styles: Monolith to Cell-Based",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Leverages massive search volume around python asyncio vs threading, addressing the common developer confusion over concurrency models in I/O bound systems.",
-    "search_evidence": "python asyncio vs threading",
+    "rationale": "System design interviews and real-world architectures require a clear grasp of trade-offs between distributed models. This breakdown simplifies complex topology choices.",
+    "search_evidence": "distributed systems architecture styles",
     "educational_visuals": [
       "Architecture diagrams",
-      "State transitions"
+      "Animated system flows"
     ],
-    "hook_angle": "Still using Python threads for I/O bound tasks? You're wasting CPU context switches and crashing your event loop. Let's fix it.",
+    "hook_angle": "Designing for scale isn't just about microservices. Here is how top-tier companies choose between federated and event-driven architectures.",
     "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "trend_score": 96,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-04T20:42:18.988Z",
+    "created_at": "2026-10-04T22:50:54.191Z",
     "used_at": null
   }
 }
