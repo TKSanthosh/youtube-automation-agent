@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-04T07:53:36.374Z",
+  "updated_at": "2026-10-04T11:34:16.568Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791100416367_3onga",
-    "topic": "Mastering the System Design Interview: Core Frameworks",
-    "category": "System Design",
+    "id": "sugg_1791113656556_5k9lr4",
+    "topic": "Python AsyncIO vs Threading: When to Stop Blocking",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "High search volume for interview prep requires structured, bite-sized tactical breakdowns of large-scale architecture problem-solving.",
-    "search_evidence": "system design interview preparation",
+    "rationale": "Python developers continually struggle with choosing concurrency models for I/O-bound tasks. This video clarifies the underlying execution differences to drive high audience retention.",
+    "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Animated system flows"
+      "State transitions",
+      "Code execution visualization"
     ],
-    "hook_angle": "Stop blanking out in system design interviews. Here is the exact 4-step framework senior engineers use.",
+    "hook_angle": "Stop using threads for I/O-bound Python apps until you see this performance bottleneck.",
     "channel_affinity_score": 100,
-    "trend_score": 99,
-    "priority_score": 99,
+    "trend_score": 95,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-04T07:53:36.367Z",
+    "created_at": "2026-10-04T11:34:16.556Z",
     "used_at": null
   }
 }
