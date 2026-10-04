@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-03T22:44:53.225Z",
+  "updated_at": "2026-10-04T03:33:05.565Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791067493216_sjfvv",
-    "topic": "Mastering the System Design Interview: Core Frameworks",
+    "id": "sugg_1791084785556_jd54gf",
+    "topic": "Cracking the Distributed Systems Architecture Interview",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "High career intent drives massive search volume for system design interview frameworks, making this a staple for high watch-time completion rates.",
-    "search_evidence": "system design interview preparation",
+    "rationale": "High search volume around system design interviews requires concise, high-impact breakdowns of core architectural styles.",
+    "search_evidence": "distributed systems architecture",
     "educational_visuals": [
       "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "Failing system design interviews? Stop drawing random boxes and use this 4-step framework that senior FAANG engineers swear by.",
+    "hook_angle": "Stop drawing monoliths in your system design interviews. Here is how senior engineers sketch distributed topologies.",
     "channel_affinity_score": 100,
-    "trend_score": 98,
+    "trend_score": 96,
     "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-03T22:44:53.216Z",
+    "created_at": "2026-10-04T03:33:05.556Z",
     "used_at": null
   }
 }
