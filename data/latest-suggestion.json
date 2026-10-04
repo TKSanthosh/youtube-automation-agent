@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-04T16:12:48.722Z",
+  "updated_at": "2026-10-04T18:02:17.178Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791130368713_8xonqn",
-    "topic": "Mastering the Microservices Circuit Breaker Pattern",
-    "category": "System Design",
+    "id": "sugg_1791136937164_jzxny8",
+    "topic": "Python AsyncIO vs Threading: When to Stop Blocking",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "Cascading failures take down entire distributed architectures. Developers preparing for system design interviews need a bulletproof grasp of the circuit breaker pattern.",
-    "search_evidence": "microservices circuit breaker pattern",
+    "rationale": "Developers continually confuse I/O-bound concurrency with CPU-bound parallelism, leading to locked event loops and poor application throughput.",
+    "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
-      "Architecture diagrams",
-      "State transitions"
+      "State transitions",
+      "Code execution visualization"
     ],
-    "hook_angle": "One downstream API failure just took down your entire microservices architecture. Here is how the Circuit Breaker pattern isolates the blast radius.",
+    "hook_angle": "Your Python API is freezing up under load because you're using threads where AsyncIO was meant to rule—let's fix your event loop.",
     "channel_affinity_score": 100,
-    "trend_score": 96,
+    "trend_score": 95,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-04T16:12:48.713Z",
+    "created_at": "2026-10-04T18:02:17.164Z",
     "used_at": null
   }
 }
