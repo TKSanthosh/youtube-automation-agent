@@ -1,119 +1,119 @@
 {
-  "updated_at": "2026-10-04T03:33:05.565Z",
+  "updated_at": "2026-10-04T07:53:36.374Z",
   "total_suggestions": 6,
   "suggestions": [
     {
-      "id": "sugg_1791084785556_jd54gf",
-      "topic": "Cracking the Distributed Systems Architecture Interview",
+      "id": "sugg_1791100416367_3onga",
+      "topic": "Mastering the System Design Interview: Core Frameworks",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "High search volume around system design interviews requires concise, high-impact breakdowns of core architectural styles.",
-      "search_evidence": "distributed systems architecture",
+      "rationale": "High search volume for interview prep requires structured, bite-sized tactical breakdowns of large-scale architecture problem-solving.",
+      "search_evidence": "system design interview preparation",
       "educational_visuals": [
         "Architecture diagrams",
         "Animated system flows"
       ],
-      "hook_angle": "Stop drawing monoliths in your system design interviews. Here is how senior engineers sketch distributed topologies.",
+      "hook_angle": "Stop blanking out in system design interviews. Here is the exact 4-step framework senior engineers use.",
       "channel_affinity_score": 100,
-      "trend_score": 96,
+      "trend_score": 99,
       "priority_score": 99,
       "status": "pending",
-      "created_at": "2026-10-04T03:33:05.556Z",
+      "created_at": "2026-10-04T07:53:36.367Z",
       "used_at": null
     },
     {
-      "id": "sugg_1791084785548_dv7nzh",
+      "id": "sugg_1791100416368_off9sm",
+      "topic": "Distributed Systems Architecture: Scaling Beyond Monoliths",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Engineers transitioning to distributed environments struggle with network partitions, eventual consistency, and coordination models.",
+      "search_evidence": "distributed systems architecture",
+      "educational_visuals": [
+        "Architecture diagrams",
+        "Data-flow diagrams"
+      ],
+      "hook_angle": "Adding microservices didn't scale your app—it just distributed your failure points across the network.",
+      "channel_affinity_score": 98,
+      "trend_score": 94,
+      "priority_score": 96,
+      "status": "pending",
+      "created_at": "2026-10-04T07:53:36.368Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1791100416362_vc4k93",
       "topic": "Python AsyncIO vs Threading: When to Stop Blocking",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Developers continually hit bottlenecks mixing I/O bound tasks with CPU-heavy threads, driving massive search intent for clear concurrency demarcations.",
+      "rationale": "Developers constantly misapply threading to I/O bound problems where asyncio scales infinitely better, causing CPU context-switching overhead and deadlocks.",
       "search_evidence": "python asyncio vs threading",
       "educational_visuals": [
-        "Animated system flows",
+        "Architecture diagrams",
         "Code execution visualization"
       ],
-      "hook_angle": "Stop adding more threads to your Python app—you're just making the GIL fight harder.",
-      "channel_affinity_score": 100,
-      "trend_score": 95,
-      "priority_score": 98,
+      "hook_angle": "Stop using threads for I/O bound Python apps—you're destroying your CPU cache.",
+      "channel_affinity_score": 95,
+      "trend_score": 98,
+      "priority_score": 96,
       "status": "pending",
-      "created_at": "2026-10-04T03:33:05.548Z",
+      "created_at": "2026-10-04T07:53:36.362Z",
       "used_at": null
     },
     {
-      "id": "sugg_1791084785558_yww7uh",
+      "id": "sugg_1791100416369_6tj2u",
       "topic": "Microservices Circuit Breaker Pattern Explained",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "Preventing cascading failures in microservice networks is a staple system design requirement that developers struggle to implement cleanly.",
+      "rationale": "Cascading failures take down entire enterprise infrastructures daily; implementing a circuit breaker is an essential distributed systems defense.",
       "search_evidence": "microservices circuit breaker pattern",
       "educational_visuals": [
         "State transitions",
-        "Data-flow diagrams"
+        "Animated system flows"
       ],
-      "hook_angle": "One downstream service crash just took down your entire microservices architecture. Here is how a circuit breaker stops the bleeding.",
-      "channel_affinity_score": 100,
-      "trend_score": 94,
-      "priority_score": 97,
+      "hook_angle": "One slow database query just took down your entire microservices fleet. Here is how a circuit breaker stops the bleed.",
+      "channel_affinity_score": 96,
+      "trend_score": 95,
+      "priority_score": 95,
       "status": "pending",
-      "created_at": "2026-10-04T03:33:05.558Z",
+      "created_at": "2026-10-04T07:53:36.369Z",
       "used_at": null
     },
     {
-      "id": "sugg_1791084785551_oo5ggc",
-      "topic": "Mastering the Python AsyncIO Event Loop",
+      "id": "sugg_1791100416364_vjq14",
+      "topic": "Demystifying the Python AsyncIO Event Loop",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Demystifying the underlying single-threaded event loop unlocks advanced asynchronous patterns for high-throughput APIs.",
+      "rationale": "The single-threaded event loop model confuses developers coming from multi-threaded backgrounds; a visual walkthrough builds strong algorithmic intuition.",
       "search_evidence": "python asyncio event loop",
       "educational_visuals": [
         "State transitions",
-        "Data-flow diagrams"
+        "Animated system flows"
       ],
-      "hook_angle": "Ever wonder how Python handles 10,000 concurrent network requests on a single thread? Let's crack open the event loop.",
-      "channel_affinity_score": 100,
+      "hook_angle": "How does Python run thousands of tasks on just one single thread? Let's crack open the event loop.",
+      "channel_affinity_score": 95,
       "trend_score": 92,
-      "priority_score": 96,
+      "priority_score": 94,
       "status": "pending",
-      "created_at": "2026-10-04T03:33:05.551Z",
+      "created_at": "2026-10-04T07:53:36.364Z",
       "used_at": null
     },
     {
-      "id": "sugg_1791084785554_hdjh1d",
+      "id": "sugg_1791100416365_nsbab2",
       "topic": "Python Memory Management & Garbage Collection",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Memory leaks in long-running Python services plague backend engineers, making reference counting and cyclic garbage collection crucial topics.",
+      "rationale": "Memory leaks in long-running Python daemons plague production systems; engineers desperately need to understand reference counting and the generational GC.",
       "search_evidence": "python memory management and garbage collection",
       "educational_visuals": [
         "Trees and graphs",
-        "Code execution visualization"
+        "Data-flow diagrams"
       ],
-      "hook_angle": "Your Python service is leaking memory and the culprit isn't what you think. It's reference cycles.",
-      "channel_affinity_score": 100,
-      "trend_score": 90,
-      "priority_score": 94,
+      "hook_angle": "Your Python code has a silent memory leak and reference counting alone won't save you.",
+      "channel_affinity_score": 90,
+      "trend_score": 95,
+      "priority_score": 92,
       "status": "pending",
-      "created_at": "2026-10-04T03:33:05.554Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1791084785560_6vucfk",
-      "topic": "Building an AsyncIO Producer-Consumer Queue",
-      "category": "Python",
-      "target_length": "short",
-      "rationale": "Handling backpressure and task pipelines in Python is a common real-world requirement for modern async applications.",
-      "search_evidence": "python asyncio queue",
-      "educational_visuals": [
-        "Data-flow diagrams",
-        "Code execution visualization"
-      ],
-      "hook_angle": "Stop writing spaghetti async code. Use an AsyncIO Queue to cleanly orchestrate your background workers.",
-      "channel_affinity_score": 100,
-      "trend_score": 88,
-      "priority_score": 91,
-      "status": "pending",
-      "created_at": "2026-10-04T03:33:05.560Z",
+      "created_at": "2026-10-04T07:53:36.365Z",
       "used_at": null
     }
   ]
