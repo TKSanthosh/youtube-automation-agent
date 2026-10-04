@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-04T11:34:16.568Z",
+  "updated_at": "2026-10-04T13:46:51.812Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791113656556_5k9lr4",
+    "id": "sugg_1791121611800_305wan",
     "topic": "Python AsyncIO vs Threading: When to Stop Blocking",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Python developers continually struggle with choosing concurrency models for I/O-bound tasks. This video clarifies the underlying execution differences to drive high audience retention.",
+    "rationale": "Leverages heavy search volume on asyncio vs threading to resolve a classic concurrency confusion with crystal-clear execution timeline visualization.",
     "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
-      "State transitions",
+      "Timelines",
       "Code execution visualization"
     ],
-    "hook_angle": "Stop using threads for I/O-bound Python apps until you see this performance bottleneck.",
+    "hook_angle": "Stop using threading for your I/O bound Python apps until you've seen this exact bottleneck.",
     "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 98,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-04T11:34:16.556Z",
+    "created_at": "2026-10-04T13:46:51.800Z",
     "used_at": null
   }
 }
