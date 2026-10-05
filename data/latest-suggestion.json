@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-05T08:32:26.687Z",
+  "updated_at": "2026-10-05T13:07:52.279Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791189146682_ryoyep",
-    "topic": "Mastering the System Design Interview: Breaking Down Scale",
+    "id": "sugg_1791205672177_joxbh",
+    "topic": "Acing the System Design Interview: Step-by-Step Distributed Cache Layout",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Taps into the perpetual massive wave of developers searching for system design interview mock and prep strategies.",
-    "search_evidence": "system design interview prep",
+    "rationale": "Meets the massive search demand for interview walkthroughs and real-world architectural design patterns under strict constraints.",
+    "search_evidence": "system design interview example",
     "educational_visuals": [
-      "Data-flow diagrams",
+      "Architecture diagrams",
       "Trees and graphs"
     ],
-    "hook_angle": "Stop freezing during system design interviews! Use this 4-step framework to map out 100-million-user systems instantly.",
+    "hook_angle": "Failing system design interviews? Stop drawing boxes randomly. Here is the 4-step framework senior engineers use to design scalable caches.",
     "channel_affinity_score": 100,
     "trend_score": 98,
     "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-05T08:32:26.682Z",
+    "created_at": "2026-10-05T13:07:52.177Z",
     "used_at": null
   }
 }
