@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-04T22:50:54.198Z",
+  "updated_at": "2026-10-05T03:13:53.418Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791154254191_4xxnr1",
-    "topic": "Distributed Systems Architecture Styles: Monolith to Cell-Based",
-    "category": "System Design",
+    "id": "sugg_1791170033352_3ryar",
+    "topic": "Python Asyncio Event Loop Internals Explained",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "System design interviews and real-world architectures require a clear grasp of trade-offs between distributed models. This breakdown simplifies complex topology choices.",
-    "search_evidence": "distributed systems architecture styles",
+    "rationale": "Developers struggle to visualize how single-threaded event loops manage concurrent non-blocking tasks. This addresses high search volume with a crystal-clear execution trace.",
+    "search_evidence": "python asyncio event loop",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Animated system flows"
+      "State transitions",
+      "Code execution visualization"
     ],
-    "hook_angle": "Designing for scale isn't just about microservices. Here is how top-tier companies choose between federated and event-driven architectures.",
+    "hook_angle": "Stop using async/await like magic. Here is exactly what the event loop does under the hood in 150 seconds.",
     "channel_affinity_score": 100,
-    "trend_score": 96,
-    "priority_score": 98,
+    "trend_score": 95,
+    "priority_score": 97,
     "status": "pending",
-    "created_at": "2026-10-04T22:50:54.191Z",
+    "created_at": "2026-10-05T03:13:53.352Z",
     "used_at": null
   }
 }
