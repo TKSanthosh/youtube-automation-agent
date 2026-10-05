@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-05T13:07:52.279Z",
+  "updated_at": "2026-10-05T21:29:34.025Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791205672177_joxbh",
-    "topic": "Acing the System Design Interview: Step-by-Step Distributed Cache Layout",
+    "id": "sugg_1791235774016_569jxb",
+    "topic": "Cracking the Distributed Systems Architecture Interview",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Meets the massive search demand for interview walkthroughs and real-world architectural design patterns under strict constraints.",
-    "search_evidence": "system design interview example",
+    "rationale": "System design interview prep is a perpetually trending niche. Providing a structured framework for distributed layouts attracts massive developer audiences.",
+    "search_evidence": "distributed systems architecture",
     "educational_visuals": [
       "Architecture diagrams",
-      "Trees and graphs"
+      "Animated system flows"
     ],
-    "hook_angle": "Failing system design interviews? Stop drawing boxes randomly. Here is the 4-step framework senior engineers use to design scalable caches.",
+    "hook_angle": "Most candidates fail system design interviews because they design monolithic components instead of decoupled distributed clusters.",
     "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "trend_score": 96,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-05T13:07:52.177Z",
+    "created_at": "2026-10-05T21:29:34.016Z",
     "used_at": null
   }
 }
