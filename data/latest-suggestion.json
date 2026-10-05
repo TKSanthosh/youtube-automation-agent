@@ -1,23 +1,24 @@
 {
-  "updated_at": "2026-10-05T21:29:34.025Z",
+  "updated_at": "2026-10-05T23:30:51.731Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791235774016_569jxb",
+    "id": "sugg_1791243051723_0b8eb",
     "topic": "Cracking the Distributed Systems Architecture Interview",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "System design interview prep is a perpetually trending niche. Providing a structured framework for distributed layouts attracts massive developer audiences.",
-    "search_evidence": "distributed systems architecture",
+    "rationale": "Capitalizes on persistent peak search volume for system design interviews and distributed layout patterns.",
+    "search_evidence": "system design interview questions",
     "educational_visuals": [
       "Architecture diagrams",
-      "Animated system flows"
+      "Animated system flows",
+      "Data-flow diagrams"
     ],
-    "hook_angle": "Most candidates fail system design interviews because they design monolithic components instead of decoupled distributed clusters.",
-    "channel_affinity_score": 100,
-    "trend_score": 96,
+    "hook_angle": "If a senior interviewer asks you to design Twitter's timeline feed, don't panic. Use this exact architectural blueprint.",
+    "channel_affinity_score": 98,
+    "trend_score": 99,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-05T21:29:34.016Z",
+    "created_at": "2026-10-05T23:30:51.723Z",
     "used_at": null
   }
 }
