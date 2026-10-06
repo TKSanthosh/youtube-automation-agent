@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-06T19:20:54.032Z",
+  "updated_at": "2026-10-06T22:03:36.909Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791314454024_vcjmog",
-    "topic": "System Design Interview: Scaling to 10M Users",
+    "id": "sugg_1791324216905_l4kg4g",
+    "topic": "System Design Interview: Distributed Systems Architecture",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "System design interviews are high-stakes milestones for software engineers. Providing a structured framework captures massive search volume.",
-    "search_evidence": "system design interview preparation",
+    "rationale": "Taps into massive evergreen search traffic for system design interview preparation with a concise, high-yield architectural breakdown.",
+    "search_evidence": "distributed systems architecture",
     "educational_visuals": [
       "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "Panicking during system design interviews? Here is the exact blueprint to scale a monolith to 10 million daily active users in under 3 minutes.",
+    "hook_angle": "Cracking senior system design interviews requires more than drawing boxes—it requires mastering failure domains.",
     "channel_affinity_score": 100,
     "trend_score": 98,
     "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-06T19:20:54.024Z",
+    "created_at": "2026-10-06T22:03:36.905Z",
     "used_at": null
   }
 }
