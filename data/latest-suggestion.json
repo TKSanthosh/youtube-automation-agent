@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-10-05T23:30:51.731Z",
+  "updated_at": "2026-10-06T04:01:39.993Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791243051723_0b8eb",
-    "topic": "Cracking the Distributed Systems Architecture Interview",
+    "id": "sugg_1791259299985_nec1t",
+    "topic": "Acing the System Design Interview: Core Strategies",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Capitalizes on persistent peak search volume for system design interviews and distributed layout patterns.",
-    "search_evidence": "system design interview questions",
+    "rationale": "High search volume for system design interviews creates an evergreen demand for structural frameworks that prevent candidates from freezing.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
       "Architecture diagrams",
-      "Animated system flows",
-      "Data-flow diagrams"
+      "Animated system flows"
     ],
-    "hook_angle": "If a senior interviewer asks you to design Twitter's timeline feed, don't panic. Use this exact architectural blueprint.",
-    "channel_affinity_score": 98,
-    "trend_score": 99,
-    "priority_score": 98,
+    "hook_angle": "Failed your last system design interview? You probably jumped straight to databases instead of establishing capacity requirements first.",
+    "channel_affinity_score": 100,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-05T23:30:51.723Z",
+    "created_at": "2026-10-06T04:01:39.985Z",
     "used_at": null
   }
 }
