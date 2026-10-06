@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-06T08:41:00.674Z",
+  "updated_at": "2026-10-06T12:29:24.857Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791276060665_ygtcyq",
-    "topic": "Cracking the System Design Interview: Core Frameworks",
-    "category": "System Design",
+    "id": "sugg_1791289764839_iz3zmq",
+    "topic": "Python AsyncIO vs Threading: When to Stop Blocking",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "System design interviews induce panic in software engineers. Providing a structured, repeatable blueprint maximizes watch time and bookmark rates.",
-    "search_evidence": "system design interview preparation",
+    "rationale": "Developers continually struggle with choosing concurrency models in Python, leading to blocked event loops and poor throughput. This addresses a massive search trend with a clear visual comparison.",
+    "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Animated system flows"
+      "State transitions",
+      "Data-flow diagrams"
     ],
-    "hook_angle": "Don't freeze up when the interviewer asks 'Design Twitter'—use this 4-step framework instead.",
+    "hook_angle": "Stop guessing whether to use threads or asyncio. Here's how one wrong call freezes your entire Python web server.",
     "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "trend_score": 95,
+    "priority_score": 97,
     "status": "pending",
-    "created_at": "2026-10-06T08:41:00.665Z",
+    "created_at": "2026-10-06T12:29:24.839Z",
     "used_at": null
   }
 }
