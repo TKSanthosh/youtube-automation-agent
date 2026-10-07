@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-10-06T23:39:01.245Z",
+  "updated_at": "2026-10-07T03:29:27.949Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791329941240_5y06wr",
-    "topic": "Python 3.13 Free-Threaded GIL Removal: What Changes for Developers",
-    "category": "Python",
+    "id": "sugg_1791343767941_keu5i",
+    "topic": "Mastering the Circuit Breaker Pattern in Microservices",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Python 3.13 free-threading is the biggest Python architectural shift in 20 years.",
-    "search_evidence": "python 3.13 gil removal benchmark",
+    "rationale": "Addresses critical distributed system resilience concepts heavily demanded in system design interviews and production architectures.",
+    "search_evidence": "microservices circuit breaker pattern",
     "educational_visuals": [
       "State transitions",
-      "Animated system flows",
-      "Code execution visualization"
+      "Animated system flows"
     ],
-    "hook_angle": "Python finally has true multi-threading without the GIL. But how does it work?",
-    "channel_affinity_score": 85,
-    "trend_score": 95,
-    "priority_score": 95,
+    "hook_angle": "One slow database query can cascade and crash your entire microservices architecture. Here is how a Circuit Breaker stops the bleeding.",
+    "channel_affinity_score": 100,
+    "trend_score": 96,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-06T23:39:01.240Z",
+    "created_at": "2026-10-07T03:29:27.941Z",
     "used_at": null
   }
 }
