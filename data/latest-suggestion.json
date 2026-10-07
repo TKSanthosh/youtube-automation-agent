@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-07T19:50:15.731Z",
+  "updated_at": "2026-10-07T22:28:18.464Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791402615724_7f8fdb",
-    "topic": "Mastering the Microservices Circuit Breaker Pattern",
+    "id": "sugg_1791412098457_15d4t",
+    "topic": "System Design Interview: Ace Distributed Systems",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "System design interviews heavily penalize candidates who fail to protect downstream microservices from cascading failures during outages.",
-    "search_evidence": "microservices circuit breaker pattern",
+    "rationale": "High search volume around system design interviews makes structured breakdown formats extremely high engagement hooks.",
+    "search_evidence": "system design interview questions",
     "educational_visuals": [
       "Architecture diagrams",
-      "State transitions"
+      "Animated system flows"
     ],
-    "hook_angle": "One failing microservice can take down your entire backend. Here is how the Circuit Breaker pattern isolates the blast radius instantly.",
+    "hook_angle": "Stop freezing during system design interviews. Use this exact 4-step framework to scale any web app to billions.",
     "channel_affinity_score": 98,
-    "trend_score": 94,
-    "priority_score": 96,
+    "trend_score": 99,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-07T19:50:15.724Z",
+    "created_at": "2026-10-07T22:28:18.457Z",
     "used_at": null
   }
 }
