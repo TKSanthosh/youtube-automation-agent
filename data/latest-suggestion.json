@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-10-07T08:15:45.581Z",
+  "updated_at": "2026-10-07T12:22:36.463Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791360945567_887q7u",
-    "topic": "Python Asyncio Event Loop Internals Explained",
-    "category": "Python",
+    "id": "sugg_1791375755549_xnp1oy",
+    "topic": "System Design: Cracking the Distributed Architecture Interview",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Developers struggle to visualize how asyncio manages concurrency on a single thread. This breakdown captures massive search volume around event loops while delivering deep architectural clarity.",
-    "search_evidence": "python asyncio event loop",
+    "rationale": "Directly targets interview preparation queries with a high-value pedagogical framework for structuring scalable distributed systems.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "State transitions",
-      "Code execution visualization",
+      "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "Stop using async/await blindly—here is what the event loop is actually doing behind your Python code.",
-    "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 97,
+    "hook_angle": "Panicking during system design interviews? Stop guessing and use this 4-step framework to map out petabyte-scale distributed architectures.",
+    "channel_affinity_score": 98,
+    "trend_score": 99,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-07T08:15:45.567Z",
+    "created_at": "2026-10-07T12:22:35.549Z",
     "used_at": null
   }
 }
