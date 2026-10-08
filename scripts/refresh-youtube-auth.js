@@ -22,7 +22,17 @@ async function main() {
     process.exit(1);
   }
 
-  const redirectUri = 'http://localhost:8080/oauth2callback';
+  let redirectUri = 'http://localhost:8080/auth/callback';
+  try {
+    const credsPath = path.join(__dirname, '..', 'config', 'credentials.json');
+    if (fs.existsSync(credsPath)) {
+      const creds = JSON.parse(fs.readFileSync(credsPath, 'utf8'));
+      if (creds.youtube?.redirect_uris?.[0]) {
+        redirectUri = creds.youtube.redirect_uris[0];
+      }
+    }
+  } catch (_e) {}
+
   const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri);
 
   const scopes = [
@@ -39,7 +49,7 @@ async function main() {
     scope: scopes
   });
 
-  console.log(chalk.white('1. A local listener is running on: ') + chalk.cyan('http://localhost:8080'));
+  console.log(chalk.white('1. A local listener is running on: ') + chalk.cyan(redirectUri));
   console.log(chalk.white('2. Authorize via this Google URL:'));
   console.log(chalk.blue.underline(`\n${authUrl}\n`));
 
@@ -49,7 +59,7 @@ async function main() {
 
   const server = http.createServer(async (req, res) => {
     const parsed = url.parse(req.url, true);
-    if (parsed.pathname === '/oauth2callback') {
+    if (parsed.pathname === '/auth/callback' || parsed.pathname === '/oauth2callback' || parsed.pathname === '/youtube/callback') {
       const code = parsed.query.code;
       if (code) {
         try {
