@@ -1,11 +1,11 @@
 {
   "iterationNumber": 1,
-  "videoId": "youtube-1",
-  "title": "A",
+  "videoId": "VkPiG4NslqY",
+  "title": "Mastering Consensus Algorithms in Distributed Systems: Raft vs Paxos Explained: Architecture & Code Walkthrough",
   "category": "tech",
   "targetLength": "short",
   "metricsAnalyzed": {
-    "analyzedAt": "2026-10-08T13:26:59.374Z",
+    "analyzedAt": "2026-10-08T18:35:32.025Z",
     "videoDurationSeconds": null,
     "totalScenes": null
   },
@@ -23,5 +23,6 @@
     ]
   },
   "qualityScore": 8.2,
-  "appliedToNext": false
+  "appliedToNext": false,
+  "id": "enh_1791484532026_0i2hzl"
 }
