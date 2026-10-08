@@ -21,6 +21,7 @@
     "agent:intelligence": "node scripts/run-intelligence-agent.js",
     "service:intelligence": "node services/intelligence-service.js",
     "credentials:setup": "node utils/credential-manager.js setup",
+    "auth:refresh": "node scripts/refresh-youtube-auth.js",
     "lint": "eslint ."
   },
   "dependencies": {

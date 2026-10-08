@@ -1,11 +1,11 @@
 {
   "iterationNumber": 1,
-  "videoId": "pwUyWYgR88c",
-  "title": "Mastering Python 3.13 Free-Threaded GIL Removal: What Changes for Developers: Architecture & Code Walkthrough",
+  "videoId": "youtube-1",
+  "title": "A",
   "category": "tech",
   "targetLength": "short",
   "metricsAnalyzed": {
-    "analyzedAt": "2026-09-28T20:26:13.899Z",
+    "analyzedAt": "2026-10-08T13:26:59.374Z",
     "videoDurationSeconds": null,
     "totalScenes": null
   },
@@ -23,6 +23,5 @@
     ]
   },
   "qualityScore": 8.2,
-  "appliedToNext": false,
-  "id": "enh_1790627173899_9ue4s9"
+  "appliedToNext": false
 }

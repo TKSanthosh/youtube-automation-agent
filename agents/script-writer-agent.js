@@ -141,6 +141,11 @@ class ScriptWriterAgent {
         }
       };
 
+      // Ensure 4 progressive slides with rich narration are always generated
+      if (!Array.isArray(script.slides) || script.slides.length === 0) {
+        script.slides = this.normalizeAISlides({ sections: mainContent.sections }, strategy);
+      }
+
       // Format for readability
       script.fullScript = this.formatFullScript(script);
       
@@ -334,35 +339,46 @@ Return ONLY valid JSON matching this exact structure:
     }
   }
 
-  normalizeAISlides(parsed, _strategy) {
+  ensurePedagogicalNarrationDepth(slide, topic, idx) {
+    let narration = String(slide.teacherNarration || slide.narration || '').trim();
+    const wordCount = narration.split(/\s+/).filter(Boolean).length;
+    if (wordCount >= 75) return narration;
+
+    const topicClean = topic || 'this architecture';
+    if (idx === 0) {
+      narration = `${narration ? narration + ' ' : ''}When developers first implement ${topicClean}, naive implementations look clean in local staging but quickly collapse under real production traffic. As concurrency spikes, unhandled timeouts cascade across upstream microservices, causing thread pool exhaustion and widespread outages. Notice what happens without backpressure: a single degraded dependency brings down the entire distributed cluster. Let's examine how to prevent this architectural failure completely.`.trim();
+    } else if (idx === 1) {
+      narration = `${narration ? narration + ' ' : ''}To solve this cleanly, let's look at the underlying mental model on screen. Instead of allowing callers to continuously hammer failing endpoints, we place an intelligent boundary layer in between. Notice the flow: incoming requests pass through our health evaluation threshold. When failure rates breach the safety margin, the circuit trips instantly, returning fast fallbacks before resources degrade. This preserves system stability and allows dependent clusters to recover gracefully.`.trim();
+    } else if (idx === 2) {
+      narration = `${narration ? narration + ' ' : ''}Now let's walk through the implementation directly on your screen. Look at line 1: we configure the explicit timeout and error thresholds. As you trace down to the execution handler, every external call is wrapped inside the guarded context. If the downstream service is healthy, execution proceeds with zero overhead. But if consecutive errors exceed the threshold, the guard catches it immediately, bypassing the slow path and shielding your database from starvation.`.trim();
+    } else {
+      narration = `${narration ? narration + ' ' : ''}Here is the senior developer rule of thumb to keep in mind: never deploy ${topicClean} with static, hardcoded timeouts. Always tune your trip threshold based on real 99th percentile production latency, and pair every fallback with automated metrics and health alarms. By implementing this pattern, you eliminate cascading outages and ensure resilient, self-healing services. Apply this to your production clusters today.`.trim();
+    }
+    return narration;
+  }
+
+  normalizeAISlides(parsed, strategy) {
+    const topic = strategy?.topic || '';
+    let rawSlides = [];
     if (Array.isArray(parsed.slides) && parsed.slides.length > 0) {
-      return parsed.slides.slice(0, 5).map((slide, idx) => ({
-        slideNumber: idx + 1,
-        type: slide.type || (idx === 0 ? 'problem' : idx === 2 ? 'code' : idx === 3 ? 'takeaway' : 'architecture'),
-        headline: String(slide.headline || `Part ${idx + 1}`).trim(),
-        bulletPoints: Array.isArray(slide.bulletPoints) ? slide.bulletPoints.map(b => String(b).trim()).filter(Boolean) : [String(slide.headline || '')],
-        diagram: slide.diagram || null,
-        codeSnippet: String(slide.codeSnippet || '').trim(),
-        teacherNarration: String(slide.teacherNarration || slide.narration || '').trim()
-      }));
+      rawSlides = parsed.slides.slice(0, 5);
+    } else if (Array.isArray(parsed.sections) && parsed.sections.length > 0) {
+      rawSlides = parsed.sections.slice(0, 4);
     }
 
-    // Fallback if AI returned legacy sections
-    if (Array.isArray(parsed.sections) && parsed.sections.length > 0) {
-      return parsed.sections.slice(0, 4).map((sec, idx) => {
-        const rawContent = Array.isArray(sec.content) ? sec.content : [sec.content];
-        return {
-          slideNumber: idx + 1,
-          type: idx === 2 ? 'code' : 'architecture',
-          headline: String(sec.title || `0${idx + 1}. Concept`).trim(),
-          bulletPoints: rawContent.slice(0, 3).map(c => String(c).trim()),
-          codeSnippet: String(sec.codeSnippet || '').trim(),
-          teacherNarration: rawContent.join(' ')
-        };
-      });
-    }
+    if (rawSlides.length === 0) return [];
 
-    return [];
+    return rawSlides.slice(0, 4).map((slide, idx) => ({
+      slideNumber: idx + 1,
+      type: slide.type || (idx === 0 ? 'problem' : idx === 2 ? 'code' : idx === 3 ? 'takeaway' : 'architecture'),
+      headline: String(slide.headline || slide.title || `0${idx + 1}. Concept`).trim(),
+      bulletPoints: Array.isArray(slide.bulletPoints)
+        ? slide.bulletPoints.map(b => String(b).trim()).filter(Boolean)
+        : (Array.isArray(slide.content) ? slide.content.slice(0, 3).map(c => String(c).trim()) : [String(slide.headline || slide.title || '')]),
+      diagram: slide.diagram || null,
+      codeSnippet: String(slide.codeSnippet || '').trim(),
+      teacherNarration: this.ensurePedagogicalNarrationDepth(slide, topic, idx)
+    }));
   }
 
   normalizeAISections(sections, strategy) {

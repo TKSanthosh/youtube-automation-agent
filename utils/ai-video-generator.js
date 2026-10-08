@@ -792,21 +792,107 @@ class AIVideoGenerator {
         stills.push(stillPath);
       }
 
-      const videoPath = outputPath.replace('.mp4', '_visual.mp4');
-      const audioDuration = await this.getAudioDuration(audioPath, { shortsMode: true });
-      const scriptDuration = this.calculateScriptDuration(script);
-      let duration = audioDuration > 10 ? audioDuration : scriptDuration;
-      // Guarantee strictly between 150s (2m30s) and 175s (<180s) for YouTube Shorts qualification
-      if (duration > 175) duration = 175;
-      if (duration < 150) duration = 150;
+      // Render each slide segment matched 1:1 with its exact narration audio
+      const slidesList = Array.isArray(script.slides) && script.slides.length > 0
+        ? script.slides
+        : (script.mainContent?.sections || script.sections || []);
 
-      // Compute exact per-slide duration array based on the narration word count of each slide
-      const slideDurations = this.calculateSlideDurations(script, slideCount, duration);
-      this.logger.info(`Rendering ${stills.length} slides with synchronized durations: ${slideDurations.join(', ')}s (total: ${duration}s)`);
-      await this.renderSlidesToVideo(stills, slideDurations, videoPath);
+      const slideSegments = [];
+      const slideAudios = [];
 
-      // Add audio with strict Shorts cutoff (175s max, strictly < 180s)
-      await this.addAudioToVideo(videoPath, audioPath, outputPath, { loopVideo: true, maxDuration: 175 });
+      for (let i = 0; i < stills.length; i++) {
+        const stillPath = stills[i];
+        const slideData = slidesList[i] || {};
+        const narrationText = String(
+          slideData.teacherNarration ||
+          slideData.spokenNarration ||
+          (Array.isArray(slideData.content) ? slideData.content.join('. ') : slideData.content) ||
+          slideData.headline ||
+          ''
+        ).trim();
+
+        const slideAudioPath = path.join(slidesDir, `slide_${String(i).padStart(3, '0')}_audio.mp3`);
+        const segmentVideoPath = path.join(slidesDir, `slide_${String(i).padStart(3, '0')}_segment.mp4`);
+
+        let audioSuccess = false;
+        if (narrationText) {
+          try {
+            await this.generateTTSAudio(narrationText, slideAudioPath);
+            audioSuccess = await this.isUsableAudioFile(slideAudioPath);
+          } catch (ttsErr) {
+            this.logger.warn(`Slide ${i + 1} TTS synthesis error: ${ttsErr.message}`);
+          }
+        }
+
+        let slideDuration = 38;
+        if (audioSuccess) {
+          const rawDur = await this.getAudioDuration(slideAudioPath);
+          if (rawDur > 0) {
+            slideDuration = Number((rawDur + 0.5).toFixed(2));
+          }
+        } else {
+          await runFFmpeg([
+            '-y',
+            '-f', 'lavfi',
+            '-i', 'anullsrc=r=24000:cl=mono',
+            '-t', String(slideDuration),
+            '-acodec', 'libmp3lame',
+            '-b:a', '128k',
+            slideAudioPath
+          ]);
+        }
+        slideAudios.push(slideAudioPath);
+
+        this.logger.info(`Rendering synchronized Slide ${i + 1}/${stills.length}: duration=${slideDuration}s`);
+
+        // Render this slide's video segment strictly locked to its narration duration
+        await runFFmpeg([
+          '-y',
+          '-loop', '1',
+          '-t', String(slideDuration),
+          '-i', stillPath,
+          '-i', slideAudioPath,
+          '-c:v', 'libx264',
+          '-preset', 'ultrafast',
+          '-tune', 'stillimage',
+          '-pix_fmt', 'yuv420p',
+          '-vf', 'scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black,fps=30',
+          '-c:a', 'aac',
+          '-b:a', '128k',
+          '-shortest',
+          segmentVideoPath
+        ]);
+
+        slideSegments.push(segmentVideoPath);
+      }
+
+      // Concat all slide segments into final video
+      const concatListFile = path.join(slidesDir, 'segments.txt');
+      const concatLines = slideSegments.map(seg => `file '${seg.replace(/\\/g, '/')}'`).join('\n');
+      await fs.writeFile(concatListFile, concatLines);
+
+      await runFFmpeg([
+        '-y',
+        '-f', 'concat',
+        '-safe', '0',
+        '-i', concatListFile,
+        '-c', 'copy',
+        outputPath
+      ]);
+
+      // Extract combined audio into audioPath
+      try {
+        await runFFmpeg([
+          '-y',
+          '-i', outputPath,
+          '-vn',
+          '-c:a', 'libmp3lame',
+          '-b:a', '128k',
+          audioPath
+        ]);
+      } catch (_extractErr) {
+        this.logger.warn(`Audio extraction warning: ${_extractErr.message}`);
+      }
 
       return outputPath;
     } finally {

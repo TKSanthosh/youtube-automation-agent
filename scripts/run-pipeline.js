@@ -299,6 +299,21 @@ async function run() {
 
           // BREAK THE LOOP IMMEDIATELY - DO NOT GENERATE ANY MORE VIDEOS
           break;
+        } else if ((uploadError.message || '').includes('invalid_grant')) {
+          console.log(chalk.red.bold(`\n🚨 GOOGLE OAUTH ERROR: invalid_grant (YouTube Refresh Token Expired)`));
+          console.log(chalk.yellow(`Reason: The OAuth app in Google Cloud Console is in "Testing" mode (tokens expire in 7 days).`));
+          console.log(chalk.cyan(`To enable INFINITE uploads without token expiration:`));
+          console.log(chalk.white(`1. Open Google Cloud Console: https://console.cloud.google.com/apis/credentials/consent`));
+          console.log(chalk.white(`2. Under "Publishing status", click "PUBLISH APP" -> "Confirm" to switch to "In production".`));
+          console.log(chalk.white(`3. Run: node scripts/refresh-youtube-auth.js to generate a permanent refresh token.`));
+          console.log(chalk.white(`4. Sync the new token: gh secret set YOUTUBE_REFRESH_TOKEN -b "<token>" --repo TKSanthosh/youtube-automation-agent\n`));
+          results.push({
+            title: script.title,
+            status: `ERROR: invalid_grant (OAuth Token Expired - Needs Renewal)`,
+            url: 'None',
+            durationSec: Math.round((Date.now() - cycleStart) / 1000)
+          });
+          break;
         } else {
           console.log(chalk.red(`   ❌ Upload failed: ${uploadError.message}`));
           results.push({
@@ -325,11 +340,18 @@ async function run() {
   // Summary
   console.log(chalk.cyan.bold('\n📊 Pipeline Run Summary'));
   console.log(chalk.gray('═'.repeat(65)));
+  let publishedCount = 0;
   for (const r of results) {
     console.log(chalk.white(`• "${r.title}"`));
     console.log(chalk.gray(`  Result: `) + (r.status === 'PUBLISHED' ? chalk.green(r.url) : chalk.yellow(r.status)));
+    if (r.status === 'PUBLISHED') publishedCount++;
   }
   console.log(chalk.gray('═'.repeat(65)));
+
+  if (publishedCount === 0 && results.some(r => r.status && r.status.startsWith('ERROR'))) {
+    console.log(chalk.red.bold('\n❌ Pipeline failed: 0 videos published due to errors.'));
+    process.exit(1);
+  }
 
   process.exit(0);
 }
