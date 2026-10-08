@@ -1,11 +1,11 @@
 {
   "iterationNumber": 1,
-  "videoId": "VkPiG4NslqY",
-  "title": "Mastering Consensus Algorithms in Distributed Systems: Raft vs Paxos Explained: Architecture & Code Walkthrough",
+  "videoId": "hfdzuoTvqN0",
+  "title": "Mastering Python 3.13 Free-Threaded GIL Removal: What Changes for Developers: Architecture & Code Walkthrough",
   "category": "tech",
   "targetLength": "short",
   "metricsAnalyzed": {
-    "analyzedAt": "2026-10-08T18:35:32.025Z",
+    "analyzedAt": "2026-10-08T19:43:39.121Z",
     "videoDurationSeconds": null,
     "totalScenes": null
   },
@@ -24,5 +24,5 @@
   },
   "qualityScore": 8.2,
   "appliedToNext": false,
-  "id": "enh_1791484532026_0i2hzl"
+  "id": "enh_1791488619121_i4ws69"
 }

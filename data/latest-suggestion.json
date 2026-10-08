@@ -1,24 +1,24 @@
 {
-  "updated_at": "2026-10-08T18:35:01.030Z",
+  "updated_at": "2026-10-08T19:42:55.220Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791484501025_780zp6",
-    "topic": "Nailing Distributed Systems Architecture Models in Interviews",
-    "category": "System Design",
+    "id": "sugg_1791488575207_r3d5c",
+    "topic": "Python 3.13 Free-Threaded GIL Removal: What Changes for Developers",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "System design interview prep is the highest search volume niche for senior engineering content, requiring crisp breakdowns of architectural styles.",
-    "search_evidence": "distributed systems architectural models",
+    "rationale": "Python 3.13 free-threading is the biggest Python architectural shift in 20 years.",
+    "search_evidence": "python 3.13 gil removal benchmark",
     "educational_visuals": [
-      "Architecture diagrams",
+      "State transitions",
       "Animated system flows",
-      "Trees and graphs"
+      "Code execution visualization"
     ],
-    "hook_angle": "Stop freezing during system design interviews. Here's how to map out distributed architecture models like a Principal Engineer.",
-    "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "hook_angle": "Python finally has true multi-threading without the GIL. But how does it work?",
+    "channel_affinity_score": 85,
+    "trend_score": 95,
+    "priority_score": 95,
     "status": "pending",
-    "created_at": "2026-10-08T18:35:01.025Z",
+    "created_at": "2026-10-08T19:42:55.207Z",
     "used_at": null
   }
 }
