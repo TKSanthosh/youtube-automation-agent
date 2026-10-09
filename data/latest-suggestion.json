@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-09T19:19:25.835Z",
+  "updated_at": "2026-10-09T22:03:15.598Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791573565302_6m9lc",
-    "topic": "Cracking Distributed Systems Architecture in Interviews",
+    "id": "sugg_1791583395591_fp6zu",
+    "topic": "Mastering the Microservices Circuit Breaker Pattern",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "System design interview preparation commands massive search volume, with viewers desperate for structural templates to pass FAANG-style interview loops.",
-    "search_evidence": "system design interview preparation",
+    "rationale": "Meets intense system design interview and production reliability demand by breaking down closed, open, and half-open failure states clearly.",
+    "search_evidence": "microservices circuit breaker pattern",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Animated system flows"
+      "State transitions",
+      "Architecture diagrams"
     ],
-    "hook_angle": "Stop failing your distributed system design interviews by freezing up on the back-of-the-envelope estimation step.",
-    "channel_affinity_score": 98,
+    "hook_angle": "One down service shouldn't crash your entire distributed system. Here is how the Circuit Breaker pattern saves production apps.",
+    "channel_affinity_score": 100,
     "trend_score": 96,
-    "priority_score": 97,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-09T19:19:25.302Z",
+    "created_at": "2026-10-09T22:03:15.591Z",
     "used_at": null
   }
 }
