@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-09T08:35:18.667Z",
+  "updated_at": "2026-10-09T12:20:25.449Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791534917822_vv9xyh",
-    "topic": "Python AsyncIO vs Threading: When to Stop Blocking Your Event Loop",
-    "category": "Python",
+    "id": "sugg_1791548425441_zvbio4",
+    "topic": "Mastering the Microservices Circuit Breaker Pattern",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Developers constantly misapply threading vs asyncio, causing hidden I/O bottlenecks and race conditions. This video breaks down the underlying concurrency models to capture high-intent search traffic.",
-    "search_evidence": "python asyncio vs threading",
+    "rationale": "Distributed system resilience is a staple of system design interviews and real-world backend reliability. Visualizing state changes prevents cascading failures.",
+    "search_evidence": "microservices circuit breaker pattern",
     "educational_visuals": [
-      "State transitions",
-      "Code execution visualization"
+      "Architecture diagrams",
+      "State transitions"
     ],
-    "hook_angle": "Stop using Python threading for high-throughput I/O until you see what happens inside the event loop.",
+    "hook_angle": "One failing downstream microservice can take down your entire architecture—unless you implement a proper circuit breaker.",
     "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 97,
+    "trend_score": 96,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-09T08:35:17.822Z",
+    "created_at": "2026-10-09T12:20:25.441Z",
     "used_at": null
   }
 }
