@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-09T03:49:37.210Z",
+  "updated_at": "2026-10-09T08:35:18.667Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791517777198_yas0sk",
-    "topic": "Python AsyncIO Event Loop: Under the Hood of Concurrency",
+    "id": "sugg_1791534917822_vv9xyh",
+    "topic": "Python AsyncIO vs Threading: When to Stop Blocking Your Event Loop",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Developers struggle to visualize how single-threaded cooperative multitasking actually schedules coroutines, making this an evergreen high-retention topic that directly targets urgent search intent.",
-    "search_evidence": "python asyncio event loop",
+    "rationale": "Developers constantly misapply threading vs asyncio, causing hidden I/O bottlenecks and race conditions. This video breaks down the underlying concurrency models to capture high-intent search traffic.",
+    "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
       "State transitions",
       "Code execution visualization"
     ],
-    "hook_angle": "Stop writing `async def` and crossing your fingers—here is what the Python event loop is actually doing behind your back.",
+    "hook_angle": "Stop using Python threading for high-throughput I/O until you see what happens inside the event loop.",
     "channel_affinity_score": 100,
     "trend_score": 95,
     "priority_score": 97,
     "status": "pending",
-    "created_at": "2026-10-09T03:49:37.198Z",
+    "created_at": "2026-10-09T08:35:17.822Z",
     "used_at": null
   }
 }
