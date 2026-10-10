@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-09T23:51:55.460Z",
+  "updated_at": "2026-10-10T03:33:06.163Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791589915448_pze2w",
-    "topic": "Python Asyncio vs Threading: When to Stop Blocking Your Event Loop",
-    "category": "Python",
+    "id": "sugg_1791603186154_beqjks",
+    "topic": "Ace the System Design Interview: Distributed Architecture Blueprint",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Developers frequently misuse threads for I/O-bound tasks where async is far superior, or vice versa, leading to silent performance degradation.",
-    "search_evidence": "python asyncio vs threading",
+    "rationale": "System design interview prep is a perennial high-intent search category. This short provides a structural framework for structuring scalable, fault-tolerant distributed backends.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "State transitions",
-      "Code execution visualization"
+      "Architecture diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "Stop using multi-threading for your web scraper right now—here is why your CPU is crying.",
-    "channel_affinity_score": 95,
-    "trend_score": 98,
-    "priority_score": 97,
+    "hook_angle": "Failing system design interviews? Here's the 4-step framework senior engineers use to map out petabyte-scale distributed systems.",
+    "channel_affinity_score": 98,
+    "trend_score": 95,
+    "priority_score": 96,
     "status": "pending",
-    "created_at": "2026-10-09T23:51:55.448Z",
+    "created_at": "2026-10-10T03:33:06.154Z",
     "used_at": null
   }
 }
