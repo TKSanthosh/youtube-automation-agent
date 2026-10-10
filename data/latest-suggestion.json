@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-10T08:11:57.013Z",
+  "updated_at": "2026-10-10T11:38:46.431Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791619917008_kpes2q",
-    "topic": "Mastering the Microservices Circuit Breaker Pattern",
+    "id": "sugg_1791632326423_9oulup",
+    "topic": "Designing Distributed Systems: The System Design Interview Blueprint",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Distributed systems fail catastrophically without resilience patterns. System design interview prep heavily features circuit breakers, making this a high-click topic.",
-    "search_evidence": "microservices circuit breaker pattern",
+    "rationale": "Perennial high-demand interview prep topic. Delivering a structured blueprint for tackling open-ended scale questions creates exceptional watch-time and repeat views.",
+    "search_evidence": "system design interview prep",
     "educational_visuals": [
       "Architecture diagrams",
-      "State transitions"
+      "Animated system flows"
     ],
-    "hook_angle": "One downstream microservice outage just took down your entire platform—here is how the Circuit Breaker stops the cascade.",
+    "hook_angle": "Panicking during system design interviews? Here is the exact 4-step framework senior engineers use to structure any large-scale problem.",
     "channel_affinity_score": 100,
-    "trend_score": 96,
-    "priority_score": 98,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-10T08:11:57.008Z",
+    "created_at": "2026-10-10T11:38:46.423Z",
     "used_at": null
   }
 }
