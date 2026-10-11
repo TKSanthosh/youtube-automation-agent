@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-11T11:51:53.202Z",
+  "updated_at": "2026-10-11T17:05:50.024Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791719513193_deljfr",
-    "topic": "Acing the System Design Interview: Distributed Architecture 101",
+    "id": "sugg_1791738350016_y19ew",
+    "topic": "Mastering the Microservices Circuit Breaker Pattern",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Directly matches high-volume interview prep queries, leveraging the channel's system design pillar to deliver rapid, high-retention architectural concepts.",
-    "search_evidence": "system design interview preparation",
+    "rationale": "High-intent architecture topic addressing cascading failures in distributed systems during service outages.",
+    "search_evidence": "microservices circuit breaker pattern",
     "educational_visuals": [
       "Architecture diagrams",
-      "Animated system flows"
+      "State transitions"
     ],
-    "hook_angle": "If a senior interviewer asks you how to scale a read-heavy system to 100k RPS, saying 'add more servers' is an instant fail. Here's the actual distributed blueprint you need.",
-    "channel_affinity_score": 100,
+    "hook_angle": "One slow database query just took down your entire microservices mesh. Here's how a Circuit Breaker isolates the blast radius.",
+    "channel_affinity_score": 98,
     "trend_score": 96,
-    "priority_score": 98,
+    "priority_score": 97,
     "status": "pending",
-    "created_at": "2026-10-11T11:51:53.193Z",
+    "created_at": "2026-10-11T17:05:50.016Z",
     "used_at": null
   }
 }
