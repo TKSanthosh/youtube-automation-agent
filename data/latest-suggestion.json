@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-11T21:17:37.294Z",
+  "updated_at": "2026-10-11T23:29:44.809Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791753457289_my87vg",
-    "topic": "Nailing the System Design Interview: Step-by-Step Blueprint",
+    "id": "sugg_1791761383984_305la",
+    "topic": "Mastering the System Design Interview: Framework for Any Distributed Problem",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Directly matches high-intent candidate search queries looking for preparation frameworks and mock structures.",
+    "rationale": "Candidates fail system design interviews not due to lack of technical knowledge, but due to chaotic, unstructured problem-solving approaches.",
     "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "Timelines",
-      "Architecture diagrams"
+      "Architecture diagrams",
+      "Timelines"
     ],
-    "hook_angle": "Stop freezing during system design interviews. Use this exact 4-step framework to pass FAANG loops.",
-    "channel_affinity_score": 95,
-    "trend_score": 99,
-    "priority_score": 97,
+    "hook_angle": "Panicking during system design interviews? Here is the exact 4-step framework senior engineers use to ace scale, bottlenecks, and back-of-the-envelope math.",
+    "channel_affinity_score": 100,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-11T21:17:37.289Z",
+    "created_at": "2026-10-11T23:29:43.984Z",
     "used_at": null
   }
 }
