@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-10-12T22:00:42.939Z",
+  "updated_at": "2026-10-12T23:59:11.121Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791842442931_rykrwu",
-    "topic": "Mastering the Microservices Circuit Breaker Pattern",
+    "id": "sugg_1791849551116_80266w",
+    "topic": "Mastering the System Design Interview: Core Architecture",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Distributed systems failure cascades plague enterprise architecture. Providing a bulletproof visual explanation of the Closed-Open-Half-Open state machine is a staple for interview and production prep.",
-    "search_evidence": "microservices circuit breaker pattern",
+    "rationale": "High-intent search query for engineers preparing for senior interviews who need concise, high-impact architectural blueprints.",
+    "search_evidence": "system design interview",
     "educational_visuals": [
-      "State transitions",
       "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "One down service shouldn't take down your entire microservices architecture. Here is how the Circuit Breaker saves your system.",
+    "hook_angle": "Most engineers fail system design interviews in the first 2 minutes. Here is the exact architectural blueprint to ace any scale question.",
     "channel_affinity_score": 100,
-    "trend_score": 96,
-    "priority_score": 98,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-12T22:00:42.931Z",
+    "created_at": "2026-10-12T23:59:11.116Z",
     "used_at": null
   }
 }
