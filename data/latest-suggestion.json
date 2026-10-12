@@ -1,23 +1,24 @@
 {
-  "updated_at": "2026-10-12T13:59:25.947Z",
+  "updated_at": "2026-10-12T22:00:42.939Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791813565464_40nd6f",
-    "topic": "Cracking the System Design Interview: Distributed ID Generation",
+    "id": "sugg_1791842442931_rykrwu",
+    "topic": "Mastering the Microservices Circuit Breaker Pattern",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "System design interview questions focusing on distributed unique ID generation are staples that command high watch-time and replay value.",
-    "search_evidence": "system design interview questions",
+    "rationale": "Distributed systems failure cascades plague enterprise architecture. Providing a bulletproof visual explanation of the Closed-Open-Half-Open state machine is a staple for interview and production prep.",
+    "search_evidence": "microservices circuit breaker pattern",
     "educational_visuals": [
+      "State transitions",
       "Architecture diagrams",
-      "Data-flow diagrams"
+      "Animated system flows"
     ],
-    "hook_angle": "If an interviewer asks you to generate 100,000 unique IDs per second across regions, saying 'UUID4' is an instant reject.",
-    "channel_affinity_score": 98,
+    "hook_angle": "One down service shouldn't take down your entire microservices architecture. Here is how the Circuit Breaker saves your system.",
+    "channel_affinity_score": 100,
     "trend_score": 96,
-    "priority_score": 97,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-12T13:59:25.464Z",
+    "created_at": "2026-10-12T22:00:42.931Z",
     "used_at": null
   }
 }
