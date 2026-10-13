@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-12T23:59:11.121Z",
+  "updated_at": "2026-10-13T05:55:29.724Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791849551116_80266w",
-    "topic": "Mastering the System Design Interview: Core Architecture",
+    "id": "sugg_1791870929717_qfn1ej",
+    "topic": "Acing the System Design Interview: Core Frameworks",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "High-intent search query for engineers preparing for senior interviews who need concise, high-impact architectural blueprints.",
-    "search_evidence": "system design interview",
+    "rationale": "Capitalizes on massive search volume for career-advancing system design interview prep with a repeatable step-by-step methodology.",
+    "search_evidence": "system design interview prep",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Animated system flows"
+      "Animated system flows",
+      "Architecture diagrams"
     ],
-    "hook_angle": "Most engineers fail system design interviews in the first 2 minutes. Here is the exact architectural blueprint to ace any scale question.",
+    "hook_angle": "Failing system design interviews? Stop drawing boxes and start with this 4-step framework.",
     "channel_affinity_score": 100,
     "trend_score": 98,
     "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-12T23:59:11.116Z",
+    "created_at": "2026-10-13T05:55:29.717Z",
     "used_at": null
   }
 }
