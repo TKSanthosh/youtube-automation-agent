@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-10-13T13:15:55.610Z",
+  "updated_at": "2026-10-13T20:07:54.427Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791897355603_rem16k",
-    "topic": "Python 3.13 Free-Threaded GIL Removal: What Changes for Developers",
-    "category": "Python",
+    "id": "sugg_1791922074357_5wzjg",
+    "topic": "Ace the System Design Interview: Designing a Distributed Rate Limiter",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Python 3.13 free-threading is the biggest Python architectural shift in 20 years.",
-    "search_evidence": "python 3.13 gil removal benchmark",
+    "rationale": "System design interview prep is a perennial high-traffic category. Tackling distributed rate limiting provides immediate utility for job seekers.",
+    "search_evidence": "system design interview questions",
     "educational_visuals": [
-      "State transitions",
-      "Animated system flows",
-      "Code execution visualization"
+      "Architecture diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "Python finally has true multi-threading without the GIL. But how does it work?",
-    "channel_affinity_score": 85,
-    "trend_score": 95,
-    "priority_score": 95,
+    "hook_angle": "If an interviewer asks you to scale a rate limiter across 50 microservices, don't reach for a local dictionary.",
+    "channel_affinity_score": 100,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-13T13:15:55.603Z",
+    "created_at": "2026-10-13T20:07:54.357Z",
     "used_at": null
   }
 }
