@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-13T20:07:54.427Z",
+  "updated_at": "2026-10-13T22:08:04.451Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791922074357_5wzjg",
-    "topic": "Ace the System Design Interview: Designing a Distributed Rate Limiter",
+    "id": "sugg_1791929284444_rebh2l",
+    "topic": "Cracking the System Design Interview: Core Frameworks",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "System design interview prep is a perennial high-traffic category. Tackling distributed rate limiting provides immediate utility for job seekers.",
-    "search_evidence": "system design interview questions",
+    "rationale": "System design interviews induce massive anxiety; candidates need a repeatable, structured 4-step framework to approach open-ended architectural prompts.",
+    "search_evidence": "system design interview prep",
     "educational_visuals": [
       "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "If an interviewer asks you to scale a rate limiter across 50 microservices, don't reach for a local dictionary.",
+    "hook_angle": "Stop freezing up during system design interviews. Here is the exact 4-step framework staff engineers use.",
     "channel_affinity_score": 100,
     "trend_score": 98,
     "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-13T20:07:54.357Z",
+    "created_at": "2026-10-13T22:08:04.444Z",
     "used_at": null
   }
 }
