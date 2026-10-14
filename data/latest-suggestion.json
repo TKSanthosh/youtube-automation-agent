@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-13T22:08:04.451Z",
+  "updated_at": "2026-10-14T02:52:03.326Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791929284444_rebh2l",
-    "topic": "Cracking the System Design Interview: Core Frameworks",
+    "id": "sugg_1791946323318_m225zs",
+    "topic": "System Design Interview: Distributed Locks & Concurrency",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "System design interviews induce massive anxiety; candidates need a repeatable, structured 4-step framework to approach open-ended architectural prompts.",
-    "search_evidence": "system design interview prep",
+    "rationale": "System design interview questions focusing on distributed coordination are notoriously difficult. Breaking down Redis/ZooKeeper locks builds massive viewer trust.",
+    "search_evidence": "system design interview questions",
     "educational_visuals": [
       "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "Stop freezing up during system design interviews. Here is the exact 4-step framework staff engineers use.",
+    "hook_angle": "Two microservices write to the same database row simultaneously. How do you prevent race conditions at scale?",
     "channel_affinity_score": 100,
     "trend_score": 98,
     "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-13T22:08:04.444Z",
+    "created_at": "2026-10-14T02:52:03.318Z",
     "used_at": null
   }
 }
