@@ -1,23 +1,24 @@
 {
-  "updated_at": "2026-10-14T13:23:43.525Z",
+  "updated_at": "2026-10-14T16:13:44.758Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791984222961_ceq1op",
-    "topic": "Cracking the System Design Interview: Distributed Architectures 101",
+    "id": "sugg_1791994424752_vraiog",
+    "topic": "Acing the System Design Interview: Distributed Cache Scaling",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Extremely high search volume from engineers preparing for FAANG interviews. Translating architectural trade-offs into a rapid-fire visual breakdown maximizes replay value.",
+    "rationale": "System design interview prep is a perennial high-search traffic category. Condensing complex scaling topologies into a 3-minute vertical format hits peak engagement.",
     "search_evidence": "system design interview preparation",
     "educational_visuals": [
       "Architecture diagrams",
-      "Data-flow diagrams"
+      "Data-flow diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "Stop freezing up during system design interviews. Use this exact framework to map out any distributed scale problem.",
-    "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "hook_angle": "If an interviewer asks you to scale a Redis cluster to 100k writes per second, don't just say 'add a load balancer'. Do this instead.",
+    "channel_affinity_score": 95,
+    "trend_score": 95,
+    "priority_score": 96,
     "status": "pending",
-    "created_at": "2026-10-14T13:23:42.961Z",
+    "created_at": "2026-10-14T16:13:44.752Z",
     "used_at": null
   }
 }
