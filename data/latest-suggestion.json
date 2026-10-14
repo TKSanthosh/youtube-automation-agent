@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-14T10:54:31.066Z",
+  "updated_at": "2026-10-14T13:23:43.525Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791975271060_o82hqv",
-    "topic": "Cracking the System Design Interview: Step-by-Step Framework",
+    "id": "sugg_1791984222961_ceq1op",
+    "topic": "Cracking the System Design Interview: Distributed Architectures 101",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Perpetual high-intent search volume around interview prep makes structured problem-solving frameworks extremely high-value for watch time.",
+    "rationale": "Extremely high search volume from engineers preparing for FAANG interviews. Translating architectural trade-offs into a rapid-fire visual breakdown maximizes replay value.",
     "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "Timelines",
-      "Animated system flows"
+      "Architecture diagrams",
+      "Data-flow diagrams"
     ],
-    "hook_angle": "Failing your system design interviews? Use this 4-step framework to nail estimations, bottleneck identification, and API design.",
-    "channel_affinity_score": 98,
-    "trend_score": 97,
-    "priority_score": 97,
+    "hook_angle": "Stop freezing up during system design interviews. Use this exact framework to map out any distributed scale problem.",
+    "channel_affinity_score": 100,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-14T10:54:31.060Z",
+    "created_at": "2026-10-14T13:23:42.961Z",
     "used_at": null
   }
 }
