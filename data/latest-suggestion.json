@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-14T02:52:03.326Z",
+  "updated_at": "2026-10-14T07:13:46.235Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1791946323318_m225zs",
-    "topic": "System Design Interview: Distributed Locks & Concurrency",
-    "category": "System Design",
+    "id": "sugg_1791962026223_kmdadm",
+    "topic": "Python AsyncIO vs Threading: When to Stop Blocking",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "System design interview questions focusing on distributed coordination are notoriously difficult. Breaking down Redis/ZooKeeper locks builds massive viewer trust.",
-    "search_evidence": "system design interview questions",
+    "rationale": "Addressing the perpetual confusion between concurrency models. Developers heavily search this when their I/O-bound web scrapers or APIs hit performance bottlenecks, driving high retention through a clear architectural contrast.",
+    "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Animated system flows"
+      "State transitions",
+      "Data-flow diagrams"
     ],
-    "hook_angle": "Two microservices write to the same database row simultaneously. How do you prevent race conditions at scale?",
+    "hook_angle": "Stop using threads for I/O-bound tasks until you see how this single-threaded event loop outperforms them by 10x.",
     "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "trend_score": 95,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-14T02:52:03.318Z",
+    "created_at": "2026-10-14T07:13:46.223Z",
     "used_at": null
   }
 }
