@@ -1,0 +1,70 @@
+name: Weekly Repository Heartbeat & Keepalive
+
+on:
+  # Schedule: Runs automatically every Monday at 04:00 AM UTC
+  schedule:
+    - cron: '0 4 * * 1'
+
+  # Manual Trigger: Allows 1-click execution anytime from GitHub Actions UI
+  workflow_dispatch:
+
+concurrency:
+  group: weekly-heartbeat
+  cancel-in-progress: false
+
+jobs:
+  heartbeat-commit:
+    name: Record Weekly Heartbeat & Keep Workflows Active
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Update Heartbeat State
+        run: |
+          node -e '
+            const fs = require("fs");
+            const file = "data/automation-heartbeat.json";
+            let data = {};
+            try {
+              if (fs.existsSync(file)) {
+                data = JSON.parse(fs.readFileSync(file, "utf8"));
+              }
+            } catch (err) {}
+            data.lastHeartbeat = new Date().toISOString();
+            data.status = "active";
+            data.heartbeatCounter = (data.heartbeatCounter || 0) + 1;
+            data.keepAliveActive = true;
+            data.note = "Automated repository heartbeat to maintain scheduled workflow liveness and prevent GitHub Actions inactivity shutdown.";
+            fs.mkdirSync("data", { recursive: true });
+            fs.writeFileSync(file, JSON.stringify(data, null, 2) + "\n");
+            console.log("Updated heartbeat counter to:", data.heartbeatCounter, "at", data.lastHeartbeat);
+          '
+
+      - name: Commit & Push Heartbeat
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add data/automation-heartbeat.json
+
+          if git diff --staged --quiet; then
+            echo "No state changes to commit."
+          else
+            git commit -m "chore(automation): weekly repository heartbeat [skip ci]"
+            git pull --rebase origin master || true
+            git push origin HEAD:master
+            echo "Successfully pushed weekly heartbeat commit."
+          fi
