@@ -3,5 +3,8 @@
   "lastVoice": "en-US-JennyNeural",
   "gentIndex": 1,
   "ladyIndex": 2,
-  "updatedAt": "2026-10-25T13:39:59.973Z"
+  "updatedAt": "2026-10-25T13:48:26.132Z",
+  "geminiIndex": 0,
+  "lastGeminiVoice": "Fenrir",
+  "lastGeminiGender": "male"
 }
