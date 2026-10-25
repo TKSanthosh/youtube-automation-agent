@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-10-25T14:42:41.447Z",
+  "updated_at": "2026-10-25T19:27:34.958Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1792939361442_a9pz9g",
-    "topic": "Python 3.13 Free-Threaded GIL Removal: What Changes for Developers",
+    "id": "sugg_1792956454942_ts0ly2",
+    "topic": "Python AsyncIO vs Threading: When to Stop Hitting Threads",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Python 3.13 free-threading is the biggest Python architectural shift in 20 years.",
-    "search_evidence": "python 3.13 gil removal benchmark",
+    "rationale": "Developers repeatedly hit performance walls using multithreading for I/O bound tasks due to the GIL. Contrasting threads with AsyncIO under the hood drives massive retention as viewers look for definitive execution model guidance.",
+    "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
       "State transitions",
-      "Animated system flows",
-      "Code execution visualization"
+      "Data-flow diagrams"
     ],
-    "hook_angle": "Python finally has true multi-threading without the GIL. But how does it work?",
-    "channel_affinity_score": 85,
+    "hook_angle": "Stop using Python threads for high-concurrency web scrapers until you've seen this exact bottleneck.",
+    "channel_affinity_score": 100,
     "trend_score": 95,
-    "priority_score": 95,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-25T14:42:41.442Z",
+    "created_at": "2026-10-25T19:27:34.942Z",
     "used_at": null
   }
 }
