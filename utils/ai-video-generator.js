@@ -181,7 +181,14 @@ class AIVideoGenerator {
     }
   }
 
-  getRotatedGeminiVoice(_options = {}) {
+  getRotatedGeminiVoice(options = {}) {
+    if (options.voice) {
+      return {
+        voice: options.voice,
+        model: options.model || process.env.GEMINI_TTS_MODEL || 'gemini-3.8-flash-tts',
+        gender: options.gender || 'male'
+      };
+    }
     if (process.env.GEMINI_TTS_VOICE) {
       return {
         voice: process.env.GEMINI_TTS_VOICE,
@@ -233,7 +240,13 @@ class AIVideoGenerator {
     };
   }
 
-  getRotatedOpenAIVoice(_options = {}) {
+  getRotatedOpenAIVoice(options = {}) {
+    if (options.voice) {
+      return {
+        voice: options.voice,
+        model: options.model || process.env.OPENAI_TTS_MODEL || 'tts-1-hd'
+      };
+    }
     if (process.env.OPENAI_TTS_VOICE) {
       return {
         voice: process.env.OPENAI_TTS_VOICE,
@@ -284,6 +297,9 @@ class AIVideoGenerator {
   }
 
   getRotatedVoice(options = {}) {
+    if (options.voice) {
+      return { voice: options.voice, gender: options.gender || 'custom' };
+    }
     if (process.env.MSEDGE_TTS_VOICE) {
       return { voice: process.env.MSEDGE_TTS_VOICE, gender: 'custom' };
     }
@@ -824,7 +840,7 @@ class AIVideoGenerator {
         }
       }
 
-      const produced = await this.generateSlideshowVideo(script, visualAssets, audioPath, outputPath);
+      const produced = await this.generateSlideshowVideo(script, visualAssets, audioPath, outputPath, options);
       this.lastVideoResult = { requestedProvider: 'slideshow', actualProvider: 'slideshow', model: 'local-ffmpeg', mode: 'slideshow', generatedSeconds: 0, tasks: [], scenes: [] };
       return produced;
     } catch (error) {
@@ -834,7 +850,7 @@ class AIVideoGenerator {
       const reason = error && error.message ? error.message : String(error);
       this.logger.error(`Video provider generation failed; using the local slideshow: ${reason}`, error);
       try {
-        const produced = await this.generateSlideshowVideo(script, visualAssets, audioPath, outputPath);
+        const produced = await this.generateSlideshowVideo(script, visualAssets, audioPath, outputPath, options);
         this.lastVideoResult = {
           requestedProvider: this.lastVideoResult?.requestedProvider || 'configured-provider',
           actualProvider: 'slideshow', model: 'local-ffmpeg', mode: 'fallback', generatedSeconds: 0,
@@ -932,7 +948,7 @@ class AIVideoGenerator {
     return outputPath;
   }
 
-  async generateSlideshowVideo(script, visualAssets, audioPath, outputPath) {
+  async generateSlideshowVideo(script, visualAssets, audioPath, outputPath, options = {}) {
     this.logger.info('Creating slideshow video...');
 
     if (!(await checkFFmpeg())) {
@@ -980,6 +996,12 @@ class AIVideoGenerator {
       const slideSegments = [];
       const slideAudios = [];
 
+      // Lock ONE consistent voice persona for the ENTIRE video to prevent voice jumping across slides
+      const videoVoiceOptions = this.gemini
+        ? this.getRotatedGeminiVoice(options)
+        : (this.openai ? this.getRotatedOpenAIVoice(options) : this.getRotatedVoice(options));
+      this.logger.info(`Locked narrator for entire 3-minute video: ${videoVoiceOptions.voice || 'default'} (${videoVoiceOptions.gender || 'instructor'})`);
+
       for (let i = 0; i < stills.length; i++) {
         const stillPath = stills[i];
         const slideData = slidesList[i] || {};
@@ -997,18 +1019,18 @@ class AIVideoGenerator {
         let audioSuccess = false;
         if (narrationText) {
           try {
-            await this.generateTTSAudio(narrationText, slideAudioPath);
+            await this.generateTTSAudio(narrationText, slideAudioPath, videoVoiceOptions);
             audioSuccess = await this.isUsableAudioFile(slideAudioPath);
           } catch (ttsErr) {
             this.logger.warn(`Slide ${i + 1} TTS synthesis error: ${ttsErr.message}`);
           }
         }
 
-        let slideDuration = 38;
+        let slideDuration = 45;
         if (audioSuccess) {
           const rawDur = await this.getAudioDuration(slideAudioPath);
           if (rawDur > 0) {
-            slideDuration = Number((rawDur + 0.5).toFixed(2));
+            slideDuration = Number((rawDur + 0.6).toFixed(2));
           }
         } else {
           await runFFmpeg([
@@ -1025,61 +1047,23 @@ class AIVideoGenerator {
 
         this.logger.info(`Rendering synchronized Slide ${i + 1}/${stills.length}: duration=${slideDuration}s`);
 
-        // Generate per-slide synchronized captions
-        let srtFile = null;
-        if (narrationText) {
-          try {
-            srtFile = path.join(slidesDir, `slide_${String(i).padStart(3, '0')}.srt`);
-            await fs.writeFile(srtFile, this.generateSlideSRT(narrationText, slideDuration));
-          } catch (_srtErr) {
-            srtFile = null;
-          }
-        }
-
-        // Render dynamic motion (Ken Burns zoompan) + bold high-contrast subtitles
-        const totalFrames = Math.max(30, Math.ceil(slideDuration * 30));
-        const zoompanFilter = (i % 2 === 0)
-          ? `zoompan=z='min(zoom+0.0004,1.05)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${totalFrames}:s=1080x1920:fps=30`
-          : `zoompan=z='max(1.05-0.0004*on,1.0)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${totalFrames}:s=1080x1920:fps=30`;
-
-        let vfFilter = zoompanFilter;
-        if (srtFile) {
-          const srtEscaped = srtFile.replace(/\\/g, '/').replace(/:/g, '\\:');
-          vfFilter += `,subtitles='${srtEscaped}':force_style='Fontname=Arial,Fontsize=22,Bold=1,PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=4,Outline=2,Shadow=2,Alignment=2,MarginV=280'`;
-        }
-
-        try {
-          await runFFmpeg([
-            '-y',
-            '-i', stillPath,
-            '-i', slideAudioPath,
-            '-vf', vfFilter,
-            '-c:v', 'libx264',
-            '-preset', 'ultrafast',
-            '-pix_fmt', 'yuv420p',
-            '-c:a', 'aac',
-            '-b:a', '192k',
-            '-shortest',
-            segmentVideoPath
-          ]);
-        } catch (_vfErr) {
-          this.logger.warn(`Cinematic render fallback on Slide ${i + 1}: ${_vfErr.message}`);
-          await runFFmpeg([
-            '-y',
-            '-loop', '1',
-            '-t', String(slideDuration),
-            '-i', stillPath,
-            '-i', slideAudioPath,
-            '-c:v', 'libx264',
-            '-preset', 'ultrafast',
-            '-pix_fmt', 'yuv420p',
-            '-vf', 'scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black,fps=30',
-            '-c:a', 'aac',
-            '-b:a', '128k',
-            '-shortest',
-            segmentVideoPath
-          ]);
-        }
+        // Render razor-sharp, pixel-perfect 1080x1920 high-def slide video locked to narration
+        await runFFmpeg([
+          '-y',
+          '-loop', '1',
+          '-t', String(slideDuration),
+          '-i', stillPath,
+          '-i', slideAudioPath,
+          '-c:v', 'libx264',
+          '-preset', 'medium',
+          '-tune', 'stillimage',
+          '-pix_fmt', 'yuv420p',
+          '-vf', 'scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black,fps=30',
+          '-c:a', 'aac',
+          '-b:a', '192k',
+          '-shortest',
+          segmentVideoPath
+        ]);
 
         slideSegments.push(segmentVideoPath);
       }
@@ -1666,14 +1650,6 @@ class AIVideoGenerator {
             <pre class="code-block"><code>${this.escapeHTML(slide.codeSnippet)}</code></pre>
         </div>` : '';
 
-      const isFinalSlide = idx === script.slides.length - 1;
-      const interactionHTML = isFinalSlide ? `
-        <div class="interaction-card" style="border-color: ${theme.accent};">
-            <div class="interaction-badge">💬 COMMUNITY POLL & DISCUSSION</div>
-            <div class="interaction-question">${this.escapeHTML(slide.question || "How would you handle this pattern in your production stack? Drop a comment below 👇")}</div>
-            <div class="interaction-subtext">⚡ Save this Short & Follow for daily senior engineer blueprints!</div>
-        </div>` : '';
-
       return `
       <div class="slide ${idx === 0 ? 'active' : ''}">
           <div class="shorts-progress-bar-wrap">
@@ -1692,7 +1668,6 @@ class AIVideoGenerator {
               ${bulletsHTML ? `<div class="bullet-container">${bulletsHTML}</div>` : ''}
               ${diagramHTML}
               ${codeHTML}
-              ${interactionHTML}
           </div>
           <div class="slide-number" style="color: ${theme.accent}40">${String(idx + 1).padStart(2, '0')}</div>
       </div>`;
@@ -2030,37 +2005,6 @@ class AIVideoGenerator {
             transition: width 0.3s ease;
         }
 
-        /* Customer & viewer interactive engagement card */
-        .interaction-card {
-            width: 100%;
-            margin-top: 25px;
-            background: rgba(15, 23, 42, 0.95);
-            border: 2px solid ${theme.accent};
-            border-radius: 20px;
-            padding: 26px 30px;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 35px rgba(${theme.accentRGB}, 0.25);
-            animation: pulse-glow 3s ease-in-out infinite;
-        }
-        .interaction-badge {
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: 1.5px;
-            color: ${theme.accent};
-            text-transform: uppercase;
-            margin-bottom: 12px;
-        }
-        .interaction-question {
-            font-size: 30px;
-            font-weight: 700;
-            color: #ffffff;
-            line-height: 1.35;
-            margin-bottom: 14px;
-        }
-        .interaction-subtext {
-            font-size: 22px;
-            font-weight: 500;
-            color: #94a3b8;
-        }
     </style>
 </head>
 <body>

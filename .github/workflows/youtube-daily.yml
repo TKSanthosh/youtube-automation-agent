@@ -13,7 +13,7 @@ on:
         required: true
         default: '1'
       format:
-        description: 'Video Format / Length (High-Engagement Viral YouTube Shorts 50-70s)'
+        description: 'Video Format / Length (Full 3-Minute Technical Shorts Masterclass)'
         required: true
         type: choice
         default: 'short'

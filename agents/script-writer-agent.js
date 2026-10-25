@@ -178,29 +178,22 @@ Our channel rule: THIS video MUST surpass our previous upload (previous quality 
     const prompt = `You are a renowned principal software architect and passionate tech educator creating a YouTube Short on: "${strategy.topic}".
 Your goal is to teach this technical concept clearly, thoroughly, and completely so that even junior developers immediately get it, while senior engineers appreciate the depth.
 ${evoBlock}
-CRITICAL CONSTRAINTS FOR VIRAL YOUTUBE SHORTS (HIGH RETENTION & PACING):
-1. OPTIMAL SHORTS DURATION: Total video narration MUST be between 50 and 70 seconds (~130 to 160 total words across all 4 slides at a punchy ~140 wpm pacing).
-   - Fast, engaging, zero fluff! Do not drag out explanations; deliver high value per second.
-   - Pacing must keep mobile viewers hooked from start to finish!
+CRITICAL CONSTRAINTS FOR 3-MINUTE YOUTUBE SHORTS MASTERCLASS (FULL 3 MINUTES & DEEP TEACHING):
+1. FULL 3-MINUTE DURATION: Total video narration MUST be between 2:45 and 3:00 minutes (165 to 180 seconds).
+   - Total narration across all 4 slides MUST be 420 to 460 words (~100 to 115 words per slide at ~145-150 wpm pacing).
+   - Do NOT rush! Deliver a full masterclass that completely demystifies the topic with zero hand-waving.
 
-2. IMMEDIATE HIGH-IMPACT HOOK (First 2 Seconds):
-   - Start immediately with the counterintuitive insight, mistake, or urgent developer question.
-   - Zero greetings ("hey guys", "welcome back")! Jump right into the fire.
+2. TEACHING STYLE:
+   - Talk like a passionate, world-class principal software architect doing a whiteboard deep dive.
+   - Use funny, relatable real-world developer analogies (e.g. debugging at 2 AM, caffeine-fueled refactors, production outages caused by cascading retries).
+   - NEVER read the slide bullet points verbatim! The slides are visual anchors; you talk directly to the engineer and walk through what is on the screen ("Look at line 3 on your screen...", "Notice what happens when this flag is toggled...").
+   - ZERO REPETITION: Advance the teaching with fresh, actionable engineering insights every slide.
 
-3. 100% COMPLETE VALUE IN UNDER 70 SECONDS:
-   - Clear progression: Problem ➔ Architecture / Mental Model ➔ Code / Fix ➔ Senior Rule & Discussion.
-   - The viewer must walk away with a practical, memorable takeaway.
-
-4. TALK LIKE A PASSIONATE SENIOR ENGINEER:
-   - Punchy, conversational, and energetic.
-   - Speak directly to the viewer ("Notice line 3...", "Here is the trap...")
-   - Slide 4 MUST include an interactive question that drives comments!
-
-4 PROGRESSIVE SLIDES (Total: 130-160 words):
-- Slide 1: The Urgent Problem & Hidden Trap (30-35 words)
-- Slide 2: The Mental Model & Architecture Diagram (35-40 words)
-- Slide 3: Practical Code Solution (35-45 words)
-- Slide 4: Senior Dev Rule of Thumb & Community Question (30-35 words)
+4 PROGRESSIVE SLIDES (Total: 420-460 words):
+- Slide 1: The Production Nightmare & Relatable Disaster (Focus on 1 concrete pain point; 95-105 words)
+- Slide 2: Under-The-Hood Architecture & The Mental Model (Intuitive mental model with visual diagram; 105-115 words)
+- Slide 3: Practical Implementation & Code Walkthrough (Explain the code on screen line-by-line; 115-125 words)
+- Slide 4: Senior Dev Rule of Thumb, Failure Modes & Key Takeaway (Full closure and golden rule of thumb; 95-105 words)
 
 Return ONLY valid JSON matching this exact structure:
 {
@@ -216,7 +209,7 @@ Return ONLY valid JSON matching this exact structure:
         "The hidden bottleneck devs miss in code review"
       ],
       "codeSnippet": "",
-      "teacherNarration": "Conversational, witty, energetic teacher explanation of the problem with a relatable developer struggle (80-90 words). Does NOT read the slide bullets."
+      "teacherNarration": "Conversational, witty, energetic teacher explanation of the problem with a relatable developer struggle (95-105 words). Does NOT read the slide bullets."
     },
     {
       "slideNumber": 2,
@@ -237,7 +230,7 @@ Return ONLY valid JSON matching this exact structure:
         "flowLabel": "Client (HTTPS) ➔ Controller ➔ Worker Pods ➔ State"
       },
       "codeSnippet": "",
-      "teacherNarration": "Conversational teacher explanation with a brilliant real-world analogy and zero slide reading (90-100 words). If you point to what is on screen, discuss the exact architecture nodes displayed on this slide."
+      "teacherNarration": "Conversational teacher explanation with a brilliant real-world analogy and zero slide reading (105-115 words). If you point to what is on screen, discuss the exact architecture nodes displayed on this slide."
     },
     {
       "slideNumber": 3,
@@ -248,7 +241,7 @@ Return ONLY valid JSON matching this exact structure:
         "Graceful fallback on timeout"
       ],
       "codeSnippet": "10-14 lines of clean practical code or config",
-      "teacherNarration": "Teacher walks through the code shown on screen line by line explaining why each line matters (35-45 words)."
+      "teacherNarration": "Teacher walks through the code shown on screen line by line explaining why each line matters (115-125 words)."
     },
     {
       "slideNumber": 4,
@@ -259,8 +252,7 @@ Return ONLY valid JSON matching this exact structure:
         "Key benchmark to monitor"
       ],
       "codeSnippet": "",
-      "question": "Engaging technical question to drive viewer comments and discussion (e.g. 'How would you handle this at 50k RPS?')",
-      "teacherNarration": "Punchy concluding rule of thumb and high-energy question inviting viewer comments (30-35 words)."
+      "teacherNarration": "Memorable concluding rule of thumb providing complete pedagogical closure and resolution without generic subscribe begging (95-105 words)."
     }
   ],
   "conclusion": "One-line golden rule of thumb for senior engineers"
@@ -317,7 +309,7 @@ Return ONLY valid JSON matching this exact structure:
           nextVideo: "",
           duration: '0 seconds'
         },
-        duration: '1:00',
+        duration: '3:00',
         tone: template.tone,
         pacing: template.pacing,
         keywords: strategy.keywords || [],
@@ -338,17 +330,17 @@ Return ONLY valid JSON matching this exact structure:
   ensurePedagogicalNarrationDepth(slide, topic, idx) {
     let narration = String(slide.teacherNarration || slide.narration || '').trim();
     const wordCount = narration.split(/\s+/).filter(Boolean).length;
-    if (wordCount >= 20) return narration;
+    if (wordCount >= 85) return narration;
 
     const topicClean = topic || 'this architecture';
     if (idx === 0) {
-      narration = `${narration ? narration + ' ' : ''}When building ${topicClean}, standard implementations look clean in local staging but quickly collapse under real production spikes.`.trim();
+      narration = `${narration ? narration + ' ' : ''}When engineers first implement ${topicClean}, standard textbook solutions look deceivingly simple in local staging environments, but instantly collapse the moment real production traffic spikes. As concurrent requests flood the ingress, unhandled downstream latencies cascade across upstream microservices, causing worker thread pool exhaustion and catastrophic cluster-wide outages. Notice what happens without intelligent backpressure: a single degraded dependency starves system resources and triggers a domino effect that takes down your entire distributed platform. Let's break down the exact engineering mechanics required to eliminate this failure permanently.`.trim();
     } else if (idx === 1) {
-      narration = `${narration ? narration + ' ' : ''}To solve this cleanly, notice the underlying architecture on screen: we decouple incoming requests from internal worker queues.`.trim();
+      narration = `${narration ? narration + ' ' : ''}To solve this cleanly, let's examine the underlying architecture and mental model displayed directly on your screen. Instead of allowing callers to continuously hammer failing endpoints and consume thread capacity, we place an intelligent, stateful boundary layer directly in the critical request path. Notice the sequence: incoming traffic passes through our active health evaluation threshold. When failure rates breach the safety margin, the circuit trips instantly into an open state, serving deterministic fallbacks before resources saturate. This isolates faults, preserves memory buffers, and grants downstream dependencies the breathing room needed to recover gracefully.`.trim();
     } else if (idx === 2) {
-      narration = `${narration ? narration + ' ' : ''}Look at the code implementation on screen: we configure explicit timeouts and structured fallback handlers to shield the database.`.trim();
+      narration = `${narration ? narration + ' ' : ''}Now let's walk through the production implementation directly on your screen. Look at line 1: we configure explicit timeout thresholds paired with isolated execution pools to prevent thread contention. As you trace down through the execution handler, notice that every external I/O call is guarded within a monitored context. If the downstream service is healthy, execution proceeds with zero latency overhead. But the moment consecutive failures exceed the tripping threshold, the guard intercepts the execution path immediately, bypassing slow network timeouts and shielding your core database layer from connection starvation.`.trim();
     } else {
-      narration = `${narration ? narration + ' ' : ''}Here is the senior engineer rule of thumb: always benchmark latency at p99 before shipping ${topicClean} to production.`.trim();
+      narration = `${narration ? narration + ' ' : ''}Here is the golden rule of thumb that senior staff engineers always keep in mind: never deploy ${topicClean} with static, hardcoded configuration values. Always tune your latency thresholds based on empirical 99th percentile production telemetry, and pair every fallback handler with automated metric alarms and circuit reset monitors. By designing systems around failure-tolerant boundaries, you eliminate cascading outages and guarantee self-healing resilience across your entire tech stack. Implement this pattern in your production codebase today.`.trim();
     }
     return narration;
   }
