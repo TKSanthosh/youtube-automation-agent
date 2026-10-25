@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-25T19:27:34.958Z",
+  "updated_at": "2026-10-25T20:32:46.882Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1792956454942_ts0ly2",
-    "topic": "Python AsyncIO vs Threading: When to Stop Hitting Threads",
-    "category": "Python",
+    "id": "sugg_1792960366875_1h1ddr",
+    "topic": "Cracking Distributed Systems Architecture in Interviews",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Developers repeatedly hit performance walls using multithreading for I/O bound tasks due to the GIL. Contrasting threads with AsyncIO under the hood drives massive retention as viewers look for definitive execution model guidance.",
-    "search_evidence": "python asyncio vs threading",
+    "rationale": "Directly captures the massive audience preparing for system design interviews, focusing on scalable architectural building blocks.",
+    "search_evidence": "distributed systems architecture",
     "educational_visuals": [
-      "State transitions",
-      "Data-flow diagrams"
+      "Animated system flows",
+      "Architecture diagrams"
     ],
-    "hook_angle": "Stop using Python threads for high-concurrency web scrapers until you've seen this exact bottleneck.",
-    "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 98,
+    "hook_angle": "Stop freezing up during system design interviews when asked to scale a read-heavy distributed database. Here is your architectural blueprint.",
+    "channel_affinity_score": 92,
+    "trend_score": 96,
+    "priority_score": 94,
     "status": "pending",
-    "created_at": "2026-10-25T19:27:34.942Z",
+    "created_at": "2026-10-25T20:32:46.875Z",
     "used_at": null
   }
 }
