@@ -67,8 +67,21 @@ class AIVideoGenerator {
 
     try {
       let generatedPath = null;
-      // 1. ElevenLabs (if configured)
-      if (this.elevenLabsApiKey && this.elevenLabsVoiceId) {
+      // 1. Gemini Neural TTS (100% Free Tier: gemini-3.8-flash-tts / gemini-3.8-flash-lite-tts with prebuilt voices)
+      if (this.gemini) {
+        try {
+          provider = 'gemini';
+          const { voice: geminiVoice, model: gModel, gender } = this.getRotatedGeminiVoice(options);
+          model = gModel;
+          this.logger.info(`Synthesizing humanized neural voice via Gemini (${model}, voice: ${geminiVoice} [${gender}])...`);
+          generatedPath = await this.generateGeminiTTS(text, outputPath, { model, voice: geminiVoice });
+        } catch (e) {
+          this.logger.warn(`Gemini TTS failed: ${e.message}`);
+        }
+      }
+
+      // 2. ElevenLabs (if configured)
+      if (!generatedPath && this.elevenLabsApiKey && this.elevenLabsVoiceId) {
         try {
           provider = 'elevenlabs';
           model = this.elevenLabsModel;
@@ -79,7 +92,7 @@ class AIVideoGenerator {
         }
       }
 
-      // 2. OpenAI Studio Voices (tts-1-hd / tts-1 with human-like prosody)
+      // 3. OpenAI Studio Voices (tts-1-hd / tts-1 with human-like prosody)
       if (!generatedPath && this.openai) {
         try {
           provider = 'openai';
@@ -89,19 +102,6 @@ class AIVideoGenerator {
           generatedPath = await this.generateOpenAITTS(text, outputPath, { model, voice: openAIVoice });
         } catch (e) {
           this.logger.warn(`OpenAI TTS failed: ${e.message}`);
-        }
-      }
-
-      // 3. Gemini Neural TTS (gemini-3.8-flash-tts / gemini-3.8-flash-lite-tts with prebuilt voices)
-      if (!generatedPath && this.gemini) {
-        try {
-          provider = 'gemini';
-          const { voice: geminiVoice, model: gModel, gender } = this.getRotatedGeminiVoice(options);
-          model = gModel;
-          this.logger.info(`Synthesizing humanized neural voice via Gemini (${model}, voice: ${geminiVoice} [${gender}])...`);
-          generatedPath = await this.generateGeminiTTS(text, outputPath, { model, voice: geminiVoice });
-        } catch (e) {
-          this.logger.warn(`Gemini TTS failed: ${e.message}`);
         }
       }
 

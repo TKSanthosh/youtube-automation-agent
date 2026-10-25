@@ -66,16 +66,17 @@ class AITextService {
       return this._initOpenAICompatible(PROVIDERS[provider], apiKey, model);
     }
 
+    // Prioritize 100% Free Tier: Google Gemini first
+    const geminiKey = credentials.gemini?.apiKey || process.env.GEMINI_API_KEY;
+    if (geminiKey) {
+      return this._initGemini(geminiKey, credentials.gemini?.model);
+    }
+
     for (const [, preset] of Object.entries(PROVIDERS)) {
       const key = process.env[preset.envKey];
       if (key) {
         return this._initOpenAICompatible(preset, key);
       }
-    }
-
-    const geminiKey = credentials.gemini?.apiKey || process.env.GEMINI_API_KEY;
-    if (geminiKey) {
-      return this._initGemini(geminiKey, credentials.gemini?.model);
     }
 
     this.logger.warn('No AI text provider configured — text generation unavailable');
