@@ -60,22 +60,52 @@ class AIVideoGenerator {
   }
 
   async generateTTSAudio(text, outputPath, options = {}) {
-    this.logger.info('Generating TTS audio...');
+    this.logger.info('Generating enhanced humanized TTS audio...');
     this.lastNarrationResult = null;
     let provider = 'simulation';
     let model = null;
 
     try {
       let generatedPath = null;
+      // 1. ElevenLabs (if configured)
       if (this.elevenLabsApiKey && this.elevenLabsVoiceId) {
         try {
           provider = 'elevenlabs';
           model = this.elevenLabsModel;
+          this.logger.info(`Synthesizing premium voice via ElevenLabs (${model})...`);
           generatedPath = await this.generateElevenLabsTTS(text, outputPath);
         } catch (e) {
           this.logger.warn(`ElevenLabs TTS failed: ${e.message}`);
         }
       }
+
+      // 2. OpenAI Studio Voices (tts-1-hd / tts-1 with human-like prosody)
+      if (!generatedPath && this.openai) {
+        try {
+          provider = 'openai';
+          const { voice: openAIVoice, model: oModel } = this.getRotatedOpenAIVoice(options);
+          model = oModel;
+          this.logger.info(`Synthesizing studio voice via OpenAI TTS (${model}, voice: ${openAIVoice})...`);
+          generatedPath = await this.generateOpenAITTS(text, outputPath, { model, voice: openAIVoice });
+        } catch (e) {
+          this.logger.warn(`OpenAI TTS failed: ${e.message}`);
+        }
+      }
+
+      // 3. Gemini Neural TTS (gemini-3.8-flash-tts / gemini-3.8-flash-lite-tts with prebuilt voices)
+      if (!generatedPath && this.gemini) {
+        try {
+          provider = 'gemini';
+          const { voice: geminiVoice, model: gModel, gender } = this.getRotatedGeminiVoice(options);
+          model = gModel;
+          this.logger.info(`Synthesizing humanized neural voice via Gemini (${model}, voice: ${geminiVoice} [${gender}])...`);
+          generatedPath = await this.generateGeminiTTS(text, outputPath, { model, voice: geminiVoice });
+        } catch (e) {
+          this.logger.warn(`Gemini TTS failed: ${e.message}`);
+        }
+      }
+
+      // 4. MsEdge Neural Voice fallback (if reachable)
       if (!generatedPath) {
         try {
           provider = 'msedge-neural';
@@ -87,15 +117,8 @@ class AIVideoGenerator {
           this.logger.warn(`MsEdge Neural TTS failed: ${e.message}`);
         }
       }
-      if (!generatedPath && this.gemini) {
-        try {
-          provider = 'gemini';
-          model = process.env.GEMINI_TTS_MODEL || 'gemini-3.1-flash-tts-preview';
-          generatedPath = await this.generateGeminiTTS(text, outputPath);
-        } catch (e) {
-          this.logger.warn(`Gemini TTS failed: ${e.message}; using universal speech engine`);
-        }
-      }
+
+      // 5. High-reliability speech fallback
       if (!generatedPath) {
         provider = 'free-tts';
         model = 'google-speech';
@@ -103,6 +126,11 @@ class AIVideoGenerator {
       }
 
       const usable = await this.isUsableAudioFile(generatedPath);
+      if (usable) {
+        // Apply broadcast studio mastering (dynamic range normalization & EQ presence boost)
+        await this.masterAudioFile(generatedPath);
+      }
+
       this.lastNarrationResult = {
         status: usable ? 'ready' : 'unavailable',
         path: generatedPath,
@@ -126,6 +154,133 @@ class AIVideoGenerator {
       };
       return synthPath;
     }
+  }
+
+  async masterAudioFile(audioPath) {
+    try {
+      const fsSync = require('fs');
+      if (!fsSync.existsSync(audioPath) || fsSync.statSync(audioPath).size < 1000) return;
+      const masteredTemp = `${audioPath}.mastered.mp3`;
+      await runFFmpeg([
+        '-y',
+        '-i', audioPath,
+        '-af', 'dynaudnorm=p=0.9:m=10.0:s=12:g=15,volume=1.15',
+        '-c:a', 'libmp3lame',
+        '-b:a', '192k',
+        masteredTemp
+      ]);
+      if (fsSync.existsSync(masteredTemp) && fsSync.statSync(masteredTemp).size > 1000) {
+        await fs.unlink(audioPath).catch(() => {});
+        await fs.rename(masteredTemp, audioPath);
+        this.logger.info(`Studio broadcast audio mastering applied: ${path.basename(audioPath)}`);
+      } else {
+        await fs.unlink(masteredTemp).catch(() => {});
+      }
+    } catch (err) {
+      this.logger.warn(`Audio mastering notice: ${err.message}`);
+    }
+  }
+
+  getRotatedGeminiVoice(_options = {}) {
+    if (process.env.GEMINI_TTS_VOICE) {
+      return {
+        voice: process.env.GEMINI_TTS_VOICE,
+        model: process.env.GEMINI_TTS_MODEL || 'gemini-3.8-flash-tts',
+        gender: 'custom'
+      };
+    }
+
+    const fsSync = require('fs');
+    const path = require('path');
+    const stateFile = path.join(__dirname, '..', 'data', 'voice_state.json');
+
+    const voices = [
+      { name: 'Puck', desc: 'Warm, natural conversational male instructor', gender: 'male' },
+      { name: 'Kore', desc: 'Approachable, clear articulate female mentor', gender: 'female' },
+      { name: 'Charon', desc: 'Deep, resonant authoritative senior architect', gender: 'male' },
+      { name: 'Aoede', desc: 'Expressive, energetic modern female presenter', gender: 'female' },
+      { name: 'Fenrir', desc: 'Sharp, dynamic tech lead male', gender: 'male' }
+    ];
+
+    let geminiIndex = 0;
+    try {
+      if (fsSync.existsSync(stateFile)) {
+        const raw = JSON.parse(fsSync.readFileSync(stateFile, 'utf8'));
+        geminiIndex = Number.isInteger(raw.geminiIndex) ? raw.geminiIndex : 0;
+      }
+    } catch (_e) {}
+
+    const selected = voices[geminiIndex % voices.length];
+    const nextIdx = (geminiIndex + 1) % voices.length;
+
+    try {
+      let state = {};
+      if (fsSync.existsSync(stateFile)) {
+        try { state = JSON.parse(fsSync.readFileSync(stateFile, 'utf8')); } catch (_e) {}
+      }
+      state.geminiIndex = nextIdx;
+      state.lastGeminiVoice = selected.name;
+      state.lastGeminiGender = selected.gender;
+      state.updatedAt = new Date().toISOString();
+      fsSync.mkdirSync(path.dirname(stateFile), { recursive: true });
+      fsSync.writeFileSync(stateFile, JSON.stringify(state, null, 2));
+    } catch (_e) {}
+
+    return {
+      voice: selected.name,
+      model: process.env.GEMINI_TTS_MODEL || 'gemini-3.8-flash-tts',
+      gender: selected.gender
+    };
+  }
+
+  getRotatedOpenAIVoice(_options = {}) {
+    if (process.env.OPENAI_TTS_VOICE) {
+      return {
+        voice: process.env.OPENAI_TTS_VOICE,
+        model: process.env.OPENAI_TTS_MODEL || 'tts-1-hd'
+      };
+    }
+
+    const fsSync = require('fs');
+    const path = require('path');
+    const stateFile = path.join(__dirname, '..', 'data', 'voice_state.json');
+
+    const voices = [
+      { name: 'nova', gender: 'female', desc: 'Energetic, crisp, engaging' },
+      { name: 'onyx', gender: 'male', desc: 'Deep, authoritative, confident' },
+      { name: 'alloy', gender: 'neutral', desc: 'Clean, balanced, modern' },
+      { name: 'echo', gender: 'male', desc: 'Smooth, conversational educator' },
+      { name: 'fable', gender: 'expressive', desc: 'Dynamic, storytelling tone' },
+      { name: 'shimmer', gender: 'female', desc: 'Warm, clear, optimistic' }
+    ];
+
+    let openaiIndex = 0;
+    try {
+      if (fsSync.existsSync(stateFile)) {
+        const raw = JSON.parse(fsSync.readFileSync(stateFile, 'utf8'));
+        openaiIndex = Number.isInteger(raw.openaiIndex) ? raw.openaiIndex : 0;
+      }
+    } catch (_e) {}
+
+    const selected = voices[openaiIndex % voices.length];
+    const nextIdx = (openaiIndex + 1) % voices.length;
+
+    try {
+      let state = {};
+      if (fsSync.existsSync(stateFile)) {
+        try { state = JSON.parse(fsSync.readFileSync(stateFile, 'utf8')); } catch (_e) {}
+      }
+      state.openaiIndex = nextIdx;
+      state.lastOpenAIVoice = selected.name;
+      state.updatedAt = new Date().toISOString();
+      fsSync.mkdirSync(path.dirname(stateFile), { recursive: true });
+      fsSync.writeFileSync(stateFile, JSON.stringify(state, null, 2));
+    } catch (_e) {}
+
+    return {
+      voice: selected.name,
+      model: process.env.OPENAI_TTS_MODEL || 'tts-1-hd'
+    };
   }
 
   getRotatedVoice(options = {}) {
@@ -431,50 +586,75 @@ class AIVideoGenerator {
     });
   }
 
-  async generateOpenAITTS(text, outputPath) {
+  async generateOpenAITTS(text, outputPath, options = {}) {
+    if (!this.openai) throw new Error('OpenAI client not initialized');
+    const model = options.model || process.env.OPENAI_TTS_MODEL || 'tts-1-hd';
+    const voice = options.voice || 'nova';
+
     const response = await this.openai.audio.speech.create({
-      model: process.env.OPENAI_TTS_MODEL || "tts-1",
-      voice: "coral",
+      model,
+      voice,
       input: text,
-      speed: 1.0
+      speed: 1.05
     });
 
     const buffer = Buffer.from(await response.arrayBuffer());
     await fs.writeFile(outputPath, buffer);
 
-    this.logger.info('OpenAI TTS generation complete');
+    this.logger.info(`OpenAI TTS generation complete (${model}, voice: ${voice})`);
     return outputPath;
   }
 
-  async generateGeminiTTS(text, outputPath) {
-    const model = process.env.GEMINI_TTS_MODEL || 'gemini-3.1-flash-tts-preview';
-    const voiceName = process.env.GEMINI_TTS_VOICE || 'Kore';
+  async generateGeminiTTS(text, outputPath, options = {}) {
+    const defaultModel = 'gemini-3.8-flash-tts';
+    const model = options.model || process.env.GEMINI_TTS_MODEL || defaultModel;
+    const voiceName = options.voice || process.env.GEMINI_TTS_VOICE || 'Puck';
 
-    const response = await this.gemini.models.generateContent({
-      model,
-      contents: [{ parts: [{ text }] }],
-      config: {
-        responseModalities: ['AUDIO'],
-        speechConfig: {
-          voiceConfig: {
-            prebuiltVoiceConfig: { voiceName }
+    const tryGenerate = async (m, v) => {
+      const response = await this.gemini.models.generateContent({
+        model: m,
+        contents: [{ parts: [{ text }] }],
+        config: {
+          responseModalities: ['AUDIO'],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: { voiceName: v }
+            }
           }
         }
-      }
-    });
+      });
+      return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+    };
 
-    const audioData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+    let audioData = null;
+    let usedModel = model;
+    try {
+      audioData = await tryGenerate(model, voiceName);
+    } catch (err) {
+      if (model !== 'gemini-3.8-flash-lite-tts') {
+        this.logger.warn(`Gemini TTS (${model}) error: ${err.message}; attempting gemini-3.8-flash-lite-tts fallback...`);
+        try {
+          usedModel = 'gemini-3.8-flash-lite-tts';
+          audioData = await tryGenerate(usedModel, voiceName);
+        } catch (liteErr) {
+          throw err;
+        }
+      } else {
+        throw err;
+      }
+    }
+
     if (!audioData) {
       throw new Error('Gemini TTS returned no audio data');
     }
 
-    // Gemini returns raw PCM (24kHz, mono, 16-bit); encode to the requested container via FFmpeg
-    const pcmPath = outputPath + '.pcm';
+    // Gemini returns raw PCM (24kHz, mono, 16-bit); encode to MP3 via FFmpeg
+    const pcmPath = `${outputPath}.pcm`;
     await fs.writeFile(pcmPath, Buffer.from(audioData, 'base64'));
-    await runFFmpeg(['-y', '-f', 's16le', '-ar', '24000', '-ac', '1', '-i', pcmPath, outputPath]);
+    await runFFmpeg(['-y', '-f', 's16le', '-ar', '24000', '-ac', '1', '-i', pcmPath, '-c:a', 'libmp3lame', '-b:a', '192k', outputPath]);
     await fs.unlink(pcmPath).catch(() => {});
 
-    this.logger.info('Gemini TTS generation complete');
+    this.logger.info(`Gemini humanized neural audio generated successfully (${usedModel}, voice: ${voiceName})`);
     return outputPath;
   }
 
@@ -845,23 +1025,61 @@ class AIVideoGenerator {
 
         this.logger.info(`Rendering synchronized Slide ${i + 1}/${stills.length}: duration=${slideDuration}s`);
 
-        // Render this slide's video segment strictly locked to its narration duration
-        await runFFmpeg([
-          '-y',
-          '-loop', '1',
-          '-t', String(slideDuration),
-          '-i', stillPath,
-          '-i', slideAudioPath,
-          '-c:v', 'libx264',
-          '-preset', 'ultrafast',
-          '-tune', 'stillimage',
-          '-pix_fmt', 'yuv420p',
-          '-vf', 'scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black,fps=30',
-          '-c:a', 'aac',
-          '-b:a', '128k',
-          '-shortest',
-          segmentVideoPath
-        ]);
+        // Generate per-slide synchronized captions
+        let srtFile = null;
+        if (narrationText) {
+          try {
+            srtFile = path.join(slidesDir, `slide_${String(i).padStart(3, '0')}.srt`);
+            await fs.writeFile(srtFile, this.generateSlideSRT(narrationText, slideDuration));
+          } catch (_srtErr) {
+            srtFile = null;
+          }
+        }
+
+        // Render dynamic motion (Ken Burns zoompan) + bold high-contrast subtitles
+        const totalFrames = Math.max(30, Math.ceil(slideDuration * 30));
+        const zoompanFilter = (i % 2 === 0)
+          ? `zoompan=z='min(zoom+0.0004,1.05)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${totalFrames}:s=1080x1920:fps=30`
+          : `zoompan=z='max(1.05-0.0004*on,1.0)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${totalFrames}:s=1080x1920:fps=30`;
+
+        let vfFilter = zoompanFilter;
+        if (srtFile) {
+          const srtEscaped = srtFile.replace(/\\/g, '/').replace(/:/g, '\\:');
+          vfFilter += `,subtitles='${srtEscaped}':force_style='Fontname=Arial,Fontsize=22,Bold=1,PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=4,Outline=2,Shadow=2,Alignment=2,MarginV=280'`;
+        }
+
+        try {
+          await runFFmpeg([
+            '-y',
+            '-i', stillPath,
+            '-i', slideAudioPath,
+            '-vf', vfFilter,
+            '-c:v', 'libx264',
+            '-preset', 'ultrafast',
+            '-pix_fmt', 'yuv420p',
+            '-c:a', 'aac',
+            '-b:a', '192k',
+            '-shortest',
+            segmentVideoPath
+          ]);
+        } catch (_vfErr) {
+          this.logger.warn(`Cinematic render fallback on Slide ${i + 1}: ${_vfErr.message}`);
+          await runFFmpeg([
+            '-y',
+            '-loop', '1',
+            '-t', String(slideDuration),
+            '-i', stillPath,
+            '-i', slideAudioPath,
+            '-c:v', 'libx264',
+            '-preset', 'ultrafast',
+            '-pix_fmt', 'yuv420p',
+            '-vf', 'scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black,fps=30',
+            '-c:a', 'aac',
+            '-b:a', '128k',
+            '-shortest',
+            segmentVideoPath
+          ]);
+        }
 
         slideSegments.push(segmentVideoPath);
       }
@@ -899,6 +1117,33 @@ class AIVideoGenerator {
       await browser.close().catch(() => {});
       await this.cleanupDirectory(slidesDir);
     }
+  }
+
+  generateSlideSRT(text, duration) {
+    const clean = String(text || '').replace(/\s+/g, ' ').trim();
+    if (!clean) return '';
+    const words = clean.split(' ');
+    const wordsPerChunk = 5;
+    const chunks = [];
+    for (let w = 0; w < words.length; w += wordsPerChunk) {
+      chunks.push(words.slice(w, w + wordsPerChunk).join(' '));
+    }
+    const chunkDur = duration / Math.max(1, chunks.length);
+    let srt = '';
+    const formatTime = (s) => {
+      const ms = Math.floor((s % 1) * 1000);
+      const totalSec = Math.floor(s);
+      const mins = Math.floor(totalSec / 60);
+      const secs = totalSec % 60;
+      const hrs = Math.floor(mins / 60);
+      return `${String(hrs).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}:${String(secs).padStart(2, '0')},${String(ms).padStart(3, '0')}`;
+    };
+    chunks.forEach((chunk, idx) => {
+      const start = idx * chunkDur;
+      const end = Math.min(duration, (idx + 1) * chunkDur);
+      srt += `${idx + 1}\n${formatTime(start)} --> ${formatTime(end)}\n${chunk}\n\n`;
+    });
+    return srt;
   }
 
   async renderSlidesToVideo(stills, totalDuration, videoPath) {
@@ -1421,8 +1666,19 @@ class AIVideoGenerator {
             <pre class="code-block"><code>${this.escapeHTML(slide.codeSnippet)}</code></pre>
         </div>` : '';
 
+      const isFinalSlide = idx === script.slides.length - 1;
+      const interactionHTML = isFinalSlide ? `
+        <div class="interaction-card" style="border-color: ${theme.accent};">
+            <div class="interaction-badge">💬 COMMUNITY POLL & DISCUSSION</div>
+            <div class="interaction-question">${this.escapeHTML(slide.question || "How would you handle this pattern in your production stack? Drop a comment below 👇")}</div>
+            <div class="interaction-subtext">⚡ Save this Short & Follow for daily senior engineer blueprints!</div>
+        </div>` : '';
+
       return `
       <div class="slide ${idx === 0 ? 'active' : ''}">
+          <div class="shorts-progress-bar-wrap">
+              <div class="shorts-progress-bar-fill" style="width: ${Math.round(((idx + 1) / script.slides.length) * 100)}%; background: ${theme.headerGradient};"></div>
+          </div>
           <div class="scanline"></div>
           ${asset ? `<img class="background-image" src="${asset}" />` : ''}
           <div class="slide-particles">
@@ -1436,6 +1692,7 @@ class AIVideoGenerator {
               ${bulletsHTML ? `<div class="bullet-container">${bulletsHTML}</div>` : ''}
               ${diagramHTML}
               ${codeHTML}
+              ${interactionHTML}
           </div>
           <div class="slide-number" style="color: ${theme.accent}40">${String(idx + 1).padStart(2, '0')}</div>
       </div>`;
@@ -1753,6 +2010,57 @@ class AIVideoGenerator {
         }
         .achieve-icon { font-size: 28px; }
         .achieve-text { font-size: 16px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* Top animated progress bar for Shorts retention */
+        .shorts-progress-bar-wrap {
+            position: absolute;
+            top: 40px;
+            left: 70px;
+            right: 70px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 9999px;
+            overflow: hidden;
+            z-index: 10;
+        }
+        .shorts-progress-bar-fill {
+            height: 100%;
+            border-radius: 9999px;
+            box-shadow: 0 0 20px ${theme.accent};
+            transition: width 0.3s ease;
+        }
+
+        /* Customer & viewer interactive engagement card */
+        .interaction-card {
+            width: 100%;
+            margin-top: 25px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid ${theme.accent};
+            border-radius: 20px;
+            padding: 26px 30px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 35px rgba(${theme.accentRGB}, 0.25);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        .interaction-badge {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: ${theme.accent};
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .interaction-question {
+            font-size: 30px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.35;
+            margin-bottom: 14px;
+        }
+        .interaction-subtext {
+            font-size: 22px;
+            font-weight: 500;
+            color: #94a3b8;
+        }
     </style>
 </head>
 <body>

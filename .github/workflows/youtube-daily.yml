@@ -1,19 +1,19 @@
 name: Autonomous YouTube Automation Pipeline (End-to-End Cloud)
 
 on:
-  # Schedule: Runs 4 times daily at global peak viewer engagement hours
+  # Schedule: Runs 10 times daily across global peak viewer hours (enabling 10+ shorts daily)
   schedule:
-    - cron: '0 2,8,14,20 * * *'
+    - cron: '0 0,2,4,6,8,10,12,14,16,18 * * *'
 
   # Manual Trigger: 1-click execution from GitHub website or GitHub mobile app
   workflow_dispatch:
     inputs:
       video_count:
-        description: 'Number of videos to generate & upload (1 to 5)'
+        description: 'Number of videos to generate & upload (1 to 10)'
         required: true
         default: '1'
       format:
-        description: 'Video Format / Length (Enforced YouTube Shorts/Reels 2:30-3:00 min)'
+        description: 'Video Format / Length (High-Engagement Viral YouTube Shorts 50-70s)'
         required: true
         type: choice
         default: 'short'
@@ -122,6 +122,8 @@ jobs:
           git add data/quality-evolution-directives.json \
                   data/latest-suggestion.json \
                   data/ai-content-suggestions.json \
+                  data/theme_state.json \
+                  data/voice_state.json \
                   data/trend-insights.json || true
           
           if git diff --staged --quiet; then
