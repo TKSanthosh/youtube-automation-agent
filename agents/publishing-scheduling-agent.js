@@ -480,6 +480,14 @@ class PublishingSchedulingAgent {
   }
   async uploadThumbnail(videoId, thumbnailPath) {
     try {
+      if (!thumbnailPath || String(thumbnailPath).endsWith('.info')) {
+        return;
+      }
+      const ext = path.extname(thumbnailPath).toLowerCase();
+      if (!['.jpg', '.jpeg', '.png'].includes(ext)) {
+        this.logger.info(`Skipping non-image thumbnail format (${ext || 'unknown'}) for video ${videoId}`);
+        return;
+      }
       const thumbnailBuffer = await fs.readFile(thumbnailPath);
       
       await this.youtube.thumbnails.set({
@@ -491,7 +499,7 @@ class PublishingSchedulingAgent {
       
       this.logger.info(`Thumbnail uploaded for video: ${videoId}`);
     } catch (error) {
-      this.logger.error(`Failed to upload thumbnail: ${error.message}`);
+      this.logger.warn(`Could not set custom thumbnail: ${error.message}`);
     }
   }
 
