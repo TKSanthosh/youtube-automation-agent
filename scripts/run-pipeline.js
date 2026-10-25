@@ -255,7 +255,10 @@ async function run() {
       let youtubeUrl = null;
       try {
         const uploadRes = await publishingAgent.uploadToYouTube(scheduleEntry);
-        youtubeUrl = `https://www.youtube.com/watch?v=${uploadRes.id}`;
+        const isShort = strategy.requestedLengthKey !== 'extended' && strategy.requestedLength !== '20-30 minutes';
+        youtubeUrl = isShort
+          ? `https://www.youtube.com/shorts/${uploadRes.id}`
+          : `https://www.youtube.com/watch?v=${uploadRes.id}`;
         console.log(chalk.green.bold(`   ✅ UPLOAD SUCCESSFUL: ${youtubeUrl}`));
 
         // Continuous Evolutionary Quality Audit: Evaluate uploaded video to guarantee next video is better

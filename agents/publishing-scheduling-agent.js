@@ -192,7 +192,13 @@ class PublishingSchedulingAgent {
       scheduleEntry.status = 'published';
       scheduleEntry.publishedAt = new Date().toISOString();
       scheduleEntry.youtubeId = uploadResult.id;
-      scheduleEntry.youtubeUrl = `https://www.youtube.com/watch?v=${uploadResult.id}`;
+      const isShort = scheduleEntry.metadata?.requestedLengthKey === 'short' ||
+                      scheduleEntry.targetLength === 'short' ||
+                      (scheduleEntry.title && scheduleEntry.title.toLowerCase().includes('#short')) ||
+                      !scheduleEntry.isExtendedForm;
+      scheduleEntry.youtubeUrl = isShort
+        ? `https://www.youtube.com/shorts/${uploadResult.id}`
+        : `https://www.youtube.com/watch?v=${uploadResult.id}`;
       
       await this.db.updateScheduleEntry(scheduleEntry);
       await this.syncShortStatus(scheduleEntry, 'published');

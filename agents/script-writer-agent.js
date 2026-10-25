@@ -84,7 +84,7 @@ class ScriptWriterAgent {
           pipelineScript.sections = pipelineScript.sections || [];
           pipelineScript.mainContent = pipelineScript.mainContent || { sections: pipelineScript.sections };
           pipelineScript.keywords = pipelineScript.keywords || strategy.keywords || [];
-          pipelineScript.duration = '0:55';
+          pipelineScript.duration = '2:55';
           pipelineScript.slides = this.normalizeAISlides(
             { slides: pipelineScript.slides, sections: pipelineScript.sections },
             strategy
@@ -303,7 +303,7 @@ Return ONLY valid JSON matching this exact structure:
           nextVideo: "",
           duration: '0 seconds'
         },
-        duration: '0:55',
+        duration: '2:55',
         tone: template.tone,
         pacing: template.pacing,
         keywords: strategy.keywords || [],
@@ -324,23 +324,23 @@ Return ONLY valid JSON matching this exact structure:
   ensurePedagogicalNarrationDepth(slide, topic, idx) {
     let narration = String(slide.teacherNarration || slide.narration || '').trim();
     const wordCount = narration.split(/\s+/).filter(Boolean).length;
-    // Strictly timed for YouTube Shorts (< 60s total duration, ~25-34 words per slide = ~52-56s)
-    if (wordCount >= 25 && wordCount <= 34) return narration;
+    // Strictly timed for 2:45 to 3:00 minute YouTube Shorts (~85-100 words per slide = ~165-175s total)
+    if (wordCount >= 85 && wordCount <= 102) return narration;
 
     const topicClean = topic || 'this architecture';
     let text = '';
     if (idx === 0) {
-      text = `When building ${topicClean}, standard implementations look fine in staging but instantly crash under production spikes. Unhandled downstream latencies cascade across microservices, exhausting thread pools and triggering catastrophic outages.`;
+      text = `When engineers first implement ${topicClean}, standard textbook solutions look deceivingly simple in local staging environments, but instantly collapse the moment real production traffic spikes. As concurrent requests flood the ingress, unhandled downstream latencies cascade across upstream microservices, causing worker thread pool exhaustion and catastrophic cluster-wide outages. Notice what happens without intelligent backpressure: a single degraded dependency starves system resources and triggers a domino effect that takes down your entire distributed platform. Let's break down the exact engineering mechanics required to eliminate this failure permanently and keep our core services rock-solid.`;
     } else if (idx === 1) {
-      text = `To fix this cleanly, look at the architecture on screen. We place an intelligent boundary layer in the critical path that intercepts downstream failures and trips open before resources saturate.`;
+      text = `To solve this cleanly, let's examine the underlying architecture and mental model displayed directly on your screen. Instead of allowing callers to continuously hammer failing endpoints and consume thread capacity, we place an intelligent, stateful boundary layer directly in the critical request path. Notice the sequence: incoming traffic passes through our active health evaluation threshold. When failure rates breach the safety margin, the circuit trips instantly into an open state, serving deterministic fallbacks before resources saturate. This isolates faults, preserves memory buffers, and grants downstream dependencies the breathing room needed to recover gracefully without risking total system collapse.`;
     } else if (idx === 2) {
-      text = `Here is the production implementation. Notice line 1: explicit timeout thresholds with isolated thread pools guard every call, ensuring zero latency overhead while shielding your core database from connection starvation.`;
+      text = `Now let's walk through the production implementation directly on your screen. Look at line 1: we configure explicit timeout thresholds paired with isolated execution pools to prevent thread contention. As you trace down through the execution handler, notice that every external I/O call is guarded within a monitored context. If the downstream service is healthy, execution proceeds with zero latency overhead. But the moment consecutive failures exceed the tripping threshold, the guard intercepts the execution path immediately, bypassing slow network timeouts, preventing cascading thread locks, and shielding your core database layer from catastrophic connection starvation.`;
     } else {
-      text = `The senior engineer rule of thumb: always tune failure thresholds using real 99th percentile production metrics. Never deploy static timeouts, and implement automated recovery loops to guarantee resilient architecture.`;
+      text = `Here is the golden rule of thumb that senior staff engineers always keep in mind: never deploy ${topicClean} with static, hardcoded configuration values. Always tune your latency thresholds based on empirical 99th percentile production telemetry, and pair every fallback handler with automated metric alarms and circuit reset monitors. By designing systems around failure-tolerant boundaries and active recovery loops, you eliminate cascading outages, protect downstream infrastructure, and guarantee self-healing resilience across your entire tech stack. Implement this battle-tested pattern in your mission-critical production codebase today and elevate system stability.`;
     }
 
-    if (wordCount > 34) {
-      return narration.split(/\s+/).slice(0, 30).join(' ') + '.';
+    if (wordCount > 102) {
+      return narration.split(/\s+/).slice(0, 98).join(' ') + '.';
     }
 
     return text.trim();

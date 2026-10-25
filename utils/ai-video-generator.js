@@ -1026,7 +1026,7 @@ class AIVideoGenerator {
           }
         }
 
-        let slideDuration = 14;
+        let slideDuration = 43;
         if (audioSuccess) {
           const rawDur = await this.getAudioDuration(slideAudioPath);
           if (rawDur > 0) {
@@ -1082,17 +1082,17 @@ class AIVideoGenerator {
         outputPath
       ]);
 
-      // Ensure Shorts video strictly never exceeds 58 seconds (YouTube Shorts hard requirement)
+      // Ensure Shorts video strictly never exceeds 178 seconds (3-minute YouTube Shorts hard cutoff: <= 180s)
       if (options.shortsMode !== false) {
         try {
           const totalDur = await this.getAudioDuration(outputPath);
-          if (totalDur > 58.5) {
-            this.logger.info(`Trimming final video from ${totalDur}s to 58.0s for strict YouTube Shorts compliance`);
+          if (totalDur > 178.5) {
+            this.logger.info(`Trimming final video from ${totalDur}s to 176.0s for strict 3-minute YouTube Shorts compliance`);
             const clampedTemp = path.join(slidesDir, 'clamped_output.mp4');
             await runFFmpeg([
               '-y',
               '-i', outputPath,
-              '-t', '58.0',
+              '-t', '176.0',
               '-c', 'copy',
               clampedTemp
             ]);
@@ -1256,7 +1256,7 @@ class AIVideoGenerator {
   }
 
   async getAudioDuration(audioPath, options = {}) {
-    if (!audioPath) return options.shortsMode ? 55 : 0;
+    if (!audioPath) return options.shortsMode ? 172 : 0;
     try {
       const { exec } = require('child_process');
       const util = require('util');
@@ -1265,14 +1265,14 @@ class AIVideoGenerator {
       const dur = parseFloat(String(stdout).trim());
       if (Number.isFinite(dur) && dur > 0) {
         if (options.shortsMode) {
-          return Math.min(58, Math.max(15, Math.ceil(dur)));
+          return Math.min(178, Math.max(30, Math.ceil(dur)));
         }
         return Math.ceil(dur);
       }
     } catch (_err) {
       // ffprobe unavailable or errored
     }
-    return options.shortsMode ? 55 : 0;
+    return options.shortsMode ? 172 : 0;
   }
 
   escapeHTML(str) {

@@ -12,10 +12,10 @@ class FinalScriptEditor {
     // Candidate A: Problem/Solution & Architectural Flow
     // Candidate B: Technical Deep-Dive & Internals First
     const prompt = `You are a Master Script Architect and Passionate Tech Educator.
-Create TWO distinct candidate scripts for topic: "${topic}" (Format: ${isLongForm ? '15-20 Min Comprehensive Masterclass' : 'Strictly YouTube Shorts (< 60s duration, 110-120 words total narration across 4 chapters)'}).
+Create TWO distinct candidate scripts for topic: "${topic}" (Format: ${isLongForm ? '15-20 Min Comprehensive Masterclass' : 'Full 2:45 to 3:00 Minute YouTube Short (strictly 165 to 176 seconds duration, 370-385 words total narration across 4 chapters)'}).
 
 PEDAGOGICAL & DURATION CONSTRAINTS:
-1. STRICT SHORTS DURATION: Total spoken narration MUST be between 110 and 125 words (~50 to 55 seconds). Never exceed 58 seconds total (YouTube requires < 60s to index as a Short)!
+1. STRICT SHORTS DURATION: Total spoken narration MUST be between 370 and 385 words (~165 to 175 seconds). Strictly between 2m45s and 2m56s (never under 2m45s, never over 2m58s so it qualifies as a Short)!
 2. ANTI-OVERPROMISING: The hook must focus ONLY on ONE singular technical problem that will be 100% resolved in this video.
 3. 100% COMPLETE RESOLUTION: Every concept introduced in Chapter 1 MUST be thoroughly explained, demonstrated with code, and resolved by Chapter 4.
 4. HUMAN TEACHER VOICE: Energetic, conversational, with witty developer analogies. NEVER read slides verbatim.
@@ -35,10 +35,10 @@ Provide a JSON response:
     "title": "Punchy YouTube Title (under 95 chars)",
     "hook": "${hooks.hooks?.[0]?.text || ''}",
     "sections": [
-      { "title": "Chapter 1: The Bottleneck", "content": ["Spoken teacher explanation... (25-30 words)"], "duration": ${isLongForm ? 90 : 13} },
-      { "title": "Chapter 2: The Mental Model", "content": ["Spoken teacher explanation with analogy... (25-30 words)"], "duration": ${isLongForm ? 120 : 14} },
-      { "title": "Chapter 3: Code Walkthrough", "content": ["Spoken line-by-line code walkthrough... (28-32 words)"], "duration": ${isLongForm ? 150 : 14} },
-      { "title": "Chapter 4: Production Trade-offs & Closure", "content": ["Spoken takeaway and complete resolution... (25-28 words)"], "duration": ${isLongForm ? 120 : 13} }
+      { "title": "Chapter 1: The Bottleneck", "content": ["Spoken teacher explanation... (90-95 words)"], "duration": ${isLongForm ? 90 : 42} },
+      { "title": "Chapter 2: The Mental Model", "content": ["Spoken teacher explanation with analogy... (95-100 words)"], "duration": ${isLongForm ? 120 : 44} },
+      { "title": "Chapter 3: Code Walkthrough", "content": ["Spoken line-by-line code walkthrough... (95-100 words)"], "duration": ${isLongForm ? 150 : 44} },
+      { "title": "Chapter 4: Production Trade-offs & Closure", "content": ["Spoken takeaway and complete resolution... (85-90 words)"], "duration": ${isLongForm ? 120 : 42} }
     ],
     "funFact": "${research.interestingFacts?.[0] || 'Historical programming trivia'}",
     "conclusion": "Key takeaway recap providing complete pedagogical closure",
@@ -49,10 +49,10 @@ Provide a JSON response:
     "title": "Alternative High-Click Technical Title",
     "hook": "${hooks.hooks?.[1]?.text || hooks.hooks?.[0]?.text || ''}",
     "sections": [
-      { "title": "Chapter 1: The Invisible Execution", "content": ["Spoken teacher explanation... (25-30 words)"], "duration": ${isLongForm ? 90 : 13} },
-      { "title": "Chapter 2: Memory & State Machines", "content": ["Spoken teacher explanation with analogy... (25-30 words)"], "duration": ${isLongForm ? 120 : 14} },
-      { "title": "Chapter 3: Step-by-Step Implementation", "content": ["Spoken line-by-line code walkthrough... (28-32 words)"], "duration": ${isLongForm ? 150 : 14} },
-      { "title": "Chapter 4: Advanced Gotchas & Closure", "content": ["Spoken takeaway and complete resolution... (25-28 words)"], "duration": ${isLongForm ? 120 : 13} }
+      { "title": "Chapter 1: The Invisible Execution", "content": ["Spoken teacher explanation... (90-95 words)"], "duration": ${isLongForm ? 90 : 42} },
+      { "title": "Chapter 2: Memory & State Machines", "content": ["Spoken teacher explanation with analogy... (95-100 words)"], "duration": ${isLongForm ? 120 : 44} },
+      { "title": "Chapter 3: Step-by-Step Implementation", "content": ["Spoken line-by-line code walkthrough... (95-100 words)"], "duration": ${isLongForm ? 150 : 44} },
+      { "title": "Chapter 4: Advanced Gotchas & Closure", "content": ["Spoken takeaway and complete resolution... (85-90 words)"], "duration": ${isLongForm ? 120 : 42} }
     ],
     "funFact": "${research.interestingFacts?.[0] || 'Historical programming trivia'}",
     "conclusion": "Mastery recap providing complete pedagogical closure",
@@ -74,30 +74,30 @@ Respond strictly with valid JSON.`;
             {
               title: 'The Production Problem',
               content: [
-                `When building ${topic}, standard implementations look fine in staging but instantly crash under production spikes. Unhandled downstream latencies cascade across microservices, exhausting thread pools and triggering catastrophic outages.`
+                `When engineers first implement ${topic}, textbook solutions appear clean in staging but collapse under live production spikes. As concurrent requests flood the ingress, unhandled downstream latencies cascade across microservices, causing worker thread pool exhaustion and catastrophic cluster outages. Notice what happens without intelligent backpressure: a single degraded dependency starves system resources and triggers a domino failure across your entire distributed platform. Let's break down the exact engineering mechanics required to eliminate this failure permanently and keep core services resilient.`
               ],
-              duration: isLongForm ? 180 : 13
+              duration: isLongForm ? 180 : 42
             },
             {
               title: 'Under The Hood Architecture',
               content: [
-                `To fix this cleanly, look at the architecture on screen. We place an intelligent boundary layer in the critical path that intercepts downstream failures and trips open before resources saturate.`
+                `To solve this cleanly, let's examine the underlying architecture and mental model displayed directly on your screen. Instead of allowing callers to continuously hammer failing endpoints and consume thread capacity, we place an intelligent, stateful boundary layer directly in the critical request path. When failure rates breach the safety margin, the circuit trips instantly into an open state, serving deterministic fallbacks before resources saturate, isolating faults and granting downstream dependencies the room needed to recover gracefully.`
               ],
-              duration: isLongForm ? 240 : 14
+              duration: isLongForm ? 240 : 44
             },
             {
               title: 'Production Implementation',
               content: [
-                `Here is the production implementation. Notice line 1: explicit timeout thresholds with isolated thread pools guard every call, ensuring zero latency overhead while shielding your core database from connection starvation.`
+                `Now let's walk through the production implementation directly on your screen. Look at line 1: we configure explicit timeout thresholds paired with isolated execution pools to prevent thread contention. As you trace down through the execution handler, notice that every external I/O call is guarded within a monitored context. If the downstream service is healthy, execution proceeds with zero latency overhead. But the moment consecutive failures exceed the tripping threshold, the guard intercepts execution immediately, shielding your core database layer from connection starvation.`
               ],
-              duration: isLongForm ? 240 : 14
+              duration: isLongForm ? 240 : 44
             },
             {
               title: 'Senior Rule of Thumb',
               content: [
-                `The senior engineer rule of thumb: always tune failure thresholds using real 99th percentile production metrics. Never deploy static timeouts, and implement automated recovery loops to guarantee resilient architecture.`
+                `Here is the golden rule of thumb that senior staff engineers always keep in mind: never deploy ${topic} with static, hardcoded configuration values. Always tune your latency thresholds based on empirical 99th percentile production telemetry, and pair every fallback handler with automated metric alarms and circuit reset monitors. By designing systems around failure-tolerant boundaries and active recovery loops, you eliminate cascading outages, protect downstream infrastructure, and guarantee self-healing resilience across your entire tech stack.`
               ],
-              duration: isLongForm ? 180 : 13
+              duration: isLongForm ? 180 : 42
             }
           ],
           funFact: research.interestingFacts?.[0] || 'Engineered to maximize throughput',
