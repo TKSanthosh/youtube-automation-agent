@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Interface & Dashboard - YouTube Automation Agent</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    body { background: #0f172a; color: #f8fafc; padding: 2rem; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid #334155; padding-bottom: 1rem; }
+    .title { font-size: 1.5rem; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 10px; }
+    .yt-badge { background: #ef4444; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 1.5rem; margin-bottom: 1.5rem; }
+    h2 { font-size: 1.2rem; color: #f1f5f9; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th { padding: 12px; background: #0f172a; color: #94a3b8; font-size: 0.85rem; text-transform: uppercase; border-bottom: 1px solid #334155; }
+    td { padding: 14px 12px; border-bottom: 1px solid #334155; font-size: 0.9rem; color: #cbd5e1; }
+    .status-published { background: rgba(34, 197, 94, 0.2); color: #4ade80; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+    .link-yt { color: #38bdf8; text-decoration: none; font-weight: 600; }
+    .metadata-panel { background: #0b1120; border: 1px solid #1e293b; border-radius: 8px; padding: 1rem; margin-top: 1rem; font-family: monospace; font-size: 0.85rem; color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="title">
+      <span>⚡ YouTube Automation Operations Dashboard</span>
+      <span class="yt-badge">YouTube Data API v3 (videos.insert)</span>
+    </div>
+    <div>Channel: <strong>Code & Architecture Hub</strong> (Authenticated via OAuth 2.0)</div>
+  </div>
+
+  <div class="card">
+    <h2>Active Publication Queue (YouTube Shorts Only, &lt; 60s)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Upload ID</th>
+          <th>Video Title</th>
+          <th>Duration</th>
+          <th>Category</th>
+          <th>Status</th>
+          <th>YouTube Watch Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>YT-UPLOAD-084</code></td>
+          <td>Python 3.13 Free-Threaded GIL Removal #Shorts #Reels</td>
+          <td>56.1s</td>
+          <td>28 (Science & Tech)</td>
+          <td><span class="status-published">✅ Published</span></td>
+          <td><a class="link-yt" href="https://www.youtube.com/watch?v=VD9n9iVp_PU" target="_blank">watch?v=VD9n9iVp_PU</a></td>
+        </tr>
+        <tr>
+          <td><code>YT-UPLOAD-083</code></td>
+          <td>Mastering Kafka Distributed Event Log #Shorts #Reels</td>
+          <td>54.2s</td>
+          <td>28 (Science & Tech)</td>
+          <td><span class="status-published">✅ Published</span></td>
+          <td><a class="link-yt" href="https://www.youtube.com/watch?v=QeNiPD5tMCU" target="_blank">watch?v=QeNiPD5tMCU</a></td>
+        </tr>
+        <tr>
+          <td><code>YT-UPLOAD-082</code></td>
+          <td>Zero-Copy Networking Architecture #Shorts #Reels</td>
+          <td>55.0s</td>
+          <td>28 (Science & Tech)</td>
+          <td><span class="status-published">✅ Published</span></td>
+          <td><a class="link-yt" href="https://www.youtube.com/watch?v=DSbLOCh4mA0" target="_blank">watch?v=DSbLOCh4mA0</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="metadata-panel">
+      [API Request Metadata Body] POST https://www.googleapis.com/upload/youtube/v3/videos?part=snippet,status<br>
+      { "snippet": { "title": "... #Shorts #Reels", "categoryId": "28" }, "status": { "privacyStatus": "public", "selfDeclaredMadeForKids": false } }
+    </div>
+  </div>
+</body>
+</html>

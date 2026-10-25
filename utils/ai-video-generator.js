@@ -1026,11 +1026,11 @@ class AIVideoGenerator {
           }
         }
 
-        let slideDuration = 45;
+        let slideDuration = 14;
         if (audioSuccess) {
           const rawDur = await this.getAudioDuration(slideAudioPath);
           if (rawDur > 0) {
-            slideDuration = Number((rawDur + 0.6).toFixed(2));
+            slideDuration = Number((rawDur + 0.3).toFixed(2));
           }
         } else {
           await runFFmpeg([
@@ -1081,6 +1081,27 @@ class AIVideoGenerator {
         '-c', 'copy',
         outputPath
       ]);
+
+      // Ensure Shorts video strictly never exceeds 58 seconds (YouTube Shorts hard requirement)
+      if (options.shortsMode !== false) {
+        try {
+          const totalDur = await this.getAudioDuration(outputPath);
+          if (totalDur > 58.5) {
+            this.logger.info(`Trimming final video from ${totalDur}s to 58.0s for strict YouTube Shorts compliance`);
+            const clampedTemp = path.join(slidesDir, 'clamped_output.mp4');
+            await runFFmpeg([
+              '-y',
+              '-i', outputPath,
+              '-t', '58.0',
+              '-c', 'copy',
+              clampedTemp
+            ]);
+            await fs.copyFile(clampedTemp, outputPath);
+          }
+        } catch (_clampErr) {
+          // Non-fatal
+        }
+      }
 
       // Extract combined audio into audioPath
       try {
@@ -1235,7 +1256,7 @@ class AIVideoGenerator {
   }
 
   async getAudioDuration(audioPath, options = {}) {
-    if (!audioPath) return options.shortsMode ? 170 : 0;
+    if (!audioPath) return options.shortsMode ? 55 : 0;
     try {
       const { exec } = require('child_process');
       const util = require('util');
@@ -1244,14 +1265,14 @@ class AIVideoGenerator {
       const dur = parseFloat(String(stdout).trim());
       if (Number.isFinite(dur) && dur > 0) {
         if (options.shortsMode) {
-          return Math.min(176, Math.max(30, Math.ceil(dur)));
+          return Math.min(58, Math.max(15, Math.ceil(dur)));
         }
         return Math.ceil(dur);
       }
     } catch (_err) {
       // ffprobe unavailable or errored
     }
-    return options.shortsMode ? 170 : 0;
+    return options.shortsMode ? 55 : 0;
   }
 
   escapeHTML(str) {

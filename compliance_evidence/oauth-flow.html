@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Google OAuth 2.0 Consent Screen - YouTube Automation Agent</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+    body { background: #f8fafc; color: #1e293b; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 2rem; }
+    .consent-card { background: white; border: 1px solid #dadce0; border-radius: 8px; width: 480px; padding: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .google-logo { width: 75px; margin-bottom: 24px; }
+    h1 { font-size: 24px; font-weight: 400; color: #202124; margin-bottom: 8px; }
+    .app-title { font-size: 16px; color: #5f6368; margin-bottom: 24px; }
+    .app-badge { display: flex; align-items: center; gap: 12px; padding: 12px; background: #f1f3f4; border-radius: 8px; margin-bottom: 24px; }
+    .app-icon { width: 36px; height: 36px; background: #1a73e8; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px; }
+    .app-info-title { font-weight: 500; font-size: 14px; color: #202124; }
+    .app-info-email { font-size: 12px; color: #5f6368; }
+    .scope-box { border-top: 1px solid #dadce0; border-bottom: 1px solid #dadce0; padding: 16px 0; margin-bottom: 24px; }
+    .scope-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+    .scope-icon { color: #1a73e8; font-size: 18px; line-height: 1.2; }
+    .scope-title { font-size: 14px; font-weight: 500; color: #202124; }
+    .scope-desc { font-size: 12px; color: #5f6368; margin-top: 2px; }
+    .terms-text { font-size: 12px; color: #5f6368; line-height: 1.5; margin-bottom: 24px; }
+    .terms-text a { color: #1a73e8; text-decoration: none; }
+    .actions { display: flex; justify-content: flex-end; gap: 12px; }
+    .btn { padding: 10px 24px; border-radius: 4px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; }
+    .btn-cancel { background: transparent; color: #1a73e8; }
+    .btn-allow { background: #1a73e8; color: white; }
+    .revocation-footer { margin-top: 20px; padding-top: 16px; border-top: 1px dashed #dadce0; font-size: 11px; color: #70757a; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="consent-card">
+    <svg class="google-logo" viewBox="0 0 74 24"><path fill="#4285F4" d="M9.24 10.4v3.1h4.94c-.2 1.3-1.5 3.8-4.94 3.8-2.98 0-5.4-2.46-5.4-5.5s2.42-5.5 5.4-5.5c1.7 0 2.84.73 3.5 1.35l2.45-2.36C13.6 3.8 11.64 3 9.24 3 4.14 3 0 7.14 0 12.24s4.14 9.24 9.24 9.24c5.33 0 8.87-3.75 8.87-9.03 0-.6-.07-1.07-.15-1.53H9.24z"/></svg>
+    <h1>Sign in with Google</h1>
+    <div class="app-title">YouTube Automation Agent wants to access your Google Account</div>
+
+    <div class="app-badge">
+      <div class="app-icon">⚡</div>
+      <div>
+        <div class="app-info-title">YouTube Automation Agent</div>
+        <div class="app-info-email">tksanthosh494@gmail.com</div>
+      </div>
+    </div>
+
+    <div class="scope-box">
+      <div class="scope-item">
+        <div class="scope-icon">▶</div>
+        <div>
+          <div class="scope-title">Manage your YouTube videos</div>
+          <div class="scope-desc">Allows YouTube Automation Agent to upload, edit, and publish automated educational Shorts to your authorized YouTube channel. (Scope: <code>https://www.googleapis.com/auth/youtube.upload</code>)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="terms-text">
+      Make sure you trust YouTube Automation Agent. You may review our <a href="./privacy-policy.html">Privacy Policy</a> and <a href="./terms-of-service.html">Terms of Service</a>. You can always see or remove access in your <a href="https://security.google.com/settings/security/permissions">Google Account Permissions</a>.
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-cancel">Cancel</button>
+      <button class="btn btn-allow">Allow</button>
+    </div>
+
+    <div class="revocation-footer">
+      Tokens are stored in encrypted repository secrets. Revoke access anytime via https://myaccount.google.com/permissions
+    </div>
+  </div>
+</body>
+</html>
