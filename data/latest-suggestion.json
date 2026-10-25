@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-25T13:48:00.597Z",
+  "updated_at": "2026-10-25T14:03:45.447Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1792936080590_gnj3af",
-    "topic": "Mastering the Microservices Circuit Breaker Pattern",
+    "id": "sugg_1792937025442_ioymw",
+    "topic": "Cracking the Distributed Systems Interview Architecture Round",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Directly targets high-demand system design interview concepts and real-world failure mitigation strategies for distributed architectures.",
-    "search_evidence": "microservices circuit breaker pattern",
+    "rationale": "System design interviews focus heavily on scaling monoliths to distributed architectures; candidates struggle with structured breakdown frameworks.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
       "Architecture diagrams",
-      "State transitions"
+      "Animated system flows"
     ],
-    "hook_angle": "One crashing microservice can take down your entire backend. Here is how the Circuit Breaker pattern stops cascading failures.",
+    "hook_angle": "Want to pass senior system design interviews? Stop drawing boxes randomly and use this 4-step framework.",
     "channel_affinity_score": 100,
-    "trend_score": 96,
-    "priority_score": 98,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-25T13:48:00.590Z",
+    "created_at": "2026-10-25T14:03:45.442Z",
     "used_at": null
   }
 }
