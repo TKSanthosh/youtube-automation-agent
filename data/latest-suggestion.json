@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-26T09:11:46.298Z",
+  "updated_at": "2026-10-26T09:55:09.165Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793005906285_affv8",
-    "topic": "Python AsyncIO vs Threading: When to Stop Swapping Contexts",
-    "category": "Python",
+    "id": "sugg_1793008509161_jcoers",
+    "topic": "Ace Your System Design Interview: The 4-Step Framework",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Developers continually confuse I/O-bound concurrency with CPU parallelism, resulting in heavily bottlenecked APIs. This breakdown directly addresses search intent while demonstrating clear architectural distinction.",
-    "search_evidence": "python asyncio vs threading",
+    "rationale": "Directly tackles the massive volume of queries around interview preparation by giving viewers a repeatable, high-signal blueprint for senior engineering panels.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "State transitions",
-      "Code execution visualization"
+      "Timelines",
+      "Animated system flows"
     ],
-    "hook_angle": "Stop using threads for network requests; you're destroying your CPU cache.",
-    "channel_affinity_score": 95,
+    "hook_angle": "Failing system design interviews usually has nothing to do with your coding skills. Here is the exact 4-step framework FAANG engineering leads use.",
+    "channel_affinity_score": 100,
     "trend_score": 98,
-    "priority_score": 96,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-26T09:11:46.285Z",
+    "created_at": "2026-10-26T09:55:09.161Z",
     "used_at": null
   }
 }
