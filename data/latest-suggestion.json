@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-26T09:55:09.165Z",
+  "updated_at": "2026-10-26T12:28:42.110Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793008509161_jcoers",
-    "topic": "Ace Your System Design Interview: The 4-Step Framework",
+    "id": "sugg_1793017722102_hxvgqm",
+    "topic": "Cracking the System Design Interview: Distributed Rate Limiting",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Directly tackles the massive volume of queries around interview preparation by giving viewers a repeatable, high-signal blueprint for senior engineering panels.",
-    "search_evidence": "system design interview preparation",
+    "rationale": "Captures the booming search interest in system design interview prep. Breaking down algorithms like Token Bucket in a fast-paced 3-minute format maximizes bookmarking and shares.",
+    "search_evidence": "system design interview prep",
     "educational_visuals": [
-      "Timelines",
+      "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "Failing system design interviews usually has nothing to do with your coding skills. Here is the exact 4-step framework FAANG engineering leads use.",
+    "hook_angle": "If a FAANG interviewer asks you to design a distributed rate limiter, don't mention Redis without knowing this exact synchronization pitfall.",
     "channel_affinity_score": 100,
     "trend_score": 98,
     "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-26T09:55:09.161Z",
+    "created_at": "2026-10-26T12:28:42.102Z",
     "used_at": null
   }
 }
