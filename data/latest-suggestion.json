@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-27T11:47:31.216Z",
+  "updated_at": "2026-10-27T12:35:17.748Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793101651201_bkautb",
-    "topic": "Python AsyncIO vs Threading: When to Stop Blocking Your Loop",
+    "id": "sugg_1793104517738_dcxuto",
+    "topic": "Python Asyncio vs Threading: When to Stop Using Threads",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Developers continually mix up I/O-bound concurrency models, leading to thread contention or blocked event loops. Addressing this directly answers heavy search queries on asyncio versus threading.",
+    "rationale": "Developers constantly struggle with choosing between threading and asyncio for I/O-bound tasks. This video clarifies the GIL limitations and event loop efficiency, directly targeting surging search interest.",
     "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
       "State transitions",
       "Data-flow diagrams"
     ],
-    "hook_angle": "Stop using threads for I/O-bound apps until you've seen how AsyncIO handles 10,000 concurrent sockets on a single CPU core.",
-    "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 98,
+    "hook_angle": "Still using Python threads for I/O bound tasks? You're wasting 80% of your CPU waiting on context switches.",
+    "channel_affinity_score": 95,
+    "trend_score": 98,
+    "priority_score": 96,
     "status": "pending",
-    "created_at": "2026-10-27T11:47:31.201Z",
+    "created_at": "2026-10-27T12:35:17.738Z",
     "used_at": null
   }
 }
