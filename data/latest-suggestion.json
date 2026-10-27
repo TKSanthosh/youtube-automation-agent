@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-27T04:12:23.766Z",
+  "updated_at": "2026-10-27T04:16:11.908Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793074343743_q9rsd",
-    "topic": "Cracking the System Design Interview: Distributed Architectures",
+    "id": "sugg_1793074571902_br7fub",
+    "topic": "Acing the System Design Interview: Distributed Architecture Styles",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "System design interview prep is a perennial high-intent search category. Condensing distributed architecture styles into a fast-paced vertical format maximizes replay value.",
-    "search_evidence": "system design interview preparation",
+    "rationale": "Direct match for top search volume on system design interview prep and distributed architectural models.",
+    "search_evidence": "distributed systems architecture styles",
     "educational_visuals": [
       "Architecture diagrams",
-      "Animated system flows"
+      "Data-flow diagrams"
     ],
-    "hook_angle": "Failing your system design interviews because you don't know how to structure distributed tiers? Here is the blueprint interviewers look for.",
+    "hook_angle": "Failing system design interviews? Stop drawing random boxes and learn how to structure distributed architectures like a Principal Engineer.",
     "channel_affinity_score": 100,
     "trend_score": 98,
     "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-27T04:12:23.743Z",
+    "created_at": "2026-10-27T04:16:11.902Z",
     "used_at": null
   }
 }
