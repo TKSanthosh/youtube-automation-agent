@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-27T17:43:26.995Z",
+  "updated_at": "2026-10-27T21:56:17.647Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793123006979_xrjsn",
-    "topic": "Python AsyncIO vs Threading: When to Stop Blocking Your Loop",
+    "id": "sugg_1793138177117_ahkxak",
+    "topic": "Python AsyncIO vs Threading: When to Stop Blocking Your I/O",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Addressing the massive developer confusion between concurrency models by clearly showing when cooperative multitasking outperforms preemptive OS threads.",
+    "rationale": "Addresses a foundational concurrency confusion among developers looking up asyncio tutorials, bridging single-threaded cooperative multitasking with OS threads.",
     "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
       "State transitions",
-      "Code execution visualization"
+      "Data-flow diagrams"
     ],
-    "hook_angle": "Stop using threading for I/O-bound Python apps until you've seen what AsyncIO's single-threaded event loop actually does to your CPU core.",
+    "hook_angle": "Stop using threads for I/O-bound tasks until you've seen what AsyncIO's single event loop can handle.",
     "channel_affinity_score": 100,
     "trend_score": 95,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-27T17:43:26.979Z",
+    "created_at": "2026-10-27T21:56:17.117Z",
     "used_at": null
   }
 }
