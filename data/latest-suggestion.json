@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-10-28T04:41:37.498Z",
+  "updated_at": "2026-10-28T04:45:11.551Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793162497490_9snsj",
-    "topic": "Cracking the System Design Interview: Distributed Rate Limiting",
+    "id": "sugg_1793162711536_mobjw",
+    "topic": "Cracking the System Design Interview: Rate Limiters",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "System design interview prep is a perennial top-tier search category. Demonstrating a token-bucket or sliding-window architecture provides immediate career value.",
+    "rationale": "Directly targets high-volume interview prep queries with a rapid architectural walkthrough of token bucket vs leaky bucket algorithms.",
     "search_evidence": "system design interview prep",
     "educational_visuals": [
       "Architecture diagrams",
-      "Animated system flows",
-      "Data-flow diagrams"
+      "Animated system flows"
     ],
-    "hook_angle": "Failing system design interviews? Here is the exact blueprint to ace distributed rate limiting questions.",
+    "hook_angle": "If an interviewer asks you to design a rate limiter, don't freeze—use this exact token bucket blueprint.",
     "channel_affinity_score": 100,
     "trend_score": 98,
     "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-28T04:41:37.490Z",
+    "created_at": "2026-10-28T04:45:11.536Z",
     "used_at": null
   }
 }
