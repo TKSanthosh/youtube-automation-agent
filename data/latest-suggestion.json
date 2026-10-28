@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-28T04:45:11.551Z",
+  "updated_at": "2026-10-28T12:21:14.138Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793162711536_mobjw",
-    "topic": "Cracking the System Design Interview: Rate Limiters",
-    "category": "System Design",
+    "id": "sugg_1793190074125_v2t8w",
+    "topic": "Python AsyncIO vs Threading: When to Use Which",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "Directly targets high-volume interview prep queries with a rapid architectural walkthrough of token bucket vs leaky bucket algorithms.",
-    "search_evidence": "system design interview prep",
+    "rationale": "Directly targets high-volume search queries regarding concurrency models in Python, clarifying I/O-bound vs CPU-bound tasks to maximize retention.",
+    "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Animated system flows"
+      "State transitions",
+      "Data-flow diagrams"
     ],
-    "hook_angle": "If an interviewer asks you to design a rate limiter, don't freeze—use this exact token bucket blueprint.",
+    "hook_angle": "Stop using threads for I/O bound Python apps—here is why your CPU is burning up.",
     "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "trend_score": 95,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-28T04:45:11.536Z",
+    "created_at": "2026-10-28T12:21:14.126Z",
     "used_at": null
   }
 }
