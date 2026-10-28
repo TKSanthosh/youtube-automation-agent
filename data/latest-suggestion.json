@@ -1,23 +1,24 @@
 {
-  "updated_at": "2026-10-27T21:58:01.272Z",
+  "updated_at": "2026-10-28T04:41:37.498Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793138281266_ykpwh",
-    "topic": "Mastering the Microservices Circuit Breaker Pattern",
+    "id": "sugg_1793162497490_9snsj",
+    "topic": "Cracking the System Design Interview: Distributed Rate Limiting",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "System Design interview prep is at an all-time high. The circuit breaker pattern is a fundamental resilient architecture concept everyone must master.",
-    "search_evidence": "microservices circuit breaker pattern",
+    "rationale": "System design interview prep is a perennial top-tier search category. Demonstrating a token-bucket or sliding-window architecture provides immediate career value.",
+    "search_evidence": "system design interview prep",
     "educational_visuals": [
       "Architecture diagrams",
-      "State transitions"
+      "Animated system flows",
+      "Data-flow diagrams"
     ],
-    "hook_angle": "When a downstream microservice goes down, does it drag your entire platform into a cascading failure loop?",
-    "channel_affinity_score": 98,
-    "trend_score": 95,
-    "priority_score": 96,
+    "hook_angle": "Failing system design interviews? Here is the exact blueprint to ace distributed rate limiting questions.",
+    "channel_affinity_score": 100,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-27T21:58:01.266Z",
+    "created_at": "2026-10-28T04:41:37.490Z",
     "used_at": null
   }
 }
