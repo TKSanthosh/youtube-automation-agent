@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-28T12:21:14.138Z",
+  "updated_at": "2026-10-28T12:23:14.544Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793190074125_v2t8w",
-    "topic": "Python AsyncIO vs Threading: When to Use Which",
+    "id": "sugg_1793190194531_wj5h1j",
+    "topic": "Python AsyncIO vs Threading: When to Stop Using Threads",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Directly targets high-volume search queries regarding concurrency models in Python, clarifying I/O-bound vs CPU-bound tasks to maximize retention.",
+    "rationale": "Directly targets high-volume search intent around concurrency models, addressing common performance bottlenecks in I/O-bound applications.",
     "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
       "State transitions",
-      "Data-flow diagrams"
+      "Code execution visualization"
     ],
-    "hook_angle": "Stop using threads for I/O bound Python apps—here is why your CPU is burning up.",
+    "hook_angle": "Still using multi-threading for your I/O-bound Python app? You're wasting precious CPU cycles—let's look at why AsyncIO crushes it.",
     "channel_affinity_score": 100,
     "trend_score": 95,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-28T12:21:14.126Z",
+    "created_at": "2026-10-28T12:23:14.531Z",
     "used_at": null
   }
 }
