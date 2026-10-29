@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-29T04:54:12.018Z",
+  "updated_at": "2026-10-29T04:57:11.018Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793249652006_v9xmmd",
-    "topic": "Python AsyncIO Event Loop: Under the Hood of Concurrency",
+    "id": "sugg_1793249831005_mka8d7",
+    "topic": "Python AsyncIO Event Loop: How Concurrency Really Works",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Leverages massive search volume for python asyncio to demystify single-threaded cooperative multitasking through concrete event loop mechanics.",
+    "rationale": "Directly targets high-volume search intent around asyncio mechanics, solving developer confusion regarding single-threaded cooperative multitasking.",
     "search_evidence": "python asyncio event loop",
     "educational_visuals": [
       "State transitions",
       "Code execution visualization"
     ],
-    "hook_angle": "Stop guessing how Python handles concurrency. Let's trace the event loop step-by-step.",
-    "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 98,
+    "hook_angle": "Stop writing async/await code blindly. Here is what is actually happening inside Python's event loop right now.",
+    "channel_affinity_score": 95,
+    "trend_score": 92,
+    "priority_score": 94,
     "status": "pending",
-    "created_at": "2026-10-29T04:54:12.006Z",
+    "created_at": "2026-10-29T04:57:11.005Z",
     "used_at": null
   }
 }
