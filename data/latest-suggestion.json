@@ -1,24 +1,24 @@
 {
-  "updated_at": "2026-10-29T19:28:58.438Z",
+  "updated_at": "2026-10-29T22:33:39.256Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793302138430_epcui",
-    "topic": "Acing the System Design Interview: Distributed Locking",
-    "category": "System Design",
+    "id": "sugg_1793313219242_7ccaz",
+    "topic": "Python Asyncio Event Loop Under the Hood",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "Distributed locking is a core pillar of high-level system design interviews that candidates routinely fail due to edge cases like split-brain scenarios and network partitions.",
-    "search_evidence": "system design interview prep",
+    "rationale": "High search volume around asynchronous execution and event loops requires demystifying the underlying single-threaded cooperative multitasking mechanism to capture peak developer intent.",
+    "search_evidence": "python asyncio event loop",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Animated system flows",
+      "State transitions",
+      "Code execution visualization",
       "Data-flow diagrams"
     ],
-    "hook_angle": "If a system design interviewer asks how to prevent double-charging in a distributed queue, do you default to a basic SQL lock? Don't.",
-    "channel_affinity_score": 100,
-    "trend_score": 96,
-    "priority_score": 98,
+    "hook_angle": "Stop writing async/await in Python until you actually understand how the event loop silently blocks your entire thread.",
+    "channel_affinity_score": 95,
+    "trend_score": 92,
+    "priority_score": 94,
     "status": "pending",
-    "created_at": "2026-10-29T19:28:58.430Z",
+    "created_at": "2026-10-29T22:33:39.242Z",
     "used_at": null
   }
 }
