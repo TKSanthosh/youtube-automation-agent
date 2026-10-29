@@ -1,23 +1,24 @@
 {
-  "updated_at": "2026-10-29T12:32:55.335Z",
+  "updated_at": "2026-10-29T19:28:58.438Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793277175331_r9go0i",
-    "topic": "Ace Your System Design Interview: The 4-Step Scalability Framework",
+    "id": "sugg_1793302138430_epcui",
+    "topic": "Acing the System Design Interview: Distributed Locking",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Engineers actively preparing for system design interviews crave structured problem-solving methodologies to tackle vague open-ended prompts under pressure.",
+    "rationale": "Distributed locking is a core pillar of high-level system design interviews that candidates routinely fail due to edge cases like split-brain scenarios and network partitions.",
     "search_evidence": "system design interview prep",
     "educational_visuals": [
-      "Timelines",
-      "Animated system flows"
+      "Architecture diagrams",
+      "Animated system flows",
+      "Data-flow diagrams"
     ],
-    "hook_angle": "Stop rambling in your system design interview. Use this exact 4-step framework to land that senior FAANG offer.",
+    "hook_angle": "If a system design interviewer asks how to prevent double-charging in a distributed queue, do you default to a basic SQL lock? Don't.",
     "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "trend_score": 96,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-29T12:32:55.331Z",
+    "created_at": "2026-10-29T19:28:58.430Z",
     "used_at": null
   }
 }
