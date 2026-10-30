@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-30T12:22:23.344Z",
+  "updated_at": "2026-10-30T12:24:21.833Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793362943320_s1udgs",
-    "topic": "Mastering the Microservices Circuit Breaker",
+    "id": "sugg_1793363061148_6alpjp",
+    "topic": "Cracking the Distributed Systems Architecture Interview",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "System design interviews and production architectures heavily emphasize fault tolerance patterns to prevent cascading failures.",
-    "search_evidence": "microservices circuit breaker pattern",
+    "rationale": "Massive evergreen search volume driven by career-focused engineers preparing for senior interviews.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "Animated system flows",
-      "State transitions"
+      "Architecture diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "One slow database query can take down your entire microservices architecture. Here is how the Circuit Breaker pattern stops the bleed.",
+    "hook_angle": "Most candidates fail system design interviews because they start drawing boxes too early. Do this instead.",
     "channel_affinity_score": 100,
     "trend_score": 96,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-30T12:22:23.320Z",
+    "created_at": "2026-10-30T12:24:21.148Z",
     "used_at": null
   }
 }
