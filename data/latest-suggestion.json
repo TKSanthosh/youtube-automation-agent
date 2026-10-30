@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-10-29T22:33:39.256Z",
+  "updated_at": "2026-10-30T04:53:40.057Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793313219242_7ccaz",
-    "topic": "Python Asyncio Event Loop Under the Hood",
-    "category": "Python",
+    "id": "sugg_1793336020054_njx73s",
+    "topic": "Cracking the System Design Interview: Core Preparation Blueprint",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "High search volume around asynchronous execution and event loops requires demystifying the underlying single-threaded cooperative multitasking mechanism to capture peak developer intent.",
-    "search_evidence": "python asyncio event loop",
+    "rationale": "Meets intense user demand for structured interview prep frameworks that can be consumed rapidly on mobile.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "State transitions",
-      "Code execution visualization",
-      "Data-flow diagrams"
+      "Timelines",
+      "Trees and graphs"
     ],
-    "hook_angle": "Stop writing async/await in Python until you actually understand how the event loop silently blocks your entire thread.",
+    "hook_angle": "Stop freezing during system design interviews! Use this 4-step framework to nail any ambiguous architectural prompt.",
     "channel_affinity_score": 95,
-    "trend_score": 92,
-    "priority_score": 94,
+    "trend_score": 96,
+    "priority_score": 95,
     "status": "pending",
-    "created_at": "2026-10-29T22:33:39.242Z",
+    "created_at": "2026-10-30T04:53:40.054Z",
     "used_at": null
   }
 }
