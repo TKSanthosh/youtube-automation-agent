@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-30T04:53:40.057Z",
+  "updated_at": "2026-10-30T04:56:25.398Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793336020054_njx73s",
-    "topic": "Cracking the System Design Interview: Core Preparation Blueprint",
+    "id": "sugg_1793336184908_i64ryj",
+    "topic": "Ace the System Design Interview: Distributed Architecture 101",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Meets intense user demand for structured interview prep frameworks that can be consumed rapidly on mobile.",
+    "rationale": "Capitalizes on massive, evergreen developer demand for interview prep by translating complex distributed scaling rules into an intuitive 4-slide framework.",
     "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "Timelines",
-      "Trees and graphs"
+      "Architecture diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "Stop freezing during system design interviews! Use this 4-step framework to nail any ambiguous architectural prompt.",
-    "channel_affinity_score": 95,
+    "hook_angle": "Most engineers fail system design interviews because they start drawing databases instead of handling traffic load balancers first.",
+    "channel_affinity_score": 98,
     "trend_score": 96,
-    "priority_score": 95,
+    "priority_score": 97,
     "status": "pending",
-    "created_at": "2026-10-30T04:53:40.054Z",
+    "created_at": "2026-10-30T04:56:24.908Z",
     "used_at": null
   }
 }
