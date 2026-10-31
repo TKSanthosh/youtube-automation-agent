@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-31T11:52:23.962Z",
+  "updated_at": "2026-10-31T11:54:11.724Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793447543958_75kke",
+    "id": "sugg_1793447651717_n4bum",
     "topic": "Cracking the System Design Interview: Distributed Architectures",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Directly feeds high search demand for technical interview prep by breaking down complex distributed communication topology in under 3 minutes.",
+    "rationale": "Capitalizes on massive search volume for system design interview preparation, providing high-value architectural heuristics.",
     "search_evidence": "system design interview preparation",
     "educational_visuals": [
       "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "This one architectural flaw will fail you in your senior system design interview.",
-    "channel_affinity_score": 98,
-    "trend_score": 95,
-    "priority_score": 96,
+    "hook_angle": "Failing system design interviews because you don't know how to scale writes across distributed nodes? Master this core architectural pattern.",
+    "channel_affinity_score": 100,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-10-31T11:52:23.958Z",
+    "created_at": "2026-10-31T11:54:11.717Z",
     "used_at": null
   }
 }
