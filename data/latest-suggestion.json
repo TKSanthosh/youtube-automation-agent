@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-10-31T11:54:11.724Z",
+  "updated_at": "2026-10-31T16:59:05.718Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793447651717_n4bum",
-    "topic": "Cracking the System Design Interview: Distributed Architectures",
+    "id": "sugg_1793465945683_f5xmrm",
+    "topic": "Acing the System Design Interview: Distributed ID Generators",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Capitalizes on massive search volume for system design interview preparation, providing high-value architectural heuristics.",
-    "search_evidence": "system design interview preparation",
+    "rationale": "Directly fulfills heavy interview prep demand with a rock-solid, production-proven architectural solution like Snowflake IDs.",
+    "search_evidence": "system design interview questions",
     "educational_visuals": [
       "Architecture diagrams",
-      "Animated system flows"
+      "Data-flow diagrams"
     ],
-    "hook_angle": "Failing system design interviews because you don't know how to scale writes across distributed nodes? Master this core architectural pattern.",
+    "hook_angle": "If an interviewer asks you to generate unique IDs across 50 data centers, auto-increment will fail instantly. Here is the architectural fix.",
     "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "trend_score": 96,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-10-31T11:54:11.717Z",
+    "created_at": "2026-10-31T16:59:05.683Z",
     "used_at": null
   }
 }
