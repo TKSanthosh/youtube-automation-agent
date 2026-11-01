@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-11-01T18:47:49.237Z",
+  "updated_at": "2026-11-01T21:49:28.643Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793558869230_mstxxr",
-    "topic": "Cracking the Distributed Systems Interview Architecture",
+    "id": "sugg_1793569768635_birgy",
+    "topic": "Cracking the System Design Interview: Rate Limiters",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Capitalizes on massive organic traffic for interview prep by offering a streamlined framework for distributed system design requirements.",
-    "search_evidence": "system design interview preparation",
+    "rationale": "Extremely high search intent for system design interview prep. Token bucket vs Leaky bucket algorithms visualized clearly for architectural interviews.",
+    "search_evidence": "system design interview questions",
     "educational_visuals": [
       "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "Failing system design interviews? Stop drawing random boxes and start using this 4-step capacity planning formula.",
-    "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "hook_angle": "Failing system design interviews? Here is how to ace the distributed rate limiter question in 3 minutes.",
+    "channel_affinity_score": 98,
+    "trend_score": 96,
+    "priority_score": 97,
     "status": "pending",
-    "created_at": "2026-11-01T18:47:49.230Z",
+    "created_at": "2026-11-01T21:49:28.635Z",
     "used_at": null
   }
 }
