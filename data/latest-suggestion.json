@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-11-01T05:03:19.303Z",
+  "updated_at": "2026-11-01T12:51:57.714Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793509399297_hw5fm",
-    "topic": "Mastering Distributed Systems Architecture: Core Scaling Patterns",
+    "id": "sugg_1793537517710_ezwhk7",
+    "topic": "Ace Your System Design Interview: Step-by-Step Framework",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Addresses the massive demand for 'distributed systems architecture' by breaking down partitioning, replication, and consistency trade-offs.",
-    "search_evidence": "distributed systems architecture",
+    "rationale": "Captures high-intent career growth traffic looking for structured frameworks to tackle open-ended architecture questions.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "Animated system flows",
-      "Architecture diagrams"
+      "Timelines",
+      "Data-flow diagrams"
     ],
-    "hook_angle": "Passing a senior system design interview requires more than drawing boxes—here is how top engineers handle partition tolerance.",
+    "hook_angle": "Stop freezing during system design interviews. Use this exact 4-step framework used by FAANG staff engineers.",
     "channel_affinity_score": 100,
-    "trend_score": 96,
+    "trend_score": 97,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-11-01T05:03:19.297Z",
+    "created_at": "2026-11-01T12:51:57.710Z",
     "used_at": null
   }
 }
