@@ -1,23 +1,24 @@
 {
-  "updated_at": "2026-11-01T21:49:28.643Z",
+  "updated_at": "2026-11-02T04:59:45.362Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793569768635_birgy",
-    "topic": "Cracking the System Design Interview: Rate Limiters",
+    "id": "sugg_1793595585355_1qa48r",
+    "topic": "Mastering the Microservices Circuit Breaker Pattern",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Extremely high search intent for system design interview prep. Token bucket vs Leaky bucket algorithms visualized clearly for architectural interviews.",
-    "search_evidence": "system design interview questions",
+    "rationale": "System design interview candidates frequently fail to explain how to gracefully degrade service dependencies under heavy failure.",
+    "search_evidence": "microservices circuit breaker pattern",
     "educational_visuals": [
+      "State transitions",
       "Architecture diagrams",
       "Animated system flows"
     ],
-    "hook_angle": "Failing system design interviews? Here is how to ace the distributed rate limiter question in 3 minutes.",
+    "hook_angle": "One failing database query can bring down your entire microservices architecture. Here is how a circuit breaker saves it.",
     "channel_affinity_score": 98,
-    "trend_score": 96,
+    "trend_score": 95,
     "priority_score": 97,
     "status": "pending",
-    "created_at": "2026-11-01T21:49:28.635Z",
+    "created_at": "2026-11-02T04:59:45.356Z",
     "used_at": null
   }
 }
