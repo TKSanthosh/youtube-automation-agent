@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-11-02T23:22:26.750Z",
+  "updated_at": "2026-11-03T00:43:32.047Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793661746743_mjdwl",
-    "topic": "System Design Interview: Scaling Distributed Systems Architectures",
-    "category": "System Design",
+    "id": "sugg_1793666612033_how5f",
+    "topic": "Python Asyncio Event Loop Demystified Under the Hood",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "Capitalizes on heavy search intent for system design interviews and architectural patterns used at scale.",
-    "search_evidence": "system design interview questions",
+    "rationale": "High search volume around asyncio and event loops creates strong intent. Demystifying the single-threaded event loop mechanism via clear architecture diagrams captures high watch-time and drives retention on complex concurrency topics.",
+    "search_evidence": "python asyncio event loop",
     "educational_visuals": [
       "Architecture diagrams",
-      "Animated system flows"
+      "Code execution visualization"
     ],
-    "hook_angle": "Failing system design interviews? Here is how senior engineers break down distributed architectural bottlenecks in 3 minutes.",
+    "hook_angle": "Stop guessing how Python handles concurrency. Let's trace the exact lifecycle of an asyncio event loop in under 3 minutes.",
     "channel_affinity_score": 100,
-    "trend_score": 96,
+    "trend_score": 95,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-11-02T23:22:26.743Z",
+    "created_at": "2026-11-03T00:43:32.033Z",
     "used_at": null
   }
 }
