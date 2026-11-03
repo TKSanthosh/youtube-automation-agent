@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-11-03T20:28:02.740Z",
+  "updated_at": "2026-11-03T22:59:53.683Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793737682730_3hykc",
-    "topic": "Python AsyncIO vs Threading: When to Use Which",
-    "category": "Python",
+    "id": "sugg_1793746793677_uhc3q2",
+    "topic": "Cracking System Design Interviews: The 4-Step Framework",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Developers frequently struggle with concurrency models in Python, mixing up I/O-bound tasks with CPU bounds and tanking application performance.",
-    "search_evidence": "python asyncio vs threading",
+    "rationale": "System design interview prep is one of the highest-demand categories in software engineering content. A repeatable structural framework drives intense viewer retention and shares.",
+    "search_evidence": "system design interview prep",
     "educational_visuals": [
-      "State transitions",
-      "Code execution visualization"
+      "Architecture diagrams",
+      "Timelines"
     ],
-    "hook_angle": "Stop using threading for your web scrapers! You're destroying your CPU efficiency.",
+    "hook_angle": "Stop freezing up during system design interviews. Use this exact 4-step framework to structure any distributed scale problem.",
     "channel_affinity_score": 100,
-    "trend_score": 95,
+    "trend_score": 96,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-11-03T20:28:02.730Z",
+    "created_at": "2026-11-03T22:59:53.677Z",
     "used_at": null
   }
 }
