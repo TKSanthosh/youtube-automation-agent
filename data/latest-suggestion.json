@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-11-03T00:43:32.047Z",
+  "updated_at": "2026-11-03T05:52:31.402Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793666612033_how5f",
-    "topic": "Python Asyncio Event Loop Demystified Under the Hood",
-    "category": "Python",
+    "id": "sugg_1793685151398_3kuy7p",
+    "topic": "Microservices Circuit Breaker Pattern: Prevent Cascading Failures",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "High search volume around asyncio and event loops creates strong intent. Demystifying the single-threaded event loop mechanism via clear architecture diagrams captures high watch-time and drives retention on complex concurrency topics.",
-    "search_evidence": "python asyncio event loop",
+    "rationale": "Capitalizes on search queries for resilient microservice patterns, explaining state transitions between Closed, Open, and Half-Open modes.",
+    "search_evidence": "microservices circuit breaker pattern",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Code execution visualization"
+      "State transitions",
+      "Animated system flows"
     ],
-    "hook_angle": "Stop guessing how Python handles concurrency. Let's trace the exact lifecycle of an asyncio event loop in under 3 minutes.",
+    "hook_angle": "One slow third-party API just took down your entire microservices architecture. Here is how the Circuit Breaker pattern isolates the blast radius.",
     "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 98,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-11-03T00:43:32.033Z",
+    "created_at": "2026-11-03T05:52:31.398Z",
     "used_at": null
   }
 }
