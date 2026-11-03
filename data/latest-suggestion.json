@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-11-03T13:50:15.542Z",
+  "updated_at": "2026-11-03T20:28:02.740Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793713815527_893cbo",
-    "topic": "Python AsyncIO Event Loop: Under the Hood of Concurrency",
+    "id": "sugg_1793737682730_3hykc",
+    "topic": "Python AsyncIO vs Threading: When to Use Which",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Developers struggle to visualize how single-threaded event loops handle thousands of concurrent network calls without blocking, driving massive search intent.",
-    "search_evidence": "python asyncio event loop",
+    "rationale": "Developers frequently struggle with concurrency models in Python, mixing up I/O-bound tasks with CPU bounds and tanking application performance.",
+    "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
       "State transitions",
-      "Code execution visualization",
-      "Animated system flows"
+      "Code execution visualization"
     ],
-    "hook_angle": "Stop using time.sleep() in your APIs! Here is how Python's AsyncIO event loop actually manages thousands of requests on a single thread.",
+    "hook_angle": "Stop using threading for your web scrapers! You're destroying your CPU efficiency.",
     "channel_affinity_score": 100,
     "trend_score": 95,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-11-03T13:50:15.527Z",
+    "created_at": "2026-11-03T20:28:02.730Z",
     "used_at": null
   }
 }
