@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-11-04T05:23:40.438Z",
+  "updated_at": "2026-11-04T05:28:10.849Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793769820390_hdrk6",
-    "topic": "Python AsyncIO Event Loop: Under the Hood Explained",
-    "category": "Python",
+    "id": "sugg_1793770090827_pr0rkf",
+    "topic": "Mastering the Circuit Breaker Pattern in Microservices",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Directly targets high-volume search intent for concurrency models while correcting common developer misunderstandings about asynchronous single-threaded execution.",
-    "search_evidence": "python asyncio event loop",
+    "rationale": "Directly responds to high-frequency system design interview queries on microservice resilience, utilizing state transition visuals to explain closed, open, and half-open states.",
+    "search_evidence": "microservices circuit breaker pattern",
     "educational_visuals": [
       "State transitions",
-      "Code execution visualization",
-      "Animated system flows"
+      "Architecture diagrams"
     ],
-    "hook_angle": "Stop using async/await blindly—here is why your Python code is still blocking the main thread.",
+    "hook_angle": "One failing microservice is about to cascade and take down your entire distributed backend. Here is how a circuit breaker stops it.",
     "channel_affinity_score": 100,
-    "trend_score": 95,
+    "trend_score": 96,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-11-04T05:23:40.390Z",
+    "created_at": "2026-11-04T05:28:10.827Z",
     "used_at": null
   }
 }
