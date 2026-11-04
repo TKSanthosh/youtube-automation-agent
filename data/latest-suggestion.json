@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-11-04T05:28:10.849Z",
+  "updated_at": "2026-11-04T13:57:18.330Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793770090827_pr0rkf",
-    "topic": "Mastering the Circuit Breaker Pattern in Microservices",
+    "id": "sugg_1793800638325_0hjb9",
+    "topic": "Ace the System Design Interview: Distributed Systems Blueprint",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Directly responds to high-frequency system design interview queries on microservice resilience, utilizing state transition visuals to explain closed, open, and half-open states.",
-    "search_evidence": "microservices circuit breaker pattern",
+    "rationale": "Capitalizes on massive search volume for system design interview preparation by breaking down core architectural styles.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "State transitions",
-      "Architecture diagrams"
+      "Architecture diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "One failing microservice is about to cascade and take down your entire distributed backend. Here is how a circuit breaker stops it.",
+    "hook_angle": "Failing system design interviews? Here is the exact framework senior engineers use to structure distributed system solutions.",
     "channel_affinity_score": 100,
-    "trend_score": 96,
-    "priority_score": 98,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-11-04T05:28:10.827Z",
+    "created_at": "2026-11-04T13:57:18.325Z",
     "used_at": null
   }
 }
