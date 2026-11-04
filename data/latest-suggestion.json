@@ -1,23 +1,24 @@
 {
-  "updated_at": "2026-11-04T20:45:21.561Z",
+  "updated_at": "2026-11-04T23:22:41.773Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793825121445_14is4s",
-    "topic": "Cracking System Design Interviews: Distributed Architectures",
+    "id": "sugg_1793834561766_w1viz",
+    "topic": "Cracking System Design Interviews: The 4-Step Blueprint",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Capitalizes on massive search volume for interview prep by breaking down core architectural trade-offs in distributed computing.",
-    "search_evidence": "system design interview prep",
+    "rationale": "System design interview prep is a perennial high-intent search query. Offering a structured, reproducible 4-step framework guarantees immediate bookmarking and high algorithmic engagement.",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
       "Architecture diagrams",
-      "Animated system flows"
+      "Animated system flows",
+      "Trees and graphs"
     ],
-    "hook_angle": "Failing system design interviews? Stop memorizing solutions and master how to scale stateful distributed services from scratch.",
+    "hook_angle": "Failing system design interviews isn't about lacking coding skills; it's because you're skipping this exact 4-step framework.",
     "channel_affinity_score": 100,
     "trend_score": 98,
     "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-11-04T20:45:21.446Z",
+    "created_at": "2026-11-04T23:22:41.766Z",
     "used_at": null
   }
 }
