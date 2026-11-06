@@ -1,81 +1,125 @@
 {
-  "updated_at": "2026-11-06T14:40:30.988Z",
-  "total_suggestions": 4,
+  "updated_at": "2026-11-06T20:33:19.603Z",
+  "total_suggestions": 6,
   "suggestions": [
     {
-      "id": "sugg_1793976030975_ihp0x",
-      "topic": "Python AsyncIO Event Loop Deep Dive: How It Actually Works",
+      "id": "sugg_1793997199251_9ib6e7",
+      "topic": "Python Asyncio vs Threading: When to Use Which",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Directly targets high-volume search queries regarding asyncio and the event loop mechanics, capturing intermediate developers confused by cooperative multitasking.",
+      "rationale": "Targets a perennial developer debate with high search volume, offering clear architectural boundaries between I/O bound concurrency models.",
+      "search_evidence": "python asyncio vs threading",
+      "educational_visuals": [
+        "Data-flow diagrams",
+        "Timelines",
+        "Code execution visualization"
+      ],
+      "hook_angle": "Stop using threading for high-concurrency network I/O. Asyncio is faster, but only if you avoid this one trap.",
+      "channel_affinity_score": 100,
+      "trend_score": 96,
+      "priority_score": 99,
+      "status": "pending",
+      "created_at": "2026-11-06T20:33:19.251Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1793997198114_05b2fi",
+      "topic": "Python AsyncIO Event Loop: Under the Hood of Concurrency",
+      "category": "Python",
+      "target_length": "short",
+      "rationale": "Directly addresses high search demand around Python asyncio mechanics and event loops, capturing developers struggling with asynchronous flow understanding.",
       "search_evidence": "python asyncio event loop",
       "educational_visuals": [
+        "Animated system flows",
         "State transitions",
         "Code execution visualization"
       ],
-      "hook_angle": "Stop writing async/await in Python until you actually understand what the event loop is doing behind your back.",
+      "hook_angle": "Stop writing async/await code without knowing how the event loop actually schedules your tasks under the hood.",
       "channel_affinity_score": 100,
       "trend_score": 95,
-      "priority_score": 97,
+      "priority_score": 98,
       "status": "pending",
-      "created_at": "2026-11-06T14:40:30.975Z",
+      "created_at": "2026-11-06T20:33:18.114Z",
       "used_at": null
     },
     {
-      "id": "sugg_1793976030981_o5oau",
-      "topic": "Microservices Circuit Breaker Pattern: Prevent Cascading Failures",
+      "id": "sugg_1793997198745_djztg",
+      "topic": "Microservices Circuit Breaker: Failing Fast Under Load",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "Aligns with top system design search intent around resilient distributed architectures and fault-tolerant microservices.",
+      "rationale": "Leverages surging interest in distributed systems architecture and microservice resilience patterns for interview prep and production stability.",
       "search_evidence": "microservices circuit breaker pattern",
       "educational_visuals": [
         "Animated system flows",
-        "Architecture diagrams"
-      ],
-      "hook_angle": "One crashing microservice just took down your entire production cluster because you forgot this pattern.",
-      "channel_affinity_score": 100,
-      "trend_score": 94,
-      "priority_score": 96,
-      "status": "pending",
-      "created_at": "2026-11-06T14:40:30.981Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1793976030980_ziziqj",
-      "topic": "Python Memory Optimization: Mastering Garbage Collection",
-      "category": "Python",
-      "target_length": "short",
-      "rationale": "Addresses rampant developer frustration with memory leaks and reference counting mechanics in long-running Python backend services.",
-      "search_evidence": "python memory management and garbage collection",
-      "educational_visuals": [
-        "Data-flow diagrams",
-        "Code execution visualization"
-      ],
-      "hook_angle": "Your Python app is slowly leaking memory, and your default garbage collector isn't saving you.",
-      "channel_affinity_score": 100,
-      "trend_score": 92,
-      "priority_score": 95,
-      "status": "pending",
-      "created_at": "2026-11-06T14:40:30.980Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1793976030983_ebcsf",
-      "topic": "System Design Interview: Distributed Control System Architecture",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "Leverages intense interview preparation demand while delivering rigorous distributed system engineering principles.",
-      "search_evidence": "distributed control system architecture",
-      "educational_visuals": [
         "Architecture diagrams",
         "State transitions"
       ],
-      "hook_angle": "Here is how senior engineers actually design distributed control systems under strict fault-tolerance constraints.",
+      "hook_angle": "One downstream service crash is cascading and taking down your entire backend. Here is how to stop it instantly.",
+      "channel_affinity_score": 100,
+      "trend_score": 94,
+      "priority_score": 97,
+      "status": "pending",
+      "created_at": "2026-11-06T20:33:18.745Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1793997198485_5bk5dq",
+      "topic": "Python Memory Management: Reference Counting & GC Internals",
+      "category": "Python",
+      "target_length": "short",
+      "rationale": "Capitalizes on heavy search volume for Python memory management and garbage collection, resolving subtle memory leak debugging nightmares.",
+      "search_evidence": "python memory management and garbage collection",
+      "educational_visuals": [
+        "Data-flow diagrams",
+        "Trees and graphs",
+        "Code execution visualization"
+      ],
+      "hook_angle": "Your Python app is leaking memory, and standard reference counting isn't saving you from cyclic references.",
+      "channel_affinity_score": 100,
+      "trend_score": 92,
+      "priority_score": 96,
+      "status": "pending",
+      "created_at": "2026-11-06T20:33:18.485Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1793997199460_pvr7u",
+      "topic": "System Design Interview: Designing a Rate Limiter at Scale",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Directly targets system design interview preparation queries with an architectural blueprint for production-grade API throttling.",
+      "search_evidence": "system design interview questions",
+      "educational_visuals": [
+        "Architecture diagrams",
+        "Data-flow diagrams",
+        "State transitions"
+      ],
+      "hook_angle": "If a system design interviewer asks you to build a rate limiter, don't just say Redis. Here is the production architecture.",
+      "channel_affinity_score": 100,
+      "trend_score": 93,
+      "priority_score": 95,
+      "status": "pending",
+      "created_at": "2026-11-06T20:33:19.460Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1793997199151_uuj6wi",
+      "topic": "Distributed Systems: Consensus & Leader Election Explained",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Directly maps to high-demand distributed computing architecture queries in system design interviews.",
+      "search_evidence": "distributed systems architecture",
+      "educational_visuals": [
+        "Architecture diagrams",
+        "Animated system flows",
+        "Timelines"
+      ],
+      "hook_angle": "How do distributed nodes agree on state without a central database? The secret behind production leader election.",
       "channel_affinity_score": 100,
       "trend_score": 90,
       "priority_score": 93,
       "status": "pending",
-      "created_at": "2026-11-06T14:40:30.983Z",
+      "created_at": "2026-11-06T20:33:19.151Z",
       "used_at": null
     }
   ]

@@ -1,23 +1,24 @@
 {
-  "updated_at": "2026-11-06T14:40:30.988Z",
+  "updated_at": "2026-11-06T20:33:19.603Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793976030975_ihp0x",
-    "topic": "Python AsyncIO Event Loop Deep Dive: How It Actually Works",
+    "id": "sugg_1793997199251_9ib6e7",
+    "topic": "Python Asyncio vs Threading: When to Use Which",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Directly targets high-volume search queries regarding asyncio and the event loop mechanics, capturing intermediate developers confused by cooperative multitasking.",
-    "search_evidence": "python asyncio event loop",
+    "rationale": "Targets a perennial developer debate with high search volume, offering clear architectural boundaries between I/O bound concurrency models.",
+    "search_evidence": "python asyncio vs threading",
     "educational_visuals": [
-      "State transitions",
+      "Data-flow diagrams",
+      "Timelines",
       "Code execution visualization"
     ],
-    "hook_angle": "Stop writing async/await in Python until you actually understand what the event loop is doing behind your back.",
+    "hook_angle": "Stop using threading for high-concurrency network I/O. Asyncio is faster, but only if you avoid this one trap.",
     "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 97,
+    "trend_score": 96,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-11-06T14:40:30.975Z",
+    "created_at": "2026-11-06T20:33:19.251Z",
     "used_at": null
   }
 }
