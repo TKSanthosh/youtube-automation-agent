@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-11-06T05:40:30.309Z",
+  "updated_at": "2026-11-06T05:44:16.517Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793943630301_5exlhn",
-    "topic": "Acing the System Design Interview: Designing a Distributed Rate Limiter",
+    "id": "sugg_1793943856510_ib5rxm",
+    "topic": "Ace Your System Design Interview: Distributed Systems Blueprint",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Captures the massive audience preparing for system design interviews by walking through token bucket vs. leaky bucket algorithms in distributed clusters.",
+    "rationale": "System design interview preparation is one of the highest-volume search categories. Providing a structured 4-step framework captures urgent career-driven watch time.",
     "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "Animated system flows",
-      "Architecture diagrams"
+      "Architecture diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "Don't fail your senior system design interview by using a local in-memory rate limiter. Here is how to scale it across 50 microservices.",
+    "hook_angle": "Failing your system design interviews? Stop drawing random boxes and use this exact 4-step scalability blueprint instead.",
     "channel_affinity_score": 100,
-    "trend_score": 96,
-    "priority_score": 98,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-11-06T05:40:30.301Z",
+    "created_at": "2026-11-06T05:44:16.510Z",
     "used_at": null
   }
 }
