@@ -1,145 +1,81 @@
 {
-  "updated_at": "2026-11-06T13:55:14.140Z",
-  "total_suggestions": 7,
+  "updated_at": "2026-11-06T14:40:30.988Z",
+  "total_suggestions": 4,
   "suggestions": [
     {
-      "id": "sugg_1793973314125_h93yqn",
-      "topic": "Python AsyncIO Event Loop: Single-Threaded Concurrency Explained",
+      "id": "sugg_1793976030975_ihp0x",
+      "topic": "Python AsyncIO Event Loop Deep Dive: How It Actually Works",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Directly targets high-volume search queries around asyncio and event loops. Bridges the conceptual gap between multi-threading and asynchronous code for intermediate Python developers seeking high-performance I/O handling.",
+      "rationale": "Directly targets high-volume search queries regarding asyncio and the event loop mechanics, capturing intermediate developers confused by cooperative multitasking.",
       "search_evidence": "python asyncio event loop",
       "educational_visuals": [
         "State transitions",
-        "Code execution visualization",
-        "Data-flow diagrams"
+        "Code execution visualization"
       ],
-      "hook_angle": "Stop using threads for I/O-bound tasks until you understand how Python's single-threaded event loop actually interleaves your coroutines.",
+      "hook_angle": "Stop writing async/await in Python until you actually understand what the event loop is doing behind your back.",
       "channel_affinity_score": 100,
       "trend_score": 95,
-      "priority_score": 98,
-      "status": "pending",
-      "created_at": "2026-11-06T13:55:14.125Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1793973314129_388mb4",
-      "topic": "Mastering the System Design Interview: Scalable Rate Limiting",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "High-intent search traffic surrounds system design interview prep. Providing a crystal-clear architectural breakdown of token bucket vs. sliding window algorithms drives immense save and share metrics.",
-      "search_evidence": "system design interview preparation",
-      "educational_visuals": [
-        "Animated system flows",
-        "Architecture diagrams",
-        "Data-flow diagrams"
-      ],
-      "hook_angle": "If your system design interviewer asks you to scale a rate limiter to 10 million requests per second, telling them to use a simple database counter will fail the interview.",
-      "channel_affinity_score": 100,
-      "trend_score": 96,
       "priority_score": 97,
       "status": "pending",
-      "created_at": "2026-11-06T13:55:14.129Z",
+      "created_at": "2026-11-06T14:40:30.975Z",
       "used_at": null
     },
     {
-      "id": "sugg_1793973314132_iacnms",
+      "id": "sugg_1793976030981_o5oau",
       "topic": "Microservices Circuit Breaker Pattern: Prevent Cascading Failures",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "Directly targets high-demand search queries on microservices circuit breakers. Solves the ubiquitous production nightmare of one slow downstream service taking down an entire platform.",
+      "rationale": "Aligns with top system design search intent around resilient distributed architectures and fault-tolerant microservices.",
       "search_evidence": "microservices circuit breaker pattern",
       "educational_visuals": [
-        "State transitions",
         "Animated system flows",
-        "Data-flow diagrams"
+        "Architecture diagrams"
       ],
-      "hook_angle": "One downstream API slowdown just took down your entire web application. Here is how the Circuit Breaker pattern isolates failures before they cascade.",
+      "hook_angle": "One crashing microservice just took down your entire production cluster because you forgot this pattern.",
       "channel_affinity_score": 100,
       "trend_score": 94,
       "priority_score": 96,
       "status": "pending",
-      "created_at": "2026-11-06T13:55:14.132Z",
+      "created_at": "2026-11-06T14:40:30.981Z",
       "used_at": null
     },
     {
-      "id": "sugg_1793973314127_3jsoc29",
-      "topic": "Python Memory Management: Reference Counting & Garbage Collection",
+      "id": "sugg_1793976030980_ziziqj",
+      "topic": "Python Memory Optimization: Mastering Garbage Collection",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Capitalizes on heavy search volume for Python memory management. Addresses silent memory leaks caused by circular references that standard reference counting fails to catch.",
+      "rationale": "Addresses rampant developer frustration with memory leaks and reference counting mechanics in long-running Python backend services.",
       "search_evidence": "python memory management and garbage collection",
       "educational_visuals": [
-        "Trees and graphs",
-        "Architecture diagrams",
+        "Data-flow diagrams",
         "Code execution visualization"
       ],
-      "hook_angle": "Your Python app is leaking memory even after you delete your variables. Here is how reference counting and generational garbage collection actually interact under the hood.",
+      "hook_angle": "Your Python app is slowly leaking memory, and your default garbage collector isn't saving you.",
       "channel_affinity_score": 100,
       "trend_score": 92,
       "priority_score": 95,
       "status": "pending",
-      "created_at": "2026-11-06T13:55:14.127Z",
+      "created_at": "2026-11-06T14:40:30.980Z",
       "used_at": null
     },
     {
-      "id": "sugg_1793973314131_neoacl",
-      "topic": "Distributed Systems: Designing Fault-Tolerant Microservices",
+      "id": "sugg_1793976030983_ebcsf",
+      "topic": "System Design Interview: Distributed Control System Architecture",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "Aligns with distributed architecture search terms. Breaks down complex partitioning and consensus concepts into digestible, production-grade visual topologies.",
-      "search_evidence": "distributed systems architecture",
+      "rationale": "Leverages intense interview preparation demand while delivering rigorous distributed system engineering principles.",
+      "search_evidence": "distributed control system architecture",
       "educational_visuals": [
-        "Animated system flows",
         "Architecture diagrams",
         "State transitions"
       ],
-      "hook_angle": "Network partitions happen in production every single day. Here is how distributed systems maintain consistency without bringing down your entire microservices fleet.",
+      "hook_angle": "Here is how senior engineers actually design distributed control systems under strict fault-tolerance constraints.",
       "channel_affinity_score": 100,
       "trend_score": 90,
       "priority_score": 93,
       "status": "pending",
-      "created_at": "2026-11-06T13:55:14.131Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1793973314135_y88t9",
-      "topic": "Kubernetes Pod Lifecycle & Probes: Zero-Downtime Deployments",
-      "category": "Kubernetes",
-      "target_length": "short",
-      "rationale": "Addresses critical Kubernetes orchestration mechanics. Captures the high-intent audience looking to eliminate HTTP 502 errors during rolling updates and pod restarts.",
-      "search_evidence": "distributed computing architecture",
-      "educational_visuals": [
-        "State transitions",
-        "Animated system flows",
-        "Timelines"
-      ],
-      "hook_angle": "Why do your users still see 502 bad gateway errors during a Kubernetes rolling update? The secret lies in misconfigured startup, liveness, and readiness probes.",
-      "channel_affinity_score": 100,
-      "trend_score": 89,
-      "priority_score": 92,
-      "status": "pending",
-      "created_at": "2026-11-06T13:55:14.135Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1793973314134_sx9682",
-      "topic": "Docker Multi-Stage Builds: Slash Container Sizes by 90%",
-      "category": "Docker",
-      "target_length": "short",
-      "rationale": "Fits core channel pillar for Docker while delivering immediate, high-utility optimization techniques that senior engineers search for daily to improve CI/CD pipeline speeds.",
-      "search_evidence": "python memory optimization",
-      "educational_visuals": [
-        "Architecture diagrams",
-        "Code execution visualization",
-        "Data-flow diagrams"
-      ],
-      "hook_angle": "Stop shipping 1-gigabyte Docker images containing your entire build toolchain. Here is how multi-stage builds strip your production containers down to bare metal.",
-      "channel_affinity_score": 100,
-      "trend_score": 88,
-      "priority_score": 91,
-      "status": "pending",
-      "created_at": "2026-11-06T13:55:14.134Z",
+      "created_at": "2026-11-06T14:40:30.983Z",
       "used_at": null
     }
   ]

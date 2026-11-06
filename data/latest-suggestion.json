@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-11-06T13:55:14.140Z",
+  "updated_at": "2026-11-06T14:40:30.988Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1793973314125_h93yqn",
-    "topic": "Python AsyncIO Event Loop: Single-Threaded Concurrency Explained",
+    "id": "sugg_1793976030975_ihp0x",
+    "topic": "Python AsyncIO Event Loop Deep Dive: How It Actually Works",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Directly targets high-volume search queries around asyncio and event loops. Bridges the conceptual gap between multi-threading and asynchronous code for intermediate Python developers seeking high-performance I/O handling.",
+    "rationale": "Directly targets high-volume search queries regarding asyncio and the event loop mechanics, capturing intermediate developers confused by cooperative multitasking.",
     "search_evidence": "python asyncio event loop",
     "educational_visuals": [
       "State transitions",
-      "Code execution visualization",
-      "Data-flow diagrams"
+      "Code execution visualization"
     ],
-    "hook_angle": "Stop using threads for I/O-bound tasks until you understand how Python's single-threaded event loop actually interleaves your coroutines.",
+    "hook_angle": "Stop writing async/await in Python until you actually understand what the event loop is doing behind your back.",
     "channel_affinity_score": 100,
     "trend_score": 95,
-    "priority_score": 98,
+    "priority_score": 97,
     "status": "pending",
-    "created_at": "2026-11-06T13:55:14.125Z",
+    "created_at": "2026-11-06T14:40:30.975Z",
     "used_at": null
   }
 }
