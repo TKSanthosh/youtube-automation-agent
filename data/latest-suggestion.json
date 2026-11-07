@@ -1,23 +1,24 @@
 {
-  "updated_at": "2026-11-07T18:31:23.650Z",
+  "updated_at": "2026-11-07T21:35:49.321Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1794076282871_7iqo3",
-    "topic": "Mastering the System Design Interview: Distributed ID Generators",
-    "category": "System Design",
+    "id": "sugg_1794087349294_jrm2e7",
+    "topic": "Python 3.13 Free-Threaded GIL Removal: What Changes for Developers",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "Directly serves the massive search volume for interview prep by solving a fundamental architectural bottleneck (Snowflake IDs vs UUIDs).",
-    "search_evidence": "system design interview preparation",
+    "rationale": "Python 3.13 free-threading is the biggest Python architectural shift in 20 years.",
+    "search_evidence": "python 3.13 gil removal benchmark",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Animated system flows"
+      "State transitions",
+      "Animated system flows",
+      "Code execution visualization"
     ],
-    "hook_angle": "If a system design interviewer asks you to generate 100k unique IDs per second, auto-increment will crash your database.",
-    "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "hook_angle": "Python finally has true multi-threading without the GIL. But how does it work?",
+    "channel_affinity_score": 85,
+    "trend_score": 95,
+    "priority_score": 95,
     "status": "pending",
-    "created_at": "2026-11-07T18:31:22.871Z",
+    "created_at": "2026-11-07T21:35:49.294Z",
     "used_at": null
   }
 }
