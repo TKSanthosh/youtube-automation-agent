@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-11-07T12:41:12.594Z",
+  "updated_at": "2026-11-07T18:31:23.650Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1794055272583_vxxk9i",
-    "topic": "Python AsyncIO Event Loop Deep Dive",
-    "category": "Python",
+    "id": "sugg_1794076282871_7iqo3",
+    "topic": "Mastering the System Design Interview: Distributed ID Generators",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Captures high-intent developer searches for asynchronous concurrency mechanics, driving exceptional retention via step-by-step loop visualization.",
-    "search_evidence": "python asyncio event loop",
+    "rationale": "Directly serves the massive search volume for interview prep by solving a fundamental architectural bottleneck (Snowflake IDs vs UUIDs).",
+    "search_evidence": "system design interview preparation",
     "educational_visuals": [
-      "State transitions",
-      "Code execution visualization"
+      "Architecture diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "Stop writing async/await code blindly. Here is what is actually happening inside Python's single-threaded event loop right now.",
+    "hook_angle": "If a system design interviewer asks you to generate 100k unique IDs per second, auto-increment will crash your database.",
     "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 98,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-11-07T12:41:12.583Z",
+    "created_at": "2026-11-07T18:31:22.871Z",
     "used_at": null
   }
 }
