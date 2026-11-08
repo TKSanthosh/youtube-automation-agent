@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-11-08T18:42:57.656Z",
+  "updated_at": "2026-11-08T21:49:44.205Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1794163377065_f8xg3n",
-    "topic": "Mastering System Design Interviews: The Distributed ID Generator",
-    "category": "System Design",
+    "id": "sugg_1794174584191_68fzcv",
+    "topic": "Python AsyncIO Event Loop Deep Dive: How It Actually Works",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "Aligns with the perennial demand for system design interview preparation by solving a classic distributed architectural hurdle.",
-    "search_evidence": "system design interview prep",
+    "rationale": "Leverages massive search volume around python asyncio to de-mystify the single-threaded event loop architecture, drastically increasing retention through clear visualization.",
+    "search_evidence": "python asyncio event loop",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Data-flow diagrams"
+      "State transitions",
+      "Code execution visualization"
     ],
-    "hook_angle": "How do you generate unique IDs across 50 distributed microservices without a single point of failure?",
-    "channel_affinity_score": 100,
-    "trend_score": 96,
-    "priority_score": 98,
+    "hook_angle": "Stop guessing how async/await works in Python. Let's look inside the event loop right now.",
+    "channel_affinity_score": 95,
+    "trend_score": 98,
+    "priority_score": 97,
     "status": "pending",
-    "created_at": "2026-11-08T18:42:57.065Z",
+    "created_at": "2026-11-08T21:49:44.191Z",
     "used_at": null
   }
 }
