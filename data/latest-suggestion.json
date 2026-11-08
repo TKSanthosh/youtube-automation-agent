@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-11-08T12:58:11.420Z",
+  "updated_at": "2026-11-08T18:42:57.656Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1794142691415_ehnrui",
-    "topic": "Cracking Distributed Systems Architecture in Interviews",
+    "id": "sugg_1794163377065_f8xg3n",
+    "topic": "Mastering System Design Interviews: The Distributed ID Generator",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Directly targets 'system design interview prep' keywords with high-value architectural blueprints for scalable distributed systems.",
-    "search_evidence": "distributed systems architecture",
+    "rationale": "Aligns with the perennial demand for system design interview preparation by solving a classic distributed architectural hurdle.",
+    "search_evidence": "system design interview prep",
     "educational_visuals": [
       "Architecture diagrams",
-      "Animated system flows"
+      "Data-flow diagrams"
     ],
-    "hook_angle": "Senior engineers don't guess during system design interviews. They use this exact foundational framework.",
-    "channel_affinity_score": 98,
-    "trend_score": 94,
-    "priority_score": 96,
+    "hook_angle": "How do you generate unique IDs across 50 distributed microservices without a single point of failure?",
+    "channel_affinity_score": 100,
+    "trend_score": 96,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-11-08T12:58:11.415Z",
+    "created_at": "2026-11-08T18:42:57.065Z",
     "used_at": null
   }
 }
