@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-11-08T12:56:36.378Z",
+  "updated_at": "2026-11-08T12:58:11.420Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1794142596360_ad66th",
-    "topic": "Python AsyncIO Event Loop Deep Dive: How It Actually Works",
-    "category": "Python",
+    "id": "sugg_1794142691415_ehnrui",
+    "topic": "Cracking Distributed Systems Architecture in Interviews",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Leverages massive search volume around python asyncio to de-mystify the single-threaded event loop. Maximizes retention via step-by-step state execution visualization.",
-    "search_evidence": "python asyncio event loop",
+    "rationale": "Directly targets 'system design interview prep' keywords with high-value architectural blueprints for scalable distributed systems.",
+    "search_evidence": "distributed systems architecture",
     "educational_visuals": [
-      "State transitions",
-      "Code execution visualization"
+      "Architecture diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "Ever wonder how Python handles thousands of concurrent network requests on a single CPU core without crashing? Let's crack open the asyncio event loop.",
-    "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 98,
+    "hook_angle": "Senior engineers don't guess during system design interviews. They use this exact foundational framework.",
+    "channel_affinity_score": 98,
+    "trend_score": 94,
+    "priority_score": 96,
     "status": "pending",
-    "created_at": "2026-11-08T12:56:36.360Z",
+    "created_at": "2026-11-08T12:58:11.415Z",
     "used_at": null
   }
 }
