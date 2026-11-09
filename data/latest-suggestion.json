@@ -1,24 +1,24 @@
 {
-  "updated_at": "2026-11-09T15:33:27.561Z",
+  "updated_at": "2026-11-09T15:37:43.132Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1794238407555_qcsnt",
-    "topic": "Cracking Distributed Systems Architecture for Senior Interviews",
-    "category": "System Design",
+    "id": "sugg_1794238663118_vv5q25",
+    "topic": "Python AsyncIO Event Loop Deep Dive: How It Actually Works",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "Answers the massive influx of system design interview queries, breaking down complex distributed consensus and partitioning patterns into digestible architectural concepts.",
-    "search_evidence": "distributed systems architecture",
+    "rationale": "Leverages massive search interest in asyncio mechanics. Breaking down the single-threaded event loop visually captures high watch-time for developers trying to transition from synchronous code.",
+    "search_evidence": "python asyncio event loop",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Data-flow diagrams",
-      "Animated system flows"
+      "State transitions",
+      "Code execution visualization",
+      "Data-flow diagrams"
     ],
-    "hook_angle": "Most developers fail system design interviews because they can't scale distributed components past a single load balancer.",
+    "hook_angle": "Stop using async/await like magic. Here is exactly what the Python event loop is doing under the hood.",
     "channel_affinity_score": 100,
-    "trend_score": 98,
-    "priority_score": 99,
+    "trend_score": 95,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-11-09T15:33:27.555Z",
+    "created_at": "2026-11-09T15:37:43.118Z",
     "used_at": null
   }
 }
