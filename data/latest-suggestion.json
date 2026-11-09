@@ -1,23 +1,24 @@
 {
-  "updated_at": "2026-11-09T05:21:43.190Z",
+  "updated_at": "2026-11-09T15:33:27.561Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1794201703184_9rydhe",
-    "topic": "Mastering Distributed Systems Architecture for Interviews",
+    "id": "sugg_1794238407555_qcsnt",
+    "topic": "Cracking Distributed Systems Architecture for Senior Interviews",
     "category": "System Design",
     "target_length": "short",
-    "rationale": "Capitalizes on massive 'system design interview' queries by structuring a complex distributed pattern into clear pedagogical slides suitable for a 3-minute vertical format.",
-    "search_evidence": "system design interview prep",
+    "rationale": "Answers the massive influx of system design interview queries, breaking down complex distributed consensus and partitioning patterns into digestible architectural concepts.",
+    "search_evidence": "distributed systems architecture",
     "educational_visuals": [
-      "Animated system flows",
-      "Architecture diagrams"
+      "Architecture diagrams",
+      "Data-flow diagrams",
+      "Animated system flows"
     ],
-    "hook_angle": "Nailing a system design interview isn't about memorizing diagrams—it's about handling partition tolerance under heavy load. Here is the blueprint.",
+    "hook_angle": "Most developers fail system design interviews because they can't scale distributed components past a single load balancer.",
     "channel_affinity_score": 100,
     "trend_score": 98,
     "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-11-09T05:21:43.184Z",
+    "created_at": "2026-11-09T15:33:27.555Z",
     "used_at": null
   }
 }
