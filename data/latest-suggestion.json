@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-11-09T05:15:02.326Z",
+  "updated_at": "2026-11-09T05:21:43.190Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1794201302306_ds2zxj",
-    "topic": "Python AsyncIO Event Loop Deep Dive: How It Actually Works",
-    "category": "Python",
+    "id": "sugg_1794201703184_9rydhe",
+    "topic": "Mastering Distributed Systems Architecture for Interviews",
+    "category": "System Design",
     "target_length": "short",
-    "rationale": "Directly targets top search intent for asyncio internals. Demystifies the single-threaded concurrency model using clear visual architecture diagrams and code execution tracing to maximize retention.",
-    "search_evidence": "python asyncio event loop",
+    "rationale": "Capitalizes on massive 'system design interview' queries by structuring a complex distributed pattern into clear pedagogical slides suitable for a 3-minute vertical format.",
+    "search_evidence": "system design interview prep",
     "educational_visuals": [
-      "Architecture diagrams",
-      "Code execution visualization",
-      "State transitions"
+      "Animated system flows",
+      "Architecture diagrams"
     ],
-    "hook_angle": "Stop guessing how `asyncio` runs under the hood. If you think it's multithreading, you're about to write a production bug.",
+    "hook_angle": "Nailing a system design interview isn't about memorizing diagrams—it's about handling partition tolerance under heavy load. Here is the blueprint.",
     "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 98,
+    "trend_score": 98,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-11-09T05:15:02.306Z",
+    "created_at": "2026-11-09T05:21:43.184Z",
     "used_at": null
   }
 }

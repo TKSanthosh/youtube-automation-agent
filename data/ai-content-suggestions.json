@@ -1,125 +1,119 @@
 {
-  "updated_at": "2026-11-09T05:15:02.326Z",
+  "updated_at": "2026-11-09T05:21:43.190Z",
   "total_suggestions": 6,
   "suggestions": [
     {
-      "id": "sugg_1794201302306_ds2zxj",
+      "id": "sugg_1794201703184_9rydhe",
+      "topic": "Mastering Distributed Systems Architecture for Interviews",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Capitalizes on massive 'system design interview' queries by structuring a complex distributed pattern into clear pedagogical slides suitable for a 3-minute vertical format.",
+      "search_evidence": "system design interview prep",
+      "educational_visuals": [
+        "Animated system flows",
+        "Architecture diagrams"
+      ],
+      "hook_angle": "Nailing a system design interview isn't about memorizing diagrams—it's about handling partition tolerance under heavy load. Here is the blueprint.",
+      "channel_affinity_score": 100,
+      "trend_score": 98,
+      "priority_score": 99,
+      "status": "pending",
+      "created_at": "2026-11-09T05:21:43.184Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1794201703180_640die",
       "topic": "Python AsyncIO Event Loop Deep Dive: How It Actually Works",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Directly targets top search intent for asyncio internals. Demystifies the single-threaded concurrency model using clear visual architecture diagrams and code execution tracing to maximize retention.",
+      "rationale": "Captures high search volume around 'python asyncio event loop' by explaining the single-threaded event loop mechanism without fluff, ensuring high retention and replayability.",
       "search_evidence": "python asyncio event loop",
       "educational_visuals": [
-        "Architecture diagrams",
-        "Code execution visualization",
-        "State transitions"
+        "State transitions",
+        "Code execution visualization"
       ],
-      "hook_angle": "Stop guessing how `asyncio` runs under the hood. If you think it's multithreading, you're about to write a production bug.",
+      "hook_angle": "Stop guessing how async Python works under the hood. Let's trace the event loop step-by-step in 150 seconds.",
       "channel_affinity_score": 100,
       "trend_score": 95,
-      "priority_score": 98,
-      "status": "pending",
-      "created_at": "2026-11-09T05:15:02.306Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1794201302316_rtxe7o",
-      "topic": "Distributed Systems Architecture: Ace Your Interview Design",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "Directly targets high-demand system design interview prep queries. Breaks down component scaling, load balancing tiers, and fault-tolerance topologies into a rapid 3-minute architectural blueprint.",
-      "search_evidence": "system design interview prep",
-      "educational_visuals": [
-        "Architecture diagrams",
-        "Animated system flows",
-        "Trees and graphs"
-      ],
-      "hook_angle": "Failing system design interviews? Stop drawing random boxes and learn the exact architectural framework senior FAANG engineers use.",
-      "channel_affinity_score": 100,
-      "trend_score": 96,
       "priority_score": 97,
       "status": "pending",
-      "created_at": "2026-11-09T05:15:02.316Z",
+      "created_at": "2026-11-09T05:21:43.180Z",
       "used_at": null
     },
     {
-      "id": "sugg_1794201302312_fta05m",
-      "topic": "Microservices Circuit Breaker Pattern: Prevent Cascading Failures",
+      "id": "sugg_1794201703185_0eondg",
+      "topic": "Microservices Circuit Breaker Pattern Explained & Coded",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "Capitalizes on high-intent distributed systems queries. Breaks down state transitions (Closed, Open, Half-Open) to show how resilient enterprise architectures handle downstream outages.",
-      "search_evidence": "microservices circuit breaker pattern",
+      "rationale": "Bridges the gap between theory and implementation for high-demand searches on microservices resilience and failure cascading prevention.",
+      "search_evidence": "microservices circuit breaker implementation",
       "educational_visuals": [
         "State transitions",
-        "Architecture diagrams",
         "Animated system flows"
       ],
-      "hook_angle": "One slow database query just took down your entire microservices architecture. Here is how the Circuit Breaker pattern stops the cascade.",
-      "channel_affinity_score": 100,
+      "hook_angle": "When one microservice fails, your entire backend shouldn't collapse like a house of cards. Here is how the Circuit Breaker pattern saves production.",
+      "channel_affinity_score": 98,
       "trend_score": 92,
-      "priority_score": 96,
-      "status": "pending",
-      "created_at": "2026-11-09T05:15:02.312Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1794201302309_cipvx4",
-      "topic": "Mastering Python Memory Management & Garbage Collection",
-      "category": "Python",
-      "target_length": "short",
-      "rationale": "Addresses heavy search volume around memory optimization and reference counting. Explains cyclic garbage collection visually to help senior engineers prevent memory leaks in long-running services.",
-      "search_evidence": "python memory management and garbage collection",
-      "educational_visuals": [
-        "Data-flow diagrams",
-        "Trees and graphs",
-        "Animated system flows"
-      ],
-      "hook_angle": "Your Python backend is leaking memory, and standard garbage collection won't save you. Here is why reference cycles destroy your RAM.",
-      "channel_affinity_score": 100,
-      "trend_score": 90,
       "priority_score": 95,
       "status": "pending",
-      "created_at": "2026-11-09T05:15:02.309Z",
+      "created_at": "2026-11-09T05:21:43.185Z",
       "used_at": null
     },
     {
-      "id": "sugg_1794201302314_wdcewj",
-      "topic": "Python AsyncIO vs Threading: When to Use Which",
+      "id": "sugg_1794201703186_hr611l",
+      "topic": "Python AsyncIO vs Threading: When to Use Which?",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Resolves the perennial confusion between I/O bound concurrency paradigms. Uses clear performance timelines to demonstrate CPU-bound vs I/O-bound bottlenecks.",
+      "rationale": "Directly targets the frequently searched architectural dilemma between concurrency paradigms in Python with clear performance benchmarks.",
       "search_evidence": "python asyncio vs threading",
       "educational_visuals": [
         "Timelines",
-        "Code execution visualization",
-        "Data-flow diagrams"
+        "Code execution visualization"
       ],
-      "hook_angle": "Using `asyncio` for CPU-heavy tasks is a massive anti-pattern. Let's look at the actual execution timelines to prove when threading wins.",
-      "channel_affinity_score": 100,
-      "trend_score": 88,
-      "priority_score": 93,
+      "hook_angle": "Threading or AsyncIO? Pick the wrong one and your I/O-bound Python app crawls to a halt. Let's settle the debate with a visual timeline.",
+      "channel_affinity_score": 96,
+      "trend_score": 94,
+      "priority_score": 94,
       "status": "pending",
-      "created_at": "2026-11-09T05:15:02.314Z",
+      "created_at": "2026-11-09T05:21:43.186Z",
       "used_at": null
     },
     {
-      "id": "sugg_1794201302320_h912z",
-      "topic": "Distributed Computing Architecture: Scaling Beyond Single Nodes",
+      "id": "sugg_1794201703182_t5dbk7",
+      "topic": "Python Memory Management & GC: Why Your RAM Never Drops",
+      "category": "Python",
+      "target_length": "short",
+      "rationale": "Addresses chronic production memory leaks and answers the heavy search intent behind Python memory management and garbage collection mechanics.",
+      "search_evidence": "python memory management and garbage collection",
+      "educational_visuals": [
+        "Data-flow diagrams",
+        "Trees and graphs"
+      ],
+      "hook_angle": "Ever wonder why your Python service keeps holding onto RAM even after variables go out of scope? Let's look at reference counting and cyclic GC.",
+      "channel_affinity_score": 95,
+      "trend_score": 90,
+      "priority_score": 92,
+      "status": "pending",
+      "created_at": "2026-11-09T05:21:43.182Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1794201703187_ycss3",
+      "topic": "Designing Distributed Computing Architectures at Scale",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "Captures surging interest in distributed computing styles. Explains consensus and data partitioning strategies using intuitive visual analogies tailored for backend engineers.",
+      "rationale": "Leverages active developer search trends in distributed computing to break down complex topologies into an easily digestible architectural breakdown.",
       "search_evidence": "distributed computing architecture",
       "educational_visuals": [
-        "Animated system flows",
-        "Data-flow diagrams",
-        "Architecture diagrams"
+        "Architecture diagrams",
+        "Data-flow diagrams"
       ],
-      "hook_angle": "Scaling a single server is easy until network partitions hit. Here is how distributed computing architecture solves consensus at scale.",
-      "channel_affinity_score": 100,
+      "hook_angle": "Scaling from a single monolith to a distributed computing grid introduces hidden latency traps. Let's map out the topology correctly.",
+      "channel_affinity_score": 95,
       "trend_score": 89,
       "priority_score": 91,
       "status": "pending",
-      "created_at": "2026-11-09T05:15:02.320Z",
+      "created_at": "2026-11-09T05:21:43.187Z",
       "used_at": null
     }
   ]
