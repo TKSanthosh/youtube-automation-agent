@@ -289,10 +289,6 @@ async function run() {
           console.log(chalk.yellow(`🛑 Stopping pipeline immediately. No more videos will be generated today.`));
           console.log(chalk.yellow(`   The next scheduled run will resume after quota resets at midnight Pacific Time.\n`));
 
-          // Delete current video assets immediately
-          await deleteMediaAssets(productionData);
-          await purgeTempFolders();
-
           results.push({
             title: script.title,
             status: 'STOPPED_QUOTA_REACHED',
@@ -331,12 +327,16 @@ async function run() {
     } catch (cycleError) {
       logger.error(`Cycle error: ${cycleError.message}`);
     } finally {
-      // 7. ALWAYS DELETE VIDEO FILES IMMEDIATELY POST-CYCLE
+      // 7. Delete media files only if upload succeeded
       if (productionData) {
-        await deleteMediaAssets(productionData);
+        if (youtubeUrl) {
+          await deleteMediaAssets(productionData);
+          await purgeTempFolders();
+          console.log(chalk.gray(`   🗑️  Temporary media files deleted after successful upload.`));
+        } else {
+          console.log(chalk.yellow(`   💾 Preserving rendered video locally: ${productionData?.assets?.finalVideo?.path || 'N/A'}`));
+        }
       }
-      await purgeTempFolders();
-      console.log(chalk.gray(`   🗑️  Temporary media files deleted. Zero storage retained.`));
     }
   }
 

@@ -13,25 +13,31 @@ async function main() {
   console.log(chalk.cyan.bold('\n🔑 YouTube OAuth Permanent Refresh Token Generator'));
   console.log(chalk.gray('═'.repeat(65)));
 
-  const clientId = process.env.GOOGLE_CLIENT_ID || process.env.YOUTUBE_CLIENT_ID;
-  const clientSecret = process.env.GOOGLE_CLIENT_SECRET || process.env.YOUTUBE_CLIENT_SECRET;
-
-  if (!clientId || !clientSecret) {
-    console.log(chalk.red('\n❌ Missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET in .env!'));
-    console.log(chalk.yellow('Please ensure GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are set in your .env file.\n'));
-    process.exit(1);
-  }
-
+  let clientId = process.env.GOOGLE_CLIENT_ID || process.env.YOUTUBE_CLIENT_ID;
+  let clientSecret = process.env.GOOGLE_CLIENT_SECRET || process.env.YOUTUBE_CLIENT_SECRET;
   let redirectUri = 'http://localhost:8080/auth/callback';
+
   try {
     const credsPath = path.join(__dirname, '..', 'config', 'credentials.json');
     if (fs.existsSync(credsPath)) {
       const creds = JSON.parse(fs.readFileSync(credsPath, 'utf8'));
+      if (!clientId && creds.youtube?.client_id) {
+        clientId = creds.youtube.client_id;
+      }
+      if (!clientSecret && creds.youtube?.client_secret) {
+        clientSecret = creds.youtube.client_secret;
+      }
       if (creds.youtube?.redirect_uris?.[0]) {
         redirectUri = creds.youtube.redirect_uris[0];
       }
     }
   } catch (_e) {}
+
+  if (!clientId || !clientSecret) {
+    console.log(chalk.red('\n❌ Missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET in .env or config/credentials.json!'));
+    console.log(chalk.yellow('Please ensure credentials are configured.\n'));
+    process.exit(1);
+  }
 
   const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri);
 
@@ -99,6 +105,21 @@ async function main() {
             }
             fs.writeFileSync(envPath, envContent, 'utf8');
             console.log(chalk.green('✅ Updated YOUTUBE_REFRESH_TOKEN in local .env'));
+          }
+
+          // Update config/tokens.json
+          const tokensPath = path.join(__dirname, '..', 'config', 'tokens.json');
+          try {
+            let tokensData = {};
+            if (fs.existsSync(tokensPath)) {
+              tokensData = JSON.parse(fs.readFileSync(tokensPath, 'utf8'));
+            }
+            tokensData.youtube = tokensData.youtube || {};
+            tokensData.youtube.refresh_token = refreshToken;
+            fs.writeFileSync(tokensPath, JSON.stringify(tokensData, null, 2), 'utf8');
+            console.log(chalk.green('✅ Updated config/tokens.json'));
+          } catch (tokErr) {
+            console.log(chalk.yellow(`Notice: Could not write tokens.json: ${tokErr.message}`));
           }
 
           // Sync to GitHub Secrets automatically via gh CLI

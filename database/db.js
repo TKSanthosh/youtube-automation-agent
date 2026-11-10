@@ -19,6 +19,15 @@ class Database {
       
       // Connect to database
       this.db = new sqlite3.Database(this.dbPath);
+      if (typeof this.db.configure === 'function') {
+        this.db.configure('busyTimeout', 15000);
+      }
+      try {
+        await this.executeQuery('PRAGMA journal_mode = WAL;');
+        await this.executeQuery('PRAGMA busy_timeout = 15000;');
+      } catch (_pragmaErr) {
+        // Continue even if pragma fails
+      }
       
       // Create tables
       await this.createTables();
