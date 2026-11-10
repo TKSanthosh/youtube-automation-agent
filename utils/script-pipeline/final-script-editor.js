@@ -67,42 +67,42 @@ Respond strictly with valid JSON.`;
     } catch (err) {
       return {
         candidateA: {
-          approach: 'problem_solution_architecture',
-          title: `Mastering ${topic}: Architecture & Code Walkthrough`,
-          hook: hooks.hooks?.[0]?.text || `Understanding ${topic} is the difference between junior code and production architecture.`,
+          approach: 'cs_masterclass_fireship_bytebytego',
+          title: `Mastering ${topic}: Computer Science Deep Dive`,
+          hook: hooks.hooks?.[0]?.text || `Computing history changed when engineers solved ${topic}. Here is what you need to know.`,
           sections: [
             {
-              title: 'The Production Problem',
+              title: 'The Origin & Computing Lore',
               content: [
-                `When engineers first implement ${topic}, textbook solutions appear clean in staging but collapse under live production spikes. As concurrent requests flood the ingress, unhandled downstream latencies cascade across microservices, causing worker thread pool exhaustion and catastrophic cluster outages. Notice what happens without intelligent backpressure: a single degraded dependency starves system resources and triggers a domino failure across your entire distributed platform. Let's break down the exact engineering mechanics required to eliminate this failure permanently and keep core services resilient.`
+                `Computing history is defined by how engineers conquer complexity. When ${topic} was first conceptualized, early computer scientists were constrained by tight hardware registers, forcing pioneers to invent clean architectural abstractions that still govern modern software today.`
               ],
-              duration: isLongForm ? 180 : 42
+              duration: isLongForm ? 180 : 35
             },
             {
-              title: 'Under The Hood Architecture',
+              title: 'The 2 AM Developer Reality',
               content: [
-                `To solve this cleanly, let's examine the underlying architecture and mental model displayed directly on your screen. Instead of allowing callers to continuously hammer failing endpoints and consume thread capacity, we place an intelligent, stateful boundary layer directly in the critical request path. When failure rates breach the safety margin, the circuit trips instantly into an open state, serving deterministic fallbacks before resources saturate, isolating faults and granting downstream dependencies the room needed to recover gracefully.`
+                `The 2 AM developer reality: textbook solutions look flawless in local development environments, but the instant real production traffic hits, race conditions and subtle bottlenecks emerge. It worked on my machine, so why is the production server currently on fire?`
               ],
-              duration: isLongForm ? 240 : 44
+              duration: isLongForm ? 180 : 30
             },
             {
-              title: 'Production Implementation',
+              title: 'Under The Hood: Mental Model',
               content: [
-                `Now let's walk through the production implementation directly on your screen. Look at line 1: we configure explicit timeout thresholds paired with isolated execution pools to prevent thread contention. As you trace down through the execution handler, notice that every external I/O call is guarded within a monitored context. If the downstream service is healthy, execution proceeds with zero latency overhead. But the moment consecutive failures exceed the tripping threshold, the guard intercepts execution immediately, shielding your core database layer from connection starvation.`
+                `Let's examine the under-the-hood mental model displayed directly on your screen. Notice the flow of data across memory boundaries. Instead of naive lookups or tight synchronous coupling, modern architecture isolates state transitions, managing state changes through deterministic state boundaries and explicit invariant verification.`
               ],
-              duration: isLongForm ? 240 : 44
+              duration: isLongForm ? 240 : 40
             },
             {
-              title: 'Senior Rule of Thumb',
+              title: 'Staff Engineer Golden Rule',
               content: [
-                `Here is the golden rule of thumb that senior staff engineers always keep in mind: never deploy ${topic} with static, hardcoded configuration values. Always tune your latency thresholds based on empirical 99th percentile production telemetry, and pair every fallback handler with automated metric alarms and circuit reset monitors. By designing systems around failure-tolerant boundaries and active recovery loops, you eliminate cascading outages, protect downstream infrastructure, and guarantee self-healing resilience across your entire tech stack.`
+                `Here is the golden rule senior staff engineers live by: prioritize maintainable, predictable architecture over clever premature optimizations. Design systems around failure-tolerant boundaries and explicit invariants to build rock-solid software that scales effortlessly.`
               ],
-              duration: isLongForm ? 180 : 42
+              duration: isLongForm ? 180 : 35
             }
           ],
-          funFact: research.interestingFacts?.[0] || 'Engineered to maximize throughput',
-          conclusion: 'Always profile your execution before premature optimization.',
-          cta: 'Subscribe to Code & AI Academy for senior-level engineering tutorials.'
+          funFact: research.interestingFacts?.[0] || 'Engineered for sub-millisecond memory efficiency',
+          conclusion: 'Master hardware-aware data structures and your code will scale effortlessly.',
+          cta: 'Save this breakdown for your next system design interview or production architecture review.'
         }
       };
     }

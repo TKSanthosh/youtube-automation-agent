@@ -27,25 +27,22 @@ class TrendEngagementAgent {
 
     // Stems for live search queries across developer tech domains (YouTube autocomplete & search suggest)
     this.searchQueryStems = [
-      { stem: 'python asyncio', category: 'Python' },
-      { stem: 'python memory optimization', category: 'Python' },
-      { stem: 'system design interview', category: 'System Design' },
-      { stem: 'distributed systems architecture', category: 'System Design' },
-      { stem: 'microservices circuit breaker', category: 'System Design' },
-      { stem: 'docker container networking', category: 'Docker' },
-      { stem: 'docker multi stage build', category: 'Docker' },
-      { stem: 'kubernetes pod lifecycle', category: 'Kubernetes' },
-      { stem: 'kubernetes gateway api', category: 'Kubernetes' },
-      { stem: 'kubernetes hpa scaling', category: 'Kubernetes' },
-      { stem: 'model context protocol mcp', category: 'AI/ML' },
-      { stem: 'ai agent framework autonomous', category: 'AI/ML' },
-      { stem: 'vector database similarity search', category: 'AI/ML' },
-      { stem: 'typescript performance generics', category: 'TypeScript' },
-      { stem: 'kafka partition consumer group', category: 'System Design' },
-      { stem: 'redis caching strategies', category: 'System Design' },
-      { stem: 'database sharding postgresql', category: 'System Design' },
-      { stem: 'linux eBPF kernel', category: 'DevOps' },
-      { stem: 'github actions cicd pipeline', category: 'DevOps' }
+      { stem: 'how hash tables work under the hood', category: 'DSA' },
+      { stem: 'why quicksort is faster than mergesort', category: 'DSA' },
+      { stem: 'b-tree vs lsm tree database indexing', category: 'System Design' },
+      { stem: 'bloom filter redis system design', category: 'System Design' },
+      { stem: 'brendan eich javascript in 10 days lore', category: 'CS Lore' },
+      { stem: 'tony hoare billion dollar null mistake', category: 'CS Lore' },
+      { stem: 'linus torvalds git architecture story', category: 'CS Lore' },
+      { stem: 'python gil explained free threading', category: 'Python' },
+      { stem: 'stack vs heap memory allocation explained', category: 'System Design' },
+      { stem: 'observer pattern vs pub sub', category: 'Design Patterns' },
+      { stem: 'strategy pattern clean code', category: 'Design Patterns' },
+      { stem: 'circuit breaker pattern microservices', category: 'System Design' },
+      { stem: 'docker multi stage build optimization', category: 'Docker' },
+      { stem: 'kubernetes pod lifecycle probes', category: 'Kubernetes' },
+      { stem: 'consistent hashing system design interview', category: 'System Design' },
+      { stem: 'cpu cache line false sharing', category: 'System Design' }
     ];
   }
 
@@ -233,7 +230,7 @@ class TrendEngagementAgent {
       }
 
       // 3. Fallback database analytics
-      const [snapshots, strategies] = await Promise.all([
+      const [_snapshots, strategies] = await Promise.all([
         this.db.getAllRows ? this.db.getAllRows('SELECT * FROM performance_snapshots ORDER BY measured_at DESC LIMIT 50') : [],
         this.db.getAllRows ? this.db.getAllRows('SELECT * FROM content_strategies ORDER BY created_at DESC LIMIT 50') : []
       ]);
@@ -523,67 +520,67 @@ Respond with ONLY valid JSON formatted as an array of objects:
       this.logger.warn(`AI synthesis fallback triggered (${aiErr.message}). Using deterministic trend mapper.`);
     }
 
-    // Deterministic High-Quality Fallback if AI synthesis is unavailable (Strictly Shorts, Deduplicated)
+    // Deterministic High-Quality Fallback if AI synthesis is unavailable (Fireship / ByteByteGo style CS Masterclass, Strictly Shorts)
     const fallbackTemplates = [
       {
-        topic: "Docker BuildKit Cache Mounts: Cut Image Build Times by 70%",
-        category: "Docker",
+        topic: "How Hash Tables Resolve Collisions: Separate Chaining vs Open Addressing",
+        category: "DSA",
         targetLength: "short",
-        rationale: "BuildKit cache mounts eliminate redundant npm/pip downloads on every build.",
-        searchEvidence: "docker buildkit cache mount tutorial",
-        educationalVisuals: ["Process animations", "Timelines", "Code execution visualization"],
-        hookAngle: "Stop waiting 10 minutes for Docker builds. Here is the BuildKit secret.",
-        priorityScore: 92
+        rationale: "Core DSA interview question with massive developer interest; visual mental model of bucket arrays and linked lists.",
+        searchEvidence: "hash table collision resolution separate chaining vs open addressing",
+        educationalVisuals: ["Trees and graphs", "Data-flow diagrams", "Code execution visualization"],
+        hookAngle: "What happens when two different keys hash to the exact same memory bucket?",
+        priorityScore: 98
       },
       {
-        topic: "Kubernetes Ingress vs Gateway API Explained in 3 Minutes",
-        category: "Kubernetes",
+        topic: "Why Quicksort Beats Mergesort in Practice: CPU L1/L2 Cache Lines",
+        category: "DSA",
         targetLength: "short",
-        rationale: "Gateway API is replacing Ingress as standard in K8s 1.30+; huge search interest.",
-        searchEvidence: "kubernetes ingress vs gateway api",
-        educationalVisuals: ["Architecture diagrams", "Animated system flows", "Comparisons"],
-        hookAngle: "Why Kubernetes officially deprecated standard Ingress in favor of Gateway API.",
-        priorityScore: 91
+        rationale: "Classic Big-O paradox: both are O(N log N), but Quicksort is 3x faster due to hardware cache locality.",
+        searchEvidence: "why quicksort is faster than mergesort cache locality",
+        educationalVisuals: ["Animated system flows", "Architecture diagrams", "Comparisons"],
+        hookAngle: "On paper, Mergesort and Quicksort have the exact same time complexity. So why is Quicksort 3 times faster?",
+        priorityScore: 96
       },
       {
-        topic: "Model Context Protocol (MCP) in 3 Minutes: The AI Agent Connector Standard",
-        category: "AI/ML",
+        topic: "Brendan Eich Created JavaScript in 10 Days: The Lore & The Bugs",
+        category: "CS Lore",
         targetLength: "short",
-        rationale: "Anthropic MCP is becoming the standard protocol for tool-calling AI agents.",
-        searchEvidence: "model context protocol mcp tutorial",
-        educationalVisuals: ["Architecture diagrams", "Data-flow diagrams"],
-        hookAngle: "Every AI agent framework is adopting MCP. Here is how client-server JSON-RPC works.",
-        priorityScore: 94
+        rationale: "Fireship-style programming lore explaining why JS has quirky behaviors like typeof null === 'object'.",
+        searchEvidence: "brendan eich javascript 10 days history quirks",
+        educationalVisuals: ["Timelines", "Code execution visualization"],
+        hookAngle: "In May 1995, one engineer created the language running the entire internet in just 10 days.",
+        priorityScore: 97
       },
       {
-        topic: "Redis Cache Invalidation Patterns: Cache-Aside vs Write-Through",
-        category: "System Design",
+        topic: "Tony Hoare's Billion Dollar Mistake: Why Null Pointers Exist",
+        category: "CS Lore",
         targetLength: "short",
-        rationale: "Cache invalidation is a classic system design challenge with high search volume.",
-        searchEvidence: "redis cache aside vs write through",
-        educationalVisuals: ["Architecture diagrams", "Data-flow diagrams"],
-        hookAngle: "There are only two hard things in Computer Science: cache invalidation is one of them.",
-        priorityScore: 89
-      },
-      {
-        topic: "Python 3.13 Free-Threaded GIL Removal: What Changes for Developers",
-        category: "Python",
-        targetLength: "short",
-        rationale: "Python 3.13 free-threading is the biggest Python architectural shift in 20 years.",
-        searchEvidence: "python 3.13 gil removal benchmark",
-        educationalVisuals: ["State transitions", "Animated system flows", "Code execution visualization"],
-        hookAngle: "Python finally has true multi-threading without the GIL. But how does it work?",
+        rationale: "The origin story of null references in 1965 ALGOL W and why modern languages like Rust and Swift eliminated them.",
+        searchEvidence: "tony hoare billion dollar mistake null pointer history",
+        educationalVisuals: ["Architecture diagrams", "Code execution visualization"],
+        hookAngle: "In 1965, a computer scientist made a single design choice that has cost the software industry over a billion dollars in crashes.",
         priorityScore: 95
       },
       {
-        topic: "Database Sharding vs Partitioning in 3 Minutes",
-        category: "Databases",
+        topic: "Observer Pattern vs Pub-Sub: The Critical Event-Driven Difference",
+        category: "Design Patterns",
         targetLength: "short",
-        rationale: "Core system design question with consistently high search volume.",
-        searchEvidence: "database sharding vs partitioning system design",
+        rationale: "ByteByteGo-style architecture comparison: tight coupling vs message broker decoupling.",
+        searchEvidence: "observer pattern vs publish subscribe pattern system design",
         educationalVisuals: ["Architecture diagrams", "Data-flow diagrams", "Comparisons"],
-        hookAngle: "When your database hits 100,000 queries per second, this is how you scale storage.",
-        priorityScore: 90
+        hookAngle: "Junior developers think Observer and Pub-Sub are identical. Senior engineers know the event broker changes everything.",
+        priorityScore: 94
+      },
+      {
+        topic: "Memory Management: Stack vs Heap Allocation & Pointer Dereferencing",
+        category: "System Design",
+        targetLength: "short",
+        rationale: "Fundamental computer science concept explaining stack frames, heap pointers, and memory leaks.",
+        searchEvidence: "stack vs heap memory allocation computer science",
+        educationalVisuals: ["State transitions", "Animated system flows", "Code execution visualization"],
+        hookAngle: "Every variable you declare lives in one of two memory realms: the blazing-fast Stack or the dynamic Heap.",
+        priorityScore: 95
       }
     ];
 

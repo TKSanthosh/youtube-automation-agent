@@ -1564,6 +1564,238 @@ class AIVideoGenerator {
 </html>`;
   }
 
+  renderMemeSVG(memeType = 'server_on_fire') {
+    switch (memeType) {
+      case 'server_on_fire':
+        return `
+        <div class="meme-svg-wrapper">
+          <svg viewBox="0 0 440 230" class="meme-svg" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="flameGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#ef4444" />
+                <stop offset="50%" stop-color="#f97316" />
+                <stop offset="100%" stop-color="#facc15" />
+              </linearGradient>
+              <linearGradient id="rackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#1e293b" />
+                <stop offset="100%" stop-color="#0f172a" />
+              </linearGradient>
+            </defs>
+            <rect x="70" y="25" width="280" height="180" rx="14" fill="url(#rackGrad)" stroke="#475569" stroke-width="4" />
+            <rect x="85" y="40" width="250" height="36" rx="6" fill="#0f172a" stroke="#334155" stroke-width="2" />
+            <circle cx="105" cy="58" r="6" fill="#ef4444" />
+            <circle cx="125" cy="58" r="6" fill="#ef4444" />
+            <circle cx="145" cy="58" r="6" fill="#eab308" />
+            <line x1="170" y1="58" x2="315" y2="58" stroke="#334155" stroke-width="3" stroke-dasharray="6,4" />
+            <rect x="85" y="88" width="250" height="36" rx="6" fill="#0f172a" stroke="#ef4444" stroke-width="2" />
+            <circle cx="105" cy="106" r="6" fill="#ef4444" />
+            <circle cx="125" cy="106" r="6" fill="#ef4444" />
+            <circle cx="145" cy="106" r="6" fill="#ef4444" />
+            <line x1="170" y1="106" x2="315" y2="106" stroke="#ef4444" stroke-width="3" stroke-dasharray="4,4" />
+            <rect x="85" y="136" width="250" height="36" rx="6" fill="#0f172a" stroke="#334155" stroke-width="2" />
+            <circle cx="105" cy="154" r="6" fill="#ef4444" />
+            <circle cx="125" cy="154" r="6" fill="#ef4444" />
+            <line x1="150" y1="154" x2="315" y2="154" stroke="#334155" stroke-width="3" stroke-dasharray="6,4" />
+            <path d="M 120 180 Q 110 130 135 110 Q 150 90 140 55 Q 170 80 160 115 Q 185 90 195 65 Q 215 100 200 135 Q 230 105 240 75 Q 260 110 245 145 Q 275 120 285 90 Q 300 125 280 180 Z" fill="url(#flameGrad)" opacity="0.95" />
+            <path d="M 150 180 Q 160 140 180 115 Q 200 145 220 125 Q 230 155 210 180 Z" fill="#ffea00" opacity="0.88" />
+            <rect x="250" y="145" width="85" height="52" rx="8" fill="#f8fafc" stroke="#0f172a" stroke-width="2" />
+            <path d="M 335 158 C 352 158, 352 184, 335 184" fill="none" stroke="#f8fafc" stroke-width="6" stroke-linecap="round" />
+            <text x="292" y="168" font-size="11" font-weight="900" text-anchor="middle" fill="#0f172a">THIS IS</text>
+            <text x="292" y="186" font-size="13" font-weight="900" text-anchor="middle" fill="#dc2626">FINE 🔥</text>
+          </svg>
+        </div>`;
+
+      case 'works_on_my_machine':
+        return `
+        <div class="meme-svg-wrapper">
+          <svg viewBox="0 0 440 230" class="meme-svg" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fef08a" />
+                <stop offset="50%" stop-color="#eab308" />
+                <stop offset="100%" stop-color="#ca8a04" />
+              </linearGradient>
+            </defs>
+            <polygon points="175,175 155,225 190,210 225,225 205,175" fill="#dc2626" />
+            <polygon points="225,175 205,225 240,210 275,225 255,175" fill="#b91c1c" />
+            <circle cx="220" cy="110" r="92" fill="url(#goldGrad)" stroke="#78350f" stroke-width="4" />
+            <circle cx="220" cy="110" r="78" fill="#1e293b" stroke="#ca8a04" stroke-width="3" stroke-dasharray="6,4" />
+            <text x="220" y="62" font-size="12" font-weight="800" text-anchor="middle" fill="#facc15" letter-spacing="3">OFFICIAL SEAL</text>
+            <text x="220" y="88" font-size="19" font-weight="900" text-anchor="middle" fill="#ffffff" letter-spacing="1">WORKS ON</text>
+            <text x="220" y="112" font-size="19" font-weight="900" text-anchor="middle" fill="#ffffff" letter-spacing="1">MY MACHINE</text>
+            <text x="220" y="136" font-size="11" font-weight="700" text-anchor="middle" fill="#94a3b8">★ LOCALHOST:3000 ★</text>
+            <text x="220" y="156" font-size="12" font-weight="800" text-anchor="middle" fill="#22c55e">CERTIFIED 0 BUGS IN DEV</text>
+          </svg>
+        </div>`;
+
+      case 'spiderman_pointing':
+        return `
+        <div class="meme-svg-wrapper">
+          <svg viewBox="0 0 440 230" class="meme-svg" xmlns="http://www.w3.org/2000/svg">
+            <rect x="40" y="35" width="150" height="160" rx="16" fill="#1e293b" stroke="#3b82f6" stroke-width="3" />
+            <circle cx="115" cy="78" r="26" fill="#3b82f6" opacity="0.3" />
+            <text x="115" y="87" font-size="30" text-anchor="middle">👨‍💻</text>
+            <text x="115" y="125" font-size="16" font-weight="900" text-anchor="middle" fill="#60a5fa">FRONTEND</text>
+            <text x="115" y="148" font-size="12" font-weight="800" text-anchor="middle" fill="#f87171">"500 SERVER ERR"</text>
+            <text x="115" y="172" font-size="12" text-anchor="middle" fill="#94a3b8">👉 "It's the backend!"</text>
+            <circle cx="220" cy="115" r="22" fill="#ef4444" opacity="0.25" />
+            <text x="220" y="123" font-size="22" font-weight="900" text-anchor="middle" fill="#ef4444">⚡</text>
+            <rect x="250" y="35" width="150" height="160" rx="16" fill="#1e293b" stroke="#10b981" stroke-width="3" />
+            <circle cx="325" cy="78" r="26" fill="#10b981" opacity="0.3" />
+            <text x="325" y="87" font-size="30" text-anchor="middle">🧑‍💼</text>
+            <text x="325" y="125" font-size="16" font-weight="900" text-anchor="middle" fill="#34d399">BACKEND</text>
+            <text x="325" y="148" font-size="12" font-weight="800" text-anchor="middle" fill="#f87171">"BAD REQUEST 400"</text>
+            <text x="325" y="172" font-size="12" text-anchor="middle" fill="#94a3b8">👈 "You sent bad JSON!"</text>
+          </svg>
+        </div>`;
+
+      case 'two_buttons':
+        return `
+        <div class="meme-svg-wrapper">
+          <svg viewBox="0 0 440 230" class="meme-svg" xmlns="http://www.w3.org/2000/svg">
+            <rect x="55" y="25" width="330" height="185" rx="16" fill="#1e293b" stroke="#475569" stroke-width="3" />
+            <circle cx="220" cy="68" r="26" fill="#facc15" />
+            <text x="220" y="76" font-size="26" text-anchor="middle">😰</text>
+            <rect x="80" y="110" width="130" height="60" rx="12" fill="#ef4444" stroke="#b91c1c" stroke-width="3" />
+            <text x="145" y="134" font-size="12" font-weight="900" text-anchor="middle" fill="#ffffff">DEPLOY ON</text>
+            <text x="145" y="152" font-size="13" font-weight="900" text-anchor="middle" fill="#fef08a">FRIDAY 5 PM</text>
+            <rect x="230" y="110" width="130" height="60" rx="12" fill="#3b82f6" stroke="#1d4ed8" stroke-width="3" />
+            <text x="295" y="134" font-size="12" font-weight="900" text-anchor="middle" fill="#ffffff">FIX 24 FAILING</text>
+            <text x="295" y="152" font-size="13" font-weight="900" text-anchor="middle" fill="#bfdbfe">UNIT TESTS</text>
+            <text x="220" y="196" font-size="12" font-weight="700" text-anchor="middle" fill="#94a3b8">SWEATING OVER PRODUCTION DECISIONS</text>
+          </svg>
+        </div>`;
+
+      default:
+        return this.renderMemeSVG('server_on_fire');
+    }
+  }
+
+  renderDSASVG(dsaType, topic = '') {
+    const t = String(topic).toLowerCase();
+    const type = dsaType || (
+      t.includes('hash') || t.includes('collision') ? 'hash_table' :
+      t.includes('stack') || t.includes('heap') || t.includes('memory') || t.includes('null') ? 'stack_heap' :
+      t.includes('circuit') || t.includes('pattern') ? 'circuit_breaker' :
+      t.includes('tree') || t.includes('sort') || t.includes('quick') ? 'binary_tree' : 'hash_table'
+    );
+
+    if (type === 'hash_table') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#334155" stroke-width="2" />
+          <rect x="25" y="35" width="130" height="58" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2" />
+          <text x="90" y="58" font-size="13" font-weight="700" text-anchor="middle" fill="#60a5fa">KEY: "user:42"</text>
+          <text x="90" y="78" font-size="12" font-weight="800" text-anchor="middle" fill="#93c5fd">hash(k) % 4 ➔ [1]</text>
+          <line x1="155" y1="64" x2="195" y2="64" stroke="#3b82f6" stroke-width="3" stroke-dasharray="4,2" />
+          <rect x="200" y="25" width="60" height="32" rx="6" fill="#1e293b" stroke="#475569" stroke-width="2" />
+          <text x="230" y="46" font-size="13" font-weight="800" text-anchor="middle" fill="#94a3b8">[0]</text>
+          <rect x="200" y="63" width="60" height="32" rx="6" fill="#3b82f6" stroke="#60a5fa" stroke-width="3" />
+          <text x="230" y="84" font-size="14" font-weight="900" text-anchor="middle" fill="#ffffff">[1] ★</text>
+          <rect x="200" y="101" width="60" height="32" rx="6" fill="#1e293b" stroke="#475569" stroke-width="2" />
+          <text x="230" y="122" font-size="13" font-weight="800" text-anchor="middle" fill="#94a3b8">[2]</text>
+          <rect x="200" y="139" width="60" height="32" rx="6" fill="#1e293b" stroke="#475569" stroke-width="2" />
+          <text x="230" y="160" font-size="13" font-weight="800" text-anchor="middle" fill="#94a3b8">[3]</text>
+          <line x1="260" y1="79" x2="295" y2="79" stroke="#f59e0b" stroke-width="3" />
+          <rect x="295" y="60" width="105" height="38" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="2" />
+          <text x="347" y="76" font-size="11" font-weight="800" text-anchor="middle" fill="#fde047">"user:42"</text>
+          <text x="347" y="91" font-size="10" font-weight="600" text-anchor="middle" fill="#cbd5e1">val: {id:42} ➔</text>
+          <line x1="400" y1="79" x2="425" y2="79" stroke="#ef4444" stroke-width="3" />
+          <rect x="425" y="60" width="95" height="38" rx="8" fill="#1e293b" stroke="#ef4444" stroke-width="2" />
+          <text x="472" y="76" font-size="11" font-weight="800" text-anchor="middle" fill="#f87171">"session:9"</text>
+          <text x="472" y="91" font-size="10" font-weight="600" text-anchor="middle" fill="#cbd5e1">val: null ➔ ∅</text>
+          <rect x="25" y="195" width="490" height="48" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2" />
+          <text x="270" y="216" font-size="13" font-weight="900" text-anchor="middle" fill="#34d399">⚡ SEPARATE CHAINING COLLISION RESOLUTION</text>
+          <text x="270" y="233" font-size="11" font-weight="600" text-anchor="middle" fill="#94a3b8">Average: O(1) Lookup • Worst Case without resizing: O(N)</text>
+        </svg>
+      </div>`;
+    }
+
+    if (type === 'stack_heap') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#334155" stroke-width="2" />
+          <rect x="25" y="30" width="220" height="185" rx="12" fill="#1e293b" stroke="#3b82f6" stroke-width="2" />
+          <text x="135" y="55" font-size="14" font-weight="900" text-anchor="middle" fill="#60a5fa">CALL STACK (Fast/Fixed)</text>
+          <rect x="40" y="70" width="190" height="35" rx="6" fill="#0f172a" stroke="#475569" stroke-width="1.5" />
+          <text x="135" y="92" font-size="12" font-weight="700" text-anchor="middle" fill="#e2e8f0">int total = 100</text>
+          <rect x="40" y="115" width="190" height="45" rx="6" fill="#0f172a" stroke="#f59e0b" stroke-width="2" />
+          <text x="135" y="135" font-size="11" font-weight="800" text-anchor="middle" fill="#fde047">Node* ptr = 0x7ffe42</text>
+          <text x="135" y="151" font-size="10" text-anchor="middle" fill="#94a3b8">Stack pointer address</text>
+          <rect x="295" y="30" width="220" height="185" rx="12" fill="#1e293b" stroke="#10b981" stroke-width="2" />
+          <text x="405" y="55" font-size="14" font-weight="900" text-anchor="middle" fill="#34d399">HEAP (Dynamic/Alloc)</text>
+          <rect x="310" y="90" width="190" height="80" rx="8" fill="#0f172a" stroke="#10b981" stroke-width="2" />
+          <text x="405" y="115" font-size="12" font-weight="800" text-anchor="middle" fill="#4ade80">Address: 0x7ffe42</text>
+          <text x="405" y="135" font-size="11" font-weight="600" text-anchor="middle" fill="#cbd5e1">Payload: { id: 42, role: "admin" }</text>
+          <text x="405" y="153" font-size="10" text-anchor="middle" fill="#64748b">Garbage Collected / Manual Free</text>
+          <path d="M 230 137 C 260 137, 270 130, 305 130" stroke="#f59e0b" stroke-width="3" stroke-dasharray="5,3" />
+          <text x="270" y="240" font-size="12" font-weight="700" text-anchor="middle" fill="#94a3b8">💡 Stack = L1 Cache Locality • Heap = Pointer Indirection</text>
+        </svg>
+      </div>`;
+    }
+
+    if (type === 'circuit_breaker') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#334155" stroke-width="2" />
+          <circle cx="95" cy="110" r="48" fill="#064e3b" stroke="#10b981" stroke-width="3" />
+          <text x="95" y="107" font-size="13" font-weight="900" text-anchor="middle" fill="#6ee7b7">CLOSED</text>
+          <text x="95" y="125" font-size="10" font-weight="700" text-anchor="middle" fill="#a7f3d0">Normal Flow</text>
+          <path d="M 145 95 Q 270 45 395 95" fill="none" stroke="#ef4444" stroke-width="3" stroke-dasharray="6,4" />
+          <text x="270" y="65" font-size="11" font-weight="800" text-anchor="middle" fill="#f87171">Failures &gt; 50% ➔ Trip</text>
+          <circle cx="445" cy="110" r="48" fill="#7f1d1d" stroke="#ef4444" stroke-width="3" />
+          <text x="445" y="107" font-size="13" font-weight="900" text-anchor="middle" fill="#fca5a5">OPEN</text>
+          <text x="445" y="125" font-size="10" font-weight="700" text-anchor="middle" fill="#fecaca">Fast Fallback</text>
+          <circle cx="270" cy="190" r="40" fill="#78350f" stroke="#f59e0b" stroke-width="3" />
+          <text x="270" y="188" font-size="11" font-weight="900" text-anchor="middle" fill="#fde047">HALF-OPEN</text>
+          <text x="270" y="204" font-size="9" font-weight="700" text-anchor="middle" fill="#fef08a">Trial Probe</text>
+          <path d="M 405 140 Q 350 195 315 195" fill="none" stroke="#f59e0b" stroke-width="2.5" />
+          <path d="M 225 195 Q 170 185 135 145" fill="none" stroke="#10b981" stroke-width="2.5" />
+        </svg>
+      </div>`;
+    }
+
+    return `
+    <div class="dsa-svg-wrapper">
+      <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#334155" stroke-width="2" />
+        <circle cx="270" cy="60" r="30" fill="#1e293b" stroke="#3b82f6" stroke-width="3" />
+        <text x="270" y="67" font-size="15" font-weight="900" text-anchor="middle" fill="#60a5fa">ROOT [50]</text>
+        <line x1="245" y1="85" x2="160" y2="135" stroke="#3b82f6" stroke-width="3" />
+        <line x1="295" y1="85" x2="380" y2="135" stroke="#3b82f6" stroke-width="3" />
+        <text x="185" y="105" font-size="12" font-weight="800" fill="#f59e0b">&lt; 50 (Left)</text>
+        <text x="345" y="105" font-size="12" font-weight="800" fill="#10b981">&gt; 50 (Right)</text>
+        <circle cx="150" cy="160" r="26" fill="#1e293b" stroke="#f59e0b" stroke-width="2.5" />
+        <text x="150" y="167" font-size="13" font-weight="800" text-anchor="middle" fill="#fde047">[25]</text>
+        <circle cx="390" cy="160" r="26" fill="#1e293b" stroke="#10b981" stroke-width="2.5" />
+        <text x="390" y="167" font-size="13" font-weight="800" text-anchor="middle" fill="#4ade80">[75]</text>
+        <text x="270" y="235" font-size="12" font-weight="700" text-anchor="middle" fill="#94a3b8">⚡ Logarithmic Search: O(log N) Time Complexity</text>
+      </svg>
+    </div>`;
+  }
+
+  renderCodeSyntaxHTML(code) {
+    if (!code) return '';
+    const lines = String(code).trim().split('\n');
+    return lines.map((line, lIdx) => {
+      const lineNum = String(lIdx + 1).padStart(2, '0');
+      let highlighted = this.escapeHTML(line);
+      if (highlighted.includes('//')) {
+        const parts = highlighted.split('//');
+        highlighted = `${parts[0]}<span class="syn-comment">//${parts.slice(1).join('//')}</span>`;
+      }
+      const keywords = ['const', 'let', 'var', 'function', 'class', 'return', 'async', 'await', 'if', 'else', 'for', 'while', 'import', 'export', 'try', 'catch', 'new', 'throw', 'switch', 'case', 'break', 'typedef', 'struct'];
+      const kwRegex = new RegExp(`\\b(${keywords.join('|')})\\b`, 'g');
+      highlighted = highlighted.replace(kwRegex, '<span class="syn-kw">$1</span>');
+      highlighted = highlighted.replace(/(["'`].*?["'`])/g, '<span class="syn-str">$1</span>');
+      highlighted = highlighted.replace(/\b(\d+)\b/g, '<span class="syn-num">$1</span>');
+      return `<div class="code-line"><span class="line-num">${lineNum}</span><span class="line-code">${highlighted}</span></div>`;
+    }).join('');
+  }
+
   renderDiagramHTML(slide, _topic = '') {
     const raw = slide.diagram;
     let title = 'System Architecture & Data Flow';
@@ -1627,30 +1859,16 @@ class AIVideoGenerator {
     const theme = this.getRotatedTheme();
 
     const slideBadges = [
-      { icon: '🔥', label: '01. The Problem', color: '#ef4444' },
-      { icon: '⚙️', label: '02. The Architecture', color: theme.accent },
-      { icon: '💻', label: '03. Live Code', color: '#22c55e' },
-      { icon: '💡', label: '04. Senior Rule of Thumb', color: '#eab308' },
-      { icon: '🚀', label: '05. Deep Dive', color: theme.secondary }
-    ];
-
-    const slideDecorations = [
-      // Slide 1: floating alert icons
-      `<div class="deco-float deco-float-1">⚠️</div><div class="deco-float deco-float-2">🐛</div><div class="deco-float deco-float-3">💥</div>`,
-      // Slide 2: mini architecture nodes
-      `<div class="deco-arch"><div class="arch-node" style="border-color:${theme.accent}">📡</div><div class="arch-line" style="background:${theme.accent}"></div><div class="arch-node" style="border-color:${theme.secondary}">⚙️</div><div class="arch-line" style="background:${theme.secondary}"></div><div class="arch-node" style="border-color:${theme.accent}">💾</div></div>`,
-      // Slide 3: terminal cursor blink
-      `<div class="deco-terminal"><span class="term-prompt" style="color:${theme.accent}">$</span> <span class="term-cursor">_</span></div>`,
-      // Slide 4: achievement badge
-      `<div class="deco-achievement" style="border-color:${theme.accent}"><span class="achieve-icon">🏆</span><span class="achieve-text" style="color:${theme.accent}">KEY TAKEAWAY</span></div>`,
-      // Slide 5 fallback
-      `<div class="deco-float deco-float-1">🚀</div>`
+      { icon: '🏛️', label: '01. History & Lore', color: '#f59e0b' },
+      { icon: '😂', label: '02. Relatable Dev Meme', color: '#ec4899' },
+      { icon: '🧠', label: '03. Under The Hood (DSA)', color: '#3b82f6' },
+      { icon: '💻', label: '04. Live Code Walkthrough', color: '#10b981' },
+      { icon: '🏆', label: '05. Staff Engineer Rule', color: '#eab308' }
     ];
 
     const slidesHTML = script.slides.map((slide, idx) => {
       const asset = (visualAssets && visualAssets.length > 0) ? visualAssets[idx % visualAssets.length] : null;
       const badge = slideBadges[idx] || slideBadges[0];
-      const deco = slideDecorations[idx] || '';
 
       const bulletsHTML = (slide.bulletPoints || []).map((b, bIdx) => {
         const bulletIcons = ['💡', '⚡', '🔑', '📌', '✨'];
@@ -1658,18 +1876,68 @@ class AIVideoGenerator {
         return `<div class="bullet-card" style="border-left-color: ${theme.accent}; animation-delay: ${bIdx * 0.15}s">${icon} ${this.escapeHTML(b)}</div>`;
       }).join('');
 
-      const diagramHTML = (idx === 1 || slide.diagram) ? this.renderDiagramHTML(slide, script.title) : '';
+      let cardContentHTML = '';
 
-      const codeHTML = slide.codeSnippet ? `
-        <div class="code-container">
-            <div class="code-header">
-                <span class="dot red"></span>
-                <span class="dot yellow"></span>
-                <span class="dot green"></span>
-                <span class="file-title">terminal / code</span>
+      if (idx === 0) {
+        // Slide 0: History & Programming Lore (Retro CRT Terminal)
+        const milestone = slide.historicMilestone || 'BELL LABS ARCHIVES • 1972';
+        cardContentHTML = `
+          <div class="retro-milestone"><span class="milestone-icon">🏛️</span> ${this.escapeHTML(milestone)}</div>
+          <div class="retro-terminal-box">
+            <div class="terminal-bar">
+              <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+              <span class="term-title">vintage-terminal-vax11</span>
             </div>
-            <pre class="code-block"><code>${this.escapeHTML(slide.codeSnippet)}</code></pre>
-        </div>` : '';
+            <div class="terminal-body">
+              <div class="term-line"><span class="term-p">root@bell-labs:~$</span> <span class="term-c">cat origin_lore.md</span></div>
+              ${bulletsHTML}
+            </div>
+          </div>
+        `;
+      } else if (idx === 1) {
+        // Slide 1: Relatable Developer Comedy Meme (Fireship style)
+        const memeType = slide.meme?.type || 'server_on_fire';
+        const memeCaption = slide.meme?.caption || 'WHEN YOUR NAIVE CODE MEETS PRODUCTION TRAFFIC';
+        const memeSubtext = slide.meme?.subtext || 'Tested once on localhost:3000';
+        cardContentHTML = `
+          <div class="meme-banner">${this.escapeHTML(memeCaption)}</div>
+          ${this.renderMemeSVG(memeType)}
+          <div class="meme-subtext">💬 ${this.escapeHTML(memeSubtext)}</div>
+          <div class="bullet-container">${bulletsHTML}</div>
+        `;
+      } else if (idx === 2) {
+        // Slide 2: Under-The-Hood Architecture & DSA Diagram (ByteByteGo style)
+        const dsaSVG = this.renderDSASVG(slide.diagram?.dsaType, script.title);
+        const flowLabel = slide.diagram?.flowLabel || 'Key ➔ Algorithm ➔ State Output';
+        cardContentHTML = `
+          ${dsaSVG}
+          <div class="diagram-flow-bar"><span>⚡</span> ${this.escapeHTML(flowLabel)}</div>
+          <div class="bullet-container" style="margin-top: 15px;">${bulletsHTML}</div>
+        `;
+      } else if (idx === 3) {
+        // Slide 3: Clean Code Walkthrough (JavaScript Mastery style)
+        const code = slide.codeSnippet || `// ${script.title}\nfunction optimize(input) {\n  const bucket = hash(input) & 0x0F;\n  return bucket.resolve();\n}`;
+        cardContentHTML = `
+          <div class="code-container">
+            <div class="code-header">
+              <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+              <span class="file-title">production_solution.ts</span>
+            </div>
+            <div class="code-block">${this.renderCodeSyntaxHTML(code)}</div>
+          </div>
+          <div class="bullet-container" style="margin-top: 15px;">${bulletsHTML}</div>
+        `;
+      } else {
+        // Slide 4: Senior Staff Engineer Takeaway & Loop Anchor
+        cardContentHTML = `
+          <div class="takeaway-trophy">
+            <span class="trophy-icon">🏆</span>
+            <span class="trophy-text">STAFF ENGINEER GOLDEN RULE</span>
+          </div>
+          <div class="bullet-container">${bulletsHTML}</div>
+          <div class="retention-loop-footer"><span>🔁</span> Save this for your next system design interview or code review</div>
+        `;
+      }
 
       return `
       <div class="slide ${idx === 0 ? 'active' : ''}">
@@ -1682,13 +1950,10 @@ class AIVideoGenerator {
             <div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div>
             <div class="particle p4"></div><div class="particle p5"></div>
           </div>
-          ${deco}
           <div class="top-badge" style="background: ${badge.color}22; border-color: ${badge.color}66; color: ${badge.color};">${badge.icon} ${badge.label}</div>
           <div class="section-card">
               <h2 class="section-header">${this.escapeHTML(slide.headline)}</h2>
-              ${bulletsHTML ? `<div class="bullet-container">${bulletsHTML}</div>` : ''}
-              ${diagramHTML}
-              ${codeHTML}
+              ${cardContentHTML}
           </div>
           <div class="slide-number" style="color: ${theme.accent}40">${String(idx + 1).padStart(2, '0')}</div>
       </div>`;
@@ -1780,7 +2045,7 @@ class AIVideoGenerator {
             position: absolute;
             width: 1080px;
             height: 1920px;
-            padding: 100px 70px;
+            padding: 90px 65px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -1798,11 +2063,10 @@ class AIVideoGenerator {
             filter: saturate(1.3);
         }
 
-        /* Large faded slide number watermark */
         .slide-number {
           position: absolute;
-          bottom: 60px; right: 60px;
-          font-size: 200px;
+          bottom: 50px; right: 50px;
+          font-size: 180px;
           font-weight: 900;
           opacity: 0.08;
           pointer-events: none;
@@ -1819,24 +2083,24 @@ class AIVideoGenerator {
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
-            padding: 14px 28px;
+            padding: 12px 26px;
             border-radius: 9999px;
             border: 1px solid;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             animation: pulse-glow 3s ease-in-out infinite;
         }
         .section-card {
             position: relative; z-index: 3;
             width: 100%;
-            max-width: 960px;
+            max-width: 950px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
         }
         h2.section-header {
-            font-size: 52px;
+            font-size: 48px;
             font-weight: 800;
-            margin-bottom: 35px;
+            margin-bottom: 24px;
             line-height: 1.25;
             background: ${theme.headerGradient};
             -webkit-background-clip: text;
@@ -1845,60 +2109,77 @@ class AIVideoGenerator {
         .bullet-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 16px;
             width: 100%;
-            margin-bottom: 25px;
+            margin-bottom: 18px;
         }
         .bullet-card {
             background: ${theme.cardBg};
             border-left: 6px solid ${theme.accent};
-            border-radius: 16px;
-            padding: 28px 34px;
-            font-size: 32px;
-            line-height: 1.5;
+            border-radius: 14px;
+            padding: 22px 28px;
+            font-size: 28px;
+            line-height: 1.45;
             color: #e2e8f0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: slide-in-up 0.6s ease-out both;
+            animation: slide-in-up 0.5s ease-out both;
         }
 
-        /* Diagram styling */
-        .diagram-container {
+        /* Meme styling */
+        .meme-banner {
             width: 100%;
-            background: ${theme.cardBg};
-            border: 2px solid ${theme.accent};
-            border-radius: 20px;
-            padding: 26px 22px;
-            margin-top: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 35px rgba(${theme.accentRGB}, 0.2);
-            animation: pulse-glow 4s ease-in-out infinite;
-        }
-        .diagram-title {
-            font-size: 24px; font-weight: 700;
-            color: ${theme.accent};
+            font-size: 30px;
+            font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            margin-bottom: 16px;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .diagram-nodes-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-            margin-bottom: 16px;
-        }
-        .diagram-node-card {
-            background: rgba(${theme.accentRGB}, 0.08);
-            border: 1px solid ${theme.cardBorder};
+            padding: 16px 24px;
+            background: #facc15;
+            color: #0f172a;
             border-radius: 14px;
-            padding: 16px 18px;
-            display: flex; align-items: center; gap: 14px;
+            text-align: center;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 25px rgba(250, 204, 21, 0.35);
         }
-        .diagram-node-icon { font-size: 32px; line-height: 1; }
-        .diagram-node-info { display: flex; flex-direction: column; }
-        .diagram-node-name { font-size: 22px; font-weight: 700; color: #ffffff; }
-        .diagram-node-role { font-size: 16px; color: #94a3b8; margin-top: 3px; }
+        .meme-svg-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        .meme-svg {
+            width: 100%;
+            max-width: 580px;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.6);
+        }
+        .meme-subtext {
+            font-size: 22px;
+            font-weight: 700;
+            color: #cbd5e1;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 9999px;
+            padding: 8px 22px;
+            margin-bottom: 16px;
+            align-self: center;
+        }
+
+        /* DSA SVG diagram styling */
+        .dsa-svg-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        .dsa-svg {
+            width: 100%;
+            max-width: 720px;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.6);
+        }
         .diagram-flow-bar {
+            width: 100%;
             background: rgba(${theme.accentRGB}, 0.12);
             border: 1px dashed ${theme.accent};
             border-radius: 12px;
@@ -1908,111 +2189,142 @@ class AIVideoGenerator {
             font-family: 'Consolas', monospace;
             font-weight: 600;
             text-align: center;
+            margin-bottom: 14px;
         }
 
-        /* Code block */
+        /* Retro Terminal styling */
+        .retro-milestone {
+            font-size: 22px;
+            font-weight: 800;
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            border-radius: 8px;
+            padding: 8px 18px;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .retro-terminal-box {
+            width: 100%;
+            background: #090d16;
+            border: 2px solid #334155;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 18px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.7);
+        }
+        .terminal-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
+            background: #161f30;
+            border-bottom: 1px solid #334155;
+        }
+        .term-title {
+            color: #94a3b8;
+            font-family: 'Consolas', monospace;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+        .terminal-body {
+            padding: 20px 24px;
+            font-family: 'Consolas', monospace;
+        }
+        .term-line {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        .term-p { color: #22c55e; font-weight: 700; }
+        .term-c { color: #f1f5f9; }
+
+        /* Code block & syntax highlighter */
         .code-container {
             width: 100%;
             background: #0d1117;
-            border: 1px solid ${theme.cardBorder};
-            border-radius: 20px;
+            border: 1px solid #30363d;
+            border-radius: 18px;
             overflow: hidden;
-            margin-top: 15px;
+            margin-bottom: 16px;
             box-shadow: 0 12px 35px rgba(0,0,0,0.7);
         }
         .code-header {
             display: flex; align-items: center; gap: 10px;
             background: #161b22;
-            padding: 18px 24px;
+            padding: 14px 20px;
             border-bottom: 1px solid #30363d;
         }
-        .dot { width: 16px; height: 16px; border-radius: 50%; display: inline-block; }
+        .dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
         .dot.red { background: #ff5f56; }
         .dot.yellow { background: #ffbd2e; }
         .dot.green { background: #27c93f; }
         .file-title {
             color: #8b949e;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 24px;
-            margin-left: 12px;
+            font-family: 'Consolas', monospace;
+            font-size: 20px;
+            margin-left: 10px;
         }
         .code-block {
-            padding: 28px 32px;
+            padding: 22px 28px;
             font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 26px;
-            line-height: 1.55;
-            color: ${theme.codeColor};
-            white-space: pre-wrap;
-            word-break: break-all;
+            background: #0d1117;
         }
+        .code-line {
+            display: flex;
+            align-items: baseline;
+            font-size: 24px;
+            line-height: 1.6;
+        }
+        .line-num {
+            width: 45px;
+            color: #475569;
+            user-select: none;
+            font-size: 20px;
+        }
+        .line-code { color: #f8f8f2; }
+        .syn-kw { color: #ff79c6; font-weight: 700; }
+        .syn-type { color: #8be9fd; font-weight: 600; }
+        .syn-str { color: #f1fa8c; }
+        .syn-num { color: #bd93f9; }
+        .syn-comment { color: #6272a4; font-style: italic; }
 
-        /* Decorative elements */
-        .deco-float {
-          position: absolute;
-          font-size: 48px;
-          z-index: 1;
-          pointer-events: none;
-          animation: float-drift 4s ease-in-out infinite;
+        /* Senior Staff Engineer Trophy */
+        .takeaway-trophy {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: linear-gradient(90deg, rgba(234, 179, 8, 0.2), rgba(234, 179, 8, 0.05));
+            border: 2px solid #eab308;
+            border-radius: 16px;
+            padding: 16px 24px;
+            margin-bottom: 22px;
+            box-shadow: 0 10px 30px rgba(234, 179, 8, 0.2);
         }
-        .deco-float-1 { top: 12%; right: 10%; animation-delay: 0s; }
-        .deco-float-2 { top: 25%; left: 8%; animation-delay: 1s; }
-        .deco-float-3 { bottom: 18%; right: 15%; animation-delay: 2s; }
+        .trophy-icon { font-size: 38px; }
+        .trophy-text { font-size: 26px; font-weight: 900; color: #fbbf24; letter-spacing: 1.5px; }
 
-        /* Architecture decoration */
-        .deco-arch {
-          position: absolute;
-          bottom: 140px; left: 50%;
-          transform: translateX(-50%);
-          display: flex; align-items: center; gap: 0;
-          z-index: 1; pointer-events: none;
-          opacity: 0.6;
+        /* Retention loop footer */
+        .retention-loop-footer {
+            width: 100%;
+            font-size: 22px;
+            font-weight: 700;
+            color: #94a3b8;
+            border: 1px dashed ${theme.accent};
+            border-radius: 12px;
+            padding: 14px 22px;
+            margin-top: 18px;
+            text-align: center;
+            background: rgba(0,0,0,0.3);
         }
-        .arch-node {
-          width: 56px; height: 56px;
-          border: 2px solid;
-          border-radius: 14px;
-          display: flex; align-items: center; justify-content: center;
-          font-size: 24px;
-          background: rgba(0,0,0,0.4);
-        }
-        .arch-line {
-          width: 40px; height: 3px;
-          opacity: 0.5;
-        }
-
-        /* Terminal cursor */
-        .deco-terminal {
-          position: absolute;
-          bottom: 150px; left: 70px;
-          font-family: 'Consolas', monospace;
-          font-size: 28px;
-          z-index: 1;
-          opacity: 0.5;
-        }
-        .term-prompt { font-weight: 700; }
-        .term-cursor { animation: cursor-blink 1s step-end infinite; }
-
-        /* Achievement badge */
-        .deco-achievement {
-          position: absolute;
-          top: 120px; right: 60px;
-          border: 2px solid;
-          border-radius: 16px;
-          padding: 10px 20px;
-          display: flex; align-items: center; gap: 10px;
-          background: rgba(0,0,0,0.5);
-          z-index: 1;
-          animation: pulse-glow 3s ease-in-out infinite;
-        }
-        .achieve-icon { font-size: 28px; }
-        .achieve-text { font-size: 16px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
 
         /* Top animated progress bar for Shorts retention */
         .shorts-progress-bar-wrap {
             position: absolute;
-            top: 40px;
-            left: 70px;
-            right: 70px;
+            top: 35px;
+            left: 65px;
+            right: 65px;
             height: 10px;
             background: rgba(255, 255, 255, 0.15);
             border-radius: 9999px;
@@ -2025,7 +2337,6 @@ class AIVideoGenerator {
             box-shadow: 0 0 20px ${theme.accent};
             transition: width 0.3s ease;
         }
-
     </style>
 </head>
 <body>

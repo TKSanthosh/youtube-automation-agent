@@ -411,23 +411,23 @@ Do not invent trend data, statistics, sources, URLs, or factual claims. Use only
       }
     } catch (_e) {}
 
-    const prompt = `You are selecting a YouTube Shorts content strategy focused strictly on IT Technologies, Software Engineering, DevOps, Cloud, and System Design.
+    const prompt = `You are selecting a YouTube Shorts content strategy focused on the whole spectrum of Computer Science, Software Engineering, Programming History & Lore, Data Structures & Algorithms (DSA), System Design, and Core Systems.
 Return only valid JSON with this exact shape:
 {
-  "topic": "specific IT technology or architectural concept (e.g., Docker Multi-Stage Builds, Kubernetes Pod Lifecycle, Redis Caching, Kafka Event Streaming, SQL Indexing B-Trees, JWT Token Rotation, Circuit Breaker Pattern)",
-  "angle": "in-depth 3-minute practical breakdown explaining the concept from start to end with a clear code or architecture example",
-  "targetAudience": "software engineers, DevOps engineers, developers, IT students",
+  "topic": "specific Computer Science concept, algorithm, lore milestone, or architectural pattern (e.g., How Hash Tables Resolve Collisions, Why Quicksort Beats Mergesort on Cache Lines, Dennis Ritchie & Bell Labs C Revolution, Tony Hoare's Billion Dollar Null Pointer Mistake, The Python GIL Explained, Observer vs Pub-Sub Pattern, B-Trees vs LSM Trees)",
+  "angle": "in-depth 3-minute practical breakdown explaining the concept from historical origin or struggle to core DSA mechanics, real code, and senior takeaway",
+  "targetAudience": "software engineers, computer science students, developers, tech enthusiasts",
   "contentType": "Tutorial",
-  "keywords": ["IT", "coding", "software engineering", "tech", "architecture"]
+  "keywords": ["Computer Science", "DSA", "programming", "software engineering", "coding lore"]
 }
 
 Requested topic: ${requestedTopic || 'none'}
-Channel niche: Pure IT Technologies, System Design, Cloud & Software Engineering. Must be a concrete concept explainable in 3 minutes with clear technical examples. Zero fluff.
+Channel niche: The Entire World of Computer Science — Programming History & Lore, Data Structures & Algorithms (DSA), Design Patterns, System Architecture, Compilers & Low-Level Systems. Must be concrete, intellectually captivating, and explainable in 3 minutes with real code or diagrams and developer humor. Zero generic fluff.
 
 CRITICAL ANTI-DUPLICATION RULE:
 Do NOT select, repeat, or closely replicate any of these recent channel topics:
 ${recentTopics.slice(0, 30).map(t => `- ${t}`).join('\n')}
-Pick an entirely fresh, exciting, unaddressed IT concept!`;
+Pick an entirely fresh, exciting, unaddressed Computer Science concept!`;
 
     try {
       const response = await this.aiTextService.generateText(prompt, {
@@ -519,42 +519,61 @@ Pick an entirely fresh, exciting, unaddressed IT concept!`;
 
   getEvergreenFallbackTopics() {
     return [
-      'Docker Multi-Stage Builds: Slash Container Image Sizes by 90%',
-      'Docker Distroless Images: Lock Down Container Attack Surface',
-      'Docker Layer Caching Secrets for Lightning-Fast CI Pipelines',
-      'Kubernetes Pod Lifecycle & Health Probes Explained',
-      'Kubernetes ClusterIP vs NodePort vs LoadBalancer Networking',
-      'Kubernetes Ingress Controllers: Traffic Routing Demystified',
-      'Kubernetes ConfigMaps and Secrets: Safe Configuration at Scale',
-      'Kubernetes HPA: Autoscaling Pods Based on Real CPU and Memory',
-      'Consistent Hashing in Distributed System Design',
+      // 1. Programming History & Lore (Captivating story hooks & historic bugs)
+      'Dennis Ritchie & Bell Labs: How C and UNIX Changed Computing Forever',
+      'Brendan Eich Created JavaScript in 10 Days: The Lore & Quirks Explained',
+      'Linus Torvalds Created Git in 2 Weeks: The Architecture Born from Rage',
+      'Tony Hoare and the Billion Dollar Mistake: Why Null Pointers Exist',
+      'The $125M Mars Climate Orbiter Metric Bug: Unit Conversion in Code',
+      'Grace Hopper & The First Computer Bug: How a Real Moth Made History',
+      'Margaret Hamilton & Apollo 11: How Priority Scheduling Saved the Moon Landing',
+      'Fast Inverse Square Root: The 0x5f3759df Magic Number in Quake III',
+      'The Y2K Bug Explained: How Cobol Programmers Saved the Modern World',
+      'Why 404 Not Found Exists: Tim Berners-Lee & The History of HTTP Statuses',
+
+      // 2. Data Structures & Algorithms (Deep mental models & Big-O mechanics)
+      'How Hash Tables Resolve Collisions: Separate Chaining vs Open Addressing',
+      'Why Quicksort Beats Mergesort in Practice: CPU L1/L2 Cache Lines',
+      'B-Trees vs LSM Trees: Why Modern Databases Abandoned Binary Search Trees',
+      'Bloom Filters Explained: Probabilistic O(1) Lookups in Redis & Cassandra',
+      'Trie Data Structure: How Google Autocomplete Searches Millions of Words in O(k)',
+      'LRU Cache in O(1): Combining Doubly Linked Lists with Hash Maps',
+      'Consistent Hashing in Distributed Systems: Ring Topology Explained',
+      'Sliding Window Algorithm: Turning O(N²) Nested Loops Into O(N) Speed',
+      'Two Pointer Technique: Solving Array & Linked List Problems in O(N)',
+      'Graph Traversal: Breadth-First Search (BFS) vs Depth-First Search (DFS)',
+
+      // 3. Software Engineering Design Patterns & System Architecture
+      'Observer Pattern vs Pub-Sub: The Critical Event-Driven Difference',
+      'Strategy Pattern: How to Permanently Kill Ugly Nested If-Else Ladders',
+      'Factory Method vs Abstract Factory: When and Why to Use Each',
+      'Circuit Breaker Pattern: Stopping Cascading Outages in Microservices',
+      'Singleton Pattern: Why Senior Engineers Hate It and When It is Valid',
+      'Saga Pattern: Orchestrating Distributed Transactions Without 2PC',
+      'CQRS Pattern: Separating Read and Write Models for Massive Scalability',
       'API Rate Limiting: Token Bucket vs Leaky Bucket Algorithms',
-      'Circuit Breaker Pattern in Microservices Architecture',
-      'Idempotent APIs: Preventing Duplicate Payments and Requests',
+      'Idempotent APIs: How to Prevent Double Charges and Duplicate Requests',
       'Distributed Caching: Cache-Aside vs Write-Through vs Write-Back',
-      'How Redis In-Memory Caching and Expiration Keys Actually Work',
-      'Kafka vs RabbitMQ: Event Streaming vs Message Queues',
-      'Kafka Partitioning & Consumer Groups: Parallel Processing Explained',
+
+      // 4. Core Systems, Compilers & Low-Level Computer Science
+      'Memory Management: Stack vs Heap Allocation & Pointer Dereferencing',
+      'How Compilers Work Under the Hood: Lexing, Parsing, and Abstract Syntax Trees',
+      'Virtual Memory & Page Tables: How Operating Systems Protect Memory',
+      'The Python GIL Explained: Why Multi-Threading Is Not Truly Parallel',
+      'Concurrency: Race Conditions, Deadlocks, and Mutex Locks Demystified',
+      'CPU Cache Lines & False Sharing: Low-Latency Optimization Secrets',
+      'Garbage Collection Internals: Mark-and-Sweep vs Generational GC',
+      'Linux Process Signals: Graceful Shutdown with SIGTERM in Docker',
+      'Linux Epoll vs Select: How Nginx and Node.js Handle 100K Connections',
+      'TCP 3-Way Handshake & Connection Teardown: Network Packets Traced',
+      'TLS / SSL Handshake: How Asymmetric & Symmetric Encryption Secures The Web',
       'Database Indexing Under the Hood: B-Trees vs Hash Indexes',
       'PostgreSQL MVCC: How Vacuuming Prevents Catastrophic Table Bloat',
       'Database Connection Pooling: Preventing Connection Leaks & Exhaustion',
       'Database ACID Transactions and Isolation Levels Explained',
-      'JWT Authentication & Refresh Token Rotation Explained',
-      'OAuth 2.0 Authorization Code Flow with PKCE Walkthrough',
-      'WebSockets vs Server-Sent Events vs HTTP Long Polling',
-      'REST vs gRPC: When to Use Protocol Buffers in Production',
-      'TCP 3-Way Handshake and Connection Teardown Explained',
-      'TLS / SSL Handshake: How HTTPS Secures The Web',
-      'Memory Management: Stack vs Heap in Modern Runtimes',
-      'Garbage Collection Internals: Mark and Sweep vs Generational GC',
-      'Linux Process Signals: Graceful Shutdown with SIGTERM in Docker',
-      'Linux Epoll vs Select: How Nginx Handles 100K Connections',
-      'CAP Theorem in Distributed Systems: Tradeoffs in Practice',
-      'Write-Ahead Logging (WAL): How Databases Guarantee Zero Data Loss',
-      'Saga Pattern: Managing Distributed Transactions Without 2PC',
-      'CPU Cache Lines & False Sharing: Low-Latency Systems Explained',
-      'Reverse Proxy vs Load Balancer: Nginx Architecture Walkthrough',
-      'Git Under the Hood: Blobs, Trees, and Commits Demystified'
+      'Kafka Partitioning & Consumer Groups: Parallel Processing Explained',
+      'Docker Multi-Stage Builds: Slash Container Image Sizes by 90%',
+      'Kubernetes Pod Lifecycle & Health Probes Explained'
     ];
   }
 

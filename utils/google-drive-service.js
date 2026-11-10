@@ -1,4 +1,3 @@
-const fs = require('fs').promises;
 const fsSync = require('fs');
 const path = require('path');
 const { google } = require('googleapis');
@@ -88,7 +87,7 @@ class GoogleDriveService {
     }
   }
 
-  async syncProductionBundle({ title, videoPath, script, thumbnailPath, metadata }) {
+  async syncProductionBundle({ title, videoPath, script: _script, thumbnailPath, metadata: _metadata }) {
     this.logger.info(`Syncing production bundle to Google Drive: "${title}"`);
     try {
       const safeTitle = (title || 'untitled').replace(/[^a-z0-9]/gi, '_');

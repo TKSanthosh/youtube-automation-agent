@@ -169,84 +169,108 @@ Our channel rule: THIS video MUST surpass our previous upload (previous quality 
 - Mandatory Upgrades: ${Array.isArray(strategy.qualityDirectives.mandatoryUpgrades) ? strategy.qualityDirectives.mandatoryUpgrades.join('; ') : 'Tighter pacing, zero delay in hook.'}
 ` : '';
 
-    const prompt = `You are a renowned principal software architect and passionate tech educator creating a YouTube Short on: "${strategy.topic}".
-Your goal is to teach this technical concept clearly, thoroughly, and completely so that even junior developers immediately get it, while senior engineers appreciate the depth.
+    const prompt = `You are a renowned computer science educator creating a captivating 3-minute YouTube Short on: "${strategy.topic}".
+Channel Style: A brilliant blend of FIRESHIP (fast-paced developer wit, programming history/lore & hilarious relatable dev memes), BYTEBYTEGO (crystal-clear visual diagrams & DSA/architecture mental models), and JAVASCRIPT MASTERY (sleek syntax-highlighted code walkthroughs).
+Your goal is to make this video captivating, deeply educational, and free of generic corporate buzzwords. Junior engineers will love the humor and clarity, while staff engineers will respect the depth.
 ${evoBlock}
-CRITICAL CONSTRAINTS FOR 3-MINUTE YOUTUBE SHORTS MASTERCLASS (FULL 3 MINUTES & DEEP TEACHING):
-1. FULL 3-MINUTE DURATION: Total video narration MUST be between 2:45 and 3:00 minutes (165 to 180 seconds).
-   - Total narration across all 4 slides MUST be 420 to 460 words (~100 to 115 words per slide at ~145-150 wpm pacing).
-   - Do NOT rush! Deliver a full masterclass that completely demystifies the topic with zero hand-waving.
+CRITICAL CONSTRAINTS FOR 3-MINUTE YOUTUBE SHORTS (2:45 to 3:00 MINUTES):
+- Video duration MUST be strictly between 2:45 and 3:00 minutes (165 to 178 seconds).
+- Total narration across all 5 slides MUST be 360 to 385 words (~70-80 words per slide at ~130-135 wpm speech pacing).
+- Zero fluff, zero generic boilerplate, zero throat-clearing greetings.
 
-2. TEACHING STYLE:
-   - Talk like a passionate, world-class principal software architect doing a whiteboard deep dive.
-   - Use funny, relatable real-world developer analogies (e.g. debugging at 2 AM, caffeine-fueled refactors, production outages caused by cascading retries).
-   - NEVER read the slide bullet points verbatim! The slides are visual anchors; you talk directly to the engineer and walk through what is on the screen ("Look at line 3 on your screen...", "Notice what happens when this flag is toggled...").
-   - ZERO REPETITION: Advance the teaching with fresh, actionable engineering insights every slide.
-
-4 PROGRESSIVE SLIDES (Total: 420-460 words):
-- Slide 1: The Production Nightmare & Relatable Disaster (Focus on 1 concrete pain point; 95-105 words)
-- Slide 2: Under-The-Hood Architecture & The Mental Model (Intuitive mental model with visual diagram; 105-115 words)
-- Slide 3: Practical Implementation & Code Walkthrough (Explain the code on screen line-by-line; 115-125 words)
-- Slide 4: Senior Dev Rule of Thumb, Failure Modes & Key Takeaway (Full closure and golden rule of thumb; 95-105 words)
+THE 5 PROGRESSIVE SLIDES (Total: 360-385 words):
+1. Slide 1 (type: "history_lore"): Programming History / Lore & High-Stakes Hook (~70-75 words)
+   - Story hook: When was this discovered, created, or broken? (e.g., Bell Labs 1972, Netscape 1995, Apollo 11 1969, Tony Hoare 1965, or the historical origin of the problem).
+   - Talk like Fireship: fast, punchy, cynical, fascinating.
+2. Slide 2 (type: "meme"): Developer Comedy Meme & The Relatable Pain Point (~60-65 words)
+   - Relatable developer struggle: Debugging at 2 AM, burning production servers, "works on my machine", junior vs senior dev.
+   - Include a meme object with type ("server_on_fire" | "works_on_my_machine" | "spiderman_pointing" | "two_buttons" | "doge_cheems"), comic uppercase caption, and subtext.
+3. Slide 3 (type: "dsa_architecture"): Under-The-Hood DSA & Architecture Mental Model (~80-85 words)
+   - ByteByteGo style: Explain the core mechanics (memory layout, Big-O, bucket arrays, cache lines, state machine transitions) without hand-waving.
+   - Include a diagram object with dsaType ("hash_table" | "binary_tree" | "stack_heap" | "circuit_breaker" | "cache_hierarchy") and flowLabel.
+4. Slide 4 (type: "code"): Clean Code Implementation Walkthrough (~80-85 words)
+   - JavaScript Mastery style: Real, clean syntax (TypeScript, Python, C, or Go).
+   - Narration walks through the code on screen line-by-line ("Notice on line 3...", "Instead of a naive loop...").
+5. Slide 5 (type: "takeaway"): Senior Staff Engineer Golden Rule of Thumb (~70-75 words)
+   - One actionable golden rule that separates tutorial hell from senior architecture.
+   - Smooth loop anchor back to the start.
 
 Return ONLY valid JSON matching this exact structure:
 {
-  "title": "Compelling technical title under 80 characters (include Part 1 if multi-part)",
-  "hook": "Opening statement capturing the singular, specific real-world problem (no greetings)",
+  "title": "Compelling CS title under 70 characters",
+  "hook": "Opening statement capturing the singular, specific real-world problem or lore milestone (no greetings)",
   "slides": [
     {
       "slideNumber": 1,
-      "type": "problem",
-      "headline": "01. The Production Nightmare",
+      "type": "history_lore",
+      "headline": "01. Origin & Computing Lore",
+      "historicMilestone": "BELL LABS • 1972",
       "bulletPoints": [
-        "Why standard naive implementations fail",
-        "The hidden bottleneck devs miss in code review"
+        "Historical origin and discovery",
+        "Why naive approaches broke early computing"
       ],
       "codeSnippet": "",
-      "teacherNarration": "Conversational, witty, energetic teacher explanation of the problem with a relatable developer struggle (95-105 words). Does NOT read the slide bullets."
+      "teacherNarration": "Conversational, witty, energetic history/lore explanation hook (70-75 words)."
     },
     {
       "slideNumber": 2,
-      "type": "architecture",
-      "headline": "02. Under The Hood: The Mental Model",
-      "bulletPoints": [
-        "Core architectural mechanism",
-        "State transitions & memory layout"
-      ],
-      "diagram": {
-        "title": "Architecture & Data Flow",
-        "nodes": [
-          {"name": "Client / Ingress", "role": "Traffic Entry", "icon": "🌐"},
-          {"name": "Controller / Router", "role": "State Machine", "icon": "⚙️"},
-          {"name": "Worker Node / Pod", "role": "Execution Unit", "icon": "📦"},
-          {"name": "Storage / State", "role": "Persistent Storage", "icon": "💾"}
-        ],
-        "flowLabel": "Client (HTTPS) ➔ Controller ➔ Worker Pods ➔ State"
+      "type": "meme",
+      "headline": "02. The 2 AM Developer Reality",
+      "meme": {
+        "type": "server_on_fire",
+        "caption": "WHEN YOUR NAIVE CODE HITS PRODUCTION TRAFFIC",
+        "subtext": "Everything worked perfectly on localhost"
       },
+      "bulletPoints": [
+        "The painful developer struggle",
+        "Why localhost tests deceive you"
+      ],
       "codeSnippet": "",
-      "teacherNarration": "Conversational teacher explanation with a brilliant real-world analogy and zero slide reading (105-115 words). If you point to what is on screen, discuss the exact architecture nodes displayed on this slide."
+      "teacherNarration": "Relatable developer comedy narration explaining the pain and nightmare (60-65 words)."
     },
     {
       "slideNumber": 3,
-      "type": "code",
-      "headline": "03. Practical Implementation",
+      "type": "dsa_architecture",
+      "headline": "03. Under The Hood: Mental Model",
       "bulletPoints": [
-        "Thread-safe execution pattern",
-        "Graceful fallback on timeout"
+        "Memory layout and data pointers",
+        "Time & Space complexity mechanics"
       ],
-      "codeSnippet": "10-14 lines of clean practical code or config",
-      "teacherNarration": "Teacher walks through the code shown on screen line by line explaining why each line matters (115-125 words)."
+      "diagram": {
+        "title": "Data Flow & Memory Mechanics",
+        "dsaType": "hash_table",
+        "nodes": [
+          {"name": "Hash Function", "role": "Key ➔ Hash Code", "icon": "⚡"},
+          {"name": "Bucket Array", "role": "Index Modulo", "icon": "📦"},
+          {"name": "Collision Chain", "role": "Linked List / Tree", "icon": "🔗"},
+          {"name": "Memory Buffer", "role": "Heap Allocation", "icon": "💾"}
+        ],
+        "flowLabel": "Key ➔ Hash Function ➔ Bucket Index ➔ Collision Chain"
+      },
+      "codeSnippet": "",
+      "teacherNarration": "ByteByteGo-style clear explanation of the mechanics and Big-O reality (80-85 words)."
     },
     {
       "slideNumber": 4,
-      "type": "takeaway",
-      "headline": "04. Senior Dev Rule of Thumb",
+      "type": "code",
+      "headline": "04. Clean Implementation",
       "bulletPoints": [
-        "Production gotcha to avoid",
-        "Key benchmark to monitor"
+        "Idiomatic pattern implementation",
+        "Edge-case and collision handling"
+      ],
+      "codeSnippet": "// 8-12 lines of clean code",
+      "teacherNarration": "Teacher walks through the code shown on screen line by line explaining why each line matters (80-85 words)."
+    },
+    {
+      "slideNumber": 5,
+      "type": "takeaway",
+      "headline": "05. Staff Engineer Golden Rule",
+      "bulletPoints": [
+        "Core production gotcha to avoid",
+        "Key architectural rule of thumb"
       ],
       "codeSnippet": "",
-      "teacherNarration": "Memorable concluding rule of thumb providing complete pedagogical closure and resolution without generic subscribe begging (95-105 words)."
+      "teacherNarration": "Memorable concluding rule of thumb providing complete pedagogical closure and resolution without generic subscribe begging (70-75 words)."
     }
   ],
   "conclusion": "One-line golden rule of thumb for senior engineers"
@@ -321,29 +345,93 @@ Return ONLY valid JSON matching this exact structure:
     }
   }
 
-  ensurePedagogicalNarrationDepth(slide, topic, idx) {
-    let narration = String(slide.teacherNarration || slide.narration || '').trim();
-    const wordCount = narration.split(/\s+/).filter(Boolean).length;
-    // Strictly timed for 2:45 to 3:00 minute YouTube Shorts (~85-100 words per slide = ~165-175s total)
-    if (wordCount >= 85 && wordCount <= 102) return narration;
+  generateAuthenticCSNarration(slide, topic, idx) {
+    const t = String(topic || '').toLowerCase();
+    const topicClean = topic || 'this concept';
 
-    const topicClean = topic || 'this architecture';
-    let text = '';
+    if (t.includes('hash') || t.includes('collision')) {
+      if (idx === 0) {
+        return `In 1953, Hans Peter Luhn at IBM invented hash tables to search text records in constant time O(1). But a mathematical reality quickly emerged: the Birthday Paradox guarantees that with just twenty-three elements, hash collisions become statistically inevitable. When two completely different keys produce the exact same bucket address, naive systems crash or overwrite memory. Let's break down how modern high-performance runtimes resolve this collision bottleneck and maintain lightning-fast lookups.`;
+      } else if (idx === 1) {
+        return `Here is the classic developer comedy nightmare: your code runs in two milliseconds during local staging tests, but the moment real users flood production, lookups mysteriously crawl to a dead halt. Every engineer cries when their textbook constant-time hash table secretly degrades into a bloated, slow O(N) linked list. It worked on my machine, so why is the server CPU pinned at one hundred percent? Welcome to the reality of unhandled collisions.`;
+      } else if (idx === 2) {
+        return `Let's trace the memory mechanics displayed directly on your screen. When a key is hashed, its 64-bit hash code is modulo-divided by the bucket array length. When two keys map to the exact same bucket index, Separate Chaining allocates a pointer on the heap, linking nodes sequentially. But notice what happens at scale: if a chain exceeds eight elements, modern runtimes like Java and V8 automatically transform the linked list into a self-balancing red-black tree, maintaining O(log N) retrieval speed.`;
+      } else if (idx === 3) {
+        return `Now examine the clean production implementation on your screen. Notice how we calculate the bucket index: instead of using expensive modulo arithmetic, we perform a bitwise AND mask with capacity minus one, executing in a single CPU clock cycle. When reading or writing, we traverse the bucket head pointer, checking cached 32-bit hash codes before running full key equality comparisons, guaranteeing true O(1) retrieval speed while shielding your CPU from redundant memory dereferencing.`;
+      } else {
+        return `Here is the golden rule of thumb senior staff engineers live by: always monitor your load factor. The moment your entry count breaches seventy-five percent of bucket capacity, trigger a dynamic array resize immediately. Never allow unmonitored collision chains to exhaust your CPU cache lines and murder database lookup throughput. Master memory-aware data structures and you will build rock-solid systems that scale effortlessly under heavy production traffic.`;
+      }
+    }
+
+    if (t.includes('quick') || t.includes('sort') || t.includes('merge') || t.includes('cache line')) {
+      if (idx === 0) {
+        return `In 1960, British computer scientist Tony Hoare invented Quicksort while working on machine translation. On paper, Mergesort and Quicksort both run in O(N log N) time, yet Quicksort consistently outperforms Mergesort by three times in real-world benchmarks. The mathematical complexity is identical, but the physical hardware tells an entirely different story. Let's uncover the computer science secret hidden inside your CPU memory caches.`;
+      } else if (idx === 1) {
+        return `The relatable developer struggle: junior engineers spend months memorizing asymptotic Big-O formulas, only to deploy to production and watch their textbook optimal algorithm get absolutely destroyed by physical hardware realities. You brag about O(N log N) in your pull request, but production latency spikes through the roof. Welcome to the brutal world of CPU L1 cache line misses, pipeline stalls, and memory latency penalty.`;
+      } else if (idx === 2) {
+        return `Look at the architecture diagram on your screen. Mergesort requires allocating an auxiliary array on the heap, thrashing memory buses and forcing continuous pointer dereferences. Quicksort sorts strictly in-place. Because contiguous array elements fit directly into sixty-four-byte CPU cache lines, hardware prefetchers predict every pivot partition with near zero latency penalty, keeping processor execution cores completely saturated without memory wait states.`;
+      } else if (idx === 3) {
+        return `Now trace the live code implementation on your screen. Look at our partition function: we select the pivot using the median-of-three heuristic, avoiding worst-case quadratic degradation on pre-sorted arrays. As the pointers scan inward, elements swap directly within contiguous memory blocks, maintaining sequential cache locality throughout execution and preventing catastrophic branch prediction failures on modern superscalar CPU architectures.`;
+      } else {
+        return `Here is the staff engineer rule of thumb: never trust algorithmic Big-O without profiling physical memory access patterns. Cache locality beats theoretical instruction counts every single day. Master hardware-aware algorithms, understand cache line boundaries, and you will write high-performance code that leaves naive textbook implementations completely in the dust. Bookmark this breakdown for your next system design interview.`;
+      }
+    }
+
+    if (t.includes('javascript') || t.includes('brendan') || t.includes('eich') || t.includes('web')) {
+      if (idx === 0) {
+        return `In May 1995, Netscape engineer Brendan Eich was given an impossible ultimatum: create a scripting language for the browser in just ten days. That feverish hackathon birthed JavaScript, a language that powers ninety-eight percent of the web today despite legendary lore like typeof null being an object. What was built as a prototype ended up running global finance, enterprise backends, and cloud infrastructure.`;
+      } else if (idx === 1) {
+        return `Every single web developer has suffered through JavaScript's hilarious meme moments: when adding an empty array plus an empty object outputs zero, or when NaN strictly does not equal NaN. It works flawlessly on your local machine, but completely breaks in production Chrome. You stare at your terminal at two in the morning questioning your entire career. Let's see how the engine actually evaluates code under the hood.`;
+      } else if (idx === 2) {
+        return `Let's examine the runtime architecture on your screen. JavaScript is single-threaded, powered by the V8 call stack, libuv thread pool, and the event loop. When asynchronous tasks complete, they enqueue into microtask and macrotask queues. Microtasks from Promises always execute before timers, maintaining non-blocking high throughput across single CPU cores without requiring thread locks or causing race condition deadlocks.`;
+      } else if (idx === 3) {
+        return `Look at the code on your screen. Notice how we handle asynchronous tasks cleanly with async await and Promise allSettled rather than unhandled callback hell. By executing concurrent I/O operations simultaneously without blocking the main event thread, our service delivers sub-millisecond response latency while shielding your runtime from unhandled rejection crashes that knock down Node.js container pods.`;
+      } else {
+        return `The senior engineer golden rule for JavaScript: always master microtask queue execution order. Never starve the event loop with synchronous heavy computation, always avoid type-coercing loose equality operators, and strictly validate external payloads with schemas to prevent silent runtime type errors from corrupting your production state. Follow this rule and your services will stay rock-solid under high traffic load.`;
+      }
+    }
+
+    if (t.includes('null') || t.includes('hoare') || t.includes('pointer') || t.includes('stack') || t.includes('heap') || t.includes('memory')) {
+      if (idx === 0) {
+        return `In 1965, computer scientist Tony Hoare invented the null reference for the ALGOL W programming language simply because it was easy to implement. Decades later at an international software engineering conference, he publicly apologized, christening it his billion-dollar mistake due to countless software crashes, security vulnerabilities, and system outages worldwide. Here is why modern language designers have completely eliminated it.`;
+      } else if (idx === 1) {
+        return `Every single software engineer has had their weekend ruined by a production NullPointerException at two in the morning. You write fifty comprehensive unit tests, everything passes locally, and then a rogue null payload sails straight past your guard rails into the database. The client app crashes, the on-call pager screams, and you realize Tony Hoare's billion-dollar mistake just cost your team a night of sleep.`;
+      } else if (idx === 2) {
+        return `Let's trace the memory layout displayed on your screen. The Stack manages fixed-size execution frames with instant pointer offsets, while the dynamic Heap allocates variable-sized objects. When a pointer variable contains zero, dereferencing it causes the operating system memory management unit to trigger a segmentation fault or runtime panic immediately, killing worker threads and terminating active request contexts.`;
+      } else if (idx === 3) {
+        return `Look at the clean implementation on your screen. Modern software architecture eliminates null entirely through Optional and Result wrapper monads. Notice how we guard every access with safe pattern matching, making impossible states completely unrepresentable at compile time before code ever reaches staging, shielding your core domain logic from unexpected missing values.`;
+      } else {
+        return `Here is the staff engineer rule of thumb: ban raw nullable references from your production domain models permanently. Adopt Option types, compile-time non-null assertions, and strict boundary validation, and you will eliminate eighty percent of preventable application crashes across your tech stack. Implement this pattern in your mission-critical codebase today and sleep peacefully on Friday nights.`;
+      }
+    }
+
+    // Default Computer Science Masterclass (Fireship / ByteByteGo style)
     if (idx === 0) {
-      text = `When engineers first implement ${topicClean}, standard textbook solutions look deceivingly simple in local staging environments, but instantly collapse the moment real production traffic spikes. As concurrent requests flood the ingress, unhandled downstream latencies cascade across upstream microservices, causing worker thread pool exhaustion and catastrophic cluster-wide outages. Notice what happens without intelligent backpressure: a single degraded dependency starves system resources and triggers a domino effect that takes down your entire distributed platform. Let's break down the exact engineering mechanics required to eliminate this failure permanently and keep our core services rock-solid.`;
+      return `Computing history is defined by how engineers conquer complexity. When ${topicClean} was first conceptualized, early computer scientists were constrained by tight hardware registers, forcing pioneers to invent clean architectural abstractions that still govern modern software today. Understanding these fundamental origins is the difference between blindly copy-pasting code and truly designing resilient production systems that withstand real-world scale.`;
     } else if (idx === 1) {
-      text = `To solve this cleanly, let's examine the underlying architecture and mental model displayed directly on your screen. Instead of allowing callers to continuously hammer failing endpoints and consume thread capacity, we place an intelligent, stateful boundary layer directly in the critical request path. Notice the sequence: incoming traffic passes through our active health evaluation threshold. When failure rates breach the safety margin, the circuit trips instantly into an open state, serving deterministic fallbacks before resources saturate. This isolates faults, preserves memory buffers, and grants downstream dependencies the breathing room needed to recover gracefully without risking total system collapse.`;
+      return `The two in the morning developer reality: textbook solutions look flawless in local development environments, but the instant real production traffic hits, race conditions and subtle bottlenecks emerge. It worked on my machine, so why is the production server currently on fire? Every engineer has experienced the panic of watching staging-tested code crumble under live user load. Let's see what is actually happening.`;
     } else if (idx === 2) {
-      text = `Now let's walk through the production implementation directly on your screen. Look at line 1: we configure explicit timeout thresholds paired with isolated execution pools to prevent thread contention. As you trace down through the execution handler, notice that every external I/O call is guarded within a monitored context. If the downstream service is healthy, execution proceeds with zero latency overhead. But the moment consecutive failures exceed the tripping threshold, the guard intercepts the execution path immediately, bypassing slow network timeouts, preventing cascading thread locks, and shielding your core database layer from catastrophic connection starvation.`;
+      return `Let's examine the under-the-hood mental model displayed on your screen. Notice the flow of data across system boundaries. Instead of tight synchronous coupling, modern architecture isolates state transitions, managing state changes through deterministic state boundaries, memory barriers, and explicit invariant verification to guarantee that failures in one component never cascade across your distributed topology.`;
+    } else if (idx === 3) {
+      return `Now let's walk through the clean production implementation on your screen. Notice on line one how we declare explicit type safety and boundary guards. As we trace through the execution handler, every state mutation is isolated, preventing unintended side effects, handling timeout edge cases gracefully, and guaranteeing thread-safe, predictable execution across concurrent worker threads.`;
     } else {
-      text = `Here is the golden rule of thumb that senior staff engineers always keep in mind: never deploy ${topicClean} with static, hardcoded configuration values. Always tune your latency thresholds based on empirical 99th percentile production telemetry, and pair every fallback handler with automated metric alarms and circuit reset monitors. By designing systems around failure-tolerant boundaries and active recovery loops, you eliminate cascading outages, protect downstream infrastructure, and guarantee self-healing resilience across your entire tech stack. Implement this battle-tested pattern in your mission-critical production codebase today and elevate system stability.`;
+      return `Here is the golden rule senior staff engineers live by: prioritize maintainable, predictable architecture over clever premature optimizations. Design systems around failure-tolerant boundaries, enforce explicit invariants, and profile physical memory before guessing. Master these core computer science principles and your software will scale effortlessly under high-throughput production load.`;
+    }
+  }
+
+  ensurePedagogicalNarrationDepth(slide, topic, idx) {
+    const narration = String(slide.teacherNarration || slide.spokenNarration || slide.narration || '').trim();
+    const wordCount = narration.split(/\s+/).filter(Boolean).length;
+
+    // If narration is already well-paced for YouTube Shorts (65 to 92 words), preserve it!
+    if (wordCount >= 65 && wordCount <= 92) return narration;
+
+    if (wordCount > 92) {
+      return narration.split(/\s+/).slice(0, 85).join(' ') + '.';
     }
 
-    if (wordCount > 102) {
-      return narration.split(/\s+/).slice(0, 98).join(' ') + '.';
-    }
-
-    return text.trim();
+    // Generate authentic, topic-tailored explanation for the specific slide role
+    return this.generateAuthenticCSNarration(slide, topic, idx);
   }
 
   normalizeAISlides(parsed, strategy) {
@@ -352,20 +440,52 @@ Return ONLY valid JSON matching this exact structure:
     if (Array.isArray(parsed.slides) && parsed.slides.length > 0) {
       rawSlides = parsed.slides.slice(0, 5);
     } else if (Array.isArray(parsed.sections) && parsed.sections.length > 0) {
-      rawSlides = parsed.sections.slice(0, 4);
+      rawSlides = parsed.sections.slice(0, 5);
     }
 
-    if (rawSlides.length === 0) return [];
+    const defaultTypes = ['history_lore', 'meme', 'dsa_architecture', 'code', 'takeaway'];
+    const defaultHeadlines = [
+      '01. Origin & Computing Lore',
+      '02. The 2 AM Developer Reality',
+      '03. Under The Hood: Mental Model',
+      '04. Clean Implementation',
+      '05. Staff Engineer Golden Rule'
+    ];
 
-    return rawSlides.slice(0, 4).map((slide, idx) => ({
+    // Ensure we always have 5 progressive slides
+    while (rawSlides.length < 5) {
+      const idx = rawSlides.length;
+      rawSlides.push({
+        slideNumber: idx + 1,
+        type: defaultTypes[idx],
+        headline: defaultHeadlines[idx],
+        bulletPoints: [`Key engineering insight for ${topic}`, 'Production architectural principle']
+      });
+    }
+
+    return rawSlides.slice(0, 5).map((slide, idx) => ({
       slideNumber: idx + 1,
-      type: slide.type || (idx === 0 ? 'problem' : idx === 2 ? 'code' : idx === 3 ? 'takeaway' : 'architecture'),
-      headline: String(slide.headline || slide.title || `0${idx + 1}. Concept`).trim(),
+      type: defaultTypes[idx] || slide.type || 'dsa_architecture',
+      headline: (slide.headline && !['question', 'background', 'explanation', 'examples', 'implications'].includes(String(slide.headline).toLowerCase()))
+        ? String(slide.headline).trim()
+        : (slide.title && !['question', 'background', 'explanation', 'examples', 'implications', 'deep dive', 'real-world examples', 'what this means'].includes(String(slide.title).toLowerCase()))
+          ? String(slide.title).trim()
+          : defaultHeadlines[idx],
+      historicMilestone: slide.historicMilestone || (idx === 0 ? 'COMPUTER SCIENCE LORE' : null),
+      meme: slide.meme || (idx === 1 ? {
+        type: 'server_on_fire',
+        caption: 'WHEN YOUR CODE MEETS PRODUCTION TRAFFIC',
+        subtext: 'Tested once on localhost:3000'
+      } : null),
       bulletPoints: Array.isArray(slide.bulletPoints)
         ? slide.bulletPoints.map(b => String(b).trim()).filter(Boolean)
         : (Array.isArray(slide.content) ? slide.content.slice(0, 3).map(c => String(c).trim()) : [String(slide.headline || slide.title || '')]),
-      diagram: slide.diagram || null,
-      codeSnippet: String(slide.codeSnippet || '').trim(),
+      diagram: slide.diagram || (idx === 2 ? {
+        title: 'System Mechanics & Data Flow',
+        dsaType: 'hash_table',
+        flowLabel: 'Input ➔ State Machine ➔ Execution Engine'
+      } : null),
+      codeSnippet: String(slide.codeSnippet || (idx === 3 ? `// ${topic}\nfunction execute(input) {\n  if (!input) return null;\n  return process(input);\n}` : '')).trim(),
       question: slide.question ? String(slide.question).trim() : null,
       teacherNarration: this.ensurePedagogicalNarrationDepth(slide, topic, idx)
     }));
