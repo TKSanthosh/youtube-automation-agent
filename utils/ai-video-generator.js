@@ -162,8 +162,8 @@ class AIVideoGenerator {
         masteredTemp
       ]);
       if (fsSync.existsSync(masteredTemp) && fsSync.statSync(masteredTemp).size > 1000) {
-        await fs.unlink(audioPath).catch(() => {});
-        await fs.rename(masteredTemp, audioPath);
+        await fs.copyFile(masteredTemp, audioPath);
+        await fs.unlink(masteredTemp).catch(() => {});
         this.logger.info(`Studio broadcast audio mastering applied: ${path.basename(audioPath)}`);
       } else {
         await fs.unlink(masteredTemp).catch(() => {});

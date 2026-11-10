@@ -71,6 +71,10 @@ class QualityEvolutionService {
    * Run AI evaluation or deterministic critique
    */
   async evaluateVideoContent(videoData, previousDirectives, iteration) {
+    const hookPreview = typeof videoData.scriptSummary === 'string'
+      ? videoData.scriptSummary
+      : (typeof videoData.hook === 'string' ? videoData.hook : (videoData.hook?.text || ''));
+
     const prompt = `
 You are the Executive Video Director and YouTube Algorithmic Quality Auditor.
 Our rule: EVERY uploaded video must be measurably higher quality than the previous one.
@@ -79,7 +83,7 @@ Uploaded Video Details:
 - Title: "${videoData.title || videoData.topic || 'Software Engineering Tutorial'}"
 - Category: "${videoData.category || 'Tech'}"
 - Format: "${videoData.targetLength || 'short'}"
-- Script Hook Preview: "${(videoData.scriptSummary || videoData.hook || '').slice(0, 300)}"
+- Script Hook Preview: "${hookPreview.slice(0, 300)}"
 - Previous Iteration (#${previousDirectives?.iteration_number || 0}) Directives: ${JSON.stringify(previousDirectives?.enhancement_directives || 'Initial baseline')}
 
 Critique this video and establish strict evolutionary enhancement directives for the NEXT video:
