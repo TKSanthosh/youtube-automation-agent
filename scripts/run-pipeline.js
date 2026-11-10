@@ -146,6 +146,7 @@ async function run() {
     console.log(chalk.blue.bold(`\n🎥 [Video ${i}/${options.count}] Starting Production Cycle...`));
     const cycleStart = Date.now();
     let productionData = null;
+    let youtubeUrl = null;
 
     try {
       // 1. Generate Strategy & Topic
@@ -252,7 +253,7 @@ async function run() {
         }
       };
 
-      let youtubeUrl = null;
+      youtubeUrl = null;
       try {
         const uploadRes = await publishingAgent.uploadToYouTube(scheduleEntry);
         const isShort = strategy.requestedLengthKey !== 'extended' && strategy.requestedLength !== '20-30 minutes';
