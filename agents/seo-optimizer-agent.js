@@ -49,11 +49,9 @@ class SEOOptimizerAgent {
         tags = await this.generateTags(script, strategy);
       }
       
-      // Operator Directive: ALL videos must be strictly uploaded to the REELS / SHORTS section
+      // Operator Directive: ALL videos must be strictly uploaded to the SHORTS section
       if (!title.toLowerCase().includes('#shorts')) {
-        title = `${title.slice(0, 85)} #Shorts #Reels`;
-      } else if (!title.toLowerCase().includes('#reels')) {
-        title = `${title.slice(0, 92)} #Reels`;
+        title = `${title.slice(0, 90)} #Shorts`;
       }
 
       // Generate rich high-visibility tech hashtags

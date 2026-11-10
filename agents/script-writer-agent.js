@@ -434,6 +434,64 @@ Return ONLY valid JSON matching this exact structure:
     return this.generateAuthenticCSNarration(slide, topic, idx);
   }
 
+  getTopicDSAType(topic = '') {
+    const t = String(topic).toLowerCase();
+    if (t.includes('stack') || t.includes('heap') || t.includes('memory') || t.includes('null') || t.includes('pointer')) return 'stack_heap';
+    if (t.includes('circuit') || t.includes('rate limit') || t.includes('microservice') || t.includes('token bucket') || t.includes('failover') || t.includes('distributed') || t.includes('async')) return 'circuit_breaker';
+    if (t.includes('tree') || t.includes('sort') || t.includes('quick') || t.includes('merge') || t.includes('search') || t.includes('graph')) return 'binary_tree';
+    return 'hash_table';
+  }
+
+  getTopicCodeSnippet(topic = '') {
+    const t = String(topic).toLowerCase();
+    if (t.includes('null') || t.includes('pointer') || t.includes('hoare')) {
+      return `// Option Monad - Compile-time null elimination\ntype Option<T> = { hasValue: true; value: T } | { hasValue: false };\n\nfunction getSessionUser(id: string): Option<User> {\n  const user = database.find(id);\n  return user ? { hasValue: true, value: user } : { hasValue: false };\n}`;
+    }
+    if (t.includes('rate limit') || t.includes('token bucket') || t.includes('leaky bucket')) {
+      return `// Token Bucket Rate Limiter\nclass TokenBucket {\n  private tokens = 100;\n  allowRequest(cost = 1): boolean {\n    this.refill();\n    if (this.tokens < cost) return false;\n    this.tokens -= cost;\n    return true;\n  }\n}`;
+    }
+    if (t.includes('hash') || t.includes('collision')) {
+      return `// Separate Chaining Hash Indexing\nfunction getBucketIndex(key: string, capacity: number): number {\n  const hash = murmur3(key);\n  // Single-cycle bitwise AND replaces expensive modulo\n  return hash & (capacity - 1);\n}`;
+    }
+    if (t.includes('vector') || t.includes('distributed') || t.includes('causality') || t.includes('clock')) {
+      return `// Vector Clock Causality Resolution\nclass VectorClock {\n  private clock = new Map<string, number>();\n  increment(node: string): void {\n    this.clock.set(node, (this.clock.get(node) || 0) + 1);\n  }\n}`;
+    }
+    if (t.includes('async') || t.includes('event loop') || t.includes('javascript') || t.includes('thread')) {
+      return `// Non-blocking concurrency pipeline\nasync function processJobBatch(jobs: Job[]): Promise<Result[]> {\n  return Promise.allSettled(\n    jobs.map(job => executeWithTimeout(job, 3000))\n  );\n}`;
+    }
+    return `// Optimized Production Architecture\nfunction handleExecution(input: RequestPayload): Response {\n  const validated = validateInputSchema(input);\n  return processIsolatedBoundary(validated);\n}`;
+  }
+
+  getTopicMeme(topic = '') {
+    const t = String(topic).toLowerCase();
+    if (t.includes('null') || t.includes('pointer') || t.includes('hoare')) {
+      return {
+        type: 'server_on_fire',
+        caption: 'UNHANDLED NULLPOINTEREXCEPTION IN PRODUCTION',
+        subtext: 'Client apps crashing globally at 3 AM'
+      };
+    }
+    if (t.includes('rate limit') || t.includes('traffic') || t.includes('bucket')) {
+      return {
+        type: 'server_on_fire',
+        caption: 'WHEN TRAFFIC BURSTS 500X WITHOUT A RATE LIMITER',
+        subtext: 'Database connection pool instantly starved'
+      };
+    }
+    if (t.includes('distributed') || t.includes('clock') || t.includes('consensus')) {
+      return {
+        type: 'spiderman_pointing',
+        caption: 'SERVERS ARGUING OVER WHICH TRANSACTION CAME FIRST',
+        subtext: 'Physical clock drift has entered the chat'
+      };
+    }
+    return {
+      type: 'works_on_my_machine',
+      caption: 'TESTED ONCE ON LOCALHOST:3000 WITH ZERO LOAD',
+      subtext: 'Now running across 50 production Kubernetes pods'
+    };
+  }
+
   normalizeAISlides(parsed, strategy) {
     const topic = strategy?.topic || '';
     let rawSlides = [];
@@ -463,29 +521,29 @@ Return ONLY valid JSON matching this exact structure:
       });
     }
 
+    const dsaType = this.getTopicDSAType(topic);
+    const codeSnippet = this.getTopicCodeSnippet(topic);
+    const memeData = this.getTopicMeme(topic);
+
     return rawSlides.slice(0, 5).map((slide, idx) => ({
       slideNumber: idx + 1,
-      type: defaultTypes[idx] || slide.type || 'dsa_architecture',
+      type: defaultTypes[idx],
       headline: (slide.headline && !['question', 'background', 'explanation', 'examples', 'implications'].includes(String(slide.headline).toLowerCase()))
         ? String(slide.headline).trim()
         : (slide.title && !['question', 'background', 'explanation', 'examples', 'implications', 'deep dive', 'real-world examples', 'what this means'].includes(String(slide.title).toLowerCase()))
           ? String(slide.title).trim()
           : defaultHeadlines[idx],
       historicMilestone: slide.historicMilestone || (idx === 0 ? 'COMPUTER SCIENCE LORE' : null),
-      meme: slide.meme || (idx === 1 ? {
-        type: 'server_on_fire',
-        caption: 'WHEN YOUR CODE MEETS PRODUCTION TRAFFIC',
-        subtext: 'Tested once on localhost:3000'
-      } : null),
+      meme: (idx === 1) ? (slide.meme && slide.meme.caption ? slide.meme : memeData) : null,
       bulletPoints: Array.isArray(slide.bulletPoints)
         ? slide.bulletPoints.map(b => String(b).trim()).filter(Boolean)
         : (Array.isArray(slide.content) ? slide.content.slice(0, 3).map(c => String(c).trim()) : [String(slide.headline || slide.title || '')]),
-      diagram: slide.diagram || (idx === 2 ? {
+      diagram: (idx === 2) ? (slide.diagram && slide.diagram.dsaType ? slide.diagram : {
         title: 'System Mechanics & Data Flow',
-        dsaType: 'hash_table',
+        dsaType,
         flowLabel: 'Input ➔ State Machine ➔ Execution Engine'
-      } : null),
-      codeSnippet: String(slide.codeSnippet || (idx === 3 ? `// ${topic}\nfunction execute(input) {\n  if (!input) return null;\n  return process(input);\n}` : '')).trim(),
+      }) : null,
+      codeSnippet: (idx === 3) ? String(slide.codeSnippet && slide.codeSnippet.length > 20 ? slide.codeSnippet : codeSnippet).trim() : '',
       question: slide.question ? String(slide.question).trim() : null,
       teacherNarration: this.ensurePedagogicalNarrationDepth(slide, topic, idx)
     }));
