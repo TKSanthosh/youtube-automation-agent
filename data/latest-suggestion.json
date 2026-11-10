@@ -1,24 +1,24 @@
 {
-  "updated_at": "2026-11-10T01:17:21.155Z",
+  "updated_at": "2026-11-10T09:28:42.000Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1794273441140_uglh4",
-    "topic": "Python AsyncIO Event Loop Deep Dive: How It Actually Works",
+    "id": "sugg_1794302921986_cet978",
+    "topic": "Python AsyncIO Event Loop Deep Dive: Under the Hood",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Leverages massive search interest in asyncio mechanics while delivering clear architectural value that holds retention across the full 2.5-minute runtime.",
+    "rationale": "Directly targets high-volume search intent around asyncio mechanics, explaining the single-threaded event loop cycle to clear up developer confusion about non-blocking execution.",
     "search_evidence": "python asyncio event loop",
     "educational_visuals": [
       "State transitions",
-      "Code execution visualization",
-      "Animated system flows"
+      "Data-flow diagrams",
+      "Code execution visualization"
     ],
-    "hook_angle": "Stop writing async/await in Python until you actually understand what the event loop is doing behind your back.",
+    "hook_angle": "Stop guessing why your Python async code is blocking; let's trace the event loop tick-by-tick in under 3 minutes.",
     "channel_affinity_score": 100,
     "trend_score": 95,
     "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-11-10T01:17:21.140Z",
+    "created_at": "2026-11-10T09:28:41.986Z",
     "used_at": null
   }
 }
