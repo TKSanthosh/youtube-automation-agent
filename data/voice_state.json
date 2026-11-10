@@ -1,9 +1,9 @@
 {
-  "lastGender": "gents",
-  "lastVoice": "en-US-ChristopherNeural",
-  "gentIndex": 1,
-  "ladyIndex": 1,
-  "updatedAt": "2026-11-10T17:55:25.171Z",
+  "lastGender": "ladies",
+  "lastVoice": "en-US-AvaNeural",
+  "gentIndex": 2,
+  "ladyIndex": 3,
+  "updatedAt": "2026-11-10T18:14:17.257Z",
   "geminiIndex": 1,
   "lastGeminiVoice": "Puck",
   "lastGeminiGender": "male"

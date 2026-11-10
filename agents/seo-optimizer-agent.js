@@ -55,18 +55,21 @@ class SEOOptimizerAgent {
       } else if (!title.toLowerCase().includes('#reels')) {
         title = `${title.slice(0, 92)} #Reels`;
       }
-      if (!description.toLowerCase().includes('#shorts')) {
-        description = `${description}\n\n#Shorts #Reels #Tech #Coding #SoftwareEngineering #SystemDesign`;
-      }
-      if (!tags.includes('Shorts')) tags.push('Shorts');
-      if (!tags.includes('Reels')) tags.push('Reels');
-      if (!tags.includes('TechShorts')) tags.push('TechShorts');
-      if (!tags.includes('Tech')) tags.push('Tech');
-      if (!tags.includes('Coding')) tags.push('Coding');
-      if (!tags.includes('SoftwareEngineering')) tags.push('SoftwareEngineering');
-      
-      // Generate hashtags
+
+      // Generate rich high-visibility tech hashtags
       const hashtags = await this.generateHashtags(strategy);
+      const hashtagsBlock = hashtags.join(' ');
+      if (!description.includes('#Shorts')) {
+        description = `${description.trim()}\n\n${hashtagsBlock}`;
+      }
+
+      const coreTags = [
+        'Shorts', 'Reels', 'TechShorts', 'Tech', 'Coding', 'SoftwareEngineering',
+        'ComputerScience', 'SystemDesign', 'Algorithms', 'Developer', 'Programming'
+      ];
+      for (const ct of coreTags) {
+        if (!tags.includes(ct)) tags.push(ct);
+      }
       
       // Create chapters/timestamps
       const chapters = await this.generateChapters(script);
@@ -236,86 +239,49 @@ Keep tags under YouTube's 500 character total guidance. Avoid fabricated statist
   }
 
   async generateDescription(script, strategy) {
-    // YouTube description limit: 5000 characters, first 125 shown in search
-    
     let description = '';
-    
-    // First 125 characters - most important for SEO
-    const angleText = (strategy.angle || strategy.topic || 'key architectural concepts').toLowerCase();
-    const hook = `${script.title} - In this video, you'll discover ${angleText}.`;
-    description += hook + '\n\n';
-    
-    // Video overview
-    description += '📺 WHAT YOU\'LL LEARN:\n';
-    const sections = (script.mainContent && script.mainContent.sections) || script.sections || [];
-    if (sections.length > 0) {
-      sections.slice(0, 5).forEach(section => {
-        if (section.title) {
-          description += `• ${section.title}\n`;
-        }
+    const topic = strategy.topic || script.title;
+
+    // Executive Technical Hook
+    description += `🚀 ${script.title}\n\n`;
+    if (script.hook) {
+      const hookText = typeof script.hook === 'string' ? script.hook : (script.hook.text || '');
+      if (hookText) description += `${hookText}\n\n`;
+    }
+
+    // Video Overview & Architecture Breakdown
+    description += `🧠 IN THIS COMPUTER SCIENCE DEEP DIVE:\n`;
+    const slides = Array.isArray(script.slides) && script.slides.length > 0 ? script.slides : (script.mainContent?.sections || []);
+    if (slides.length > 0) {
+      slides.forEach((s, idx) => {
+        const title = s.headline || s.title || `Concept ${idx + 1}`;
+        const takeaway = s.teacherNarration || s.spokenNarration || '';
+        const preview = takeaway ? ` - ${takeaway.slice(0, 95)}...` : '';
+        description += `• [0${idx}:00] ${title}${preview}\n`;
       });
+      description += '\n';
     }
-    description += '\n';
-    
-    // Timestamps/Chapters
-    description += '⏱️ TIMESTAMPS:\n';
-    description += '00:00 Introduction\n';
-    let timestamp = 20;
-    if (sections.length > 0) {
-      sections.forEach(section => {
-        const minutes = Math.floor(timestamp / 60);
-        const seconds = timestamp % 60;
-        description += `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')} ${section.title || 'Section'}\n`;
-        timestamp += section.duration || 60;
-      });
+
+    // Code & Under The Hood Architecture
+    description += `⚙️ UNDER THE HOOD & SYSTEM DESIGN:\n`;
+    description += `This engineering walkthrough dissects the mechanics of ${topic}. `;
+    description += `We break down the algorithmic complexity, trade-offs, and state management patterns applied in high-scale distributed systems like Amazon DynamoDB, Apache Kafka, and production databases.\n\n`;
+
+    // Staff Engineer Takeaway
+    if (script.conclusion) {
+      const takeawayText = typeof script.conclusion === 'string' ? script.conclusion : (script.conclusion.finalThought || '');
+      if (takeawayText) {
+        description += `💡 SENIOR ENGINEER RULE OF THUMB:\n`;
+        description += `${takeawayText}\n\n`;
+      }
     }
-    description += '\n';
-    
-    // Keywords paragraph (SEO optimized)
-    description += '📝 ABOUT THIS VIDEO:\n';
-    description += `This comprehensive guide on ${strategy.topic} covers everything you need to know. `;
-    description += `Whether you're a beginner or advanced, you'll find valuable insights about ${strategy.keywords.slice(0, 3).join(', ')}. `;
-    description += `Perfect for ${strategy.targetAudience || 'developers, software engineers, and tech learners'}.\n\n`;
-    
-    // Links section
-    description += '🔗 USEFUL LINKS:\n';
-    description += `• Subscribe: [Your Channel URL]\n`;
-    description += `• Website: ${process.env.WEBSITE_URL || '[Your Website]'}\n`;
-    description += `• Social Media: ${process.env.SOCIAL_LINKS || '[Your Social Media]'}\n\n`;
-    
-    // Related videos
-    description += '📹 RELATED VIDEOS:\n';
-    description += '• [Related Video 1]\n';
-    description += '• [Related Video 2]\n';
-    description += '• [Related Video 3]\n\n';
-    
-    // Equipment/Tools (if applicable)
-    if (strategy.contentType === 'Tutorial') {
-      description += '🛠️ TOOLS & RESOURCES MENTIONED:\n';
-      description += '• [Tool/Resource 1]\n';
-      description += '• [Tool/Resource 2]\n\n';
-    }
-    
-    // Contact/Business
-    description += '📧 BUSINESS INQUIRIES:\n';
-    description += `${process.env.BUSINESS_EMAIL || '[Your Business Email]'}\n\n`;
-    
-    // Tags/Hashtags
-    description += '🏷️ TAGS:\n';
+
+    description += `📌 Save this Short for System Design and Coding Interviews!\n\n`;
+
+    // High-visibility developer hashtags (25+ tags)
     const hashtags = await this.generateHashtags(strategy);
-    description += hashtags.join(' ') + '\n\n';
-    
-    // Disclaimer if needed
-    description += '⚠️ DISCLAIMER:\n';
-    description += 'This video is for educational purposes only.\n\n';
-    
-    // Copyright
-    description += `© ${new Date().getFullYear()} All Rights Reserved\n`;
-    
-    // Music credits if applicable
-    description += '\n🎵 MUSIC:\n';
-    description += 'Background music from YouTube Audio Library\n';
-    
+    description += `${hashtags.join(' ')}\n`;
+
     return description;
   }
 
@@ -469,49 +435,38 @@ Keep tags under YouTube's 500 character total guidance. Avoid fabricated statist
   }
 
   async generateHashtags(strategy) {
-    const hashtags = [];
-    
-    // Primary hashtag
-    const primaryHashtag = `#${strategy.topic.replace(/\s+/g, '')}`;
-    hashtags.push(primaryHashtag);
-    
-    // Content type hashtag
-    hashtags.push(`#${strategy.contentType.toLowerCase()}`);
-    
-    // Trending hashtags
-    const trendingHashtags = [
-      '#youtube',
-      '#youtuber',
-      '#subscribe',
-      '#video',
-      '#viral',
-      '#trending',
-      '#new'
+    const rawTopic = (strategy.topic || 'ComputerScience')
+      .replace(/[^a-zA-Z0-9]/g, '')
+      .slice(0, 25);
+    const trendingTags = [
+      `#${rawTopic}`,
+      '#Shorts',
+      '#Reels',
+      '#ComputerScience',
+      '#SoftwareEngineering',
+      '#SystemDesign',
+      '#Programming',
+      '#Coding',
+      '#WebDevelopment',
+      '#Backend',
+      '#Algorithms',
+      '#DSA',
+      '#Tech',
+      '#Developer',
+      '#Fireship',
+      '#ByteByteGo',
+      '#JavaScriptMastery',
+      '#TechTrends',
+      '#FullStack',
+      '#Python',
+      '#JavaScript',
+      '#CodingLife',
+      '#SoftwareEngineer',
+      '#DevCommunity',
+      '#LearnToCode',
+      '#TechEducation'
     ];
-    
-    // Niche hashtags
-    const niche = this.identifyNiche(strategy);
-    const nicheHashtags = {
-      'technology': ['#tech', '#technology', '#innovation'],
-      'gaming': ['#gaming', '#gamer', '#games'],
-      'education': ['#education', '#learning', '#study'],
-      'business': ['#business', '#entrepreneur', '#success'],
-      'lifestyle': ['#lifestyle', '#life', '#daily'],
-      'health': ['#health', '#fitness', '#wellness'],
-      'entertainment': ['#entertainment', '#fun', '#funny']
-    };
-    
-    const selectedNicheHashtags = nicheHashtags[niche] || [];
-    hashtags.push(...selectedNicheHashtags.slice(0, 2));
-    
-    // Add 2-3 trending hashtags
-    hashtags.push(...trendingHashtags.slice(0, 3));
-    
-    // Year hashtag
-    hashtags.push(`#${new Date().getFullYear()}`);
-    
-    // Limit to 15 hashtags (YouTube recommendation)
-    return hashtags.slice(0, 15);
+    return Array.from(new Set(trendingTags));
   }
 
   async generateChapters(script) {

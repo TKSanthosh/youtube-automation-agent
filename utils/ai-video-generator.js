@@ -67,8 +67,20 @@ class AIVideoGenerator {
 
     try {
       let generatedPath = null;
-      // 1. Gemini Neural TTS (100% Free Tier: gemini-3.8-flash-tts / gemini-3.8-flash-lite-tts with prebuilt voices)
-      if (this.gemini) {
+      // 1. MsEdge Neural Voice (100% Free, unlimited, studio humanized neural voices)
+      try {
+        provider = 'msedge-neural';
+        const { voice: rotatedVoice, gender } = this.getRotatedVoice(options);
+        model = rotatedVoice;
+        const humanSpeed = options.speed || options.rate || 1.03;
+        this.logger.info(`Synthesizing humanized narration via MsEdge Neural TTS (${model}, ${gender === 'ladies' ? 'Female' : 'Male'} instructor, speed: ${humanSpeed}x)...`);
+        generatedPath = await this.generateMsEdgeTTS(text, outputPath, model, { rate: humanSpeed });
+      } catch (e) {
+        this.logger.warn(`MsEdge Neural TTS notice (${e.message}); attempting neural fallbacks...`);
+      }
+
+      // 2. Gemini Neural TTS (fallback if MsEdge unavailable and within daily quota)
+      if (!generatedPath && this.gemini) {
         try {
           provider = 'gemini';
           const { voice: geminiVoice, model: gModel, gender } = this.getRotatedGeminiVoice(options);
@@ -80,7 +92,7 @@ class AIVideoGenerator {
         }
       }
 
-      // 2. ElevenLabs (if configured)
+      // 3. ElevenLabs (if configured)
       if (!generatedPath && this.elevenLabsApiKey && this.elevenLabsVoiceId) {
         try {
           provider = 'elevenlabs';
@@ -92,7 +104,7 @@ class AIVideoGenerator {
         }
       }
 
-      // 3. OpenAI Studio Voices (tts-1-hd / tts-1 with human-like prosody)
+      // 4. OpenAI Studio Voices (tts-1-hd / tts-1 with human-like prosody)
       if (!generatedPath && this.openai) {
         try {
           provider = 'openai';
@@ -103,26 +115,6 @@ class AIVideoGenerator {
         } catch (e) {
           this.logger.warn(`OpenAI TTS failed: ${e.message}`);
         }
-      }
-
-      // 4. MsEdge Neural Voice fallback (if reachable)
-      if (!generatedPath) {
-        try {
-          provider = 'msedge-neural';
-          const { voice: rotatedVoice, gender } = this.getRotatedVoice(options);
-          model = rotatedVoice;
-          this.logger.info(`Synthesizing narration with ${model} (${gender === 'ladies' ? 'Female/Lady' : 'Male/Gent'} instructor)...`);
-          generatedPath = await this.generateMsEdgeTTS(text, outputPath, model);
-        } catch (e) {
-          this.logger.warn(`MsEdge Neural TTS failed: ${e.message}`);
-        }
-      }
-
-      // 5. High-reliability speech fallback
-      if (!generatedPath) {
-        provider = 'free-tts';
-        model = 'google-speech';
-        generatedPath = await this.generateFreeTTS(text, outputPath);
       }
 
       const usable = await this.isUsableAudioFile(generatedPath);
@@ -297,10 +289,11 @@ class AIVideoGenerator {
   }
 
   getRotatedVoice(options = {}) {
-    if (options.voice) {
+    const validEdgeVoiceRegex = /^[a-z]{2}-[A-Z]{2}-[\w]+Neural$/;
+    if (options.voice && validEdgeVoiceRegex.test(options.voice)) {
       return { voice: options.voice, gender: options.gender || 'custom' };
     }
-    if (process.env.MSEDGE_TTS_VOICE) {
+    if (process.env.MSEDGE_TTS_VOICE && validEdgeVoiceRegex.test(process.env.MSEDGE_TTS_VOICE)) {
       return { voice: process.env.MSEDGE_TTS_VOICE, gender: 'custom' };
     }
 
@@ -967,27 +960,6 @@ class AIVideoGenerator {
       const imageAssets = await this.filterImageAssets(visualAssets);
       await page.setContent(this.createSlideshowHTML(script, imageAssets));
 
-      // Freeze CSS transitions/animations so each still is captured fully rendered
-      await page.addStyleTag({ content: '* { transition: none !important; animation: none !important; }' });
-      await page.waitForTimeout(1000); // Wait for assets to load
-
-      // Capture ONE still per slide
-      const slideCount = await page.evaluate(() => document.querySelectorAll('.slide').length);
-      await fs.mkdir(slidesDir, { recursive: true });
-
-      const stills = [];
-      for (let i = 0; i < slideCount; i++) {
-        await page.evaluate((index) => {
-          document.querySelectorAll('.slide').forEach((slide, s) => {
-            slide.classList.toggle('active', s === index);
-          });
-        }, i);
-
-        const stillPath = path.join(slidesDir, `slide_${String(i).padStart(3, '0')}.png`);
-        await page.screenshot({ path: stillPath });
-        stills.push(stillPath);
-      }
-
       // Render each slide segment matched 1:1 with its exact narration audio
       const slidesList = Array.isArray(script.slides) && script.slides.length > 0
         ? script.slides
@@ -995,15 +967,16 @@ class AIVideoGenerator {
 
       const slideSegments = [];
       const slideAudios = [];
+      const fsSync = require('fs');
 
-      // Lock ONE consistent voice persona for the ENTIRE video to prevent voice jumping across slides
-      const videoVoiceOptions = this.gemini
-        ? this.getRotatedGeminiVoice(options)
-        : (this.openai ? this.getRotatedOpenAIVoice(options) : this.getRotatedVoice(options));
+      // Lock ONE consistent humanized voice persona for the ENTIRE video to prevent voice jumping across slides
+      const videoVoiceOptions = this.getRotatedVoice(options);
       this.logger.info(`Locked narrator for entire 3-minute video: ${videoVoiceOptions.voice || 'default'} (${videoVoiceOptions.gender || 'instructor'})`);
 
-      for (let i = 0; i < stills.length; i++) {
-        const stillPath = stills[i];
+      const slideCount = await page.evaluate(() => document.querySelectorAll('.slide').length);
+      await fs.mkdir(slidesDir, { recursive: true });
+
+      for (let i = 0; i < slideCount; i++) {
         const slideData = slidesList[i] || {};
         const narrationText = String(
           slideData.teacherNarration ||
@@ -1045,25 +1018,76 @@ class AIVideoGenerator {
         }
         slideAudios.push(slideAudioPath);
 
-        this.logger.info(`Rendering synchronized Slide ${i + 1}/${stills.length}: duration=${slideDuration}s`);
+        this.logger.info(`Rendering dynamic motion video for Slide ${i + 1}/${slideCount}: duration=${slideDuration}s`);
 
-        // Render razor-sharp, pixel-perfect 1080x1920 high-def slide video locked to narration
-        await runFFmpeg([
-          '-y',
-          '-loop', '1',
-          '-t', String(slideDuration),
-          '-i', stillPath,
-          '-i', slideAudioPath,
-          '-c:v', 'libx264',
-          '-preset', 'medium',
-          '-tune', 'stillimage',
-          '-pix_fmt', 'yuv420p',
-          '-vf', 'scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black,fps=30',
-          '-c:a', 'aac',
-          '-b:a', '192k',
-          '-shortest',
-          segmentVideoPath
-        ]);
+        // Record live 3.5s fluid video of this slide with all CSS keyframes, SVG packets, and terminal typing active
+        let recVideoPath = null;
+        try {
+          const slideVideoDir = path.join(slidesDir, `rec_${i}`);
+          await fs.mkdir(slideVideoDir, { recursive: true });
+          const slideContext = await browser.newContext({
+            recordVideo: {
+              dir: slideVideoDir,
+              size: { width: 1080, height: 1920 }
+            }
+          });
+          const slidePage = await slideContext.newPage();
+          await slidePage.setContent(this.createSlideshowHTML(script, imageAssets));
+          await slidePage.evaluate((index) => {
+            document.querySelectorAll('.slide').forEach((slide, s) => {
+              slide.classList.toggle('active', s === index);
+            });
+          }, i);
+          // Let live CSS/SVG packet animations, flame flickers, and terminal typing play
+          await slidePage.waitForTimeout(3500);
+          await slidePage.close();
+          await slideContext.close();
+
+          recVideoPath = await slidePage.video()?.path();
+        } catch (recErr) {
+          this.logger.warn(`Live video recording note for slide ${i + 1}: ${recErr.message}`);
+        }
+
+        if (recVideoPath && fsSync.existsSync(recVideoPath) && fsSync.statSync(recVideoPath).size > 1000) {
+          // Seamlessly loop the 3.5s dynamic motion video to match the audio narration duration
+          await runFFmpeg([
+            '-y',
+            '-stream_loop', '-1',
+            '-i', recVideoPath,
+            '-t', String(slideDuration),
+            '-i', slideAudioPath,
+            '-c:v', 'libx264',
+            '-preset', 'veryfast',
+            '-pix_fmt', 'yuv420p',
+            '-vf', 'scale=1080:1920,fps=30',
+            '-c:a', 'aac',
+            '-b:a', '192k',
+            '-shortest',
+            segmentVideoPath
+          ]);
+        } else {
+          // Fallback: Ken Burns cinematic camera zoompan on high-def screenshot
+          const stillPath = path.join(slidesDir, `slide_${String(i).padStart(3, '0')}.png`);
+          await page.evaluate((index) => {
+            document.querySelectorAll('.slide').forEach((slide, s) => {
+              slide.classList.toggle('active', s === index);
+            });
+          }, i);
+          await page.screenshot({ path: stillPath });
+          await runFFmpeg([
+            '-y',
+            '-i', stillPath,
+            '-vf', 'zoompan=z=\'min(zoom+0.0012,1.12)\':x=\'iw/2-(iw/zoom/2)\':y=\'ih/2-(ih/zoom/2)\':d=120:s=1080x1920:fps=30,format=yuv420p',
+            '-t', String(slideDuration),
+            '-i', slideAudioPath,
+            '-c:v', 'libx264',
+            '-preset', 'ultrafast',
+            '-c:a', 'aac',
+            '-b:a', '192k',
+            '-shortest',
+            segmentVideoPath
+          ]);
+        }
 
         slideSegments.push(segmentVideoPath);
       }
@@ -1336,7 +1360,61 @@ class AIVideoGenerator {
         .slide.active {
             opacity: 1;
         }
-        
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(${theme.accentRGB}, 0.3)); }
+            50% { transform: scale(1.02); filter: drop-shadow(0 0 25px rgba(${theme.accentRGB}, 0.7)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(${theme.accentRGB}, 0.3)); }
+        }
+        @keyframes flameFlicker {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.03, 0.98) rotate(1deg); }
+            50% { transform: scale(0.98, 1.04) rotate(-1deg); }
+            75% { transform: scale(1.02, 1.01) rotate(0.5deg); }
+        }
+        @keyframes statusDot {
+            0%, 100% { opacity: 1; filter: drop-shadow(0 0 8px #22c55e); }
+            50% { opacity: 0.3; filter: none; }
+        }
+        @keyframes blinkCursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .meme-svg {
+            animation: flameFlicker 2s infinite ease-in-out;
+            transform-origin: bottom center;
+        }
+
+        .live-terminal-bar {
+            width: 100%;
+            background: #090d16;
+            border-top: 1px solid #1e293b;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+            font-size: 20px;
+            color: #94a3b8;
+        }
+        .live-status-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #22c55e;
+            animation: statusDot 1.2s infinite ease-in-out;
+        }
+        .cursor-blink {
+            display: inline-block;
+            width: 10px;
+            height: 22px;
+            background: ${theme.accent};
+            margin-left: 6px;
+            animation: blinkCursor 0.8s infinite;
+            vertical-align: middle;
+        }
+
         .background-image {
             position: absolute;
             top: 0;
@@ -1363,6 +1441,7 @@ class AIVideoGenerator {
             padding: 14px 28px;
             border-radius: 9999px;
             margin-bottom: 40px;
+            animation: pulseGlow 3s infinite ease-in-out;
         }
 
         .title-card {
@@ -1780,7 +1859,7 @@ class AIVideoGenerator {
   renderCodeSyntaxHTML(code) {
     if (!code) return '';
     const lines = String(code).trim().split('\n');
-    return lines.map((line, lIdx) => {
+    const formattedLines = lines.map((line, lIdx) => {
       const lineNum = String(lIdx + 1).padStart(2, '0');
       let highlighted = this.escapeHTML(line);
       if (highlighted.includes('//')) {
@@ -1794,6 +1873,14 @@ class AIVideoGenerator {
       highlighted = highlighted.replace(/\b(\d+)\b/g, '<span class="syn-num">$1</span>');
       return `<div class="code-line"><span class="line-num">${lineNum}</span><span class="line-code">${highlighted}</span></div>`;
     }).join('');
+
+    return `${formattedLines}
+    <div class="live-terminal-bar">
+      <div class="live-status-dot"></div>
+      <span style="color:#60a5fa; font-weight:700;">ENGINE:</span>
+      <span style="color:#cbd5e1;">executing logic</span>
+      <span class="cursor-blink"></span>
+    </div>`;
   }
 
   renderDiagramHTML(slide, _topic = '') {
