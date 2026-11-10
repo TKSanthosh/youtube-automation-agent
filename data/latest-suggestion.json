@@ -1,25 +1,23 @@
 {
-  "updated_at": "2026-10-25T14:42:41.447Z",
+  "updated_at": "2026-11-10T22:57:38.029Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1792939361442_a9pz9g",
-    "topic": "Python 3.13 Free-Threaded GIL Removal: What Changes for Developers",
+    "id": "sugg_1794351457989_30mqp8",
+    "topic": "Python GIL Explained: Why Multi-Threading Fails CPU Tasks",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Python 3.13 free-threading is the biggest Python architectural shift in 20 years.",
-    "search_evidence": "python 3.13 gil removal benchmark",
+    "rationale": "Python developers constantly hit performance walls when trying to scale CPU-bound tasks using threads, making the GIL one of the most heavily searched concepts in Python engineering.",
+    "search_evidence": "python gil explained",
     "educational_visuals": [
-      "State transitions",
       "Animated system flows",
       "Code execution visualization"
     ],
-    "hook_angle": "Python finally has true multi-threading without the GIL. But how does it work?",
-    "channel_affinity_score": 85,
+    "hook_angle": "Why does adding more threads to your Python script actually slow it down? Let's look inside the GIL.",
+    "channel_affinity_score": 100,
     "trend_score": 95,
-    "priority_score": 95,
+    "priority_score": 97,
     "status": "pending",
-    "created_at": "2026-10-25T14:42:41.442Z",
-    "used_at": null,
-    "_consumed": true
+    "created_at": "2026-11-10T22:57:37.989Z",
+    "used_at": null
   }
 }
