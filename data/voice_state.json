@@ -1,7 +1,10 @@
 {
-  "lastGender": "ladies",
-  "lastVoice": "en-US-AriaNeural",
-  "gentIndex": 0,
-  "ladyIndex": 1,
-  "updatedAt": "2026-11-11T07:36:17.540Z"
+  "lastGender": "gents",
+  "lastVoice": "en-US-AndrewNeural",
+  "gentIndex": 3,
+  "ladyIndex": 3,
+  "updatedAt": "2026-11-11T07:45:53.416Z",
+  "geminiIndex": 1,
+  "lastGeminiVoice": "Puck",
+  "lastGeminiGender": "male"
 }
