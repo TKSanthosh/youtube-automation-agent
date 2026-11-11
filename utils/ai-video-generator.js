@@ -1079,13 +1079,12 @@ class AIVideoGenerator {
           });
         }, i);
         await page.screenshot({ path: stillPath });
-        const totalFrames = Math.max(90, Math.ceil(slideDuration * 30));
         await runFFmpeg([
           '-y',
           '-loop', '1',
           '-i', stillPath,
           '-i', slideAudioPath,
-          '-vf', `zoompan=z='min(zoom+0.0006,1.08)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${totalFrames}:s=1080x1920:fps=30,format=yuv420p`,
+          '-vf', 'scale=1080:1920,format=yuv420p',
           '-c:v', 'libx264',
           '-preset', 'veryfast',
           '-c:a', 'aac',
