@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-11T13:49:10.213Z",
+  "updated_at": "2026-11-11T21:09:32.868Z",
   "total_trends": 44,
   "channel_engagement": {
     "totalVideosAnalyzed": 0,
@@ -110,7 +110,7 @@
   },
   "trends": [
     {
-      "id": "trend_1794404942729_n4nmgc",
+      "id": "trend_1794431369165_p3yanr",
       "keyword": "How I cut GTA Online loading times by 70%",
       "category": "General Tech",
       "search_query": "How I cut GTA Online loading times by 70%",
@@ -120,10 +120,10 @@
         "points": 3883,
         "url": "https://nee.lv/2021/02/28/How-I-cut-GTA-Online-loading-times-by-70/"
       },
-      "discovered_at": "2026-11-11T13:49:02.729Z"
+      "discovered_at": "2026-11-11T21:09:29.165Z"
     },
     {
-      "id": "trend_1794404942728_g9m2l",
+      "id": "trend_1794431369164_syyzt",
       "keyword": "Replit used legal threats to kill my open-source project",
       "category": "General Tech",
       "search_query": "Replit used legal threats to kill my open-source project",
@@ -133,10 +133,10 @@
         "points": 4022,
         "url": "https://intuitiveexplanations.com/tech/replit/"
       },
-      "discovered_at": "2026-11-11T13:49:02.728Z"
+      "discovered_at": "2026-11-11T21:09:29.164Z"
     },
     {
-      "id": "trend_1794404942727_ygdnr8",
+      "id": "trend_1794431369163_f1kamc",
       "keyword": "Google’s copying of the Java SE API was fair use [pdf]",
       "category": "AI/ML",
       "search_query": "Google’s copying of the Java SE API was fair use [pdf]",
@@ -146,10 +146,10 @@
         "points": 4103,
         "url": "https://www.supremecourt.gov/opinions/20pdf/18-956_d18f.pdf"
       },
-      "discovered_at": "2026-11-11T13:49:02.727Z"
+      "discovered_at": "2026-11-11T21:09:29.163Z"
     },
     {
-      "id": "trend_1794404942727_en2wst",
+      "id": "trend_1794431369163_msfoih",
       "keyword": "GPT-4",
       "category": "AI/ML",
       "search_query": "GPT-4",
@@ -159,36 +159,10 @@
         "points": 4091,
         "url": "https://openai.com/research/gpt-4"
       },
-      "discovered_at": "2026-11-11T13:49:02.727Z"
+      "discovered_at": "2026-11-11T21:09:29.163Z"
     },
     {
-      "id": "trend_1794404942726_lg7wx2",
-      "keyword": "Reflecting on one very, very strange year at Uber",
-      "category": "General Tech",
-      "search_query": "Reflecting on one very, very strange year at Uber",
-      "search_volume_indicator": "surging",
-      "trend_source": "hackernews",
-      "metadata": {
-        "points": 4107,
-        "url": "https://www.susanjfowler.com/blog/2017/2/19/reflecting-on-one-very-strange-year-at-uber"
-      },
-      "discovered_at": "2026-11-11T13:49:02.726Z"
-    },
-    {
-      "id": "trend_1794404942725_lw4pdh",
-      "keyword": "YouTube-dl has received a DMCA takedown from RIAA",
-      "category": "General Tech",
-      "search_query": "YouTube-dl has received a DMCA takedown from RIAA",
-      "search_volume_indicator": "surging",
-      "trend_source": "hackernews",
-      "metadata": {
-        "points": 4240,
-        "url": "https://github.com/github/dmca/blob/master/2020/10/2020-10-23-RIAA.md"
-      },
-      "discovered_at": "2026-11-11T13:49:02.725Z"
-    },
-    {
-      "id": "trend_1794404942725_lw4lh",
+      "id": "trend_1794431369162_t0qbv",
       "keyword": "Don't post generated/AI-edited comments. HN is for conversation between humans",
       "category": "AI/ML",
       "search_query": "Don't post generated/AI-edited comments. HN is for conversation between humans",
@@ -198,10 +172,36 @@
         "points": 4229,
         "url": "https://news.ycombinator.com/newsguidelines.html#generated"
       },
-      "discovered_at": "2026-11-11T13:49:02.725Z"
+      "discovered_at": "2026-11-11T21:09:29.162Z"
     },
     {
-      "id": "trend_1794404942723_94b6vr",
+      "id": "trend_1794431369162_bimzzb",
+      "keyword": "Reflecting on one very, very strange year at Uber",
+      "category": "General Tech",
+      "search_query": "Reflecting on one very, very strange year at Uber",
+      "search_volume_indicator": "surging",
+      "trend_source": "hackernews",
+      "metadata": {
+        "points": 4107,
+        "url": "https://www.susanjfowler.com/blog/2017/2/19/reflecting-on-one-very-strange-year-at-uber"
+      },
+      "discovered_at": "2026-11-11T21:09:29.162Z"
+    },
+    {
+      "id": "trend_1794431369161_woy74h",
+      "keyword": "YouTube-dl has received a DMCA takedown from RIAA",
+      "category": "General Tech",
+      "search_query": "YouTube-dl has received a DMCA takedown from RIAA",
+      "search_volume_indicator": "surging",
+      "trend_source": "hackernews",
+      "metadata": {
+        "points": 4240,
+        "url": "https://github.com/github/dmca/blob/master/2020/10/2020-10-23-RIAA.md"
+      },
+      "discovered_at": "2026-11-11T21:09:29.161Z"
+    },
+    {
+      "id": "trend_1794431369160_5skuis",
       "keyword": "Bram Moolenaar has died",
       "category": "General Tech",
       "search_query": "Bram Moolenaar has died",
@@ -211,10 +211,10 @@
         "points": 4310,
         "url": "https://groups.google.com/g/vim_announce/c/tWahca9zkt4"
       },
-      "discovered_at": "2026-11-11T13:49:02.724Z"
+      "discovered_at": "2026-11-11T21:09:29.160Z"
     },
     {
-      "id": "trend_1794404942724_u4g0i7",
+      "id": "trend_1794431369160_3kc188",
       "keyword": "Mechanical Watch",
       "category": "General Tech",
       "search_query": "Mechanical Watch",
@@ -224,23 +224,10 @@
         "points": 4298,
         "url": "https://ciechanow.ski/mechanical-watch/"
       },
-      "discovered_at": "2026-11-11T13:49:02.724Z"
+      "discovered_at": "2026-11-11T21:09:29.160Z"
     },
     {
-      "id": "trend_1794404942723_dzpzlu",
-      "keyword": "Steve Jobs has passed away.",
-      "category": "General Tech",
-      "search_query": "Steve Jobs has passed away.",
-      "search_volume_indicator": "surging",
-      "trend_source": "hackernews",
-      "metadata": {
-        "points": 4338,
-        "url": "http://www.apple.com/stevejobs/"
-      },
-      "discovered_at": "2026-11-11T13:49:02.723Z"
-    },
-    {
-      "id": "trend_1794404942722_l58sb",
+      "id": "trend_1794431369159_wv9t5u",
       "keyword": "CrowdStrike Update: Windows Bluescreen and Boot Loops",
       "category": "General Tech",
       "search_query": "CrowdStrike Update: Windows Bluescreen and Boot Loops",
@@ -250,23 +237,23 @@
         "points": 4489,
         "url": "https://old.reddit.com/r/crowdstrike/comments/1e6vmkf/bsod_error_in_latest_crowdstrike_update/"
       },
-      "discovered_at": "2026-11-11T13:49:02.722Z"
+      "discovered_at": "2026-11-11T21:09:29.159Z"
     },
     {
-      "id": "trend_1794404942721_fqc4rg",
-      "keyword": "OpenAI's board has fired Sam Altman",
-      "category": "AI/ML",
-      "search_query": "OpenAI's board has fired Sam Altman",
+      "id": "trend_1794431369159_fnitc",
+      "keyword": "Steve Jobs has passed away.",
+      "category": "General Tech",
+      "search_query": "Steve Jobs has passed away.",
       "search_volume_indicator": "surging",
       "trend_source": "hackernews",
       "metadata": {
-        "points": 5710,
-        "url": "https://openai.com/blog/openai-announces-leadership-transition"
+        "points": 4338,
+        "url": "http://www.apple.com/stevejobs/"
       },
-      "discovered_at": "2026-11-11T13:49:02.721Z"
+      "discovered_at": "2026-11-11T21:09:29.159Z"
     },
     {
-      "id": "trend_1794404942721_os36jc",
+      "id": "trend_1794431369158_muj0fk",
       "keyword": "Backdoor in upstream xz/liblzma leading to SSH server compromise",
       "category": "General Tech",
       "search_query": "Backdoor in upstream xz/liblzma leading to SSH server compromise",
@@ -276,23 +263,10 @@
         "points": 4549,
         "url": "https://www.openwall.com/lists/oss-security/2024/03/29/4"
       },
-      "discovered_at": "2026-11-11T13:49:02.721Z"
+      "discovered_at": "2026-11-11T21:09:29.158Z"
     },
     {
-      "id": "trend_1794404942717_5f7au",
-      "keyword": "Stephen Hawking has died",
-      "category": "General Tech",
-      "search_query": "Stephen Hawking has died",
-      "search_volume_indicator": "surging",
-      "trend_source": "hackernews",
-      "metadata": {
-        "points": 6015,
-        "url": "http://www.bbc.com/news/uk-43396008"
-      },
-      "discovered_at": "2026-11-11T13:49:02.717Z"
-    },
-    {
-      "id": "trend_1794404942717_t761p",
+      "id": "trend_1794431369157_oujahs",
       "keyword": "A Message to Our Customers",
       "category": "General Tech",
       "search_query": "A Message to Our Customers",
@@ -302,34 +276,48 @@
         "points": 5771,
         "url": "http://www.apple.com/customer-letter/"
       },
-      "discovered_at": "2026-11-11T13:49:02.717Z"
+      "discovered_at": "2026-11-11T21:09:29.157Z"
     },
     {
-      "id": "trend_1794404942716_3rqqw",
-      "keyword": "consistent hashing gaurav sen",
+      "id": "trend_1794431369157_zo8gjr",
+      "keyword": "OpenAI's board has fired Sam Altman",
+      "category": "AI/ML",
+      "search_query": "OpenAI's board has fired Sam Altman",
+      "search_volume_indicator": "surging",
+      "trend_source": "hackernews",
+      "metadata": {
+        "points": 5710,
+        "url": "https://openai.com/blog/openai-announces-leadership-transition"
+      },
+      "discovered_at": "2026-11-11T21:09:29.157Z"
+    },
+    {
+      "id": "trend_1794431369156_ldxw2r",
+      "keyword": "false sharing c++",
       "category": "System Design",
-      "search_query": "consistent hashing gaurav sen",
+      "search_query": "false sharing c++",
       "search_volume_indicator": "high",
       "trend_source": "youtube_search_suggest",
       "metadata": {
-        "stem": "consistent hashing system design interview"
+        "stem": "cpu cache line false sharing"
       },
-      "discovered_at": "2026-11-11T13:49:02.716Z"
+      "discovered_at": "2026-11-11T21:09:29.156Z"
     },
     {
-      "id": "trend_1794404942715_oz543a",
-      "keyword": "consistent hashing system design interview",
-      "category": "System Design",
-      "search_query": "consistent hashing system design interview",
-      "search_volume_indicator": "high",
-      "trend_source": "youtube_search_suggest",
+      "id": "trend_1794431369156_cn1so",
+      "keyword": "Stephen Hawking has died",
+      "category": "General Tech",
+      "search_query": "Stephen Hawking has died",
+      "search_volume_indicator": "surging",
+      "trend_source": "hackernews",
       "metadata": {
-        "stem": "consistent hashing system design interview"
+        "points": 6015,
+        "url": "http://www.bbc.com/news/uk-43396008"
       },
-      "discovered_at": "2026-11-11T13:49:02.715Z"
+      "discovered_at": "2026-11-11T21:09:29.156Z"
     },
     {
-      "id": "trend_1794404942715_o3xppb",
+      "id": "trend_1794431369155_o9263b",
       "keyword": "consistent hashing system design",
       "category": "System Design",
       "search_query": "consistent hashing system design",
@@ -338,10 +326,22 @@
       "metadata": {
         "stem": "consistent hashing system design interview"
       },
-      "discovered_at": "2026-11-11T13:49:02.715Z"
+      "discovered_at": "2026-11-11T21:09:29.155Z"
     },
     {
-      "id": "trend_1794404942714_eio26",
+      "id": "trend_1794431369155_je84v7e",
+      "keyword": "consistent hashing gaurav sen",
+      "category": "System Design",
+      "search_query": "consistent hashing gaurav sen",
+      "search_volume_indicator": "high",
+      "trend_source": "youtube_search_suggest",
+      "metadata": {
+        "stem": "consistent hashing system design interview"
+      },
+      "discovered_at": "2026-11-11T21:09:29.155Z"
+    },
+    {
+      "id": "trend_1794431369154_3e3d5",
       "keyword": "kubernetes pod troubleshooting",
       "category": "Kubernetes",
       "search_query": "kubernetes pod troubleshooting",
@@ -350,22 +350,22 @@
       "metadata": {
         "stem": "kubernetes pod lifecycle probes"
       },
-      "discovered_at": "2026-11-11T13:49:02.714Z"
+      "discovered_at": "2026-11-11T21:09:29.154Z"
     },
     {
-      "id": "trend_1794404942713_e987he",
-      "keyword": "docker multi-stage builds",
-      "category": "Docker",
-      "search_query": "docker multi-stage builds",
+      "id": "trend_1794431369154_0ryaa3",
+      "keyword": "consistent hashing system design interview",
+      "category": "System Design",
+      "search_query": "consistent hashing system design interview",
       "search_volume_indicator": "high",
       "trend_source": "youtube_search_suggest",
       "metadata": {
-        "stem": "docker multi stage build optimization"
+        "stem": "consistent hashing system design interview"
       },
-      "discovered_at": "2026-11-11T13:49:02.713Z"
+      "discovered_at": "2026-11-11T21:09:29.154Z"
     },
     {
-      "id": "trend_1794404942713_aughh5",
+      "id": "trend_1794431369153_lsbbee",
       "keyword": "kubernetes pod lifecycle",
       "category": "Kubernetes",
       "search_query": "kubernetes pod lifecycle",
@@ -374,10 +374,10 @@
       "metadata": {
         "stem": "kubernetes pod lifecycle probes"
       },
-      "discovered_at": "2026-11-11T13:49:02.713Z"
+      "discovered_at": "2026-11-11T21:09:29.153Z"
     },
     {
-      "id": "trend_1794404942712_32r5r",
+      "id": "trend_1794431369152_05mehm",
       "keyword": "circuit breaker design pattern in microservices in hindi",
       "category": "System Design",
       "search_query": "circuit breaker design pattern in microservices in hindi",
@@ -386,10 +386,22 @@
       "metadata": {
         "stem": "circuit breaker pattern microservices"
       },
-      "discovered_at": "2026-11-11T13:49:02.712Z"
+      "discovered_at": "2026-11-11T21:09:29.152Z"
     },
     {
-      "id": "trend_1794404942711_b1ne6",
+      "id": "trend_1794431369152_5cate",
+      "keyword": "docker multi-stage builds",
+      "category": "Docker",
+      "search_query": "docker multi-stage builds",
+      "search_volume_indicator": "high",
+      "trend_source": "youtube_search_suggest",
+      "metadata": {
+        "stem": "docker multi stage build optimization"
+      },
+      "discovered_at": "2026-11-11T21:09:29.152Z"
+    },
+    {
+      "id": "trend_1794431369151_jmxbq6",
       "keyword": "circuit breaker design pattern in microservices",
       "category": "System Design",
       "search_query": "circuit breaker design pattern in microservices",
@@ -398,10 +410,10 @@
       "metadata": {
         "stem": "circuit breaker pattern microservices"
       },
-      "discovered_at": "2026-11-11T13:49:02.711Z"
+      "discovered_at": "2026-11-11T21:09:29.151Z"
     },
     {
-      "id": "trend_1794404942711_hgc8y",
+      "id": "trend_1794431369151_kt81a5",
       "keyword": "circuit breaker design pattern in microservices c#",
       "category": "System Design",
       "search_query": "circuit breaker design pattern in microservices c#",
@@ -410,34 +422,10 @@
       "metadata": {
         "stem": "circuit breaker pattern microservices"
       },
-      "discovered_at": "2026-11-11T13:49:02.711Z"
+      "discovered_at": "2026-11-11T21:09:29.151Z"
     },
     {
-      "id": "trend_1794404942710_jr9p8l",
-      "keyword": "circuit breaker pattern microservices spring boot",
-      "category": "System Design",
-      "search_query": "circuit breaker pattern microservices spring boot",
-      "search_volume_indicator": "high",
-      "trend_source": "youtube_search_suggest",
-      "metadata": {
-        "stem": "circuit breaker pattern microservices"
-      },
-      "discovered_at": "2026-11-11T13:49:02.710Z"
-    },
-    {
-      "id": "trend_1794404942709_gspqu",
-      "keyword": "strategy pattern python",
-      "category": "Design Patterns",
-      "search_query": "strategy pattern python",
-      "search_volume_indicator": "high",
-      "trend_source": "youtube_search_suggest",
-      "metadata": {
-        "stem": "strategy pattern clean code"
-      },
-      "discovered_at": "2026-11-11T13:49:02.709Z"
-    },
-    {
-      "id": "trend_1794404942709_sku90n",
+      "id": "trend_1794431369150_bqdjy8",
       "keyword": "circuit breaker pattern microservices",
       "category": "System Design",
       "search_query": "circuit breaker pattern microservices",
@@ -446,10 +434,22 @@
       "metadata": {
         "stem": "circuit breaker pattern microservices"
       },
-      "discovered_at": "2026-11-11T13:49:02.709Z"
+      "discovered_at": "2026-11-11T21:09:29.150Z"
     },
     {
-      "id": "trend_1794404942708_auqfs",
+      "id": "trend_1794431369150_p26vlc",
+      "keyword": "circuit breaker pattern microservices spring boot",
+      "category": "System Design",
+      "search_query": "circuit breaker pattern microservices spring boot",
+      "search_volume_indicator": "high",
+      "trend_source": "youtube_search_suggest",
+      "metadata": {
+        "stem": "circuit breaker pattern microservices"
+      },
+      "discovered_at": "2026-11-11T21:09:29.150Z"
+    },
+    {
+      "id": "trend_1794431369149_w8tpy",
       "keyword": "strategy design pattern js",
       "category": "Design Patterns",
       "search_query": "strategy design pattern js",
@@ -458,10 +458,10 @@
       "metadata": {
         "stem": "strategy pattern clean code"
       },
-      "discovered_at": "2026-11-11T13:49:02.708Z"
+      "discovered_at": "2026-11-11T21:09:29.149Z"
     },
     {
-      "id": "trend_1794404942708_3545pq",
+      "id": "trend_1794431369149_j4pog",
       "keyword": "strategy pattern c++",
       "category": "Design Patterns",
       "search_query": "strategy pattern c++",
@@ -470,10 +470,10 @@
       "metadata": {
         "stem": "strategy pattern clean code"
       },
-      "discovered_at": "2026-11-11T13:49:02.708Z"
+      "discovered_at": "2026-11-11T21:09:29.149Z"
     },
     {
-      "id": "trend_1794404942707_n004z9",
+      "id": "trend_1794431369148_7rqzf7",
       "keyword": "strategy design pattern python",
       "category": "Design Patterns",
       "search_query": "strategy design pattern python",
@@ -482,10 +482,10 @@
       "metadata": {
         "stem": "strategy pattern clean code"
       },
-      "discovered_at": "2026-11-11T13:49:02.707Z"
+      "discovered_at": "2026-11-11T21:09:29.148Z"
     },
     {
-      "id": "trend_1794404942706_r961kp",
+      "id": "trend_1794431369147_3bokq",
       "keyword": "stack vs heap memory",
       "category": "System Design",
       "search_query": "stack vs heap memory",
@@ -494,10 +494,10 @@
       "metadata": {
         "stem": "stack vs heap memory allocation explained"
       },
-      "discovered_at": "2026-11-11T13:49:02.706Z"
+      "discovered_at": "2026-11-11T21:09:29.147Z"
     },
     {
-      "id": "trend_1794404942706_vmi2y",
+      "id": "trend_1794431369147_m1hl2",
       "keyword": "strategy design pattern c++",
       "category": "Design Patterns",
       "search_query": "strategy design pattern c++",
@@ -506,22 +506,10 @@
       "metadata": {
         "stem": "strategy pattern clean code"
       },
-      "discovered_at": "2026-11-11T13:49:02.706Z"
+      "discovered_at": "2026-11-11T21:09:29.147Z"
     },
     {
-      "id": "trend_1794404942705_xspp3k",
-      "keyword": "stack vs heap memory allocation",
-      "category": "System Design",
-      "search_query": "stack vs heap memory allocation",
-      "search_volume_indicator": "high",
-      "trend_source": "youtube_search_suggest",
-      "metadata": {
-        "stem": "stack vs heap memory allocation explained"
-      },
-      "discovered_at": "2026-11-11T13:49:02.705Z"
-    },
-    {
-      "id": "trend_1794404942704_e38pwk",
+      "id": "trend_1794431369146_b0ytax",
       "keyword": "python threading explained",
       "category": "Python",
       "search_query": "python threading explained",
@@ -530,22 +518,22 @@
       "metadata": {
         "stem": "python gil explained free threading"
       },
-      "discovered_at": "2026-11-11T13:49:02.704Z"
+      "discovered_at": "2026-11-11T21:09:29.146Z"
     },
     {
-      "id": "trend_1794404942703_z0n7q",
-      "keyword": "linus torvalds git google",
-      "category": "CS Lore",
-      "search_query": "linus torvalds git google",
+      "id": "trend_1794431369146_yz5bfc",
+      "keyword": "stack vs heap memory allocation",
+      "category": "System Design",
+      "search_query": "stack vs heap memory allocation",
       "search_volume_indicator": "high",
       "trend_source": "youtube_search_suggest",
       "metadata": {
-        "stem": "linus torvalds git architecture story"
+        "stem": "stack vs heap memory allocation explained"
       },
-      "discovered_at": "2026-11-11T13:49:02.703Z"
+      "discovered_at": "2026-11-11T21:09:29.146Z"
     },
     {
-      "id": "trend_1794404942703_zcup5c",
+      "id": "trend_1794431369145_daf2l",
       "keyword": "python gil explained",
       "category": "Python",
       "search_query": "python gil explained",
@@ -554,10 +542,10 @@
       "metadata": {
         "stem": "python gil explained free threading"
       },
-      "discovered_at": "2026-11-11T13:49:02.703Z"
+      "discovered_at": "2026-11-11T21:09:29.145Z"
     },
     {
-      "id": "trend_1794404942702_8m8sno",
+      "id": "trend_1794431369144_oo4nui",
       "keyword": "linus torvalds git",
       "category": "CS Lore",
       "search_query": "linus torvalds git",
@@ -566,10 +554,22 @@
       "metadata": {
         "stem": "linus torvalds git architecture story"
       },
-      "discovered_at": "2026-11-11T13:49:02.702Z"
+      "discovered_at": "2026-11-11T21:09:29.144Z"
     },
     {
-      "id": "trend_1794404942701_btc3ig",
+      "id": "trend_1794431369144_gnf8sf",
+      "keyword": "linus torvalds git google",
+      "category": "CS Lore",
+      "search_query": "linus torvalds git google",
+      "search_volume_indicator": "high",
+      "trend_source": "youtube_search_suggest",
+      "metadata": {
+        "stem": "linus torvalds git architecture story"
+      },
+      "discovered_at": "2026-11-11T21:09:29.144Z"
+    },
+    {
+      "id": "trend_1794431369142_2gy73k",
       "keyword": "bloom filter big data",
       "category": "System Design",
       "search_query": "bloom filter big data",
@@ -578,10 +578,10 @@
       "metadata": {
         "stem": "bloom filter redis system design"
       },
-      "discovered_at": "2026-11-11T13:49:02.701Z"
+      "discovered_at": "2026-11-11T21:09:29.143Z"
     },
     {
-      "id": "trend_1794404942701_vtmv1m",
+      "id": "trend_1794431369143_ilhbps",
       "keyword": "brendan eich javascript",
       "category": "CS Lore",
       "search_query": "brendan eich javascript",
@@ -590,10 +590,10 @@
       "metadata": {
         "stem": "brendan eich javascript in 10 days lore"
       },
-      "discovered_at": "2026-11-11T13:49:02.701Z"
+      "discovered_at": "2026-11-11T21:09:29.143Z"
     },
     {
-      "id": "trend_1794404942700_kg9mx",
+      "id": "trend_1794431369142_y0up7",
       "keyword": "bloom filter redis",
       "category": "System Design",
       "search_query": "bloom filter redis",
@@ -602,22 +602,10 @@
       "metadata": {
         "stem": "bloom filter redis system design"
       },
-      "discovered_at": "2026-11-11T13:49:02.700Z"
+      "discovered_at": "2026-11-11T21:09:29.142Z"
     },
     {
-      "id": "trend_1794404942699_qgb6al",
-      "keyword": "lsm tree vs b tree",
-      "category": "System Design",
-      "search_query": "lsm tree vs b tree",
-      "search_volume_indicator": "high",
-      "trend_source": "youtube_search_suggest",
-      "metadata": {
-        "stem": "b-tree vs lsm tree database indexing"
-      },
-      "discovered_at": "2026-11-11T13:49:02.699Z"
-    },
-    {
-      "id": "trend_1794404942699_iut3ne",
+      "id": "trend_1794431369141_biw9vp",
       "keyword": "b tree in indexing",
       "category": "System Design",
       "search_query": "b tree in indexing",
@@ -626,10 +614,10 @@
       "metadata": {
         "stem": "b-tree vs lsm tree database indexing"
       },
-      "discovered_at": "2026-11-11T13:49:02.699Z"
+      "discovered_at": "2026-11-11T21:09:29.141Z"
     },
     {
-      "id": "trend_1794404942698_w1jj6k",
+      "id": "trend_1794431369140_g96l5r",
       "keyword": "quick sort vs merge sort",
       "category": "DSA",
       "search_query": "quick sort vs merge sort",
@@ -638,10 +626,22 @@
       "metadata": {
         "stem": "why quicksort is faster than mergesort"
       },
-      "discovered_at": "2026-11-11T13:49:02.698Z"
+      "discovered_at": "2026-11-11T21:09:29.140Z"
     },
     {
-      "id": "trend_1794404942696_5t0vm3",
+      "id": "trend_1794431369140_d4pmgc",
+      "keyword": "lsm tree vs b tree",
+      "category": "System Design",
+      "search_query": "lsm tree vs b tree",
+      "search_volume_indicator": "high",
+      "trend_source": "youtube_search_suggest",
+      "metadata": {
+        "stem": "b-tree vs lsm tree database indexing"
+      },
+      "discovered_at": "2026-11-11T21:09:29.140Z"
+    },
+    {
+      "id": "trend_1794431369138_i5nim",
       "keyword": "how hash tables work",
       "category": "DSA",
       "search_query": "how hash tables work",
@@ -650,7 +650,7 @@
       "metadata": {
         "stem": "how hash tables work under the hood"
       },
-      "discovered_at": "2026-11-11T13:49:02.696Z"
+      "discovered_at": "2026-11-11T21:09:29.138Z"
     }
   ]
 }
