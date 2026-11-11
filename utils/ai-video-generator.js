@@ -1097,17 +1097,26 @@ class AIVideoGenerator {
         slideSegments.push(segmentVideoPath);
       }
 
-      // Concat all slide segments into final video
-      const concatListFile = path.join(slidesDir, 'segments.txt');
-      const concatLines = slideSegments.map(seg => `file '${seg.replace(/\\/g, '/')}'`).join('\n');
-      await fs.writeFile(concatListFile, concatLines);
+      // Concat all slide segments into final video using FFmpeg concat filter for guaranteed timestamp continuity and stream sync
+      const concatInputs = [];
+      let filterStreams = '';
+      for (let s = 0; s < slideSegments.length; s++) {
+        concatInputs.push('-i', slideSegments[s]);
+        filterStreams += `[${s}:v][${s}:a]`;
+      }
+      const filterComplex = `${filterStreams}concat=n=${slideSegments.length}:v=1:a=1[v][a]`;
 
       await runFFmpeg([
         '-y',
-        '-f', 'concat',
-        '-safe', '0',
-        '-i', concatListFile,
-        '-c', 'copy',
+        ...concatInputs,
+        '-filter_complex', filterComplex,
+        '-map', '[v]',
+        '-map', '[a]',
+        '-c:v', 'libx264',
+        '-preset', 'veryfast',
+        '-pix_fmt', 'yuv420p',
+        '-c:a', 'aac',
+        '-b:a', '192k',
         outputPath
       ]);
 
