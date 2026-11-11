@@ -72,7 +72,7 @@ class AIVideoGenerator {
         provider = 'msedge-neural';
         const { voice: rotatedVoice, gender } = this.getRotatedVoice(options);
         model = rotatedVoice;
-        const humanSpeed = options.speed || options.rate || 1.03;
+        const humanSpeed = options.speed || options.rate || 1.04;
         this.logger.info(`Synthesizing humanized narration via MsEdge Neural TTS (${model}, ${gender === 'ladies' ? 'Female' : 'Male'} instructor, speed: ${humanSpeed}x)...`);
         generatedPath = await this.generateMsEdgeTTS(text, outputPath, model, { rate: humanSpeed });
       } catch (e) {
@@ -301,63 +301,55 @@ class AIVideoGenerator {
     const path = require('path');
     const stateFile = path.join(__dirname, '..', 'data', 'voice_state.json');
 
-    const gentsVoices = [
-      'en-US-ChristopherNeural', // Authoritative, warm senior male engineer
-      'en-US-GuyNeural',         // Dynamic, conversational male presenter
-      'en-US-AndrewNeural',      // Analytical, sharp tech lead
-      'en-US-BrianNeural'        // Approachable, engaging male educator
+    // Elite humanized tech presenter voices (Edge TTS Neural)
+    // Dynamic cadence, natural pitch inflection, zero robotic monotony
+    const techPresenterVoices = [
+      'en-US-GuyNeural',         // Dynamic, conversational, charismatic tech presenter (Fireship style)
+      'en-US-ChristopherNeural', // Warm, authoritative senior engineer storyteller
+      'en-US-AndrewNeural'       // Modern, sharp tech educator
     ];
     const ladiesVoices = [
-      'en-US-AriaNeural',        // Clear, professional female tech instructor
-      'en-US-JennyNeural',       // Warm, natural conversational female mentor
-      'en-US-AvaNeural',         // Crisp, energetic modern female presenter
-      'en-US-EmmaNeural'         // Articulate, expressive female teacher
+      'en-US-AvaNeural',         // Crisp, energetic modern female tech presenter
+      'en-US-JennyNeural'        // Warm, natural conversational female mentor
     ];
 
-    let lastGender = 'gents';
-    let gentIndex = 0;
-    let ladyIndex = 0;
+    let voiceIndex = 0;
 
     try {
       if (fsSync.existsSync(stateFile)) {
         const raw = JSON.parse(fsSync.readFileSync(stateFile, 'utf8'));
-        lastGender = raw.lastGender || 'gents';
-        gentIndex = Number.isInteger(raw.gentIndex) ? raw.gentIndex : 0;
-        ladyIndex = Number.isInteger(raw.ladyIndex) ? raw.ladyIndex : 0;
+        voiceIndex = Number.isInteger(raw.voiceIndex) ? raw.voiceIndex : (Number.isInteger(raw.gentIndex) ? raw.gentIndex : 0);
       }
     } catch (_e) {
       // Ignore read error
     }
 
-    // Toggle gender between ladies and gents across different videos
-    let nextGender = options.gender || (lastGender === 'gents' ? 'ladies' : 'gents');
     let selectedVoice = '';
+    let selectedGender = 'gents';
 
-    if (nextGender === 'ladies') {
-      const idx = ladyIndex % ladiesVoices.length;
-      selectedVoice = ladiesVoices[idx];
-      ladyIndex = (idx + 1) % ladiesVoices.length;
+    if (options.gender === 'ladies') {
+      selectedVoice = ladiesVoices[voiceIndex % ladiesVoices.length];
+      selectedGender = 'ladies';
     } else {
-      nextGender = 'gents';
-      const idx = gentIndex % gentsVoices.length;
-      selectedVoice = gentsVoices[idx];
-      gentIndex = (idx + 1) % gentsVoices.length;
+      selectedVoice = techPresenterVoices[voiceIndex % techPresenterVoices.length];
+      selectedGender = 'gents';
     }
+    const nextVoiceIndex = (voiceIndex + 1) % (options.gender === 'ladies' ? ladiesVoices.length : techPresenterVoices.length);
 
     try {
       fsSync.mkdirSync(path.dirname(stateFile), { recursive: true });
       fsSync.writeFileSync(stateFile, JSON.stringify({
-        lastGender: nextGender,
+        lastGender: selectedGender,
         lastVoice: selectedVoice,
-        gentIndex,
-        ladyIndex,
+        voiceIndex: nextVoiceIndex,
+        gentIndex: nextVoiceIndex,
         updatedAt: new Date().toISOString()
       }, null, 2));
     } catch (_e) {
       // Ignore write error
     }
 
-    return { voice: selectedVoice, gender: nextGender };
+    return { voice: selectedVoice, gender: selectedGender };
   }
 
   getRotatedTheme() {
@@ -462,15 +454,15 @@ class AIVideoGenerator {
     return selected;
   }
 
-  async generateMsEdgeTTS(text, outputPath, voiceName = 'en-US-ChristopherNeural', options = {}) {
+  async generateMsEdgeTTS(text, outputPath, voiceName = 'en-US-GuyNeural', options = {}) {
     this.logger.info(`Synthesizing neural voice via MsEdgeTTS (${voiceName})...`);
     const { MsEdgeTTS, OUTPUT_FORMAT } = require('msedge-tts');
     const cleanText = (text || '').replace(/\s+/g, ' ').trim();
     if (!cleanText) throw new Error('Cannot synthesize empty text');
 
     const fsSync = require('fs');
-    const humanRate = options.rate || options.speed || 1.03;
-    const prosody = { rate: humanRate };
+    const humanRate = options.rate || options.speed || 1.04;
+    const prosody = { rate: humanRate, pitch: options.pitch || '+0Hz' };
 
     const tempDir = path.join(path.dirname(outputPath), `edge_tts_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`);
     await fs.mkdir(tempDir, { recursive: true });
@@ -1011,6 +1003,7 @@ class AIVideoGenerator {
       // Create HTML for slideshow
       const imageAssets = await this.filterImageAssets(visualAssets);
       await page.setContent(this.createSlideshowHTML(script, imageAssets));
+      await page.addStyleTag({ content: '* { transition: none !important; }' });
 
       // Render each slide segment matched 1:1 with its exact narration audio
       const slidesList = Array.isArray(script.slides) && script.slides.length > 0
@@ -1078,6 +1071,7 @@ class AIVideoGenerator {
             slide.classList.toggle('active', s === index);
           });
         }, i);
+        await page.waitForTimeout(100);
         await page.screenshot({ path: stillPath });
         await runFFmpeg([
           '-y',
@@ -1917,26 +1911,52 @@ class AIVideoGenerator {
     const lines = String(code).trim().split('\n');
     const formattedLines = lines.map((line, lIdx) => {
       const lineNum = String(lIdx + 1).padStart(2, '0');
-      let highlighted = this.escapeHTML(line);
-      if (highlighted.includes('//')) {
-        const parts = highlighted.split('//');
-        highlighted = `${parts[0]}<span class="syn-comment">//${parts.slice(1).join('//')}</span>`;
+      let text = this.escapeHTML(line);
+      let commentPart = '';
+      if (text.includes('//')) {
+        const cIdx = text.indexOf('//');
+        commentPart = `<span class="syn-comment">${text.slice(cIdx)}</span>`;
+        text = text.slice(0, cIdx);
+      } else if (text.includes('#')) {
+        const cIdx = text.indexOf('#');
+        commentPart = `<span class="syn-comment">${text.slice(cIdx)}</span>`;
+        text = text.slice(0, cIdx);
       }
-      const keywords = ['const', 'let', 'var', 'function', 'class', 'return', 'async', 'await', 'if', 'else', 'for', 'while', 'import', 'export', 'try', 'catch', 'new', 'throw', 'switch', 'case', 'break', 'typedef', 'struct'];
+
+      // 1. Temporarily replace string literals with placeholder tokens so keyword regex doesn't match inside quotes
+      const stringPlaceholders = [];
+      text = text.replace(/(["'`].*?["'`])/g, (match) => {
+        const token = `___STR_TOKEN_${stringPlaceholders.length}___`;
+        stringPlaceholders.push(`<span class="syn-str">${match}</span>`);
+        return token;
+      });
+
+      // 2. Keyword highlighting
+      const keywords = ['const', 'let', 'var', 'function', 'class', 'return', 'async', 'await', 'if', 'else', 'for', 'while', 'import', 'from', 'export', 'try', 'catch', 'new', 'throw', 'switch', 'case', 'break', 'typedef', 'struct', 'def', 'with', 'as', 'in', 'lambda', 'yield'];
       const kwRegex = new RegExp(`\\b(${keywords.join('|')})\\b`, 'g');
-      highlighted = highlighted.replace(kwRegex, '<span class="syn-kw">$1</span>');
-      highlighted = highlighted.replace(/(["'`].*?["'`])/g, '<span class="syn-str">$1</span>');
-      highlighted = highlighted.replace(/\b(\d+)\b/g, '<span class="syn-num">$1</span>');
-      return `<div class="code-line"><span class="line-num">${lineNum}</span><span class="line-code">${highlighted}</span></div>`;
+      text = text.replace(kwRegex, '<span class="syn-kw">$1</span>');
+
+      // 3. Number highlighting
+      text = text.replace(/\b(\d+)\b/g, '<span class="syn-num">$1</span>');
+
+      // 4. Restore strings
+      stringPlaceholders.forEach((replacement, sIdx) => {
+        text = text.replace(`___STR_TOKEN_${sIdx}___`, replacement);
+      });
+
+      const fullLine = `${text}${commentPart}`;
+      return `<div class="code-line"><span class="line-num">${lineNum}</span><span class="line-code">${fullLine}</span></div>`;
     }).join('');
 
-    return `${formattedLines}
-    <div class="live-terminal-bar">
-      <div class="live-status-dot"></div>
-      <span style="color:#60a5fa; font-weight:700;">ENGINE:</span>
-      <span style="color:#cbd5e1;">executing logic</span>
-      <span class="cursor-blink"></span>
-    </div>`;
+    return `
+      <div class="code-block">${formattedLines}</div>
+      <div class="live-terminal-bar">
+        <div class="live-status-dot"></div>
+        <span style="color:#60a5fa; font-weight:700;">ENGINE:</span>
+        <span style="color:#cbd5e1;">executing logic</span>
+        <span class="cursor-blink"></span>
+      </div>
+    `;
   }
 
   renderDiagramHTML(slide, _topic = '') {
@@ -1998,58 +2018,150 @@ class AIVideoGenerator {
     `;
   }
 
+  getTopicDSAType(topic = '') {
+    const t = String(topic).toLowerCase();
+    if (t.includes('stack') || t.includes('heap') || t.includes('memory') || t.includes('null') || t.includes('pointer')) return 'stack_heap';
+    if (t.includes('circuit') || t.includes('rate limit') || t.includes('microservice') || t.includes('token bucket') || t.includes('failover') || t.includes('distributed') || t.includes('async')) return 'circuit_breaker';
+    if (t.includes('tree') || t.includes('sort') || t.includes('quick') || t.includes('merge') || t.includes('search') || t.includes('graph')) return 'binary_tree';
+    return 'hash_table';
+  }
+
+  getMemeForTopic(topic = '', index = 0) {
+    const t = String(topic).toLowerCase();
+    if (t.includes('deploy') || t.includes('test') || t.includes('friday') || t.includes('ci') || t.includes('release') || t.includes('production')) {
+      return 'two_buttons';
+    }
+    if (t.includes('frontend') || t.includes('backend') || t.includes('api') || t.includes('client') || t.includes('network') || t.includes('500') || t.includes('400') || t.includes('json')) {
+      return 'spiderman_pointing';
+    }
+    if (t.includes('fire') || t.includes('crash') || t.includes('leak') || t.includes('burn') || t.includes('cpu') || t.includes('down') || t.includes('oom')) {
+      return 'server_on_fire';
+    }
+    if (t.includes('local') || t.includes('machine') || t.includes('docker') || t.includes('env') || t.includes('config') || t.includes('reproduce') || t.includes('bug')) {
+      return 'works_on_my_machine';
+    }
+    const memeTypes = ['server_on_fire', 'works_on_my_machine', 'spiderman_pointing', 'two_buttons'];
+    return memeTypes[index % memeTypes.length];
+  }
+
+  getTopicCodeSnippet(topic = '') {
+    const t = String(topic).toLowerCase();
+    if (t.includes('null') || t.includes('pointer') || t.includes('hoare')) {
+      return `// Option Monad - Compile-time null elimination\ntype Option<T> = { hasValue: true; value: T } | { hasValue: false };\n\nfunction getSessionUser(id: string): Option<User> {\n  const user = database.find(id);\n  return user ? { hasValue: true, value: user } : { hasValue: false };\n}`;
+    }
+    if (t.includes('rate limit') || t.includes('token bucket') || t.includes('leaky bucket')) {
+      return `// Token Bucket Rate Limiter\nclass TokenBucket {\n  private tokens = 100;\n  allowRequest(cost = 1): boolean {\n    this.refill();\n    if (this.tokens < cost) return false;\n    this.tokens -= cost;\n    return true;\n  }\n}`;
+    }
+    if (t.includes('circuit') || t.includes('breaker') || t.includes('resilience')) {
+      return `// Circuit Breaker State Transition\nif (failureRate > 0.5) {\n  circuitState = 'OPEN';\n  fallbackCache.serveCached();\n} else {\n  await service.execute();\n}`;
+    }
+    return `// Optimized O(1) Hash Table Lookup\nconst bucket = hash(key) % capacity;\nlet node = buckets[bucket];\nwhile (node) {\n  if (node.key === key) return node.val;\n  node = node.next;\n}`;
+  }
+
   createMultiSlideShortsHTML(script, visualAssets = []) {
     const theme = this.getRotatedTheme();
 
     const slideBadges = [
       { icon: '🔥', label: '01. The Problem', color: '#ef4444' },
-      { icon: '⚙️', label: '02. The Architecture', color: theme.accent },
-      { icon: '💻', label: '03. Live Code', color: '#22c55e' },
-      { icon: '💡', label: '04. Senior Rule of Thumb', color: '#eab308' },
-      { icon: '🚀', label: '05. Deep Dive', color: theme.secondary }
+      { icon: '😂', label: '02. Developer Reality', color: '#f59e0b' },
+      { icon: '⚙️', label: '03. Under The Hood', color: theme.accent },
+      { icon: '💻', label: '04. Clean Implementation', color: '#22c55e' },
+      { icon: '🏆', label: '05. Senior Rule of Thumb', color: '#eab308' }
     ];
 
     const slideDecorations = [
       // Slide 1: floating alert icons
       `<div class="deco-float deco-float-1">⚠️</div><div class="deco-float deco-float-2">🐛</div><div class="deco-float deco-float-3">💥</div>`,
-      // Slide 2: mini architecture nodes
+      // Slide 2: meme fire & coffee deco
+      `<div class="deco-float deco-float-1">🔥</div><div class="deco-float deco-float-2">☕</div>`,
+      // Slide 3: mini architecture nodes
       `<div class="deco-arch"><div class="arch-node" style="border-color:${theme.accent}">📡</div><div class="arch-line" style="background:${theme.accent}"></div><div class="arch-node" style="border-color:${theme.secondary}">⚙️</div><div class="arch-line" style="background:${theme.secondary}"></div><div class="arch-node" style="border-color:${theme.accent}">💾</div></div>`,
-      // Slide 3: terminal cursor blink
+      // Slide 4: terminal cursor blink
       `<div class="deco-terminal"><span class="term-prompt" style="color:${theme.accent}">$</span> <span class="term-cursor">_</span></div>`,
-      // Slide 4: achievement badge
-      `<div class="deco-achievement" style="border-color:${theme.accent}"><span class="achieve-icon">🏆</span><span class="achieve-text" style="color:${theme.accent}">KEY TAKEAWAY</span></div>`,
-      // Slide 5 fallback
-      `<div class="deco-float deco-float-1">🚀</div>`
+      // Slide 5: achievement badge
+      `<div class="deco-achievement" style="border-color:${theme.accent}"><span class="achieve-icon">🏆</span><span class="achieve-text" style="color:${theme.accent}">KEY TAKEAWAY</span></div>`
     ];
 
-    const slidesHTML = script.slides.map((slide, idx) => {
+    const slidesList = Array.isArray(script.slides) && script.slides.length > 0
+      ? script.slides
+      : (script.mainContent?.sections || script.sections || []);
+
+    const slidesHTML = slidesList.map((slide, idx) => {
       const asset = (visualAssets && visualAssets.length > 0) ? visualAssets[idx % visualAssets.length] : null;
-      const badge = slideBadges[idx] || slideBadges[0];
+      const badge = slideBadges[idx] || slideBadges[slideBadges.length - 1];
       const deco = slideDecorations[idx] || '';
 
-      const bulletsHTML = (slide.bulletPoints || []).map((b, bIdx) => {
+      const isMemeSlide = idx === 1 || slide.type === 'meme';
+      const isDsaSlide = idx === 2 || slide.type === 'dsa_architecture' || (slide.diagram && !isMemeSlide);
+      const isCodeSlide = idx === 3 || slide.type === 'code' || (slide.codeSnippet && !isMemeSlide && !isDsaSlide);
+      const isTakeawaySlide = idx === 4 || (idx === slidesList.length - 1 && slidesList.length >= 4) || slide.type === 'takeaway';
+
+      let visualBlockHTML = '';
+
+      if (isMemeSlide) {
+        const memeType = slide.meme?.type || this.getMemeForTopic(script.title || slide.headline, idx);
+        const memeCaption = slide.meme?.caption || 'WORKS ON MY MACHINE';
+        const memeSubtext = slide.meme?.subtext || '0 bugs in local development • Production server on fire';
+        visualBlockHTML = `
+          <div class="meme-card-container">
+            <div class="meme-top-banner">
+              <span class="meme-tag">😂 RELATABLE DEV MOMENT</span>
+              <span class="meme-caption">${this.escapeHTML(memeCaption)}</span>
+            </div>
+            ${this.renderMemeSVG(memeType)}
+            ${memeSubtext ? `<div class="meme-subtext">${this.escapeHTML(memeSubtext)}</div>` : ''}
+          </div>
+        `;
+      } else if (isDsaSlide) {
+        const dsaType = slide.diagram?.dsaType || this.getTopicDSAType(script.title || slide.headline);
+        const flowLabel = slide.diagram?.flowLabel || slide.diagram?.flow || 'Client Ingress ➔ Rate Limiter ➔ State Machine ➔ Redis O(1)';
+        visualBlockHTML = `
+          <div class="dsa-card-container">
+            ${this.renderDSASVG(dsaType, script.title)}
+            <div class="diagram-flow-bar">
+              <span>⚡ DATA FLOW:</span> ${this.escapeHTML(flowLabel)}
+            </div>
+          </div>
+        `;
+      } else if (isCodeSlide) {
+        const codeSnippet = slide.codeSnippet || this.getTopicCodeSnippet(script.title || slide.headline);
+        visualBlockHTML = `
+          <div class="code-container">
+            <div class="code-header">
+              <span class="dot red"></span>
+              <span class="dot yellow"></span>
+              <span class="dot green"></span>
+              <span class="file-title">terminal / solution.ts</span>
+            </div>
+            ${this.renderCodeSyntaxHTML(codeSnippet)}
+          </div>
+        `;
+      } else if (isTakeawaySlide) {
+        const takeawayPrinciple = script.conclusion?.finalThought || script.conclusion || 'Prioritize deterministic failure boundaries over premature optimization.';
+        visualBlockHTML = `
+          <div class="takeaway-card-shorts">
+            <div class="takeaway-header">
+              <span class="takeaway-trophy">🏆</span>
+              <span class="takeaway-badge">STAFF ENGINEER GOLDEN RULE</span>
+            </div>
+            <div class="takeaway-principle">"${this.escapeHTML(takeawayPrinciple)}"</div>
+          </div>
+        `;
+      }
+
+      // Max 2 bullet points if visual block is present, to ensure zero clutter and pristine readability
+      const maxBullets = visualBlockHTML ? 2 : 3;
+      const rawBullets = Array.isArray(slide.bulletPoints) ? slide.bulletPoints : (Array.isArray(slide.content) ? slide.content : []);
+      const bulletsHTML = rawBullets.slice(0, maxBullets).map((b, bIdx) => {
         const bulletIcons = ['💡', '⚡', '🔑', '📌', '✨'];
         const icon = bulletIcons[bIdx % bulletIcons.length];
-        return `<div class="bullet-card" style="border-left-color: ${theme.accent}; animation-delay: ${bIdx * 0.15}s">${icon} ${this.escapeHTML(b)}</div>`;
+        return `<div class="bullet-card" style="border-left-color: ${theme.accent};">${icon} ${this.escapeHTML(b)}</div>`;
       }).join('');
-
-      const diagramHTML = (idx === 1 || slide.diagram) ? this.renderDiagramHTML(slide, script.title) : '';
-
-      const codeHTML = slide.codeSnippet ? `
-        <div class="code-container">
-            <div class="code-header">
-                <span class="dot red"></span>
-                <span class="dot yellow"></span>
-                <span class="dot green"></span>
-                <span class="file-title">terminal / code</span>
-            </div>
-            <pre class="code-block"><code>${this.escapeHTML(slide.codeSnippet)}</code></pre>
-        </div>` : '';
 
       return `
       <div class="slide ${idx === 0 ? 'active' : ''}">
           <div class="shorts-progress-bar-wrap">
-              <div class="shorts-progress-bar-fill" style="width: ${Math.round(((idx + 1) / script.slides.length) * 100)}%; background: ${theme.headerGradient};"></div>
+              <div class="shorts-progress-bar-fill" style="width: ${Math.round(((idx + 1) / slidesList.length) * 100)}%; background: ${theme.headerGradient};"></div>
           </div>
           <div class="scanline"></div>
           ${asset ? `<img class="background-image" src="${asset}" />` : ''}
@@ -2060,10 +2172,9 @@ class AIVideoGenerator {
           ${deco}
           <div class="top-badge" style="background: ${badge.color}22; border-color: ${badge.color}66; color: ${badge.color};">${badge.icon} ${badge.label}</div>
           <div class="section-card">
-              <h2 class="section-header">${this.escapeHTML(slide.headline)}</h2>
+              <h2 class="section-header">${this.escapeHTML(slide.headline || slide.title || `Chapter ${idx + 1}`)}</h2>
+              ${visualBlockHTML}
               ${bulletsHTML ? `<div class="bullet-container">${bulletsHTML}</div>` : ''}
-              ${diagramHTML}
-              ${codeHTML}
           </div>
           <div class="slide-number" style="color: ${theme.accent}40">${String(idx + 1).padStart(2, '0')}</div>
       </div>`;
@@ -2153,17 +2264,20 @@ class AIVideoGenerator {
 
         .slide {
             position: absolute;
+            top: 0; left: 0;
             width: 1080px;
             height: 1920px;
             padding: 100px 70px;
-            display: flex;
+            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: opacity 1s ease-in-out;
         }
-        .slide.active { opacity: 1; }
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
 
         .background-image {
             position: absolute; top: 0; left: 0;
@@ -2228,15 +2342,113 @@ class AIVideoGenerator {
             background: ${theme.cardBg};
             border-left: 6px solid ${theme.accent};
             border-radius: 16px;
-            padding: 28px 34px;
-            font-size: 32px;
-            line-height: 1.5;
-            color: #e2e8f0;
+            padding: 26px 32px;
+            font-size: 30px;
+            line-height: 1.45;
+            color: #f1f5f9;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: slide-in-up 0.6s ease-out both;
+            opacity: 1;
         }
 
-        /* Diagram styling */
+        /* Relatable Developer Meme Card */
+        .meme-card-container {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.94);
+            border: 2px solid #f59e0b;
+            border-radius: 22px;
+            padding: 20px 22px;
+            margin-top: 10px;
+            margin-bottom: 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 12px 35px rgba(245, 158, 11, 0.25);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        .meme-top-banner {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .meme-tag {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fde047;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 9999px;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+        .meme-caption {
+            font-size: 20px;
+            font-weight: 800;
+            color: #f8fafc;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: right;
+            max-width: 550px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .meme-svg-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 6px 0;
+        }
+        .meme-svg {
+            width: 100%;
+            max-width: 620px;
+            height: auto;
+            max-height: 320px;
+            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.6));
+        }
+        .meme-subtext {
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #fcd34d;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* DSA & Architecture Diagram styling */
+        .dsa-card-container {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.94);
+            border: 2px solid ${theme.accent};
+            border-radius: 22px;
+            padding: 20px 22px;
+            margin-top: 10px;
+            margin-bottom: 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 12px 35px rgba(${theme.accentRGB}, 0.25);
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+        .dsa-svg-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 6px 0;
+        }
+        .dsa-svg {
+            width: 100%;
+            max-width: 680px;
+            height: auto;
+            max-height: 340px;
+            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.6));
+        }
+
         .diagram-container {
             width: 100%;
             background: ${theme.cardBg};
@@ -2274,6 +2486,7 @@ class AIVideoGenerator {
         .diagram-node-name { font-size: 22px; font-weight: 700; color: #ffffff; }
         .diagram-node-role { font-size: 16px; color: #94a3b8; margin-top: 3px; }
         .diagram-flow-bar {
+            width: 100%;
             background: rgba(${theme.accentRGB}, 0.12);
             border: 1px dashed ${theme.accent};
             border-radius: 12px;
@@ -2283,16 +2496,52 @@ class AIVideoGenerator {
             font-family: 'Consolas', monospace;
             font-weight: 600;
             text-align: center;
+            margin-top: 10px;
         }
 
-        /* Code block */
+        /* Senior Takeaway Trophy Card */
+        .takeaway-card-shorts {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+            border: 2px solid #eab308;
+            border-radius: 24px;
+            padding: 30px 28px;
+            margin-top: 10px;
+            margin-bottom: 24px;
+            box-shadow: 0 16px 40px rgba(234, 179, 8, 0.25);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        .takeaway-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+        .takeaway-trophy { font-size: 42px; line-height: 1; }
+        .takeaway-badge {
+            font-size: 20px;
+            font-weight: 900;
+            color: #facc15;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .takeaway-principle {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.45;
+            color: #ffffff;
+            font-style: italic;
+        }
+
+        /* Syntax-highlighted code block */
         .code-container {
             width: 100%;
             background: #0d1117;
             border: 1px solid ${theme.cardBorder};
             border-radius: 20px;
             overflow: hidden;
-            margin-top: 15px;
+            margin-top: 12px;
+            margin-bottom: 20px;
             box-shadow: 0 12px 35px rgba(0,0,0,0.7);
         }
         .code-header {
@@ -2312,13 +2561,40 @@ class AIVideoGenerator {
             margin-left: 12px;
         }
         .code-block {
-            padding: 28px 32px;
+            padding: 24px 28px;
             font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 26px;
+            font-size: 24px;
             line-height: 1.55;
             color: ${theme.codeColor};
             white-space: pre-wrap;
             word-break: break-all;
+        }
+        .syn-kw { color: #f43f5e; font-weight: 700; }
+        .syn-str { color: #34d399; }
+        .syn-num { color: #f59e0b; }
+        .syn-comment { color: #64748b; font-style: italic; }
+        .line-num { color: #475569; margin-right: 14px; user-select: none; font-size: 20px; }
+        .code-line { display: flex; align-items: baseline; }
+        .line-code { flex: 1; }
+        .live-terminal-bar {
+            width: 100%;
+            background: #090d16;
+            border-top: 1px solid #1e293b;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Consolas', monospace;
+            font-size: 18px;
+            color: #94a3b8;
+        }
+        .live-status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+            animation: cursor-blink 1.2s infinite;
         }
 
         /* Decorative elements */
