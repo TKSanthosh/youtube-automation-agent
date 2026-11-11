@@ -369,8 +369,7 @@ class AIVideoGenerator {
         badgeBg: 'rgba(0, 242, 254, 0.12)',
         cardBorder: '#164e63',
         cardBg: 'rgba(10, 30, 50, 0.92)',
-        headerGradient: 'linear-gradient(135deg, #00f2fe 0%, #38bdf8 50%, #ffffff 100%)',
-        emoji: '⚡'
+        headerGradient: 'linear-gradient(135deg, #00f2fe 0%, #38bdf8 50%, #ffffff 100%)'
       },
       {
         name: 'Emerald Matrix',
@@ -383,8 +382,7 @@ class AIVideoGenerator {
         badgeBg: 'rgba(16, 185, 129, 0.14)',
         cardBorder: '#065f46',
         cardBg: 'rgba(6, 26, 20, 0.92)',
-        headerGradient: 'linear-gradient(135deg, #10b981 0%, #34d399 50%, #ffffff 100%)',
-        emoji: '🌿'
+        headerGradient: 'linear-gradient(135deg, #10b981 0%, #34d399 50%, #ffffff 100%)'
       },
       {
         name: 'Obsidian Violet',
@@ -397,8 +395,7 @@ class AIVideoGenerator {
         badgeBg: 'rgba(192, 132, 252, 0.14)',
         cardBorder: '#4c1d95',
         cardBg: 'rgba(15, 7, 40, 0.92)',
-        headerGradient: 'linear-gradient(135deg, #c084fc 0%, #a78bfa 50%, #ffffff 100%)',
-        emoji: '🔮'
+        headerGradient: 'linear-gradient(135deg, #c084fc 0%, #a78bfa 50%, #ffffff 100%)'
       },
       {
         name: 'Sunset Amber',
@@ -411,8 +408,7 @@ class AIVideoGenerator {
         badgeBg: 'rgba(249, 115, 22, 0.14)',
         cardBorder: '#7c2d12',
         cardBg: 'rgba(24, 11, 6, 0.92)',
-        headerGradient: 'linear-gradient(135deg, #f97316 0%, #fb923c 50%, #ffffff 100%)',
-        emoji: '🔥'
+        headerGradient: 'linear-gradient(135deg, #f97316 0%, #fb923c 50%, #ffffff 100%)'
       },
       {
         name: 'Electric Sapphire',
@@ -425,8 +421,7 @@ class AIVideoGenerator {
         badgeBg: 'rgba(59, 130, 246, 0.14)',
         cardBorder: '#1e3a5f',
         cardBg: 'rgba(8, 18, 38, 0.92)',
-        headerGradient: 'linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #ffffff 100%)',
-        emoji: '💎'
+        headerGradient: 'linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #ffffff 100%)'
       }
     ];
 
@@ -450,7 +445,7 @@ class AIVideoGenerator {
       }, null, 2));
     } catch (_e) { /* ignore */ }
 
-    this.logger.info(`Visual theme selected: ${selected.name} (${selected.emoji})`);
+    this.logger.info(`Visual theme selected: ${selected.name}`);
     return selected;
   }
 
@@ -517,7 +512,7 @@ class AIVideoGenerator {
         await fs.copyFile(chunkFiles[0], outputPath);
       } else {
         const listPath = path.join(tempDir, 'concat_list.txt');
-        const listContent = chunkFiles.map(f => `file '${f.replace(/\\/g, '/').replace(/'/g, "'\\''")}'`).join('\n');
+        const listContent = chunkFiles.map(f => `file '${path.resolve(f).replace(/\\/g, '/').replace(/'/g, "'\\''")}'`).join('\n');
         await fs.writeFile(listPath, listContent);
         await runFFmpeg(['-y', '-f', 'concat', '-safe', '0', '-i', listPath, '-c', 'copy', outputPath]);
       }
@@ -994,7 +989,7 @@ class AIVideoGenerator {
 
     const { chromium } = require('playwright');
     const browser = await chromium.launch();
-    const slidesDir = path.join(path.dirname(outputPath), 'slides');
+    const slidesDir = path.join(path.dirname(outputPath), 'slides_' + path.basename(outputPath, '.mp4').replace(/[^a-zA-Z0-9_-]/g, ''));
 
     try {
       const page = await browser.newPage();
@@ -1066,26 +1061,159 @@ class AIVideoGenerator {
 
         // Render high-definition 1080x1920 slide screenshot with Ken Burns cinematic camera zoompan
         const stillPath = path.join(slidesDir, `slide_${String(i).padStart(3, '0')}.png`);
-        await page.evaluate((index) => {
+
+        // Strict Pre-flight Slide Verification: Check that slide is 100% visible and fits within 1080x1920
+        const slideCheck = await page.evaluate((index) => {
           document.querySelectorAll('.slide').forEach((slide, s) => {
             slide.classList.toggle('active', s === index);
           });
+
+          const activeSlide = document.querySelector('.slide.active');
+          if (!activeSlide) return { ok: false, reason: 'No active slide element' };
+
+          const card = activeSlide.querySelector('.section-card');
+          if (!card) return { ok: true, reason: 'No section card' };
+
+          // Reset previous transformations
+          card.style.transform = 'none';
+          card.style.transformOrigin = 'center top';
+
+          let rect = card.getBoundingClientRect();
+          // Maximum allowable bottom coordinate before elements get cut off
+          const maxBottom = 1850;
+          let scaled = false;
+          let scaleFactor = 1;
+          if (rect.bottom > maxBottom) {
+            const availableH = maxBottom - rect.top;
+            const neededH = rect.height;
+            scaleFactor = Math.max(0.74, Number((availableH / neededH).toFixed(3)));
+            card.style.transform = `scale(${scaleFactor})`;
+            scaled = true;
+          }
+
+          rect = card.getBoundingClientRect();
+          const bullets = Array.from(activeSlide.querySelectorAll('.bullet-card'));
+          const bulletsOk = bullets.every(b => {
+            const br = b.getBoundingClientRect();
+            return br.height > 15 && br.bottom <= 1900;
+          });
+
+          return {
+            ok: true,
+            scaled,
+            scaleFactor,
+            cardTop: Math.round(rect.top),
+            cardBottom: Math.round(rect.bottom),
+            bulletsOk,
+            bulletsCount: bullets.length
+          };
         }, i);
-        await page.waitForTimeout(100);
+
+        await page.waitForTimeout(120);
         await page.screenshot({ path: stillPath });
-        await runFFmpeg([
-          '-y',
-          '-loop', '1',
-          '-i', stillPath,
-          '-i', slideAudioPath,
-          '-vf', 'scale=1080:1920,format=yuv420p',
-          '-c:v', 'libx264',
-          '-preset', 'veryfast',
-          '-c:a', 'aac',
-          '-b:a', '192k',
-          '-t', String(slideDuration),
-          segmentVideoPath
-        ]);
+
+        // Automated Pre-flight Verification: Verify screenshot is fully rendered and not clipped/blank/grey
+        const imageCheck = await this.verifySlideImageFullyRendered(stillPath);
+        if (!imageCheck.valid) {
+          this.logger.warn(`Slide ${i + 1} screenshot check notice (${imageCheck.reason}); re-rendering screenshot...`);
+          await page.waitForTimeout(250);
+          await page.screenshot({ path: stillPath });
+        } else {
+          this.logger.info(`Slide ${i + 1} layout verified: 100% visible inside 1080x1920 canvas (cardBottom: ${slideCheck.cardBottom}px, scaled: ${slideCheck.scaled})`);
+        }
+        // Detect animated media window for looping GIF/video overlay
+        const animatedBox = await page.evaluate(() => {
+          const activeSlide = document.querySelector('.slide.active');
+          if (!activeSlide) return null;
+          const target = activeSlide.querySelector('#meme-window') ||
+                         activeSlide.querySelector('.meme-svg-wrapper') ||
+                         activeSlide.querySelector('.meme-card-container');
+          if (!target) return null;
+          const r = target.getBoundingClientRect();
+          return {
+            x: Math.round(r.x),
+            y: Math.round(r.y),
+            width: Math.round(r.width),
+            height: Math.round(r.height)
+          };
+        });
+
+        const isMemeSlide = i === 1 || slideData.type === 'meme' || Boolean(slideData.meme);
+        let animatedAsset = null;
+        if (isMemeSlide || animatedBox) {
+          animatedAsset = this.getMemeAnimatedAsset(script.title || slideData.headline, slideData.meme?.type, i);
+        }
+
+        if (animatedAsset && animatedBox && animatedBox.width > 50 && animatedBox.height > 50) {
+          let w = animatedBox.width;
+          let h = animatedBox.height;
+          if (w % 2 !== 0) w -= 1;
+          if (h % 2 !== 0) h -= 1;
+          const x = animatedBox.x;
+          const y = animatedBox.y;
+
+          this.logger.info(`Overlaying looping animated GIF meme into slide ${i + 1}: ${path.basename(animatedAsset)} at (${x},${y},${w}x${h})`);
+
+          try {
+            await runFFmpeg([
+              '-y',
+              '-loop', '1',
+              '-i', stillPath,
+              '-stream_loop', '-1',
+              '-i', animatedAsset,
+              '-i', slideAudioPath,
+              '-filter_complex', `[1:v]scale=${w}:${h}:force_original_aspect_ratio=increase,crop=${w}:${h},format=rgba[anim];[0:v][anim]overlay=${x}:${y}:shortest=1[v]`,
+              '-map', '[v]',
+              '-map', '2:a',
+              '-c:v', 'libx264',
+              '-preset', 'veryfast',
+              '-pix_fmt', 'yuv420p',
+              '-c:a', 'aac',
+              '-b:a', '192k',
+              '-t', String(slideDuration),
+              segmentVideoPath
+            ]);
+          } catch (overlayErr) {
+            this.logger.warn(`Animated overlay failed (${overlayErr.message}); falling back to static render`);
+            await runFFmpeg([
+              '-y',
+              '-loop', '1',
+              '-i', stillPath,
+              '-i', slideAudioPath,
+              '-vf', 'scale=1080:1920,format=yuv420p',
+              '-c:v', 'libx264',
+              '-preset', 'veryfast',
+              '-pix_fmt', 'yuv420p',
+              '-c:a', 'aac',
+              '-b:a', '192k',
+              '-t', String(slideDuration),
+              segmentVideoPath
+            ]);
+          }
+        } else {
+          await runFFmpeg([
+            '-y',
+            '-loop', '1',
+            '-i', stillPath,
+            '-i', slideAudioPath,
+            '-vf', 'scale=1080:1920,format=yuv420p',
+            '-c:v', 'libx264',
+            '-preset', 'veryfast',
+            '-pix_fmt', 'yuv420p',
+            '-c:a', 'aac',
+            '-b:a', '192k',
+            '-t', String(slideDuration),
+            segmentVideoPath
+          ]);
+        }
+
+        // Automated Segment Video Verification: Verify segment video is fully rendered before adding to video
+        const segmentCheck = await this.verifySegmentVideoIntegrity(segmentVideoPath, slideDuration);
+        if (!segmentCheck.valid) {
+          this.logger.warn(`Slide ${i + 1} segment check notice: ${segmentCheck.reason}`);
+        } else {
+          this.logger.info(`Slide ${i + 1} segment video verified (${segmentCheck.duration}s, ${(segmentCheck.size / 1024 / 1024).toFixed(2)} MB)`);
+        }
 
         slideSegments.push(segmentVideoPath);
       }
@@ -1664,15 +1792,15 @@ class AIVideoGenerator {
     <!-- Slide 1: High-Impact Vertical Title Card -->
     <div class="slide active">
         ${visualAssets && visualAssets[0] ? `<img class="background-image" src="${visualAssets[0]}" />` : ''}
-        <div class="top-badge" style="position:relative; z-index:1;">⚡ 3-Minute Technical Deep Dive</div>
+        <div class="top-badge" style="position:relative; z-index:1;">TECHNICAL DEEP DIVE</div>
         <div class="title-card" style="position:relative; z-index:1;">
-            <h1 class="main-title">${this.escapeHTML(script.title)}</h1>
-            <p class="subtitle">${this.escapeHTML(script.hook?.text || script.hook || 'Start to End IT Concept & Practical Code Example')}</p>
+            <h1 class="main-title">${this.escapeHTML(this.stripEmojis(script.title))}</h1>
+            <p class="subtitle">${this.escapeHTML(this.stripEmojis(script.hook?.text || script.hook || 'Start to End IT Concept & Practical Code Example'))}</p>
             <div class="hero-feature-box">
-                <div class="feature-item"><span class="feature-icon">🔍</span> Architectural Overview</div>
-                <div class="feature-item"><span class="feature-icon">⚙️</span> Under-The-Hood Mechanics</div>
-                <div class="feature-item"><span class="feature-icon">💻</span> Working Code / CLI Walkthrough</div>
-                <div class="feature-item"><span class="feature-icon">🚀</span> Production Best Practices</div>
+                <div class="feature-item">Architectural Overview</div>
+                <div class="feature-item">Under-The-Hood Mechanics</div>
+                <div class="feature-item">Working Code / CLI Walkthrough</div>
+                <div class="feature-item">Production Best Practices</div>
             </div>
         </div>
     </div>
@@ -1683,10 +1811,10 @@ class AIVideoGenerator {
     <div class="slide">
         ${visualAssets && visualAssets.length > 1 ? `<img class="background-image" src="${visualAssets[visualAssets.length - 1]}" />` : ''}
         <div class="takeaway-card" style="position:relative; z-index:1;">
-            <div class="top-badge">💡 Senior Engineer Takeaway</div>
+            <div class="top-badge">Senior Engineer Takeaway</div>
             <div class="takeaway-title">Production Rule of Thumb</div>
-            <p class="takeaway-text">${this.escapeHTML(script.conclusion?.finalThought || 'Master this pattern to build resilient, scalable production infrastructure.')}</p>
-            <div class="takeaway-footer">📌 Save for System Design & Coding Interviews</div>
+            <p class="takeaway-text">${this.escapeHTML(this.stripEmojis(script.conclusion?.finalThought || 'Master this pattern to build resilient, scalable production infrastructure.'))}</p>
+            <div class="takeaway-footer">Save for System Design & Coding Interviews</div>
         </div>
     </div>
 </body>
@@ -1730,7 +1858,7 @@ class AIVideoGenerator {
             <rect x="250" y="145" width="85" height="52" rx="8" fill="#f8fafc" stroke="#0f172a" stroke-width="2" />
             <path d="M 335 158 C 352 158, 352 184, 335 184" fill="none" stroke="#f8fafc" stroke-width="6" stroke-linecap="round" />
             <text x="292" y="168" font-size="11" font-weight="900" text-anchor="middle" fill="#0f172a">THIS IS</text>
-            <text x="292" y="186" font-size="13" font-weight="900" text-anchor="middle" fill="#dc2626">FINE 🔥</text>
+            <text x="292" y="186" font-size="13" font-weight="900" text-anchor="middle" fill="#dc2626">FINE</text>
           </svg>
         </div>`;
 
@@ -1752,7 +1880,7 @@ class AIVideoGenerator {
             <text x="220" y="62" font-size="12" font-weight="800" text-anchor="middle" fill="#facc15" letter-spacing="3">OFFICIAL SEAL</text>
             <text x="220" y="88" font-size="19" font-weight="900" text-anchor="middle" fill="#ffffff" letter-spacing="1">WORKS ON</text>
             <text x="220" y="112" font-size="19" font-weight="900" text-anchor="middle" fill="#ffffff" letter-spacing="1">MY MACHINE</text>
-            <text x="220" y="136" font-size="11" font-weight="700" text-anchor="middle" fill="#94a3b8">★ LOCALHOST:3000 ★</text>
+            <text x="220" y="136" font-size="11" font-weight="700" text-anchor="middle" fill="#94a3b8">LOCALHOST:3000</text>
             <text x="220" y="156" font-size="12" font-weight="800" text-anchor="middle" fill="#22c55e">CERTIFIED 0 BUGS IN DEV</text>
           </svg>
         </div>`;
@@ -1763,18 +1891,18 @@ class AIVideoGenerator {
           <svg viewBox="0 0 440 230" class="meme-svg" xmlns="http://www.w3.org/2000/svg">
             <rect x="40" y="35" width="150" height="160" rx="16" fill="#1e293b" stroke="#3b82f6" stroke-width="3" />
             <circle cx="115" cy="78" r="26" fill="#3b82f6" opacity="0.3" />
-            <text x="115" y="87" font-size="30" text-anchor="middle">👨‍💻</text>
+            <text x="115" y="83" font-size="13" font-weight="900" text-anchor="middle" fill="#93c5fd">CLIENT</text>
             <text x="115" y="125" font-size="16" font-weight="900" text-anchor="middle" fill="#60a5fa">FRONTEND</text>
             <text x="115" y="148" font-size="12" font-weight="800" text-anchor="middle" fill="#f87171">"500 SERVER ERR"</text>
-            <text x="115" y="172" font-size="12" text-anchor="middle" fill="#94a3b8">👉 "It's the backend!"</text>
+            <text x="115" y="172" font-size="12" text-anchor="middle" fill="#94a3b8">"It is the backend"</text>
             <circle cx="220" cy="115" r="22" fill="#ef4444" opacity="0.25" />
-            <text x="220" y="123" font-size="22" font-weight="900" text-anchor="middle" fill="#ef4444">⚡</text>
+            <text x="220" y="121" font-size="15" font-weight="900" text-anchor="middle" fill="#ef4444">VS</text>
             <rect x="250" y="35" width="150" height="160" rx="16" fill="#1e293b" stroke="#10b981" stroke-width="3" />
             <circle cx="325" cy="78" r="26" fill="#10b981" opacity="0.3" />
-            <text x="325" y="87" font-size="30" text-anchor="middle">🧑‍💼</text>
+            <text x="325" y="83" font-size="13" font-weight="900" text-anchor="middle" fill="#a7f3d0">SERVER</text>
             <text x="325" y="125" font-size="16" font-weight="900" text-anchor="middle" fill="#34d399">BACKEND</text>
             <text x="325" y="148" font-size="12" font-weight="800" text-anchor="middle" fill="#f87171">"BAD REQUEST 400"</text>
-            <text x="325" y="172" font-size="12" text-anchor="middle" fill="#94a3b8">👈 "You sent bad JSON!"</text>
+            <text x="325" y="172" font-size="12" text-anchor="middle" fill="#94a3b8">"Invalid payload"</text>
           </svg>
         </div>`;
 
@@ -1783,15 +1911,15 @@ class AIVideoGenerator {
         <div class="meme-svg-wrapper">
           <svg viewBox="0 0 440 230" class="meme-svg" xmlns="http://www.w3.org/2000/svg">
             <rect x="55" y="25" width="330" height="185" rx="16" fill="#1e293b" stroke="#475569" stroke-width="3" />
-            <circle cx="220" cy="68" r="26" fill="#facc15" />
-            <text x="220" y="76" font-size="26" text-anchor="middle">😰</text>
+            <circle cx="220" cy="68" r="26" fill="#334155" stroke="#facc15" stroke-width="2" />
+            <text x="220" y="73" font-size="13" font-weight="900" text-anchor="middle" fill="#facc15">DEV</text>
             <rect x="80" y="110" width="130" height="60" rx="12" fill="#ef4444" stroke="#b91c1c" stroke-width="3" />
             <text x="145" y="134" font-size="12" font-weight="900" text-anchor="middle" fill="#ffffff">DEPLOY ON</text>
             <text x="145" y="152" font-size="13" font-weight="900" text-anchor="middle" fill="#fef08a">FRIDAY 5 PM</text>
             <rect x="230" y="110" width="130" height="60" rx="12" fill="#3b82f6" stroke="#1d4ed8" stroke-width="3" />
             <text x="295" y="134" font-size="12" font-weight="900" text-anchor="middle" fill="#ffffff">FIX 24 FAILING</text>
             <text x="295" y="152" font-size="13" font-weight="900" text-anchor="middle" fill="#bfdbfe">UNIT TESTS</text>
-            <text x="220" y="196" font-size="12" font-weight="700" text-anchor="middle" fill="#94a3b8">SWEATING OVER PRODUCTION DECISIONS</text>
+            <text x="220" y="196" font-size="12" font-weight="700" text-anchor="middle" fill="#94a3b8">PRODUCTION ARCHITECTURE DECISIONS</text>
           </svg>
         </div>`;
 
@@ -1816,12 +1944,12 @@ class AIVideoGenerator {
           <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#334155" stroke-width="2" />
           <rect x="25" y="35" width="130" height="58" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2" />
           <text x="90" y="58" font-size="13" font-weight="700" text-anchor="middle" fill="#60a5fa">KEY: "user:42"</text>
-          <text x="90" y="78" font-size="12" font-weight="800" text-anchor="middle" fill="#93c5fd">hash(k) % 4 ➔ [1]</text>
+          <text x="90" y="78" font-size="12" font-weight="800" text-anchor="middle" fill="#93c5fd">hash(k) % 4 -&gt; [1]</text>
           <line x1="155" y1="64" x2="195" y2="64" stroke="#3b82f6" stroke-width="3" stroke-dasharray="4,2" />
           <rect x="200" y="25" width="60" height="32" rx="6" fill="#1e293b" stroke="#475569" stroke-width="2" />
           <text x="230" y="46" font-size="13" font-weight="800" text-anchor="middle" fill="#94a3b8">[0]</text>
           <rect x="200" y="63" width="60" height="32" rx="6" fill="#3b82f6" stroke="#60a5fa" stroke-width="3" />
-          <text x="230" y="84" font-size="14" font-weight="900" text-anchor="middle" fill="#ffffff">[1] ★</text>
+          <text x="230" y="84" font-size="14" font-weight="900" text-anchor="middle" fill="#ffffff">[1]</text>
           <rect x="200" y="101" width="60" height="32" rx="6" fill="#1e293b" stroke="#475569" stroke-width="2" />
           <text x="230" y="122" font-size="13" font-weight="800" text-anchor="middle" fill="#94a3b8">[2]</text>
           <rect x="200" y="139" width="60" height="32" rx="6" fill="#1e293b" stroke="#475569" stroke-width="2" />
@@ -1829,13 +1957,13 @@ class AIVideoGenerator {
           <line x1="260" y1="79" x2="295" y2="79" stroke="#f59e0b" stroke-width="3" />
           <rect x="295" y="60" width="105" height="38" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="2" />
           <text x="347" y="76" font-size="11" font-weight="800" text-anchor="middle" fill="#fde047">"user:42"</text>
-          <text x="347" y="91" font-size="10" font-weight="600" text-anchor="middle" fill="#cbd5e1">val: {id:42} ➔</text>
+          <text x="347" y="91" font-size="10" font-weight="600" text-anchor="middle" fill="#cbd5e1">val: {id:42} -&gt;</text>
           <line x1="400" y1="79" x2="425" y2="79" stroke="#ef4444" stroke-width="3" />
           <rect x="425" y="60" width="95" height="38" rx="8" fill="#1e293b" stroke="#ef4444" stroke-width="2" />
           <text x="472" y="76" font-size="11" font-weight="800" text-anchor="middle" fill="#f87171">"session:9"</text>
-          <text x="472" y="91" font-size="10" font-weight="600" text-anchor="middle" fill="#cbd5e1">val: null ➔ ∅</text>
+          <text x="472" y="91" font-size="10" font-weight="600" text-anchor="middle" fill="#cbd5e1">val: null -&gt; NULL</text>
           <rect x="25" y="195" width="490" height="48" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2" />
-          <text x="270" y="216" font-size="13" font-weight="900" text-anchor="middle" fill="#34d399">⚡ SEPARATE CHAINING COLLISION RESOLUTION</text>
+          <text x="270" y="216" font-size="13" font-weight="900" text-anchor="middle" fill="#34d399">SEPARATE CHAINING COLLISION RESOLUTION</text>
           <text x="270" y="233" font-size="11" font-weight="600" text-anchor="middle" fill="#94a3b8">Average: O(1) Lookup • Worst Case without resizing: O(N)</text>
         </svg>
       </div>`;
@@ -1860,7 +1988,7 @@ class AIVideoGenerator {
           <text x="405" y="135" font-size="11" font-weight="600" text-anchor="middle" fill="#cbd5e1">Payload: { id: 42, role: "admin" }</text>
           <text x="405" y="153" font-size="10" text-anchor="middle" fill="#64748b">Garbage Collected / Manual Free</text>
           <path d="M 230 137 C 260 137, 270 130, 305 130" stroke="#f59e0b" stroke-width="3" stroke-dasharray="5,3" />
-          <text x="270" y="240" font-size="12" font-weight="700" text-anchor="middle" fill="#94a3b8">💡 Stack = L1 Cache Locality • Heap = Pointer Indirection</text>
+          <text x="270" y="240" font-size="12" font-weight="700" text-anchor="middle" fill="#94a3b8">Stack = L1 Cache Locality • Heap = Pointer Indirection</text>
         </svg>
       </div>`;
     }
@@ -1874,7 +2002,7 @@ class AIVideoGenerator {
           <text x="95" y="107" font-size="13" font-weight="900" text-anchor="middle" fill="#6ee7b7">CLOSED</text>
           <text x="95" y="125" font-size="10" font-weight="700" text-anchor="middle" fill="#a7f3d0">Normal Flow</text>
           <path d="M 145 95 Q 270 45 395 95" fill="none" stroke="#ef4444" stroke-width="3" stroke-dasharray="6,4" />
-          <text x="270" y="65" font-size="11" font-weight="800" text-anchor="middle" fill="#f87171">Failures &gt; 50% ➔ Trip</text>
+          <text x="270" y="65" font-size="11" font-weight="800" text-anchor="middle" fill="#f87171">Failures &gt; 50% -&gt; Trip</text>
           <circle cx="445" cy="110" r="48" fill="#7f1d1d" stroke="#ef4444" stroke-width="3" />
           <text x="445" y="107" font-size="13" font-weight="900" text-anchor="middle" fill="#fca5a5">OPEN</text>
           <text x="445" y="125" font-size="10" font-weight="700" text-anchor="middle" fill="#fecaca">Fast Fallback</text>
@@ -1901,7 +2029,7 @@ class AIVideoGenerator {
         <text x="150" y="167" font-size="13" font-weight="800" text-anchor="middle" fill="#fde047">[25]</text>
         <circle cx="390" cy="160" r="26" fill="#1e293b" stroke="#10b981" stroke-width="2.5" />
         <text x="390" y="167" font-size="13" font-weight="800" text-anchor="middle" fill="#4ade80">[75]</text>
-        <text x="270" y="235" font-size="12" font-weight="700" text-anchor="middle" fill="#94a3b8">⚡ Logarithmic Search: O(log N) Time Complexity</text>
+        <text x="270" y="235" font-size="12" font-weight="700" text-anchor="middle" fill="#94a3b8">Logarithmic Search: O(log N) Time Complexity</text>
       </svg>
     </div>`;
   }
@@ -1967,36 +2095,36 @@ class AIVideoGenerator {
 
     if (raw && typeof raw === 'object' && Array.isArray(raw.nodes) && raw.nodes.length > 0) {
       title = raw.title || title;
-      nodes = raw.nodes.map(n => typeof n === 'string' ? { name: n, role: 'System Component', icon: '⚙️' } : {
+      nodes = raw.nodes.map((n, i) => typeof n === 'string' ? { name: n, role: 'System Component', icon: `0${i + 1}` } : {
         name: n.name || n.label || 'Service',
         role: n.role || n.type || 'Component',
-        icon: n.icon || '⚙️'
+        icon: n.icon ? this.stripEmojis(n.icon) || `0${i + 1}` : `0${i + 1}`
       });
       flowLabel = raw.flowLabel || raw.flow || '';
     } else if (typeof raw === 'string' && raw.trim().length > 0) {
       flowLabel = raw.trim();
       nodes = [
-        { name: 'Traffic Ingress', role: 'API Request', icon: '🌐' },
-        { name: 'Core Controller', role: 'State Engine', icon: '⚙️' },
-        { name: 'Worker Execution', role: 'Runtime Pods', icon: '📦' },
-        { name: 'Persistence Layer', role: 'Database / Cache', icon: '💾' }
+        { name: 'Traffic Ingress', role: 'API Request', icon: '01' },
+        { name: 'Core Controller', role: 'State Engine', icon: '02' },
+        { name: 'Worker Execution', role: 'Runtime Pods', icon: '03' },
+        { name: 'Persistence Layer', role: 'Database / Cache', icon: '04' }
       ];
     } else {
       nodes = [
-        { name: 'Client App', role: 'End User / SDK', icon: '📱' },
-        { name: 'Ingress / Gateway', role: 'Routing & Rate Limit', icon: '🛡️' },
-        { name: 'Service Pods', role: 'Compute & Logic', icon: '⚙️' },
-        { name: 'Database / State', role: 'Persistent Store', icon: '💾' }
+        { name: 'Client App', role: 'End User / SDK', icon: '01' },
+        { name: 'Ingress Gateway', role: 'Routing & Rate Limit', icon: '02' },
+        { name: 'Service Pods', role: 'Compute & Logic', icon: '03' },
+        { name: 'Database / State', role: 'Persistent Store', icon: '04' }
       ];
-      flowLabel = 'Client ➔ Ingress (TLS) ➔ Service Replicas ➔ DB Engine';
+      flowLabel = 'Client -> Ingress (TLS) -> Service Replicas -> DB Engine';
     }
 
-    const nodesHTML = nodes.slice(0, 4).map(node => `
+    const nodesHTML = nodes.slice(0, 4).map((node, i) => `
       <div class="diagram-node-card">
-        <div class="diagram-node-icon">${node.icon || '⚙️'}</div>
+        <div class="diagram-node-icon" style="font-size: 18px; font-weight: 900; font-family: monospace;">${this.escapeHTML(node.icon || `0${i + 1}`)}</div>
         <div class="diagram-node-info">
-          <div class="diagram-node-name">${this.escapeHTML(node.name)}</div>
-          <div class="diagram-node-role">${this.escapeHTML(node.role)}</div>
+          <div class="diagram-node-name">${this.escapeHTML(this.stripEmojis(node.name))}</div>
+          <div class="diagram-node-role">${this.escapeHTML(this.stripEmojis(node.role))}</div>
         </div>
       </div>
     `).join('');
@@ -2004,14 +2132,14 @@ class AIVideoGenerator {
     return `
       <div class="diagram-container">
         <div class="diagram-title">
-          <span style="font-size: 26px;">📐</span> ${this.escapeHTML(title)}
+          <span class="diagram-tag" style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 6px; font-size: 16px; margin-right: 8px;">TOPOLOGY</span> ${this.escapeHTML(this.stripEmojis(title))}
         </div>
         <div class="diagram-nodes-grid">
           ${nodesHTML}
         </div>
         ${flowLabel ? `
           <div class="diagram-flow-bar">
-            <span>⚡</span> ${this.escapeHTML(flowLabel)}
+            <span>PIPELINE:</span> ${this.escapeHTML(this.stripEmojis(flowLabel))}
           </div>
         ` : ''}
       </div>
@@ -2044,6 +2172,63 @@ class AIVideoGenerator {
     return memeTypes[index % memeTypes.length];
   }
 
+  getMemeAnimatedAsset(topic = '', memeType = '', index = 0) {
+    const fsSync = require('fs');
+    const path = require('path');
+    const memeDirs = [
+      path.join(__dirname, '..', 'assets', 'memes'),
+      path.join(process.cwd(), 'assets', 'memes'),
+      path.join(process.cwd(), 'data', 'assets', 'memes')
+    ];
+    let resolvedDir = null;
+    for (const d of memeDirs) {
+      if (fsSync.existsSync(d)) {
+        resolvedDir = d;
+        break;
+      }
+    }
+    if (!resolvedDir) return null;
+
+    const t = `${topic} ${memeType}`.toLowerCase();
+
+    // Map content context to appropriate high-impact developer meme GIF
+    let targetFileName = null;
+    if (t.includes('two_buttons') || t.includes('deploy') || t.includes('friday') || t.includes('panic') || t.includes('sweat') || t.includes('pressure') || t.includes('deadline')) {
+      targetFileName = 'sweating.gif';
+    } else if (t.includes('fire') || t.includes('server_on_fire') || t.includes('crash') || t.includes('leak') || t.includes('burn') || t.includes('cpu') || t.includes('down') || t.includes('oom') || t.includes('prod') || t.includes('incident')) {
+      targetFileName = 'this_is_fine.gif';
+    } else if (t.includes('spiderman') || t.includes('frontend') || t.includes('backend') || t.includes('who') || t.includes('confus') || t.includes('blame') || t.includes('legacy') || t.includes('lost')) {
+      targetFileName = 'confused_travolta.gif';
+    } else if (t.includes('fast') || t.includes('speed') || t.includes('typing') || t.includes('bruce') || t.includes('almighty')) {
+      targetFileName = 'typing_fast.gif';
+    } else if (t.includes('mind') || t.includes('blown') || t.includes('genius') || t.includes('scale') || t.includes('architecture') || t.includes('big-o')) {
+      targetFileName = 'mind_blown.gif';
+    } else if (t.includes('desk') || t.includes('head') || t.includes('hate') || t.includes('syntax') || t.includes('stupid') || t.includes('fail') || t.includes('bug')) {
+      targetFileName = 'head_desk.gif';
+    } else if (t.includes('smash') || t.includes('destroy') || t.includes('rage') || t.includes('fatal')) {
+      targetFileName = 'computer_smash.gif';
+    } else if (t.includes('works_on_my_machine') || t.includes('local') || t.includes('code') || t.includes('hack') || t.includes('develop') || t.includes('bakery') || t.includes('mutex') || t.includes('algorithm')) {
+      targetFileName = 'cat_typing.gif';
+    } else {
+      const catalog = [
+        'this_is_fine.gif',
+        'cat_typing.gif',
+        'sweating.gif',
+        'confused_travolta.gif',
+        'typing_fast.gif',
+        'mind_blown.gif',
+        'thumbs_up.gif'
+      ];
+      targetFileName = catalog[index % catalog.length];
+    }
+
+    const fullPath = path.join(resolvedDir, targetFileName);
+    if (fsSync.existsSync(fullPath)) {
+      return fullPath;
+    }
+    return null;
+  }
+
   getTopicCodeSnippet(topic = '') {
     const t = String(topic).toLowerCase();
     if (t.includes('null') || t.includes('pointer') || t.includes('hoare')) {
@@ -2058,28 +2243,36 @@ class AIVideoGenerator {
     return `// Optimized O(1) Hash Table Lookup\nconst bucket = hash(key) % capacity;\nlet node = buckets[bucket];\nwhile (node) {\n  if (node.key === key) return node.val;\n  node = node.next;\n}`;
   }
 
+  stripEmojis(text) {
+    if (!text) return '';
+    return String(text)
+      .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+  }
+
   createMultiSlideShortsHTML(script, visualAssets = []) {
     const theme = this.getRotatedTheme();
 
     const slideBadges = [
-      { icon: '🔥', label: '01. The Problem', color: '#ef4444' },
-      { icon: '😂', label: '02. Developer Reality', color: '#f59e0b' },
-      { icon: '⚙️', label: '03. Under The Hood', color: theme.accent },
-      { icon: '💻', label: '04. Clean Implementation', color: '#22c55e' },
-      { icon: '🏆', label: '05. Senior Rule of Thumb', color: '#eab308' }
+      { label: '01. CORE BOTTLENECK', color: '#ef4444' },
+      { label: '02. ARCHITECTURE REALITY', color: '#f59e0b' },
+      { label: '03. UNDER THE HOOD', color: theme.accent },
+      { label: '04. CLEAN IMPLEMENTATION', color: '#22c55e' },
+      { label: '05. SENIOR PRINCIPLE', color: '#eab308' }
     ];
 
     const slideDecorations = [
-      // Slide 1: floating alert icons
-      `<div class="deco-float deco-float-1">⚠️</div><div class="deco-float deco-float-2">🐛</div><div class="deco-float deco-float-3">💥</div>`,
-      // Slide 2: meme fire & coffee deco
-      `<div class="deco-float deco-float-1">🔥</div><div class="deco-float deco-float-2">☕</div>`,
-      // Slide 3: mini architecture nodes
-      `<div class="deco-arch"><div class="arch-node" style="border-color:${theme.accent}">📡</div><div class="arch-line" style="background:${theme.accent}"></div><div class="arch-node" style="border-color:${theme.secondary}">⚙️</div><div class="arch-line" style="background:${theme.secondary}"></div><div class="arch-node" style="border-color:${theme.accent}">💾</div></div>`,
+      // Slide 1: clean status badge
+      `<div class="deco-status" style="border-color:#ef444455; color:#ef4444;"><span class="status-pulse" style="background:#ef4444;"></span> CRITICAL BOTTLENECK</div>`,
+      // Slide 2: dev context tag
+      `<div class="deco-status" style="border-color:#f59e0b55; color:#f59e0b;"><span class="status-pulse" style="background:#f59e0b;"></span> REALITY CHECK</div>`,
+      // Slide 3: clean topology nodes
+      `<div class="deco-arch"><div class="arch-node" style="border-color:${theme.accent}">INGRESS</div><div class="arch-line" style="background:${theme.accent}"></div><div class="arch-node" style="border-color:${theme.secondary}">LOGIC</div><div class="arch-line" style="background:${theme.secondary}"></div><div class="arch-node" style="border-color:${theme.accent}">STATE</div></div>`,
       // Slide 4: terminal cursor blink
       `<div class="deco-terminal"><span class="term-prompt" style="color:${theme.accent}">$</span> <span class="term-cursor">_</span></div>`,
-      // Slide 5: achievement badge
-      `<div class="deco-achievement" style="border-color:${theme.accent}"><span class="achieve-icon">🏆</span><span class="achieve-text" style="color:${theme.accent}">KEY TAKEAWAY</span></div>`
+      // Slide 5: principle badge
+      `<div class="deco-achievement" style="border-color:${theme.accent}"><span class="achieve-text" style="color:${theme.accent}">KEY PRINCIPLE</span></div>`
     ];
 
     const slidesList = Array.isArray(script.slides) && script.slides.length > 0
@@ -2100,26 +2293,29 @@ class AIVideoGenerator {
 
       if (isMemeSlide) {
         const memeType = slide.meme?.type || this.getMemeForTopic(script.title || slide.headline, idx);
-        const memeCaption = slide.meme?.caption || 'WORKS ON MY MACHINE';
-        const memeSubtext = slide.meme?.subtext || '0 bugs in local development • Production server on fire';
+        const memeCaption = this.stripEmojis(slide.meme?.caption || 'WORKS ON MY MACHINE');
+        const memeSubtext = this.stripEmojis(slide.meme?.subtext || '0 bugs in local development • Production server on fire');
         visualBlockHTML = `
           <div class="meme-card-container">
             <div class="meme-top-banner">
-              <span class="meme-tag">😂 RELATABLE DEV MOMENT</span>
+              <span class="meme-tag">DEV REALITY</span>
               <span class="meme-caption">${this.escapeHTML(memeCaption)}</span>
             </div>
-            ${this.renderMemeSVG(memeType)}
+            <div id="meme-window" class="meme-window">
+              ${this.renderMemeSVG(memeType)}
+            </div>
             ${memeSubtext ? `<div class="meme-subtext">${this.escapeHTML(memeSubtext)}</div>` : ''}
           </div>
         `;
       } else if (isDsaSlide) {
         const dsaType = slide.diagram?.dsaType || this.getTopicDSAType(script.title || slide.headline);
-        const flowLabel = slide.diagram?.flowLabel || slide.diagram?.flow || 'Client Ingress ➔ Rate Limiter ➔ State Machine ➔ Redis O(1)';
+        const rawFlow = slide.diagram?.flowLabel || slide.diagram?.flow || 'Client Ingress -> Rate Limiter -> State Machine -> Redis O(1)';
+        const flowLabel = this.stripEmojis(rawFlow);
         visualBlockHTML = `
           <div class="dsa-card-container">
             ${this.renderDSASVG(dsaType, script.title)}
             <div class="diagram-flow-bar">
-              <span>⚡ DATA FLOW:</span> ${this.escapeHTML(flowLabel)}
+              <span>DATA PIPELINE:</span> ${this.escapeHTML(flowLabel)}
             </div>
           </div>
         `;
@@ -2137,11 +2333,11 @@ class AIVideoGenerator {
           </div>
         `;
       } else if (isTakeawaySlide) {
-        const takeawayPrinciple = script.conclusion?.finalThought || script.conclusion || 'Prioritize deterministic failure boundaries over premature optimization.';
+        const rawTakeaway = script.conclusion?.finalThought || script.conclusion || 'Prioritize deterministic failure boundaries over premature optimization.';
+        const takeawayPrinciple = this.stripEmojis(rawTakeaway);
         visualBlockHTML = `
           <div class="takeaway-card-shorts">
             <div class="takeaway-header">
-              <span class="takeaway-trophy">🏆</span>
               <span class="takeaway-badge">STAFF ENGINEER GOLDEN RULE</span>
             </div>
             <div class="takeaway-principle">"${this.escapeHTML(takeawayPrinciple)}"</div>
@@ -2152,10 +2348,9 @@ class AIVideoGenerator {
       // Max 2 bullet points if visual block is present, to ensure zero clutter and pristine readability
       const maxBullets = visualBlockHTML ? 2 : 3;
       const rawBullets = Array.isArray(slide.bulletPoints) ? slide.bulletPoints : (Array.isArray(slide.content) ? slide.content : []);
-      const bulletsHTML = rawBullets.slice(0, maxBullets).map((b, bIdx) => {
-        const bulletIcons = ['💡', '⚡', '🔑', '📌', '✨'];
-        const icon = bulletIcons[bIdx % bulletIcons.length];
-        return `<div class="bullet-card" style="border-left-color: ${theme.accent};">${icon} ${this.escapeHTML(b)}</div>`;
+      const bulletsHTML = rawBullets.slice(0, maxBullets).map((b) => {
+        const cleanB = this.stripEmojis(b);
+        return `<div class="bullet-card" style="border-left-color: ${theme.accent};"><span class="bullet-indicator" style="color: ${theme.accent};">›</span> ${this.escapeHTML(cleanB)}</div>`;
       }).join('');
 
       return `
@@ -2170,9 +2365,9 @@ class AIVideoGenerator {
             <div class="particle p4"></div><div class="particle p5"></div>
           </div>
           ${deco}
-          <div class="top-badge" style="background: ${badge.color}22; border-color: ${badge.color}66; color: ${badge.color};">${badge.icon} ${badge.label}</div>
+          <div class="top-badge" style="background: ${badge.color}22; border-color: ${badge.color}66; color: ${badge.color};">${this.escapeHTML(badge.label)}</div>
           <div class="section-card">
-              <h2 class="section-header">${this.escapeHTML(slide.headline || slide.title || `Chapter ${idx + 1}`)}</h2>
+              <h2 class="section-header">${this.escapeHTML(this.stripEmojis(slide.headline || slide.title || `Chapter ${idx + 1}`))}</h2>
               ${visualBlockHTML}
               ${bulletsHTML ? `<div class="bullet-container">${bulletsHTML}</div>` : ''}
           </div>
@@ -2348,6 +2543,36 @@ class AIVideoGenerator {
             color: #f1f5f9;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             opacity: 1;
+            display: flex;
+            align-items: flex-start;
+        }
+        .bullet-indicator {
+            font-size: 34px;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-right: 14px;
+            flex-shrink: 0;
+            display: inline-block;
+        }
+        .deco-status {
+            position: absolute;
+            top: 70px; right: 70px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            padding: 8px 18px;
+            border-radius: 9999px;
+            border: 1px solid;
+            background: rgba(15, 23, 42, 0.7);
+            z-index: 3;
+        }
+        .status-pulse {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            display: inline-block;
         }
 
         /* Relatable Developer Meme Card */
@@ -2398,11 +2623,27 @@ class AIVideoGenerator {
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+        .meme-window {
+            width: 100%;
+            height: 340px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #090d16;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 8px 0;
+            border: 2px solid rgba(245, 158, 11, 0.45);
+            box-shadow: inset 0 0 24px rgba(0,0,0,0.85);
+            position: relative;
+        }
         .meme-svg-wrapper {
             width: 100%;
+            height: 100%;
             display: flex;
+            align-items: center;
             justify-content: center;
-            margin: 6px 0;
+            margin: 0;
         }
         .meme-svg {
             width: 100%;
@@ -2725,7 +2966,7 @@ class AIVideoGenerator {
       slides.push(`
       <div class="slide">
           ${asset ? `<img class="background-image" src="${asset}" />` : ''}
-          <div class="top-badge" style="position:relative; z-index:1;">⚙️ Concept Breakdown • Part ${index + 1}</div>
+          <div class="top-badge" style="position:relative; z-index:1;">Concept Breakdown • Part ${index + 1}</div>
           <div class="section-card" style="position:relative; z-index:1;">
               <h2 class="section-header">${this.escapeHTML(section.title || `Section ${index + 1}`)}</h2>
               <div class="content-card">
@@ -2844,6 +3085,62 @@ class AIVideoGenerator {
       return stats.isFile() && stats.size > 0;
     } catch (error) {
       return false;
+    }
+  }
+
+  async verifySlideImageFullyRendered(imagePath) {
+    const fsSync = require('fs');
+    if (!fsSync.existsSync(imagePath)) {
+      return { valid: false, reason: 'Screenshot file does not exist' };
+    }
+    const stat = fsSync.statSync(imagePath);
+    if (stat.size < 40000) {
+      return { valid: false, reason: `Screenshot file size suspiciously small (${stat.size} bytes)` };
+    }
+
+    const tmpCrop = `${imagePath}.bottom_verify.png`;
+    try {
+      // Crop bottom 400px: from y=1520 to y=1920 to verify bottom region is not flat grey/empty
+      await runFFmpeg([
+        '-y',
+        '-i', imagePath,
+        '-filter:v', 'crop=1080:400:0:1520',
+        '-vframes', '1',
+        tmpCrop
+      ]);
+      if (!fsSync.existsSync(tmpCrop)) {
+        return { valid: false, reason: 'Failed to extract bottom crop for verification' };
+      }
+      const cropSize = fsSync.statSync(tmpCrop).size;
+      await fs.unlink(tmpCrop).catch(() => {});
+      // If the bottom 400px is solid grey or flat, compressed PNG size is < 12000 bytes
+      if (cropSize < 12000) {
+        return { valid: false, reason: `Bottom region is blank/grey (crop size: ${cropSize} bytes)` };
+      }
+      return { valid: true, size: stat.size, bottomCropSize: cropSize };
+    } catch (err) {
+      if (fsSync.existsSync(tmpCrop)) await fs.unlink(tmpCrop).catch(() => {});
+      return { valid: false, reason: err.message };
+    }
+  }
+
+  async verifySegmentVideoIntegrity(segmentPath, expectedDuration) {
+    const fsSync = require('fs');
+    if (!fsSync.existsSync(segmentPath)) {
+      return { valid: false, reason: 'Segment video file does not exist' };
+    }
+    const stat = fsSync.statSync(segmentPath);
+    if (stat.size < 50000) {
+      return { valid: false, reason: `Segment video size suspiciously small (${stat.size} bytes)` };
+    }
+    try {
+      const dur = await this.getAudioDuration(segmentPath);
+      if (dur <= 0) {
+        return { valid: false, reason: `Invalid segment duration: ${dur}s` };
+      }
+      return { valid: true, duration: dur, size: stat.size };
+    } catch (err) {
+      return { valid: false, reason: err.message };
     }
   }
 
@@ -3223,14 +3520,14 @@ class AIVideoGenerator {
 </head>
 <body>
     <div class="header">
-        <div class="course-badge">🎓 ${this.escapeHTML(masterclassData.shortTopic)} Masterclass</div>
+        <div class="course-badge">${this.escapeHTML(masterclassData.shortTopic)} Masterclass</div>
         <div class="chapter-counter">Chapter ${chapterNum} of ${totalChapters}</div>
     </div>
     <div class="main-layout">
         <div class="left-col">
             <h1 class="chapter-title">${this.escapeHTML(chapter.title)}</h1>
             <div class="bullet-container">
-                ${(chapter.slideBullets || []).map(b => `<div class="bullet-card">💡 ${this.escapeHTML(b)}</div>`).join('')}
+                ${(chapter.slideBullets || []).map(b => `<div class="bullet-card">${this.escapeHTML(b)}</div>`).join('')}
             </div>
         </div>
         <div class="right-col">

@@ -161,7 +161,7 @@ class ScriptWriterAgent {
     }
 
     const evoBlock = strategy.qualityDirectives ? `
-⚡ MANDATORY CONTINUOUS QUALITY EVOLUTION DIRECTIVES (Iteration #${strategy.qualityIteration || 1}):
+MANDATORY CONTINUOUS QUALITY EVOLUTION DIRECTIVES (Iteration #${strategy.qualityIteration || 1}):
 Our channel rule: THIS video MUST surpass our previous upload (previous quality benchmark: ${strategy.previousQualityScore || 8.0}/10).
 - Hook Rule: ${strategy.qualityDirectives.hookRule || 'Start immediately with the high-stakes problem in under 1.5 seconds.'}
 - Audio-Text Synchronization: ${strategy.qualityDirectives.audioTextSyncRule || 'Ensure spoken words sync directly with screen text.'}
@@ -177,6 +177,7 @@ CRITICAL CONSTRAINTS FOR 3-MINUTE YOUTUBE SHORTS (2:45 to 3:00 MINUTES):
 - Video duration MUST be strictly between 2:45 and 3:00 minutes (165 to 178 seconds).
 - Total narration across all 5 slides MUST be 360 to 385 words (~70-80 words per slide at ~130-135 wpm speech pacing).
 - Zero fluff, zero generic boilerplate, zero throat-clearing greetings.
+- STRICT EMOJI BAN: Do NOT include any emojis anywhere in headlines, captions, subtexts, or bullet points. Use clean, professional engineering typography only.
 
 THE 5 PROGRESSIVE SLIDES (Total: 360-385 words):
 1. Slide 1 (type: "history_lore"): Programming History / Lore & High-Stakes Hook (~70-75 words)
@@ -240,12 +241,12 @@ Return ONLY valid JSON matching this exact structure:
         "title": "Data Flow & Memory Mechanics",
         "dsaType": "hash_table",
         "nodes": [
-          {"name": "Hash Function", "role": "Key ➔ Hash Code", "icon": "⚡"},
-          {"name": "Bucket Array", "role": "Index Modulo", "icon": "📦"},
-          {"name": "Collision Chain", "role": "Linked List / Tree", "icon": "🔗"},
-          {"name": "Memory Buffer", "role": "Heap Allocation", "icon": "💾"}
+          {"name": "Hash Function", "role": "Key -> Hash Code", "icon": "01"},
+          {"name": "Bucket Array", "role": "Index Modulo", "icon": "02"},
+          {"name": "Collision Chain", "role": "Linked List / Tree", "icon": "03"},
+          {"name": "Memory Buffer", "role": "Heap Allocation", "icon": "04"}
         ],
-        "flowLabel": "Key ➔ Hash Function ➔ Bucket Index ➔ Collision Chain"
+        "flowLabel": "Key -> Hash Function -> Bucket Index -> Collision Chain"
       },
       "codeSnippet": "",
       "teacherNarration": "ByteByteGo-style clear explanation of the mechanics and Big-O reality (80-85 words)."
@@ -541,7 +542,7 @@ Return ONLY valid JSON matching this exact structure:
       diagram: (idx === 2) ? (slide.diagram && slide.diagram.dsaType ? slide.diagram : {
         title: 'System Mechanics & Data Flow',
         dsaType,
-        flowLabel: 'Input ➔ State Machine ➔ Execution Engine'
+        flowLabel: 'Input -> State Machine -> Execution Engine'
       }) : null,
       codeSnippet: (idx === 3) ? String(slide.codeSnippet && slide.codeSnippet.length > 20 ? slide.codeSnippet : codeSnippet).trim() : '',
       question: slide.question ? String(slide.question).trim() : null,
@@ -1101,7 +1102,7 @@ Return ONLY valid JSON matching this exact structure:
           section.steps.forEach(step => {
             fullScript += `\n${step.title}\n`;
             fullScript += `${step.description}\n`;
-            fullScript += `💡 ${step.tip}\n`;
+            fullScript += `Tip: ${step.tip}\n`;
           });
         } else if (section.items) {
           section.items.forEach(item => {
