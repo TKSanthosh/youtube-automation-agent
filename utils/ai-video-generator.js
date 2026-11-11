@@ -1019,7 +1019,6 @@ class AIVideoGenerator {
 
       const slideSegments = [];
       const slideAudios = [];
-      const fsSync = require('fs');
 
       // Lock ONE consistent humanized voice persona for the ENTIRE video to prevent voice jumping across slides
       const videoVoiceOptions = this.getRotatedVoice(options);
@@ -1070,76 +1069,30 @@ class AIVideoGenerator {
         }
         slideAudios.push(slideAudioPath);
 
-        this.logger.info(`Rendering dynamic motion video for Slide ${i + 1}/${slideCount}: duration=${slideDuration}s`);
+        this.logger.info(`Rendering cinematic slide video for Slide ${i + 1}/${slideCount}: duration=${slideDuration}s`);
 
-        // Record live 3.5s fluid video of this slide with all CSS keyframes, SVG packets, and terminal typing active
-        let recVideoPath = null;
-        try {
-          const slideVideoDir = path.join(slidesDir, `rec_${i}`);
-          await fs.mkdir(slideVideoDir, { recursive: true });
-          const slideContext = await browser.newContext({
-            recordVideo: {
-              dir: slideVideoDir,
-              size: { width: 1080, height: 1920 }
-            }
+        // Render high-definition 1080x1920 slide screenshot with Ken Burns cinematic camera zoompan
+        const stillPath = path.join(slidesDir, `slide_${String(i).padStart(3, '0')}.png`);
+        await page.evaluate((index) => {
+          document.querySelectorAll('.slide').forEach((slide, s) => {
+            slide.classList.toggle('active', s === index);
           });
-          const slidePage = await slideContext.newPage();
-          await slidePage.setContent(this.createSlideshowHTML(script, imageAssets));
-          await slidePage.evaluate((index) => {
-            document.querySelectorAll('.slide').forEach((slide, s) => {
-              slide.classList.toggle('active', s === index);
-            });
-          }, i);
-          // Let live CSS/SVG packet animations, flame flickers, and terminal typing play
-          await slidePage.waitForTimeout(3500);
-          await slidePage.close();
-          await slideContext.close();
-
-          recVideoPath = await slidePage.video()?.path();
-        } catch (recErr) {
-          this.logger.warn(`Live video recording note for slide ${i + 1}: ${recErr.message}`);
-        }
-
-        if (recVideoPath && fsSync.existsSync(recVideoPath) && fsSync.statSync(recVideoPath).size > 1000) {
-          // Seamlessly loop the 3.5s dynamic motion video to match the audio narration duration
-          await runFFmpeg([
-            '-y',
-            '-stream_loop', '-1',
-            '-i', recVideoPath,
-            '-i', slideAudioPath,
-            '-c:v', 'libx264',
-            '-preset', 'veryfast',
-            '-pix_fmt', 'yuv420p',
-            '-vf', 'scale=1080:1920,fps=30',
-            '-c:a', 'aac',
-            '-b:a', '192k',
-            '-t', String(slideDuration),
-            segmentVideoPath
-          ]);
-        } else {
-          // Fallback: Ken Burns cinematic camera zoompan on high-def screenshot
-          const stillPath = path.join(slidesDir, `slide_${String(i).padStart(3, '0')}.png`);
-          await page.evaluate((index) => {
-            document.querySelectorAll('.slide').forEach((slide, s) => {
-              slide.classList.toggle('active', s === index);
-            });
-          }, i);
-          await page.screenshot({ path: stillPath });
-          const totalFrames = Math.max(90, Math.ceil(slideDuration * 30));
-          await runFFmpeg([
-            '-y',
-            '-loop', '1',
-            '-i', stillPath,
-            '-i', slideAudioPath,
-            '-vf', `zoompan=z='min(zoom+0.0008,1.10)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${totalFrames}:s=1080x1920:fps=30,format=yuv420p`,
-            '-c:v', 'libx264',
-            '-preset', 'veryfast',
-            '-c:a', 'aac',
-            '-b:a', '192k',
-            '-t', String(slideDuration),
-            segmentVideoPath
-          ]);
-        }
+        }, i);
+        await page.screenshot({ path: stillPath });
+        const totalFrames = Math.max(90, Math.ceil(slideDuration * 30));
+        await runFFmpeg([
+          '-y',
+          '-loop', '1',
+          '-i', stillPath,
+          '-i', slideAudioPath,
+          '-vf', `zoompan=z='min(zoom+0.0006,1.08)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${totalFrames}:s=1080x1920:fps=30,format=yuv420p`,
+          '-c:v', 'libx264',
+          '-preset', 'veryfast',
+          '-c:a', 'aac',
+          '-b:a', '192k',
+          '-t', String(slideDuration),
+          segmentVideoPath
+        ]);
 
         slideSegments.push(segmentVideoPath);
       }
@@ -2041,16 +1994,30 @@ class AIVideoGenerator {
     const theme = this.getRotatedTheme();
 
     const slideBadges = [
-      { icon: '🏛️', label: '01. History & Lore', color: '#f59e0b' },
-      { icon: '😂', label: '02. Relatable Dev Meme', color: '#ec4899' },
-      { icon: '🧠', label: '03. Under The Hood (DSA)', color: '#3b82f6' },
-      { icon: '💻', label: '04. Live Code Walkthrough', color: '#10b981' },
-      { icon: '🏆', label: '05. Staff Engineer Rule', color: '#eab308' }
+      { icon: '🔥', label: '01. The Problem', color: '#ef4444' },
+      { icon: '⚙️', label: '02. The Architecture', color: theme.accent },
+      { icon: '💻', label: '03. Live Code', color: '#22c55e' },
+      { icon: '💡', label: '04. Senior Rule of Thumb', color: '#eab308' },
+      { icon: '🚀', label: '05. Deep Dive', color: theme.secondary }
+    ];
+
+    const slideDecorations = [
+      // Slide 1: floating alert icons
+      `<div class="deco-float deco-float-1">⚠️</div><div class="deco-float deco-float-2">🐛</div><div class="deco-float deco-float-3">💥</div>`,
+      // Slide 2: mini architecture nodes
+      `<div class="deco-arch"><div class="arch-node" style="border-color:${theme.accent}">📡</div><div class="arch-line" style="background:${theme.accent}"></div><div class="arch-node" style="border-color:${theme.secondary}">⚙️</div><div class="arch-line" style="background:${theme.secondary}"></div><div class="arch-node" style="border-color:${theme.accent}">💾</div></div>`,
+      // Slide 3: terminal cursor blink
+      `<div class="deco-terminal"><span class="term-prompt" style="color:${theme.accent}">$</span> <span class="term-cursor">_</span></div>`,
+      // Slide 4: achievement badge
+      `<div class="deco-achievement" style="border-color:${theme.accent}"><span class="achieve-icon">🏆</span><span class="achieve-text" style="color:${theme.accent}">KEY TAKEAWAY</span></div>`,
+      // Slide 5 fallback
+      `<div class="deco-float deco-float-1">🚀</div>`
     ];
 
     const slidesHTML = script.slides.map((slide, idx) => {
       const asset = (visualAssets && visualAssets.length > 0) ? visualAssets[idx % visualAssets.length] : null;
       const badge = slideBadges[idx] || slideBadges[0];
+      const deco = slideDecorations[idx] || '';
 
       const bulletsHTML = (slide.bulletPoints || []).map((b, bIdx) => {
         const bulletIcons = ['💡', '⚡', '🔑', '📌', '✨'];
@@ -2058,68 +2025,18 @@ class AIVideoGenerator {
         return `<div class="bullet-card" style="border-left-color: ${theme.accent}; animation-delay: ${bIdx * 0.15}s">${icon} ${this.escapeHTML(b)}</div>`;
       }).join('');
 
-      let cardContentHTML = '';
+      const diagramHTML = (idx === 1 || slide.diagram) ? this.renderDiagramHTML(slide, script.title) : '';
 
-      if (idx === 0) {
-        // Slide 0: History & Programming Lore (Retro CRT Terminal)
-        const milestone = slide.historicMilestone || 'BELL LABS ARCHIVES • 1972';
-        cardContentHTML = `
-          <div class="retro-milestone"><span class="milestone-icon">🏛️</span> ${this.escapeHTML(milestone)}</div>
-          <div class="retro-terminal-box">
-            <div class="terminal-bar">
-              <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
-              <span class="term-title">vintage-terminal-vax11</span>
-            </div>
-            <div class="terminal-body">
-              <div class="term-line"><span class="term-p">root@bell-labs:~$</span> <span class="term-c">cat origin_lore.md</span></div>
-              ${bulletsHTML}
-            </div>
-          </div>
-        `;
-      } else if (idx === 1) {
-        // Slide 1: Relatable Developer Comedy Meme (Fireship style)
-        const memeType = slide.meme?.type || 'server_on_fire';
-        const memeCaption = slide.meme?.caption || 'WHEN YOUR NAIVE CODE MEETS PRODUCTION TRAFFIC';
-        const memeSubtext = slide.meme?.subtext || 'Tested once on localhost:3000';
-        cardContentHTML = `
-          <div class="meme-banner">${this.escapeHTML(memeCaption)}</div>
-          ${this.renderMemeSVG(memeType)}
-          <div class="meme-subtext">💬 ${this.escapeHTML(memeSubtext)}</div>
-          <div class="bullet-container">${bulletsHTML}</div>
-        `;
-      } else if (idx === 2) {
-        // Slide 2: Under-The-Hood Architecture & DSA Diagram (ByteByteGo style)
-        const dsaSVG = this.renderDSASVG(slide.diagram?.dsaType, script.title);
-        const flowLabel = slide.diagram?.flowLabel || 'Key ➔ Algorithm ➔ State Output';
-        cardContentHTML = `
-          ${dsaSVG}
-          <div class="diagram-flow-bar"><span>⚡</span> ${this.escapeHTML(flowLabel)}</div>
-          <div class="bullet-container" style="margin-top: 15px;">${bulletsHTML}</div>
-        `;
-      } else if (idx === 3) {
-        // Slide 3: Clean Code Walkthrough (JavaScript Mastery style)
-        const code = slide.codeSnippet || `// ${script.title}\nfunction optimize(input) {\n  const bucket = hash(input) & 0x0F;\n  return bucket.resolve();\n}`;
-        cardContentHTML = `
-          <div class="code-container">
+      const codeHTML = slide.codeSnippet ? `
+        <div class="code-container">
             <div class="code-header">
-              <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
-              <span class="file-title">production_solution.ts</span>
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+                <span class="file-title">terminal / code</span>
             </div>
-            <div class="code-block">${this.renderCodeSyntaxHTML(code)}</div>
-          </div>
-          <div class="bullet-container" style="margin-top: 15px;">${bulletsHTML}</div>
-        `;
-      } else {
-        // Slide 4: Senior Staff Engineer Takeaway & Loop Anchor
-        cardContentHTML = `
-          <div class="takeaway-trophy">
-            <span class="trophy-icon">🏆</span>
-            <span class="trophy-text">STAFF ENGINEER GOLDEN RULE</span>
-          </div>
-          <div class="bullet-container">${bulletsHTML}</div>
-          <div class="retention-loop-footer"><span>🔁</span> Save this for your next system design interview or code review</div>
-        `;
-      }
+            <pre class="code-block"><code>${this.escapeHTML(slide.codeSnippet)}</code></pre>
+        </div>` : '';
 
       return `
       <div class="slide ${idx === 0 ? 'active' : ''}">
@@ -2132,17 +2049,13 @@ class AIVideoGenerator {
             <div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div>
             <div class="particle p4"></div><div class="particle p5"></div>
           </div>
-          <div class="top-header-zone">
-            <div class="top-badge" style="background: ${badge.color}22; border-color: ${badge.color}66; color: ${badge.color};">${badge.icon} ${badge.label}</div>
-            <h2 class="section-header">${this.escapeHTML(slide.headline)}</h2>
-          </div>
+          ${deco}
+          <div class="top-badge" style="background: ${badge.color}22; border-color: ${badge.color}66; color: ${badge.color};">${badge.icon} ${badge.label}</div>
           <div class="section-card">
-              ${cardContentHTML}
-          </div>
-          <div class="shorts-footer-bar">
-            <span class="footer-icon">⚡</span>
-            <span class="footer-text">COMPUTER SCIENCE DEEP DIVE</span>
-            <span class="footer-tag">#SHORTS</span>
+              <h2 class="section-header">${this.escapeHTML(slide.headline)}</h2>
+              ${bulletsHTML ? `<div class="bullet-container">${bulletsHTML}</div>` : ''}
+              ${diagramHTML}
+              ${codeHTML}
           </div>
           <div class="slide-number" style="color: ${theme.accent}40">${String(idx + 1).padStart(2, '0')}</div>
       </div>`;
@@ -2232,45 +2145,36 @@ class AIVideoGenerator {
 
         .slide {
             position: absolute;
-            top: 0; left: 0;
             width: 1080px;
             height: 1920px;
-            padding: 70px 50px 75px;
+            padding: 100px 70px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            align-items: stretch;
+            justify-content: center;
+            align-items: center;
             opacity: 0;
-            transition: opacity 0.4s ease-in-out;
-            box-sizing: border-box;
+            transition: opacity 1s ease-in-out;
         }
         .slide.active { opacity: 1; }
 
         .background-image {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
-            object-fit: cover; opacity: 0.12;
+            object-fit: cover; opacity: 0.10;
             z-index: 0; pointer-events: none;
             filter: saturate(1.3);
         }
 
+        /* Large faded slide number watermark */
         .slide-number {
           position: absolute;
-          bottom: 30px; right: 40px;
-          font-size: 140px;
+          bottom: 60px; right: 60px;
+          font-size: 200px;
           font-weight: 900;
-          opacity: 0.06;
+          opacity: 0.08;
           pointer-events: none;
           z-index: 0;
           font-family: monospace;
-        }
-
-        .top-header-zone {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            z-index: 3;
-            margin-bottom: 8px;
         }
 
         .top-badge {
@@ -2278,128 +2182,90 @@ class AIVideoGenerator {
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            font-size: 24px;
-            font-weight: 800;
+            font-size: 26px;
+            font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
-            padding: 10px 24px;
+            padding: 14px 28px;
             border-radius: 9999px;
             border: 1px solid;
-            margin-bottom: 12px;
+            margin-bottom: 40px;
             animation: pulse-glow 3s ease-in-out infinite;
         }
         .section-card {
             position: relative; z-index: 3;
             width: 100%;
-            flex: 1;
+            max-width: 960px;
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
-            align-items: stretch;
-            min-height: 1250px;
-            margin: 6px 0;
+            align-items: flex-start;
         }
         h2.section-header {
-            font-size: 46px;
+            font-size: 52px;
             font-weight: 800;
-            margin-bottom: 8px;
+            margin-bottom: 35px;
             line-height: 1.25;
             background: ${theme.headerGradient};
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .shorts-footer-bar {
-            position: relative; z-index: 3;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 18px 28px;
-            background: rgba(15, 23, 42, 0.90);
-            border: 1px solid rgba(${theme.accentRGB}, 0.35);
-            border-radius: 9999px;
-            color: #94a3b8;
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-            margin-top: 10px;
-        }
-        .footer-tag { color: ${theme.accent}; }
         .bullet-container {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 20px;
             width: 100%;
-            margin-top: 12px;
+            margin-bottom: 25px;
         }
         .bullet-card {
             background: ${theme.cardBg};
             border-left: 6px solid ${theme.accent};
-            border-radius: 14px;
-            padding: 22px 28px;
-            font-size: 28px;
-            line-height: 1.45;
+            border-radius: 16px;
+            padding: 28px 34px;
+            font-size: 32px;
+            line-height: 1.5;
             color: #e2e8f0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: slide-in-up 0.5s ease-out both;
+            animation: slide-in-up 0.6s ease-out both;
         }
 
-        /* Meme styling */
-        .meme-banner {
+        /* Diagram styling */
+        .diagram-container {
             width: 100%;
-            font-size: 30px;
-            font-weight: 900;
+            background: ${theme.cardBg};
+            border: 2px solid ${theme.accent};
+            border-radius: 20px;
+            padding: 26px 22px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 35px rgba(${theme.accentRGB}, 0.2);
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+        .diagram-title {
+            font-size: 24px; font-weight: 700;
+            color: ${theme.accent};
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            padding: 16px 24px;
-            background: #facc15;
-            color: #0f172a;
+            margin-bottom: 16px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .diagram-nodes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        .diagram-node-card {
+            background: rgba(${theme.accentRGB}, 0.08);
+            border: 1px solid ${theme.cardBorder};
             border-radius: 14px;
-            text-align: center;
-            margin-bottom: 16px;
-            box-shadow: 0 8px 25px rgba(250, 204, 21, 0.35);
+            padding: 16px 18px;
+            display: flex; align-items: center; gap: 14px;
         }
-        .meme-svg-wrapper {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-bottom: 16px;
-        }
-        .meme-svg {
-            width: 100%;
-            max-width: 960px;
-            height: auto;
-            border-radius: 16px;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.6);
-        }
-        .meme-subtext {
-            font-size: 22px;
-            font-weight: 700;
-            color: #cbd5e1;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 9999px;
-            padding: 8px 22px;
-            margin-bottom: 16px;
-            align-self: center;
-        }
-
-        /* DSA SVG diagram styling */
-        .dsa-svg-wrapper {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-bottom: 16px;
-        }
-        .dsa-svg {
-            width: 100%;
-            max-width: 960px;
-            height: auto;
-            border-radius: 16px;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.6);
-        }
+        .diagram-node-icon { font-size: 32px; line-height: 1; }
+        .diagram-node-info { display: flex; flex-direction: column; }
+        .diagram-node-name { font-size: 22px; font-weight: 700; color: #ffffff; }
+        .diagram-node-role { font-size: 16px; color: #94a3b8; margin-top: 3px; }
         .diagram-flow-bar {
-            width: 100%;
             background: rgba(${theme.accentRGB}, 0.12);
             border: 1px dashed ${theme.accent};
             border-radius: 12px;
@@ -2409,142 +2275,111 @@ class AIVideoGenerator {
             font-family: 'Consolas', monospace;
             font-weight: 600;
             text-align: center;
-            margin-bottom: 14px;
         }
 
-        /* Retro Terminal styling */
-        .retro-milestone {
-            font-size: 22px;
-            font-weight: 800;
-            color: #f59e0b;
-            background: rgba(245, 158, 11, 0.15);
-            border: 1px solid rgba(245, 158, 11, 0.4);
-            border-radius: 8px;
-            padding: 8px 18px;
-            margin-bottom: 16px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .retro-terminal-box {
-            width: 100%;
-            background: #090d16;
-            border: 2px solid #334155;
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 18px;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.7);
-        }
-        .terminal-bar {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 18px;
-            background: #161f30;
-            border-bottom: 1px solid #334155;
-        }
-        .term-title {
-            color: #94a3b8;
-            font-family: 'Consolas', monospace;
-            font-size: 18px;
-            margin-left: 10px;
-        }
-        .terminal-body {
-            padding: 20px 24px;
-            font-family: 'Consolas', monospace;
-        }
-        .term-line {
-            font-size: 24px;
-            margin-bottom: 16px;
-        }
-        .term-p { color: #22c55e; font-weight: 700; }
-        .term-c { color: #f1f5f9; }
-
-        /* Code block & syntax highlighter */
+        /* Code block */
         .code-container {
             width: 100%;
             background: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 18px;
+            border: 1px solid ${theme.cardBorder};
+            border-radius: 20px;
             overflow: hidden;
-            margin-bottom: 16px;
+            margin-top: 15px;
             box-shadow: 0 12px 35px rgba(0,0,0,0.7);
         }
         .code-header {
             display: flex; align-items: center; gap: 10px;
             background: #161b22;
-            padding: 14px 20px;
+            padding: 18px 24px;
             border-bottom: 1px solid #30363d;
         }
-        .dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+        .dot { width: 16px; height: 16px; border-radius: 50%; display: inline-block; }
         .dot.red { background: #ff5f56; }
         .dot.yellow { background: #ffbd2e; }
         .dot.green { background: #27c93f; }
         .file-title {
             color: #8b949e;
-            font-family: 'Consolas', monospace;
-            font-size: 20px;
-            margin-left: 10px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 24px;
+            margin-left: 12px;
         }
         .code-block {
-            padding: 22px 28px;
+            padding: 28px 32px;
             font-family: 'Consolas', 'Courier New', monospace;
-            background: #0d1117;
+            font-size: 26px;
+            line-height: 1.55;
+            color: ${theme.codeColor};
+            white-space: pre-wrap;
+            word-break: break-all;
         }
-        .code-line {
-            display: flex;
-            align-items: baseline;
-            font-size: 24px;
-            line-height: 1.6;
-        }
-        .line-num {
-            width: 45px;
-            color: #475569;
-            user-select: none;
-            font-size: 20px;
-        }
-        .line-code { color: #f8f8f2; }
-        .syn-kw { color: #ff79c6; font-weight: 700; }
-        .syn-type { color: #8be9fd; font-weight: 600; }
-        .syn-str { color: #f1fa8c; }
-        .syn-num { color: #bd93f9; }
-        .syn-comment { color: #6272a4; font-style: italic; }
 
-        /* Senior Staff Engineer Trophy */
-        .takeaway-trophy {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            background: linear-gradient(90deg, rgba(234, 179, 8, 0.2), rgba(234, 179, 8, 0.05));
-            border: 2px solid #eab308;
-            border-radius: 16px;
-            padding: 16px 24px;
-            margin-bottom: 22px;
-            box-shadow: 0 10px 30px rgba(234, 179, 8, 0.2);
+        /* Decorative elements */
+        .deco-float {
+          position: absolute;
+          font-size: 48px;
+          z-index: 1;
+          pointer-events: none;
+          animation: float-drift 4s ease-in-out infinite;
         }
-        .trophy-icon { font-size: 38px; }
-        .trophy-text { font-size: 26px; font-weight: 900; color: #fbbf24; letter-spacing: 1.5px; }
+        .deco-float-1 { top: 12%; right: 10%; animation-delay: 0s; }
+        .deco-float-2 { top: 25%; left: 8%; animation-delay: 1s; }
+        .deco-float-3 { bottom: 18%; right: 15%; animation-delay: 2s; }
 
-        /* Retention loop footer */
-        .retention-loop-footer {
-            width: 100%;
-            font-size: 22px;
-            font-weight: 700;
-            color: #94a3b8;
-            border: 1px dashed ${theme.accent};
-            border-radius: 12px;
-            padding: 14px 22px;
-            margin-top: 18px;
-            text-align: center;
-            background: rgba(0,0,0,0.3);
+        /* Architecture decoration */
+        .deco-arch {
+          position: absolute;
+          bottom: 140px; left: 50%;
+          transform: translateX(-50%);
+          display: flex; align-items: center; gap: 0;
+          z-index: 1; pointer-events: none;
+          opacity: 0.6;
         }
+        .arch-node {
+          width: 56px; height: 56px;
+          border: 2px solid;
+          border-radius: 14px;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 24px;
+          background: rgba(0,0,0,0.4);
+        }
+        .arch-line {
+          width: 40px; height: 3px;
+          opacity: 0.5;
+        }
+
+        /* Terminal cursor */
+        .deco-terminal {
+          position: absolute;
+          bottom: 150px; left: 70px;
+          font-family: 'Consolas', monospace;
+          font-size: 28px;
+          z-index: 1;
+          opacity: 0.5;
+        }
+        .term-prompt { font-weight: 700; }
+        .term-cursor { animation: cursor-blink 1s step-end infinite; }
+
+        /* Achievement badge */
+        .deco-achievement {
+          position: absolute;
+          top: 120px; right: 60px;
+          border: 2px solid;
+          border-radius: 16px;
+          padding: 10px 20px;
+          display: flex; align-items: center; gap: 10px;
+          background: rgba(0,0,0,0.5);
+          z-index: 1;
+          animation: pulse-glow 3s ease-in-out infinite;
+        }
+        .achieve-icon { font-size: 28px; }
+        .achieve-text { font-size: 16px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
 
         /* Top animated progress bar for Shorts retention */
         .shorts-progress-bar-wrap {
             position: absolute;
-            top: 35px;
-            left: 65px;
-            right: 65px;
+            top: 40px;
+            left: 70px;
+            right: 70px;
             height: 10px;
             background: rgba(255, 255, 255, 0.15);
             border-radius: 9999px;
