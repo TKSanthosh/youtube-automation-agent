@@ -36,7 +36,7 @@ concurrency:
 jobs:
   autonomous-production-and-publish:
     name: Trend Scout ➔ Create ➔ Upload ➔ Evolve Quality ➔ Sync State
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 120
 
     permissions:

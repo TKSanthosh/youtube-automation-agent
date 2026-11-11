@@ -156,7 +156,7 @@ class AIVideoGenerator {
       await runFFmpeg([
         '-y',
         '-i', audioPath,
-        '-af', 'dynaudnorm=p=0.9:m=10.0:s=12:g=15,volume=1.15',
+        '-af', 'highpass=f=75,equalizer=f=3200:t=q:w=1.2:g=2.5,dynaudnorm=p=0.92:m=8.0:s=12:g=15,volume=1.08',
         '-c:a', 'libmp3lame',
         '-b:a', '192k',
         masteredTemp
@@ -477,7 +477,7 @@ class AIVideoGenerator {
 
     try {
       const tts = new MsEdgeTTS();
-      await tts.setMetadata(voiceName, OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3);
+      await tts.setMetadata(voiceName, OUTPUT_FORMAT.AUDIO_24KHZ_96KBITRATE_MONO_MP3);
 
       // Edge TTS websocket limits single utterances. If <= 350 chars, synthesize directly.
       if (cleanText.length <= 350) {
@@ -1051,11 +1051,11 @@ class AIVideoGenerator {
           }
         }
 
-        let slideDuration = 43;
+        let slideDuration = 28;
         if (audioSuccess) {
           const rawDur = await this.getAudioDuration(slideAudioPath);
           if (rawDur > 0) {
-            slideDuration = Number((rawDur + 0.3).toFixed(2));
+            slideDuration = Math.max(16, Number((rawDur + 0.35).toFixed(2)));
           }
         } else {
           await runFFmpeg([
@@ -1106,7 +1106,6 @@ class AIVideoGenerator {
             '-y',
             '-stream_loop', '-1',
             '-i', recVideoPath,
-            '-t', String(slideDuration),
             '-i', slideAudioPath,
             '-c:v', 'libx264',
             '-preset', 'veryfast',
@@ -1114,7 +1113,7 @@ class AIVideoGenerator {
             '-vf', 'scale=1080:1920,fps=30',
             '-c:a', 'aac',
             '-b:a', '192k',
-            '-shortest',
+            '-t', String(slideDuration),
             segmentVideoPath
           ]);
         } else {
@@ -1126,17 +1125,18 @@ class AIVideoGenerator {
             });
           }, i);
           await page.screenshot({ path: stillPath });
+          const totalFrames = Math.max(90, Math.ceil(slideDuration * 30));
           await runFFmpeg([
             '-y',
+            '-loop', '1',
             '-i', stillPath,
-            '-vf', 'zoompan=z=\'min(zoom+0.0012,1.12)\':x=\'iw/2-(iw/zoom/2)\':y=\'ih/2-(ih/zoom/2)\':d=120:s=1080x1920:fps=30,format=yuv420p',
-            '-t', String(slideDuration),
             '-i', slideAudioPath,
+            '-vf', `zoompan=z='min(zoom+0.0008,1.10)':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d=${totalFrames}:s=1080x1920:fps=30,format=yuv420p`,
             '-c:v', 'libx264',
-            '-preset', 'ultrafast',
+            '-preset', 'veryfast',
             '-c:a', 'aac',
             '-b:a', '192k',
-            '-shortest',
+            '-t', String(slideDuration),
             segmentVideoPath
           ]);
         }
@@ -1334,19 +1334,62 @@ class AIVideoGenerator {
   async getAudioDuration(audioPath, options = {}) {
     if (!audioPath) return options.shortsMode ? 172 : 0;
     try {
-      const { exec } = require('child_process');
-      const util = require('util');
-      const execPromise = util.promisify(exec);
-      const { stdout } = await execPromise(`ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${audioPath}"`);
-      const dur = parseFloat(String(stdout).trim());
-      if (Number.isFinite(dur) && dur > 0) {
-        if (options.shortsMode) {
-          return Math.min(178, Math.max(30, Math.ceil(dur)));
+      const fsSync = require('fs');
+      if (!fsSync.existsSync(audioPath) || fsSync.statSync(audioPath).size < 100) {
+        return options.shortsMode ? 172 : 0;
+      }
+
+      // Method 1: Probe exact container duration using bundled FFmpeg
+      let output = '';
+      try {
+        const res = await runFFmpeg(['-i', audioPath, '-f', 'null', '-']);
+        output = (res.stdout || '') + (res.stderr || '');
+      } catch (err) {
+        output = (err.stdout || '') + (err.stderr || '');
+      }
+
+      const match = output.match(/Duration:\s*(\d+):(\d+):(\d+(?:\.\d+)?)/);
+      if (match) {
+        const hours = parseInt(match[1], 10);
+        const mins = parseInt(match[2], 10);
+        const secs = parseFloat(match[3]);
+        const totalSecs = Number((hours * 3600 + mins * 60 + secs).toFixed(2));
+        if (Number.isFinite(totalSecs) && totalSecs > 0) {
+          if (options.shortsMode) {
+            return Math.min(178, Math.max(30, Math.ceil(totalSecs)));
+          }
+          return totalSecs;
         }
-        return Math.ceil(dur);
+      }
+
+      // Method 2: System ffprobe fallback
+      try {
+        const { exec } = require('child_process');
+        const util = require('util');
+        const execPromise = util.promisify(exec);
+        const { stdout } = await execPromise(`ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "${audioPath}"`);
+        const dur = parseFloat(String(stdout).trim());
+        if (Number.isFinite(dur) && dur > 0) {
+          if (options.shortsMode) {
+            return Math.min(178, Math.max(30, Math.ceil(dur)));
+          }
+          return Number(dur.toFixed(2));
+        }
+      } catch (_ffErr) {
+        // Continue to size-based heuristic
+      }
+
+      // Method 3: Bitrate heuristic from file size (assuming 96-128kbps MP3)
+      const stat = fsSync.statSync(audioPath);
+      if (stat.size > 1000) {
+        const estimated = Number((stat.size / 16000).toFixed(2)); // ~128kbps = 16KB/s
+        if (options.shortsMode) {
+          return Math.min(178, Math.max(30, Math.ceil(estimated)));
+        }
+        return estimated;
       }
     } catch (_err) {
-      // ffprobe unavailable or errored
+      // Non-fatal
     }
     return options.shortsMode ? 172 : 0;
   }
@@ -2089,10 +2132,17 @@ class AIVideoGenerator {
             <div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div>
             <div class="particle p4"></div><div class="particle p5"></div>
           </div>
-          <div class="top-badge" style="background: ${badge.color}22; border-color: ${badge.color}66; color: ${badge.color};">${badge.icon} ${badge.label}</div>
+          <div class="top-header-zone">
+            <div class="top-badge" style="background: ${badge.color}22; border-color: ${badge.color}66; color: ${badge.color};">${badge.icon} ${badge.label}</div>
+            <h2 class="section-header">${this.escapeHTML(slide.headline)}</h2>
+          </div>
           <div class="section-card">
-              <h2 class="section-header">${this.escapeHTML(slide.headline)}</h2>
               ${cardContentHTML}
+          </div>
+          <div class="shorts-footer-bar">
+            <span class="footer-icon">⚡</span>
+            <span class="footer-text">COMPUTER SCIENCE DEEP DIVE</span>
+            <span class="footer-tag">#SHORTS</span>
           </div>
           <div class="slide-number" style="color: ${theme.accent}40">${String(idx + 1).padStart(2, '0')}</div>
       </div>`;
@@ -2182,35 +2232,45 @@ class AIVideoGenerator {
 
         .slide {
             position: absolute;
+            top: 0; left: 0;
             width: 1080px;
             height: 1920px;
-            padding: 90px 65px;
+            padding: 70px 50px 75px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            justify-content: space-between;
+            align-items: stretch;
             opacity: 0;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 0.4s ease-in-out;
+            box-sizing: border-box;
         }
         .slide.active { opacity: 1; }
 
         .background-image {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
-            object-fit: cover; opacity: 0.10;
+            object-fit: cover; opacity: 0.12;
             z-index: 0; pointer-events: none;
             filter: saturate(1.3);
         }
 
         .slide-number {
           position: absolute;
-          bottom: 50px; right: 50px;
-          font-size: 180px;
+          bottom: 30px; right: 40px;
+          font-size: 140px;
           font-weight: 900;
-          opacity: 0.08;
+          opacity: 0.06;
           pointer-events: none;
           z-index: 0;
           font-family: monospace;
+        }
+
+        .top-header-zone {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            z-index: 3;
+            margin-bottom: 8px;
         }
 
         .top-badge {
@@ -2218,39 +2278,60 @@ class AIVideoGenerator {
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            font-size: 26px;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: 800;
             letter-spacing: 2px;
             text-transform: uppercase;
-            padding: 12px 26px;
+            padding: 10px 24px;
             border-radius: 9999px;
             border: 1px solid;
-            margin-bottom: 30px;
+            margin-bottom: 12px;
             animation: pulse-glow 3s ease-in-out infinite;
         }
         .section-card {
             position: relative; z-index: 3;
             width: 100%;
-            max-width: 950px;
+            flex: 1;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            justify-content: space-around;
+            align-items: stretch;
+            min-height: 1250px;
+            margin: 6px 0;
         }
         h2.section-header {
-            font-size: 48px;
+            font-size: 46px;
             font-weight: 800;
-            margin-bottom: 24px;
+            margin-bottom: 8px;
             line-height: 1.25;
             background: ${theme.headerGradient};
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        .shorts-footer-bar {
+            position: relative; z-index: 3;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 28px;
+            background: rgba(15, 23, 42, 0.90);
+            border: 1px solid rgba(${theme.accentRGB}, 0.35);
+            border-radius: 9999px;
+            color: #94a3b8;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            margin-top: 10px;
+        }
+        .footer-tag { color: ${theme.accent}; }
         .bullet-container {
             display: flex;
             flex-direction: column;
             gap: 16px;
             width: 100%;
-            margin-bottom: 18px;
+            margin-top: 12px;
         }
         .bullet-card {
             background: ${theme.cardBg};
@@ -2287,7 +2368,7 @@ class AIVideoGenerator {
         }
         .meme-svg {
             width: 100%;
-            max-width: 580px;
+            max-width: 960px;
             height: auto;
             border-radius: 16px;
             box-shadow: 0 12px 35px rgba(0,0,0,0.6);
@@ -2312,7 +2393,7 @@ class AIVideoGenerator {
         }
         .dsa-svg {
             width: 100%;
-            max-width: 720px;
+            max-width: 960px;
             height: auto;
             border-radius: 16px;
             box-shadow: 0 12px 35px rgba(0,0,0,0.6);

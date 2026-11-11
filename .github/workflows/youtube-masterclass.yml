@@ -20,7 +20,7 @@ concurrency:
 jobs:
   produce-and-publish-masterclass:
     name: Create, Upload & Purge Weekly Masterclass
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 180
 
     steps:
