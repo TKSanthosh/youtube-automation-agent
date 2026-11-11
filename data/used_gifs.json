@@ -1,0 +1,22 @@
+{
+  "usedUrls": [
+    "https://media.tenor.com/ZmJsg0dpt5QAAAAM/shanmukh-shanmukh-jaswanth.gif",
+    "https://media.tenor.com/d7LFX-HcIbkAAAAM/stress-relaxmax.gif"
+  ],
+  "history": [
+    {
+      "url": "https://media.tenor.com/ZmJsg0dpt5QAAAAM/shanmukh-shanmukh-jaswanth.gif",
+      "topic": "Database deadlocks and race conditions",
+      "query": "software engineer stress",
+      "downloadedAt": "2026-11-11T09:41:57.469Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794390117061_software_engineer_st.gif"
+    },
+    {
+      "url": "https://media.tenor.com/d7LFX-HcIbkAAAAM/stress-relaxmax.gif",
+      "topic": "Deadlock in Go Channels",
+      "query": "software engineer stress",
+      "downloadedAt": "2026-11-11T09:46:12.610Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794390370605_software_engineer_st.gif"
+    }
+  ]
+}

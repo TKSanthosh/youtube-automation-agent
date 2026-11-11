@@ -1141,7 +1141,7 @@ class AIVideoGenerator {
         const isMemeSlide = i === 1 || slideData.type === 'meme' || Boolean(slideData.meme);
         let animatedAsset = null;
         if (isMemeSlide || animatedBox) {
-          animatedAsset = this.getMemeAnimatedAsset(script.title || slideData.headline, slideData.meme?.type, i);
+          animatedAsset = await this.getMemeAnimatedAsset(script.title || slideData.headline, slideData.meme?.type, i);
         }
 
         if (animatedAsset && animatedBox && animatedBox.width > 50 && animatedBox.height > 50) {
@@ -2172,9 +2172,28 @@ class AIVideoGenerator {
     return memeTypes[index % memeTypes.length];
   }
 
-  getMemeAnimatedAsset(topic = '', memeType = '', index = 0) {
+  async getMemeAnimatedAsset(topic = '', memeType = '', index = 0) {
     const fsSync = require('fs');
     const path = require('path');
+
+    // 1. Dynamic Internet Meme Grabber: grab a fresh, never-before-used meme GIF directly from the internet
+    try {
+      const { DynamicMemeService } = require('./dynamic-meme-service');
+      const dynamicService = new DynamicMemeService();
+      const freshGif = await dynamicService.fetchFreshMemeGif({
+        topic,
+        headline: memeType,
+        fallbackName: 'this_is_fine'
+      });
+      if (freshGif && fsSync.existsSync(freshGif)) {
+        this.logger.info(`Dynamic internet meme selected for video: ${path.basename(freshGif)}`);
+        return freshGif;
+      }
+    } catch (dynamicErr) {
+      this.logger.warn(`Dynamic meme service notice (${dynamicErr.message}); rotating local asset pool...`);
+    }
+
+    // 2. Resilient Fallback: rotate through local curated assets
     const memeDirs = [
       path.join(__dirname, '..', 'assets', 'memes'),
       path.join(process.cwd(), 'assets', 'memes'),

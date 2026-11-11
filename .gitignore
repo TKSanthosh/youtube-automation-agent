@@ -73,6 +73,7 @@ build/
 !examples/*.jpg
 !assets/youtube-automation-agent.jpg
 !assets/memes/*
+assets/memes/dynamic_*
 
 # Backup files
 *.backup
