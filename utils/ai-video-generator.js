@@ -206,11 +206,10 @@ class AIVideoGenerator {
     const stateFile = path.join(__dirname, '..', 'data', 'voice_state.json');
 
     const voices = [
-      { name: 'Puck', desc: 'Warm, natural conversational male instructor', gender: 'male' },
-      { name: 'Kore', desc: 'Approachable, clear articulate female mentor', gender: 'female' },
-      { name: 'Charon', desc: 'Deep, resonant authoritative senior architect', gender: 'male' },
       { name: 'Aoede', desc: 'Expressive, energetic modern female presenter', gender: 'female' },
-      { name: 'Fenrir', desc: 'Sharp, dynamic tech lead male', gender: 'male' }
+      { name: 'Kore', desc: 'Approachable, clear articulate female mentor', gender: 'female' },
+      { name: 'Puck', desc: 'Warm, natural conversational instructor', gender: 'male' },
+      { name: 'Charon', desc: 'Deep, resonant authoritative senior architect', gender: 'male' }
     ];
 
     let geminiIndex = 0;
@@ -322,7 +321,8 @@ class AIVideoGenerator {
     ];
     const ladiesVoices = [
       'en-US-AvaNeural',         // Crisp, energetic modern female tech presenter
-      'en-US-JennyNeural'        // Warm, natural conversational female mentor
+      'en-US-JennyNeural',        // Warm, natural conversational female mentor
+      'en-US-EmmaNeural'         // Clear, articulate female educator
     ];
 
     let voiceIndex = 0;
@@ -330,23 +330,24 @@ class AIVideoGenerator {
     try {
       if (fsSync.existsSync(stateFile)) {
         const raw = JSON.parse(fsSync.readFileSync(stateFile, 'utf8'));
-        voiceIndex = Number.isInteger(raw.voiceIndex) ? raw.voiceIndex : (Number.isInteger(raw.gentIndex) ? raw.gentIndex : 0);
+        voiceIndex = Number.isInteger(raw.voiceIndex) ? raw.voiceIndex : (Number.isInteger(raw.ladiesIndex) ? raw.ladiesIndex : 0);
       }
     } catch (_e) {
       // Ignore read error
     }
 
     let selectedVoice = '';
-    let selectedGender = 'gents';
+    let selectedGender = 'ladies';
 
-    if (options.gender === 'ladies') {
-      selectedVoice = ladiesVoices[voiceIndex % ladiesVoices.length];
-      selectedGender = 'ladies';
-    } else {
+    // Default to female teacher voice unless explicitly overridden
+    if (options.gender === 'gents') {
       selectedVoice = techPresenterVoices[voiceIndex % techPresenterVoices.length];
       selectedGender = 'gents';
+    } else {
+      selectedVoice = ladiesVoices[voiceIndex % ladiesVoices.length];
+      selectedGender = 'ladies';
     }
-    const nextVoiceIndex = (voiceIndex + 1) % (options.gender === 'ladies' ? ladiesVoices.length : techPresenterVoices.length);
+    const nextVoiceIndex = (voiceIndex + 1) % (selectedGender === 'gents' ? techPresenterVoices.length : ladiesVoices.length);
 
     try {
       fsSync.mkdirSync(path.dirname(stateFile), { recursive: true });
@@ -354,7 +355,7 @@ class AIVideoGenerator {
         lastGender: selectedGender,
         lastVoice: selectedVoice,
         voiceIndex: nextVoiceIndex,
-        gentIndex: nextVoiceIndex,
+        ladiesIndex: nextVoiceIndex,
         updatedAt: new Date().toISOString()
       }, null, 2));
     } catch (_e) {
@@ -1113,14 +1114,14 @@ class AIVideoGenerator {
           card.style.transformOrigin = 'center top';
 
           let rect = card.getBoundingClientRect();
-          // Maximum allowable bottom coordinate before elements get cut off
-          const maxBottom = 1850;
+          // Maximum allowable bottom coordinate before elements get cut off or collide with YouTube Shorts mobile UI overlay
+          const maxBottom = 1700;
           let scaled = false;
           let scaleFactor = 1;
           if (rect.bottom > maxBottom) {
             const availableH = maxBottom - rect.top;
             const neededH = rect.height;
-            scaleFactor = Math.max(0.74, Number((availableH / neededH).toFixed(3)));
+            scaleFactor = Math.max(0.70, Number((availableH / neededH).toFixed(3)));
             card.style.transform = `scale(${scaleFactor})`;
             scaled = true;
           }
@@ -1129,7 +1130,7 @@ class AIVideoGenerator {
           const bullets = Array.from(activeSlide.querySelectorAll('.bullet-card'));
           const bulletsOk = bullets.every(b => {
             const br = b.getBoundingClientRect();
-            return br.height > 15 && br.bottom <= 1900;
+            return br.height > 15 && br.bottom <= 1720;
           });
 
           return {
@@ -1858,6 +1859,202 @@ class AIVideoGenerator {
 </html>`;
   }
 
+  renderAITeacherAvatar(slideIndex = 0) {
+    const emotions = [
+      { mood: 'alert', mouth: 'M 74 95 Q 80 98 86 95', blush: 0.2, eyeOpen: true },
+      { mood: 'smirk', mouth: 'M 73 93 Q 80 101 87 93 Z', blush: 0.35, eyeOpen: true },
+      { mood: 'analyze', mouth: 'M 75 95 L 85 95', blush: 0.2, eyeOpen: true },
+      { mood: 'teach', mouth: 'M 74 94 Q 80 99 86 94', blush: 0.25, eyeOpen: true },
+      { mood: 'mentor', mouth: 'M 73 93 Q 80 102 87 93 Z', blush: 0.3, eyeOpen: true }
+    ];
+    const emo = emotions[slideIndex % emotions.length] || emotions[0];
+
+    return `
+    <svg viewBox="0 0 160 160" class="teacher-svg" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ariaHairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#2a1636" />
+          <stop offset="60%" stop-color="#4c1d68" />
+          <stop offset="100%" stop-color="#24122f" />
+        </linearGradient>
+        <linearGradient id="ariaSkinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#fde8db" />
+          <stop offset="100%" stop-color="#f6cca9" />
+        </linearGradient>
+        <linearGradient id="ariaJacketGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#0f172a" />
+          <stop offset="50%" stop-color="#1e293b" />
+          <stop offset="100%" stop-color="#090d16" />
+        </linearGradient>
+        <linearGradient id="ariaCyberGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#06b6d4" />
+          <stop offset="100%" stop-color="#3b82f6" />
+        </linearGradient>
+        <filter id="ariaGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+      </defs>
+
+      <!-- Background Halo -->
+      <circle cx="80" cy="80" r="77" fill="#090d16" />
+      <circle cx="80" cy="80" r="75" fill="none" stroke="url(#ariaCyberGrad)" stroke-width="2.5" opacity="0.8" />
+
+      <!-- Back Hair Layer -->
+      <path d="M 38 72 C 34 110, 44 140, 52 155 C 55 130, 48 105, 52 85 Z" fill="url(#ariaHairGrad)" />
+      <path d="M 122 72 C 126 110, 116 140, 108 155 C 105 130, 112 105, 108 85 Z" fill="url(#ariaHairGrad)" />
+
+      <!-- Cyber Tech Hoodie / Shoulders -->
+      <path d="M 22 160 C 22 124, 46 112, 80 112 C 114 112, 138 124, 138 160 Z" fill="url(#ariaJacketGrad)" stroke="#334155" stroke-width="1.5" />
+      <!-- Cyber Neon Collar Trim -->
+      <path d="M 62 118 L 80 142 L 98 118" fill="none" stroke="url(#ariaCyberGrad)" stroke-width="2.5" stroke-linecap="round" />
+      <!-- Teacher ID Badge / Core -->
+      <polygon points="80,138 85,145 80,152 75,145" fill="#38bdf8" filter="url(#ariaGlow)" />
+
+      <!-- Neck -->
+      <rect x="71" y="98" width="18" height="20" rx="3" fill="url(#ariaSkinGrad)" />
+      <path d="M 71 106 Q 80 112 89 106" fill="none" stroke="#e09880" stroke-width="1.5" />
+
+      <!-- Face -->
+      <path d="M 50 68 C 50 96, 62 108, 80 108 C 98 108, 110 96, 110 68 C 110 44, 98 36, 80 36 C 62 36, 50 44, 50 68 Z" fill="url(#ariaSkinGrad)" />
+
+      <!-- Cute Cheek Blush -->
+      <ellipse cx="58" cy="82" rx="6.5" ry="3.5" fill="#f43f5e" opacity="${emo.blush}" />
+      <ellipse cx="102" cy="82" rx="6.5" ry="3.5" fill="#f43f5e" opacity="${emo.blush}" />
+
+      <!-- Expressive Anime-style Eyes -->
+      <!-- Left Eye -->
+      <ellipse cx="64" cy="74" rx="4.5" ry="5.5" fill="#1e293b" />
+      <ellipse cx="64" cy="74" rx="3.5" ry="4.5" fill="#2563eb" />
+      <circle cx="62.5" cy="72" r="1.8" fill="#ffffff" />
+      <circle cx="65.5" cy="76" r="0.8" fill="#ffffff" />
+      <!-- Right Eye -->
+      <ellipse cx="96" cy="74" rx="4.5" ry="5.5" fill="#1e293b" />
+      <ellipse cx="96" cy="74" rx="3.5" ry="4.5" fill="#2563eb" />
+      <circle cx="94.5" cy="72" r="1.8" fill="#ffffff" />
+      <circle cx="97.5" cy="76" r="0.8" fill="#ffffff" />
+
+      <!-- Eyelashes / Eyebrows -->
+      <path d="M 57 69 Q 64 66 71 69" fill="none" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
+      <path d="M 89 69 Q 96 66 103 69" fill="none" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
+      <path d="M 58 64 Q 65 61 71 63" fill="none" stroke="#4c1d68" stroke-width="1.5" stroke-linecap="round" />
+      <path d="M 89 63 Q 95 61 102 64" fill="none" stroke="#4c1d68" stroke-width="1.5" stroke-linecap="round" />
+
+      <!-- Nose -->
+      <path d="M 79 80 Q 80 83 78 84" fill="none" stroke="#d97706" stroke-width="1.2" stroke-linecap="round" />
+
+      <!-- Animated Mouth Expression -->
+      <path d="${emo.mouth}" fill="${emo.mouth.includes('Z') ? '#e11d48' : 'none'}" stroke="#e11d48" stroke-width="2.2" stroke-linecap="round" />
+
+      <!-- Chic Modern Tech Glasses -->
+      <rect x="52" y="66" width="24" height="15" rx="3.5" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="1.8" />
+      <rect x="84" y="66" width="24" height="15" rx="3.5" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="1.8" />
+      <line x1="76" y1="72" x2="84" y2="72" stroke="#38bdf8" stroke-width="1.8" />
+      <!-- AR Glare Reflection -->
+      <line x1="55" y1="68" x2="63" y2="76" stroke="#ffffff" stroke-width="1.5" opacity="0.65" stroke-linecap="round" />
+      <line x1="87" y1="68" x2="95" y2="76" stroke="#ffffff" stroke-width="1.5" opacity="0.65" stroke-linecap="round" />
+
+      <!-- Front Hair & Bangs -->
+      <path d="M 46 62 Q 62 38 80 38 Q 98 38 114 62 C 110 50 102 40 90 37 C 80 34 68 36 58 40 C 49 44 46 53 46 62 Z" fill="url(#ariaHairGrad)" />
+      <!-- Side Bangs Framing Face -->
+      <path d="M 45 60 C 43 78, 47 98, 52 110 C 49 92, 47 75, 49 62 Z" fill="url(#ariaHairGrad)" />
+      <path d="M 115 60 C 117 78, 113 98, 108 110 C 111 92, 113 75, 111 62 Z" fill="url(#ariaHairGrad)" />
+      <!-- Hair Violet Highlights -->
+      <path d="M 58 42 Q 72 36 86 43" fill="none" stroke="#c084fc" stroke-width="2" opacity="0.8" stroke-linecap="round" />
+      <path d="M 49 68 Q 47 88 51 102" fill="none" stroke="#c084fc" stroke-width="1.5" opacity="0.7" stroke-linecap="round" />
+
+      <!-- Studio Streaming Headset & Mic -->
+      <path d="M 42 64 A 40 40 0 0 1 118 64" fill="none" stroke="#1e293b" stroke-width="4.5" stroke-linecap="round" />
+      <path d="M 42 64 A 40 40 0 0 1 118 64" fill="none" stroke="url(#ariaCyberGrad)" stroke-width="1.5" stroke-dasharray="6,4" />
+      <!-- Left Earcup -->
+      <rect x="36" y="58" width="10" height="22" rx="4" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5" />
+      <!-- Right Earcup -->
+      <rect x="114" y="58" width="10" height="22" rx="4" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5" />
+      <!-- Microphone Boom with Active LED -->
+      <path d="M 42 74 Q 46 95 68 95" fill="none" stroke="#334155" stroke-width="2.4" stroke-linecap="round" />
+      <circle cx="69" cy="95" r="3.5" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
+      <circle cx="69" cy="95" r="1.6" fill="#22c55e" filter="url(#ariaGlow)" />
+    </svg>`;
+  }
+
+  getTeacherSpeechPrompt(slide, idx, scriptTitle = '') {
+    if (slide.teacherCue) return this.stripEmojis(slide.teacherCue);
+    if (slide.teacherNarration) {
+      const firstSentence = String(slide.teacherNarration).split(/[.?!]/)[0].trim();
+      if (firstSentence && firstSentence.length <= 110) {
+        return this.stripEmojis(firstSentence);
+      }
+    }
+
+    switch (idx) {
+      case 0:
+        return 'Watch closely: this single unhandled edge case secretly crashes high-traffic backends.';
+      case 1:
+        return 'Dev reality check: 0 bugs in local tests, but production is on fire at 3 AM! Let us debug why.';
+      case 2:
+        return 'Under the hood: here is the exact runtime memory pipeline causing the silent failure.';
+      case 3:
+        return 'Clean implementation: here is the production-grade fix used by senior staff engineers.';
+      case 4:
+      default:
+        return 'Golden engineering principle: always enforce deterministic boundaries over silent crashes.';
+    }
+  }
+
+  getTopicIncidentMetric(topic = '') {
+    const t = String(topic).toLowerCase();
+    if (t.includes('null') || t.includes('pointer')) {
+      return {
+        impact: 'API Gateway 500 Spike',
+        rootCause: 'Dereferencing Null in Hot Path',
+        diagnostic: 'SIGSEGV / NullPointerException caught in production'
+      };
+    }
+    if (t.includes('gil') || t.includes('python') || t.includes('thread')) {
+      return {
+        impact: '100% CPU on 1 Core, 7 Cores Idle',
+        rootCause: 'Global Interpreter Lock Mutex Contention',
+        diagnostic: 'Concurrency Bottleneck: Threads blocked on GIL release'
+      };
+    }
+    if (t.includes('docker') || t.includes('container') || t.includes('k8s')) {
+      return {
+        impact: 'Image Size Exceeds 1.8 GB',
+        rootCause: 'Multi-layer Build Cache Invalidation',
+        diagnostic: 'Slow Deployments: Pod initialization timeout'
+      };
+    }
+    if (t.includes('async') || t.includes('event loop') || t.includes('promise')) {
+      return {
+        impact: 'Event Loop Blocked > 450ms',
+        rootCause: 'Synchronous CPU Task in I/O Thread',
+        diagnostic: 'High Latency Spike: Microtasks queue starvation'
+      };
+    }
+    return {
+      impact: 'Unhandled Production Edge Case',
+      rootCause: 'Silent Runtime Exception in Service Worker',
+      diagnostic: 'Latency degradation across high-throughput clusters'
+    };
+  }
+
+  getSlideFooterTip(slide, idx) {
+    if (slide.footerTip) return this.stripEmojis(slide.footerTip);
+    switch (idx) {
+      case 0:
+        return 'Profile CPU and thread metrics in staging before deploying concurrency changes.';
+      case 1:
+        return 'Test with realistic concurrent client loads, not just single-threaded unit tests.';
+      case 2:
+        return 'Trace runtime memory allocations to spot hidden serialization bottlenecks.';
+      case 3:
+        return 'Enforce compile-time safety and process isolation for CPU-heavy workloads.';
+      case 4:
+      default:
+        return 'Save this pattern for System Design interviews and high-scale production systems.';
+    }
+  }
+
   renderMemeSVG(memeType = 'server_on_fire') {
     switch (memeType) {
       case 'server_on_fire':
@@ -2340,6 +2537,7 @@ class AIVideoGenerator {
       const badge = slideBadges[idx] || slideBadges[slideBadges.length - 1];
       const deco = slideDecorations[idx] || '';
 
+      const isHookSlide = idx === 0;
       const isMemeSlide = idx === 1 || slide.type === 'meme';
       const isDsaSlide = idx === 2 || slide.type === 'dsa_architecture' || (slide.diagram && !isMemeSlide);
       const isCodeSlide = idx === 3 || slide.type === 'code' || (slide.codeSnippet && !isMemeSlide && !isDsaSlide);
@@ -2347,7 +2545,34 @@ class AIVideoGenerator {
 
       let visualBlockHTML = '';
 
-      if (isMemeSlide) {
+      if (isHookSlide) {
+        const incidentMetric = this.getTopicIncidentMetric(script.title || slide.headline);
+        visualBlockHTML = `
+          <div class="incident-card-container">
+            <div class="incident-top-bar">
+              <span class="incident-badge"><span class="pulse-red"></span> SEV-1 PRODUCTION INCIDENT</span>
+              <span class="incident-time">LIVE INCIDENT</span>
+            </div>
+            <div class="incident-body">
+              <div class="incident-row">
+                <span class="metric-label">SEVERITY:</span>
+                <span class="metric-value red">CRITICAL CRASH</span>
+              </div>
+              <div class="incident-row">
+                <span class="metric-label">SYMPTOM:</span>
+                <span class="metric-value orange">${this.escapeHTML(incidentMetric.impact)}</span>
+              </div>
+              <div class="incident-row">
+                <span class="metric-label">ROOT CAUSE:</span>
+                <span class="metric-value yellow">${this.escapeHTML(incidentMetric.rootCause)}</span>
+              </div>
+            </div>
+            <div class="incident-footer-bar">
+              <span>DIAGNOSTIC:</span> ${this.escapeHTML(incidentMetric.diagnostic)}
+            </div>
+          </div>
+        `;
+      } else if (isMemeSlide) {
         const memeType = slide.meme?.type || this.getMemeForTopic(script.title || slide.headline, idx);
         const memeCaption = this.stripEmojis(slide.meme?.caption || 'WORKS ON MY MACHINE');
         const memeSubtext = this.stripEmojis(slide.meme?.subtext || '0 bugs in local development • Production server on fire');
@@ -2420,12 +2645,39 @@ class AIVideoGenerator {
             <div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div>
             <div class="particle p4"></div><div class="particle p5"></div>
           </div>
-          ${deco}
-          <div class="top-badge" style="background: ${badge.color}22; border-color: ${badge.color}66; color: ${badge.color};">${this.escapeHTML(badge.label)}</div>
+          <div class="teacher-hud">
+            <div class="teacher-avatar-pod">
+              ${this.renderAITeacherAvatar(idx)}
+              <div class="teacher-live-pill"><span class="live-dot"></span> AI TEACHER</div>
+            </div>
+            <div class="teacher-details">
+              <div class="teacher-meta-row">
+                <div class="teacher-name-group">
+                  <span class="teacher-title">TEACHER ARIA</span>
+                  <span class="teacher-tag">Senior Software Engineer</span>
+                </div>
+                <div class="voice-equalizer">
+                  <span class="eq-bar eq-1"></span>
+                  <span class="eq-bar eq-2"></span>
+                  <span class="eq-bar eq-3"></span>
+                  <span class="eq-bar eq-4"></span>
+                  <span class="eq-bar eq-5"></span>
+                </div>
+              </div>
+              <div class="teacher-bubble">
+                <span class="bubble-quote">“</span>${this.escapeHTML(this.getTeacherSpeechPrompt(slide, idx, script.title))}<span class="bubble-quote">”</span>
+              </div>
+            </div>
+          </div>
           <div class="section-card">
+              <div class="top-badge" style="background: ${badge.color}22; border-color: ${badge.color}66; color: ${badge.color};">${this.escapeHTML(badge.label)}</div>
               <h2 class="section-header">${this.escapeHTML(this.stripEmojis(slide.headline || slide.title || `Chapter ${idx + 1}`))}</h2>
               ${visualBlockHTML}
               ${bulletsHTML ? `<div class="bullet-container">${bulletsHTML}</div>` : ''}
+              <div class="teacher-takeaway-bar">
+                <span class="takeaway-icon">💡</span>
+                <span class="takeaway-text">PRO TIP: ${this.escapeHTML(this.getSlideFooterTip(slide, idx))}</span>
+              </div>
           </div>
           <div class="slide-number" style="color: ${theme.accent}40">${String(idx + 1).padStart(2, '0')}</div>
       </div>`;
@@ -2518,16 +2770,251 @@ class AIVideoGenerator {
             top: 0; left: 0;
             width: 1080px;
             height: 1920px;
-            padding: 100px 70px;
+            padding: 55px 60px 180px 60px;
             display: none;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             opacity: 0;
         }
         .slide.active {
             display: flex;
             opacity: 1;
+        }
+
+        /* AI Girl Teacher Studio HUD */
+        .teacher-hud {
+            position: relative;
+            z-index: 5;
+            width: 100%;
+            max-width: 960px;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.92));
+            border: 2px solid ${theme.accent};
+            border-radius: 24px;
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 10px;
+            margin-bottom: 18px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.65), 0 0 35px rgba(${theme.accentRGB}, 0.25);
+            animation: pulse-glow 3.5s ease-in-out infinite;
+        }
+
+        .teacher-avatar-pod {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid ${theme.accent};
+            background: #090d16;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 0 25px rgba(${theme.accentRGB}, 0.45);
+        }
+
+        .teacher-svg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .teacher-live-pill {
+            position: absolute;
+            bottom: -8px;
+            background: #ef4444;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            padding: 3px 9px;
+            border-radius: 9999px;
+            border: 2px solid #0f172a;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.5);
+            white-space: nowrap;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ffffff;
+            animation: cursor-blink 1s infinite;
+        }
+
+        .teacher-details {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        .teacher-meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid rgba(${theme.accentRGB}, 0.25);
+            padding-bottom: 5px;
+        }
+
+        .teacher-name-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .teacher-title {
+            font-size: 19px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #f8fafc;
+        }
+
+        .teacher-tag {
+            font-size: 14px;
+            font-weight: 700;
+            color: ${theme.accent};
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .voice-equalizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 18px;
+        }
+
+        .eq-bar {
+            width: 4px;
+            background: ${theme.accent};
+            border-radius: 2px;
+            animation: eq-bounce 1.2s ease-in-out infinite;
+        }
+        .eq-1 { height: 14px; animation-delay: 0.1s; }
+        .eq-2 { height: 8px;  animation-delay: 0.3s; }
+        .eq-3 { height: 18px; animation-delay: 0.2s; }
+        .eq-4 { height: 10px; animation-delay: 0.4s; }
+        .eq-5 { height: 16px; animation-delay: 0.25s; }
+
+        @keyframes eq-bounce {
+            0%, 100% { transform: scaleY(0.4); opacity: 0.6; }
+            50% { transform: scaleY(1.0); opacity: 1; }
+        }
+
+        .teacher-bubble {
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1.35;
+            color: #e2e8f0;
+            font-style: italic;
+        }
+
+        .bubble-quote {
+            color: ${theme.accent};
+            font-size: 22px;
+            font-weight: 900;
+        }
+
+        /* Incident Card styling for Hook slide */
+        .incident-card-container {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.94);
+            border: 2px solid #ef4444;
+            border-radius: 20px;
+            padding: 16px 20px;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 12px 35px rgba(239, 68, 68, 0.25);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        .incident-top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(239, 68, 68, 0.35);
+            padding-bottom: 6px;
+        }
+        .incident-badge {
+            background: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            font-size: 15px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pulse-red {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ef4444;
+            animation: cursor-blink 0.8s infinite;
+        }
+        .incident-time {
+            color: #94a3b8;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: monospace;
+            letter-spacing: 1px;
+        }
+        .incident-body {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .incident-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 20px;
+            background: rgba(2, 6, 23, 0.6);
+            padding: 12px 16px;
+            border-radius: 8px;
+            border-left: 4px solid #ef4444;
+        }
+        .metric-label {
+            color: #94a3b8;
+            font-weight: 800;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+        .metric-value {
+            font-weight: 800;
+            font-family: monospace;
+            font-size: 19px;
+        }
+        .metric-value.red { color: #f87171; }
+        .metric-value.orange { color: #fb923c; }
+        .metric-value.yellow { color: #fde047; }
+        .incident-footer-bar {
+            font-size: 15px;
+            color: #cbd5e1;
+            background: rgba(30, 41, 59, 0.6);
+            padding: 7px 10px;
+            border-radius: 8px;
+            font-family: monospace;
+        }
+        .incident-footer-bar span {
+            color: #f87171;
+            font-weight: 900;
         }
 
         .background-image {
@@ -2554,15 +3041,15 @@ class AIVideoGenerator {
             position: relative; z-index: 3;
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            font-size: 26px;
+            gap: 10px;
+            font-size: 22px;
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
-            padding: 14px 28px;
+            padding: 10px 22px;
             border-radius: 9999px;
             border: 1px solid;
-            margin-bottom: 40px;
+            margin-bottom: 16px;
             animation: pulse-glow 3s ease-in-out infinite;
         }
         .section-card {
@@ -2574,10 +3061,10 @@ class AIVideoGenerator {
             align-items: flex-start;
         }
         h2.section-header {
-            font-size: 52px;
+            font-size: 46px;
             font-weight: 800;
-            margin-bottom: 35px;
-            line-height: 1.25;
+            margin-bottom: 16px;
+            line-height: 1.22;
             background: ${theme.headerGradient};
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -2585,50 +3072,56 @@ class AIVideoGenerator {
         .bullet-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 14px;
             width: 100%;
-            margin-bottom: 25px;
+            margin-top: 8px;
+            margin-bottom: 16px;
         }
         .bullet-card {
             background: ${theme.cardBg};
             border-left: 6px solid ${theme.accent};
             border-radius: 16px;
-            padding: 26px 32px;
-            font-size: 30px;
+            padding: 22px 28px;
+            font-size: 28px;
             line-height: 1.45;
             color: #f1f5f9;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             opacity: 1;
             display: flex;
             align-items: flex-start;
+            margin-bottom: 6px;
         }
         .bullet-indicator {
-            font-size: 34px;
+            font-size: 32px;
             font-weight: 900;
             line-height: 1.1;
             margin-right: 14px;
             flex-shrink: 0;
             display: inline-block;
         }
-        .deco-status {
-            position: absolute;
-            top: 70px; right: 70px;
-            display: inline-flex;
+        .teacher-takeaway-bar {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.88));
+            border: 1.5px solid ${theme.accent}77;
+            border-radius: 16px;
+            padding: 16px 22px;
+            font-size: 22px;
+            color: #f1f5f9;
+            margin-top: 14px;
+            margin-bottom: 10px;
+            display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: 1.5px;
-            padding: 8px 18px;
-            border-radius: 9999px;
-            border: 1px solid;
-            background: rgba(15, 23, 42, 0.7);
-            z-index: 3;
+            gap: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.45);
         }
-        .status-pulse {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            display: inline-block;
+        .takeaway-icon {
+            font-size: 26px;
+            flex-shrink: 0;
+        }
+        .takeaway-text {
+            font-weight: 700;
+            line-height: 1.35;
+            color: #f8fafc;
         }
 
         /* Relatable Developer Meme Card */
@@ -2681,7 +3174,7 @@ class AIVideoGenerator {
         }
         .meme-window {
             width: 100%;
-            height: 340px;
+            height: 380px;
             border-radius: 16px;
             overflow: hidden;
             background: #090d16;

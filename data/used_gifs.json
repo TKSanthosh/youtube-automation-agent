@@ -1,7 +1,39 @@
 {
   "usedUrls": [
     "https://media.tenor.com/ZmJsg0dpt5QAAAAM/shanmukh-shanmukh-jaswanth.gif",
-    "https://media.tenor.com/d7LFX-HcIbkAAAAM/stress-relaxmax.gif"
+    "https://media.tenor.com/d7LFX-HcIbkAAAAM/stress-relaxmax.gif",
+    "https://media.tenor.com/pT_eK7L76OEAAAAM/coding-computer-coding.gif",
+    "https://media.tenor.com/hk00HULr-1cAAAAM/let-claude-do-it-claude-ai.gif",
+    "https://media.tenor.com/WuvwZsl9EnMAAAAM/user7122.gif",
+    "https://media.tenor.com/UI78GqUE_3kAAAAM/discord-acceptance.gif",
+    "https://media.tenor.com/EK_plqlM_D4AAAAM/dan-shiffman-coding.gif",
+    "https://media.tenor.com/IaKzi3LnD4oAAAAM/typing-keyboard.gif",
+    "https://media.tenor.com/nPd-ijwBSKQAAAAM/hacker-pc.gif",
+    "https://media.tenor.com/1ECFGZIpci8AAAAM/hebrew-coding.gif",
+    "https://media.tenor.com/uDgrVufjT78AAAAM/sparks-electrical-electricity-equipment-radio-amateur-fire.gif",
+    "https://media.tenor.com/Gx-UhiiSPDAAAAAM/fehlerhaft-fehler.gif",
+    "https://media.tenor.com/JCPZu3L6K4cAAAAM/coffee-coffee-time.gif",
+    "https://media.tenor.com/lgzQ7Q0MaXAAAAAM/font-hacker.gif",
+    "https://media.tenor.com/YGVjNv8XHfgAAAAM/bo-bech-med-kniven-for-struben.gif",
+    "https://media.tenor.com/pQEPSQbfeVgAAAAM/waiting-meme-lil-nouns.gif",
+    "https://media.tenor.com/GFiQfwRuE5wAAAAM/coffee.gif",
+    "https://media.tenor.com/CG0-PjiDm28AAAAM/computer.gif",
+    "https://media.tenor.com/wF4r4cPcu08AAAAM/gitmerge.gif",
+    "https://media.tenor.com/YREjjLTBw1YAAAAM/character-ai-cai.gif",
+    "https://media.tenor.com/P1mSF7vsgTIAAAAM/benjammins-bug.gif",
+    "https://media.tenor.com/7xq8f8sjUh8AAAAM/computer-hacker.gif",
+    "https://media.tenor.com/_0WsYiHDa5wAAAAM/github-git.gif",
+    "https://media.tenor.com/k1tDp7A1ys8AAAAM/programmer-developer.gif",
+    "https://media.tenor.com/qFn6_y2g-twAAAAM/sbg2-ovh.gif",
+    "https://media.tenor.com/yWVIOwocbVsAAAAM/typing-occultic-nine.gif",
+    "https://media.tenor.com/oshPqu2e-psAAAAM/notkuromiunu-center-div.gif",
+    "https://media.tenor.com/-BSoRKHhuF0AAAAM/waiting-jane-lynch.gif",
+    "https://media.tenor.com/r3DxEqmL0BkAAAAM/infinigods-kingofdestiny.gif",
+    "https://media.tenor.com/a2mTE0tf42MAAAAM/coding.gif",
+    "https://media.tenor.com/H0flATihZYQAAAAM/jim-carey-work.gif",
+    "https://media.tenor.com/KCh3fB-aAaYAAAAM/waiting-for-help-waiting.gif",
+    "https://media.tenor.com/yiaAYqLlJfoAAAAM/software-engineer-develop.gif",
+    "https://media.tenor.com/7UTHFDjsMhIAAAAM/pkers-server.gif"
   ],
   "history": [
     {
@@ -17,6 +49,230 @@
       "query": "software engineer stress",
       "downloadedAt": "2026-11-11T09:46:12.610Z",
       "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794390370605_software_engineer_st.gif"
+    },
+    {
+      "url": "https://media.tenor.com/pT_eK7L76OEAAAAM/coding-computer-coding.gif",
+      "topic": "Why SIMD Vectorization Shreds JSON Payloads at Gigabytes Per Second",
+      "query": "programmer computer reaction",
+      "downloadedAt": "2026-11-12T09:55:47.903Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794477341911_programmer_computer_.gif"
+    },
+    {
+      "url": "https://media.tenor.com/hk00HULr-1cAAAAM/let-claude-do-it-claude-ai.gif",
+      "topic": "Build a Python AsyncIO Event Loop From Scratch in 3 Minutes",
+      "query": "programmer works on my machine",
+      "downloadedAt": "2026-11-12T10:06:30.013Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794477989649_programmer_works_on_.gif"
+    },
+    {
+      "url": "https://media.tenor.com/WuvwZsl9EnMAAAAM/user7122.gif",
+      "topic": "How Rowhammer Bypasses Memory Isolation Using Physics",
+      "query": "programmer computer reaction",
+      "downloadedAt": "2026-11-12T10:15:23.144Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794478522870_programmer_computer_.gif"
+    },
+    {
+      "url": "https://media.tenor.com/UI78GqUE_3kAAAAM/discord-acceptance.gif",
+      "topic": "Mastering Raft Consensus: Leader Election & Log Replication Decoded",
+      "query": "programmer waiting for build",
+      "downloadedAt": "2026-11-12T10:22:20.537Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794478939992_programmer_waiting_f.gif"
+    },
+    {
+      "url": "https://media.tenor.com/EK_plqlM_D4AAAAM/dan-shiffman-coding.gif",
+      "topic": "Decoding the Y2K Bug: Two-Digit Year Logic & Code Remediation",
+      "query": "coding bug",
+      "downloadedAt": "2026-11-12T10:29:27.540Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794479367203_coding_bug.gif"
+    },
+    {
+      "url": "https://media.tenor.com/IaKzi3LnD4oAAAAM/typing-keyboard.gif",
+      "topic": "Fixing GTA Online's 6-Minute Load Time: A JSON Decompilation Deep Dive",
+      "query": "programmer typing fast",
+      "downloadedAt": "2026-11-12T10:37:18.975Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794479838681_programmer_typing_fa.gif"
+    },
+    {
+      "url": "https://media.tenor.com/nPd-ijwBSKQAAAAM/hacker-pc.gif",
+      "topic": "Anatomy of the 1988 Morris Worm & Buffer Overflows",
+      "query": "coding meme",
+      "downloadedAt": "2026-11-12T10:44:50.662Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794480290339_coding_meme.gif"
+    },
+    {
+      "url": "https://media.tenor.com/1ECFGZIpci8AAAAM/hebrew-coding.gif",
+      "topic": "Stop Using Wall Clocks: Master Vector Clocks & Causality",
+      "query": "coding meme meme",
+      "downloadedAt": "2026-11-12T10:52:00.926Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794480720801_coding_meme_meme.gif"
+    },
+    {
+      "url": "https://media.tenor.com/uDgrVufjT78AAAAM/sparks-electrical-electricity-equipment-radio-amateur-fire.gif",
+      "topic": "Shred Database Scans at Gigabytes/Sec with AVX-512 SIMD",
+      "query": "server burning",
+      "downloadedAt": "2026-11-12T11:16:58.947Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794482218716_server_burning.gif"
+    },
+    {
+      "url": "https://media.tenor.com/Gx-UhiiSPDAAAAAM/fehlerhaft-fehler.gif",
+      "topic": "Why 1982 Lisp Machines Crashed: TCO & Memory Exhaustion",
+      "query": "coding bug",
+      "downloadedAt": "2026-11-12T11:26:53.514Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794482807760_coding_bug.gif"
+    },
+    {
+      "url": "https://media.tenor.com/JCPZu3L6K4cAAAAM/coffee-coffee-time.gif",
+      "topic": "Anatomy of the 1987 Morris Worm: The First Buffer Overflow Masterclass",
+      "query": "developer coding coffee",
+      "downloadedAt": "2026-11-12T11:34:27.839Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794483266680_developer_coding_cof.gif"
+    },
+    {
+      "url": "https://media.tenor.com/lgzQ7Q0MaXAAAAAM/font-hacker.gif",
+      "topic": "Build Stateful LLM Context Windows with RAG Memory",
+      "query": "coding meme",
+      "downloadedAt": "2026-11-13T02:32:08.015Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794537127732_coding_meme.gif"
+    },
+    {
+      "url": "https://media.tenor.com/YGVjNv8XHfgAAAAM/bo-bech-med-kniven-for-struben.gif",
+      "topic": "How the 1978 Xerox Alto Worm Invented Autonomous Distributed Computing",
+      "query": "programmer waiting for build",
+      "downloadedAt": "2026-11-13T02:40:58.130Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794537657717_programmer_waiting_f.gif"
+    },
+    {
+      "url": "https://media.tenor.com/pQEPSQbfeVgAAAAM/waiting-meme-lil-nouns.gif",
+      "topic": "Consistent Hashing: The Secret to Scalable Distributed Caching",
+      "query": "programmer waiting for build",
+      "downloadedAt": "2026-11-13T02:48:21.675Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794538101388_programmer_waiting_f.gif"
+    },
+    {
+      "url": "https://media.tenor.com/GFiQfwRuE5wAAAAM/coffee.gif",
+      "topic": "HNSW vs IVFPQ: Master High-Performance AI Vector Search",
+      "query": "developer coding coffee",
+      "downloadedAt": "2026-11-13T02:56:57.089Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794538616691_developer_coding_cof.gif"
+    },
+    {
+      "url": "https://media.tenor.com/CG0-PjiDm28AAAAM/computer.gif",
+      "topic": "Why Epoll Scaled the Modern Web to Millions of Connections",
+      "query": "programmer computer reaction",
+      "downloadedAt": "2026-11-13T03:04:36.798Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794539076629_programmer_computer_.gif"
+    },
+    {
+      "url": "https://media.tenor.com/wF4r4cPcu08AAAAM/gitmerge.gif",
+      "topic": "How the XZ Utils Backdoor Hacked OpenSSH Without Touching GitHub",
+      "query": "git merge conflict meme",
+      "downloadedAt": "2026-11-13T03:11:14.301Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794539473830_git_merge_conflict_m.gif"
+    },
+    {
+      "url": "https://media.tenor.com/YREjjLTBw1YAAAAM/character-ai-cai.gif",
+      "topic": "PostgreSQL Connection Pooling: Stop Exhausting Your Database",
+      "query": "server burning meme",
+      "downloadedAt": "2026-11-13T03:18:03.325Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794539882514_server_burning_meme.gif"
+    },
+    {
+      "url": "https://media.tenor.com/P1mSF7vsgTIAAAAM/benjammins-bug.gif",
+      "topic": "Why a 64-Bit Float Destroyed a $7B Rocket: The Ariane 5 Bug",
+      "query": "coding bug",
+      "downloadedAt": "2026-11-13T03:26:30.050Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794540388700_coding_bug.gif"
+    },
+    {
+      "url": "https://media.tenor.com/7xq8f8sjUh8AAAAM/computer-hacker.gif",
+      "topic": "Building Mutex Locks Without Hardware Atomics: Lamport's Bakery Algorithm",
+      "query": "programmer mind blown",
+      "downloadedAt": "2026-11-13T03:34:17.360Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794540856944_programmer_mind_blow.gif"
+    },
+    {
+      "url": "https://media.tenor.com/_0WsYiHDa5wAAAAM/github-git.gif",
+      "topic": "Why Quicksort Beats Mergesort on CPU Cache Lines",
+      "query": "git merge conflict meme",
+      "downloadedAt": "2026-11-13T03:42:00.367Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794541319648_git_merge_conflict_m.gif"
+    },
+    {
+      "url": "https://media.tenor.com/k1tDp7A1ys8AAAAM/programmer-developer.gif",
+      "topic": "Why Intel's Object-Oriented Silicon CPU Failed in 1981",
+      "query": "coding bug",
+      "downloadedAt": "2026-11-13T03:49:53.019Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794541792717_coding_bug.gif"
+    },
+    {
+      "url": "https://media.tenor.com/qFn6_y2g-twAAAAM/sbg2-ovh.gif",
+      "topic": "B-Trees vs LSM Trees: Why Your Database Chokes on Writes",
+      "query": "server burning",
+      "downloadedAt": "2026-11-13T03:56:59.408Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794542217346_server_burning.gif"
+    },
+    {
+      "url": "https://media.tenor.com/yWVIOwocbVsAAAAM/typing-occultic-nine.gif",
+      "topic": "Why Cuckoo Hashing Beats Every Traditional Hash Table",
+      "query": "programmer typing fast",
+      "downloadedAt": "2026-11-13T04:04:21.888Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794542660860_programmer_typing_fa.gif"
+    },
+    {
+      "url": "https://media.tenor.com/oshPqu2e-psAAAAM/notkuromiunu-center-div.gif",
+      "topic": "Anatomy of the CrowdStrike BSOD: Channel File 291 & Null Pointer Dereference",
+      "query": "programmer computer reaction meme",
+      "downloadedAt": "2026-11-13T04:12:14.501Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794543134284_programmer_computer_.gif"
+    },
+    {
+      "url": "https://media.tenor.com/-BSoRKHhuF0AAAAM/waiting-jane-lynch.gif",
+      "topic": "Google MapReduce (2003): Distributed Batch Processing Explained",
+      "query": "programmer waiting for build",
+      "downloadedAt": "2026-11-13T04:19:34.237Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794543574119_programmer_waiting_f.gif"
+    },
+    {
+      "url": "https://media.tenor.com/r3DxEqmL0BkAAAAM/infinigods-kingofdestiny.gif",
+      "topic": "Why 1988's Deadliest Medical Bug Was a Simple Race Condition",
+      "query": "coding bug",
+      "downloadedAt": "2026-11-13T04:26:29.057Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794543988757_coding_bug.gif"
+    },
+    {
+      "url": "https://media.tenor.com/a2mTE0tf42MAAAAM/coding.gif",
+      "topic": "Stop Cascading Failures: Microservices Circuit Breakers Explained",
+      "query": "coding bug",
+      "downloadedAt": "2026-11-15T16:41:34.256Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794760893402_coding_bug.gif"
+    },
+    {
+      "url": "https://media.tenor.com/H0flATihZYQAAAAM/jim-carey-work.gif",
+      "topic": "Why 1968 Mainframes Built Ring Zero: The Birth of Hardware Security",
+      "query": "hackerman typing fast",
+      "downloadedAt": "2026-11-15T16:49:40.527Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794761378042_hackerman_typing_fas.gif"
+    },
+    {
+      "url": "https://media.tenor.com/KCh3fB-aAaYAAAAM/waiting-for-help-waiting.gif",
+      "topic": "How Leslie Lamport's 1983 Algorithm Saves Distributed Systems from Liars",
+      "query": "programmer waiting for build",
+      "downloadedAt": "2026-11-15T17:04:18.292Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794762258110_programmer_waiting_f.gif"
+    },
+    {
+      "url": "https://media.tenor.com/yiaAYqLlJfoAAAAM/software-engineer-develop.gif",
+      "topic": "Python Concurrency: Threads vs Processes Explained",
+      "query": "software engineer stress",
+      "downloadedAt": "2026-11-15T17:10:21.975Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794762621694_software_engineer_st.gif"
+    },
+    {
+      "url": "https://media.tenor.com/7UTHFDjsMhIAAAAM/pkers-server.gif",
+      "topic": "Stop Slow Vector Search: Optimize PostgreSQL Embeddings with HNSW",
+      "query": "server burning",
+      "downloadedAt": "2026-11-15T17:13:27.325Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1794762806739_server_burning.gif"
     }
   ]
 }

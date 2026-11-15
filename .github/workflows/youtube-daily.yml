@@ -1,9 +1,9 @@
 name: Autonomous YouTube Automation Pipeline (End-to-End Cloud)
 
 on:
-  # Schedule: Runs 10 times daily across global peak viewer hours (enabling 10+ shorts daily)
+  # Schedule: Runs daily at global peak viewer engagement window (14:00 UTC / 7:30 PM IST)
   schedule:
-    - cron: '0 0,2,4,6,8,10,12,14,16,18 * * *'
+    - cron: '0 14 * * *'
 
   # Manual Trigger: 1-click execution from GitHub website or GitHub mobile app
   workflow_dispatch:
