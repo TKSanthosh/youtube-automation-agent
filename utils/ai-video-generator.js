@@ -313,6 +313,16 @@ class AIVideoGenerator {
     const path = require('path');
     const stateFile = path.join(__dirname, '..', 'data', 'voice_state.json');
 
+    try {
+      if (fsSync.existsSync(stateFile)) {
+        const raw = JSON.parse(fsSync.readFileSync(stateFile, 'utf8'));
+        const candidateVoice = raw.lockedVoice || raw.preferredVoice;
+        if (candidateVoice && validEdgeVoiceRegex.test(candidateVoice)) {
+          return { voice: candidateVoice, gender: raw.lastGender || 'gents' };
+        }
+      }
+    } catch (_e) {}
+
     // Elite humanized tech presenter voices (Edge TTS Neural)
     // Dynamic cadence, natural pitch inflection, zero robotic monotony
     const techPresenterVoices = [
@@ -349,8 +359,13 @@ class AIVideoGenerator {
     const nextVoiceIndex = (voiceIndex + 1) % (options.gender === 'ladies' ? ladiesVoices.length : techPresenterVoices.length);
 
     try {
+      let existingState = {};
+      if (fsSync.existsSync(stateFile)) {
+        try { existingState = JSON.parse(fsSync.readFileSync(stateFile, 'utf8')); } catch (_e) {}
+      }
       fsSync.mkdirSync(path.dirname(stateFile), { recursive: true });
       fsSync.writeFileSync(stateFile, JSON.stringify({
+        ...existingState,
         lastGender: selectedGender,
         lastVoice: selectedVoice,
         voiceIndex: nextVoiceIndex,
@@ -1966,13 +1981,126 @@ class AIVideoGenerator {
   }
 
   renderDSASVG(dsaType, topic = '') {
-    const t = String(topic).toLowerCase();
-    const type = dsaType || (
-      t.includes('hash') || t.includes('collision') ? 'hash_table' :
-      t.includes('stack') || t.includes('heap') || t.includes('memory') || t.includes('null') ? 'stack_heap' :
-      t.includes('circuit') || t.includes('pattern') ? 'circuit_breaker' :
-      t.includes('tree') || t.includes('sort') || t.includes('quick') ? 'binary_tree' : 'hash_table'
-    );
+    const type = dsaType || this.getTopicDSAType(topic);
+
+    if (type === 'heartbleed') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+          <rect x="25" y="25" width="220" height="90" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="2" />
+          <text x="135" y="48" font-size="13" font-weight="900" text-anchor="middle" fill="#fde047">MALICIOUS TLS HEARTBEAT</text>
+          <text x="135" y="68" font-size="11" font-weight="700" text-anchor="middle" fill="#94a3b8">Payload: "BIRD" (4 Bytes)</text>
+          <rect x="40" y="78" width="190" height="26" rx="6" fill="#7f1d1d" stroke="#ef4444" stroke-width="1.5" />
+          <text x="135" y="96" font-size="11" font-weight="900" text-anchor="middle" fill="#fca5a5">Claimed Length: 64,000 Bytes!</text>
+          <line x1="245" y1="70" x2="285" y2="70" stroke="#ef4444" stroke-width="3" stroke-dasharray="4,2" />
+          <rect x="285" y="25" width="230" height="155" rx="10" fill="#1e293b" stroke="#ef4444" stroke-width="2" />
+          <text x="400" y="48" font-size="13" font-weight="900" text-anchor="middle" fill="#f87171">SERVER PROCESS RAM (64KB)</text>
+          <rect x="300" y="58" width="80" height="28" rx="6" fill="#064e3b" stroke="#10b981" stroke-width="1.5" />
+          <text x="340" y="77" font-size="11" font-weight="800" text-anchor="middle" fill="#6ee7b7">"BIRD"</text>
+          <rect x="385" y="58" width="115" height="28" rx="6" fill="#7f1d1d" stroke="#ef4444" stroke-width="1.5" />
+          <text x="442" y="77" font-size="11" font-weight="900" text-anchor="middle" fill="#fca5a5">RSA Private Key</text>
+          <rect x="300" y="92" width="200" height="28" rx="6" fill="#7f1d1d" stroke="#ef4444" stroke-width="1.5" />
+          <text x="400" y="111" font-size="11" font-weight="900" text-anchor="middle" fill="#fca5a5">User Passwords &amp; Session Cookies</text>
+          <rect x="300" y="126" width="200" height="42" rx="6" fill="#1e1e38" stroke="#6366f1" stroke-width="1.5" />
+          <text x="400" y="145" font-size="10" font-weight="700" text-anchor="middle" fill="#a5b4fc">memcpy(bp, pl, payload_len);</text>
+          <text x="400" y="160" font-size="9" text-anchor="middle" fill="#cbd5e1">No Bounds Check on payload_len!</text>
+          <rect x="25" y="195" width="490" height="48" rx="10" fill="#1e293b" stroke="#ef4444" stroke-width="2" />
+          <text x="270" y="216" font-size="13" font-weight="900" text-anchor="middle" fill="#f87171">CVE-2014-0160: BUFFER OVER-READ</text>
+          <text x="270" y="233" font-size="11" font-weight="600" text-anchor="middle" fill="#94a3b8">Payload length trusted without verifying actual packet size</text>
+        </svg>
+      </div>`;
+    }
+
+    if (type === 'buffer_overflow') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+          <rect x="30" y="30" width="480" height="38" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="2" />
+          <text x="270" y="54" font-size="13" font-weight="900" text-anchor="middle" fill="#60a5fa">LOCAL BUFFER char buf[512] (Normal Allocated Stack)</text>
+          <rect x="30" y="74" width="480" height="38" rx="8" fill="#78350f" stroke="#f59e0b" stroke-width="2" />
+          <text x="270" y="98" font-size="13" font-weight="900" text-anchor="middle" fill="#fde047">SAVED FRAME POINTER (%EBP)</text>
+          <rect x="30" y="118" width="480" height="42" rx="8" fill="#7f1d1d" stroke="#ef4444" stroke-width="3" />
+          <text x="270" y="140" font-size="14" font-weight="900" text-anchor="middle" fill="#fca5a5">SAVED RETURN ADDRESS (%EIP) -&gt; OVERWRITTEN!</text>
+          <text x="270" y="154" font-size="10" font-weight="700" text-anchor="middle" fill="#fecaca">Redirects execution to injected NOP Sled + Shellcode</text>
+          <line x1="50" y1="170" x2="490" y2="170" stroke="#ef4444" stroke-width="4" stroke-dasharray="8,4" />
+          <text x="270" y="195" font-size="12" font-weight="900" text-anchor="middle" fill="#ef4444">gets(buf) / strcpy() - ZERO BOUNDS CHECKING</text>
+          <rect x="25" y="208" width="490" height="38" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5" />
+          <text x="270" y="232" font-size="12" font-weight="700" text-anchor="middle" fill="#38bdf8">1988 Morris Worm: gets() flaw in fingerd daemon hijacked UNIX root shells</text>
+        </svg>
+      </div>`;
+    }
+
+    if (type === 'race_condition') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+          <rect x="25" y="30" width="230" height="150" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2" />
+          <text x="140" y="52" font-size="13" font-weight="900" text-anchor="middle" fill="#60a5fa">THREAD A: UI Operator</text>
+          <rect x="35" y="65" width="210" height="30" rx="6" fill="#0f172a" stroke="#3b82f6" stroke-width="1.5" />
+          <text x="140" y="85" font-size="11" font-weight="700" text-anchor="middle" fill="#93c5fd">1. Key in 'X' (X-Ray Mode)</text>
+          <rect x="35" y="102" width="210" height="30" rx="6" fill="#78350f" stroke="#f59e0b" stroke-width="1.5" />
+          <text x="140" y="122" font-size="11" font-weight="700" text-anchor="middle" fill="#fde047">2. Up-Arrow + Edit to 'E' (&lt;8s)</text>
+          <rect x="35" y="139" width="210" height="30" rx="6" fill="#0f172a" stroke="#475569" stroke-width="1" />
+          <text x="140" y="159" font-size="10" text-anchor="middle" fill="#94a3b8">Bypasses Hardware Turntable Sync</text>
+          <rect x="285" y="30" width="230" height="150" rx="10" fill="#1e293b" stroke="#ef4444" stroke-width="2" />
+          <text x="400" y="52" font-size="13" font-weight="900" text-anchor="middle" fill="#f87171">THREAD B: Hardware Beam</text>
+          <rect x="295" y="65" width="210" height="30" rx="6" fill="#0f172a" stroke="#ef4444" stroke-width="1.5" />
+          <text x="400" y="85" font-size="11" font-weight="700" text-anchor="middle" fill="#fca5a5">Reads stale turntable position</text>
+          <rect x="295" y="102" width="210" height="30" rx="6" fill="#7f1d1d" stroke="#ef4444" stroke-width="2" />
+          <text x="400" y="122" font-size="11" font-weight="900" text-anchor="middle" fill="#fecaca">COLLISION: 8-bit counter overflow</text>
+          <rect x="295" y="139" width="210" height="30" rx="6" fill="#7f1d1d" stroke="#ef4444" stroke-width="1.5" />
+          <text x="400" y="159" font-size="11" font-weight="900" text-anchor="middle" fill="#ffffff">MASSIVE 25,000 RAD OVERDOSE</text>
+          <rect x="25" y="195" width="490" height="48" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="2" />
+          <text x="270" y="216" font-size="13" font-weight="900" text-anchor="middle" fill="#fde047">THERAC-25: UNSYNCHRONIZED SHARED STATE</text>
+          <text x="270" y="233" font-size="11" font-weight="600" text-anchor="middle" fill="#94a3b8">Missing Mutex/Semaphore locks across concurrent asynchronous routines</text>
+        </svg>
+      </div>`;
+    }
+
+    if (type === 'fast_inverse_sqrt') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+          <rect x="25" y="25" width="490" height="45" rx="8" fill="#1e293b" stroke="#6366f1" stroke-width="2" />
+          <text x="270" y="45" font-size="12" font-weight="800" text-anchor="middle" fill="#a5b4fc">i = * ( long * ) &amp;y; // EVIL IEEE 754 BIT CASTING</text>
+          <text x="270" y="61" font-size="10" text-anchor="middle" fill="#cbd5e1">Treats floating-point 32-bit sign, exponent, and mantissa as pure integer</text>
+          <rect x="25" y="76" width="490" height="55" rx="10" fill="#78350f" stroke="#f59e0b" stroke-width="2.5" />
+          <text x="270" y="99" font-size="15" font-weight="900" text-anchor="middle" fill="#fde047">i = 0x5f3759df - ( i &gt;&gt; 1 ); // WHAT THE HECK?</text>
+          <text x="270" y="119" font-size="11" font-weight="700" text-anchor="middle" fill="#fef08a">Sub-linear bit-shift divides exponent by 2; magic constant minimizes error</text>
+          <rect x="25" y="137" width="490" height="45" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="2" />
+          <text x="270" y="157" font-size="12" font-weight="800" text-anchor="middle" fill="#6ee7b7">y = y * ( 1.5F - ( x2 * y * y ) ); // 1st NEWTON-RAPHSON ITERATION</text>
+          <text x="270" y="173" font-size="10" text-anchor="middle" fill="#a7f3d0">Quadratic convergence cuts residual error to &lt; 0.17% in 1 CPU cycle</text>
+          <rect x="25" y="195" width="490" height="48" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="2" />
+          <text x="270" y="216" font-size="13" font-weight="900" text-anchor="middle" fill="#38bdf8">QUAKE III (1999): 4X FASTER THAN HARDWARE FPU</text>
+          <text x="270" y="233" font-size="11" font-weight="600" text-anchor="middle" fill="#94a3b8">Allowed real-time 3D vector lighting before dedicated GPU floating units</text>
+        </svg>
+      </div>`;
+    }
+
+    if (type === 'cache_hierarchy') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+          <rect x="30" y="25" width="480" height="34" rx="6" fill="#064e3b" stroke="#10b981" stroke-width="2" />
+          <text x="270" y="47" font-size="13" font-weight="900" text-anchor="middle" fill="#6ee7b7">L1 CPU CACHE: ~1 ns (32KB-64KB) • Sequential Locality</text>
+          <rect x="55" y="65" width="430" height="34" rx="6" fill="#1e3a5f" stroke="#3b82f6" stroke-width="2" />
+          <text x="270" y="87" font-size="13" font-weight="900" text-anchor="middle" fill="#60a5fa">L2 CPU CACHE: ~4 ns (512KB-1MB) • Prefetch Hit</text>
+          <rect x="80" y="105" width="380" height="34" rx="6" fill="#78350f" stroke="#f59e0b" stroke-width="2" />
+          <text x="270" y="127" font-size="13" font-weight="900" text-anchor="middle" fill="#fde047">L3 SHARED CACHE: ~15 ns (16MB-64MB)</text>
+          <rect x="105" y="145" width="330" height="38" rx="6" fill="#7f1d1d" stroke="#ef4444" stroke-width="2.5" />
+          <text x="270" y="166" font-size="13" font-weight="900" text-anchor="middle" fill="#fca5a5">MAIN RAM: ~80-100 ns (POINTER CHASE / MISS)</text>
+          <text x="270" y="179" font-size="9" text-anchor="middle" fill="#fecaca">100x SLOWER: CPU Stalls &amp; Execution Pipeline Starvation</text>
+          <rect x="25" y="195" width="490" height="48" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2" />
+          <text x="270" y="216" font-size="13" font-weight="900" text-anchor="middle" fill="#34d399">QUICKSORT IN-PLACE VS MERGESORT HEAP ALLOCATION</text>
+          <text x="270" y="233" font-size="11" font-weight="600" text-anchor="middle" fill="#94a3b8">Continuous 64-byte cache line reads crush pointer indirection</text>
+        </svg>
+      </div>`;
+    }
 
     if (type === 'hash_table') {
       return `
@@ -2185,10 +2313,18 @@ class AIVideoGenerator {
 
   getTopicDSAType(topic = '') {
     const t = String(topic).toLowerCase();
-    if (t.includes('stack') || t.includes('heap') || t.includes('memory') || t.includes('null') || t.includes('pointer')) return 'stack_heap';
-    if (t.includes('circuit') || t.includes('rate limit') || t.includes('microservice') || t.includes('token bucket') || t.includes('failover') || t.includes('distributed') || t.includes('async')) return 'circuit_breaker';
-    if (t.includes('tree') || t.includes('sort') || t.includes('quick') || t.includes('merge') || t.includes('search') || t.includes('graph')) return 'binary_tree';
-    return 'hash_table';
+    if (t.includes('heartbleed') || t.includes('openssl') || t.includes('bounds check') || t.includes('over-read') || t.includes('leak') || t.includes('tls') || t.includes('secret')) return 'heartbleed';
+    if (t.includes('morris') || t.includes('buffer overflow') || t.includes('stack smashing') || t.includes('exploit') || t.includes('worm') || t.includes('shellcode') || t.includes('overflow')) return 'buffer_overflow';
+    if (t.includes('therac') || t.includes('race condition') || t.includes('concurrency') || t.includes('deadlock') || t.includes('mutex') || t.includes('semaphore') || t.includes('dijkstra')) return 'race_condition';
+    if (t.includes('ping of death') || t.includes('packet') || t.includes('fragment') || t.includes('ip ') || t.includes('mtu') || t.includes('epoll') || t.includes('c10k')) return 'packet_fragmentation';
+    if (t.includes('inverse square') || t.includes('0x5f3759df') || t.includes('carmack') || t.includes('float') || t.includes('quake') || t.includes('fdiv') || t.includes('pentium')) return 'fast_inverse_sqrt';
+    if (t.includes('cache line') || t.includes('quicksort') || t.includes('mergesort') || t.includes('l1') || t.includes('l2') || t.includes('locality')) return 'cache_hierarchy';
+    if (t.includes('raft') || t.includes('paxos') || t.includes('consensus') || t.includes('split-brain') || t.includes('quorum') || t.includes('leader')) return 'distributed_consensus';
+    if (t.includes('stack') || t.includes('heap') || t.includes('pointer') || t.includes('null') || t.includes('allocation') || t.includes('dereferencing')) return 'stack_heap';
+    if (t.includes('circuit') || t.includes('rate limit') || t.includes('microservice') || t.includes('token bucket') || t.includes('failover') || t.includes('resilience')) return 'circuit_breaker';
+    if (t.includes('tree') || t.includes('b-tree') || t.includes('binary') || t.includes('index') || t.includes('search') || t.includes('graph')) return 'binary_tree';
+    if (t.includes('hash') || t.includes('collision') || t.includes('chaining') || t.includes('addressing')) return 'hash_table';
+    return 'system_flowchart';
   }
 
   getMemeForTopic(topic = '', index = 0) {
@@ -2397,6 +2533,17 @@ class AIVideoGenerator {
               <span class="takeaway-badge">STAFF ENGINEER GOLDEN RULE</span>
             </div>
             <div class="takeaway-principle">"${this.escapeHTML(takeawayPrinciple)}"</div>
+          </div>
+          <div class="subscriber-cta-banner">
+            <div class="cta-pulse-icon">
+              <svg viewBox="0 0 24 24" fill="#ffffff" width="28" height="28">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+            <div class="cta-text-group">
+              <div class="cta-title">SUBSCRIBE FOR DAILY CS &amp; SYSTEM DESIGN</div>
+              <div class="cta-sub">Join 100K+ engineers mastering the internals</div>
+            </div>
           </div>
         `;
       }
@@ -2828,6 +2975,44 @@ class AIVideoGenerator {
             line-height: 1.45;
             color: #ffffff;
             font-style: italic;
+        }
+        .subscriber-cta-banner {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-top: 18px;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(15, 23, 42, 0.95) 100%);
+            border: 2px solid #ef4444;
+            border-radius: 18px;
+            box-shadow: 0 0 35px rgba(239, 68, 68, 0.35);
+        }
+        .cta-pulse-icon {
+            width: 48px;
+            height: 48px;
+            background: #ef4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px #ef4444;
+            flex-shrink: 0;
+        }
+        .cta-text-group {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .cta-title {
+            font-size: 19px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        .cta-sub {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fca5a5;
         }
 
         /* Syntax-highlighted code block */

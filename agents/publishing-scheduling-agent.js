@@ -77,10 +77,28 @@ class PublishingSchedulingAgent {
         return existing;
       }
 
+      let calculatedPublishTime = productionData.scheduledPublishTime;
+      if (this.db) {
+        try {
+          const lastScheduled = await this.db.getRow(
+            "SELECT MAX(publish_time) AS max_time FROM publish_schedule WHERE status = 'scheduled'"
+          );
+          if (lastScheduled?.max_time) {
+            const nextSlot = new Date(new Date(lastScheduled.max_time).getTime() + 4 * 60 * 60 * 1000);
+            if (!calculatedPublishTime || new Date(calculatedPublishTime) <= new Date(lastScheduled.max_time)) {
+              calculatedPublishTime = nextSlot.toISOString();
+            }
+          }
+        } catch (_slotErr) {
+          // Fall back to original scheduled time
+        }
+      }
+      if (!calculatedPublishTime) calculatedPublishTime = new Date().toISOString();
+
       const scheduleEntry = {
         productionId: productionData.id,
         title: productionData.script.title,
-        publishTime: productionData.scheduledPublishTime || new Date().toISOString(),
+        publishTime: calculatedPublishTime,
         status: 'scheduled',
         priority: productionData.priority,
         metadata: {

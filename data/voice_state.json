@@ -1,7 +1,9 @@
 {
+  "lockedVoice": "en-US-GuyNeural",
+  "preferredVoice": "en-US-GuyNeural",
   "lastGender": "gents",
   "lastVoice": "en-US-GuyNeural",
-  "voiceIndex": 1,
-  "gentIndex": 1,
-  "updatedAt": "2026-11-11T21:11:20.787Z"
+  "voiceIndex": 0,
+  "gentIndex": 0,
+  "updatedAt": "2026-11-20T18:05:00.000Z"
 }

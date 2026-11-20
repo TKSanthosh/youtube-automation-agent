@@ -523,6 +523,36 @@ Respond with ONLY valid JSON formatted as an array of objects:
     // Deterministic High-Quality Fallback if AI synthesis is unavailable (Fireship / ByteByteGo style CS Masterclass, Strictly Shorts)
     const fallbackTemplates = [
       {
+        topic: "Heartbleed Explained: The Missing Bounds Check That Leaked the Internet",
+        category: "CS Lore",
+        targetLength: "short",
+        rationale: "Anatomy of the OpenSSL vulnerability: how an unchecked 64KB length field leaked TLS private keys across the web.",
+        searchEvidence: "heartbleed openssl vulnerability explained buffer overread",
+        educationalVisuals: ["Memory bounds check", "Heartbeat packet topology", "Hex dump inspection"],
+        hookAngle: "In 2014, a single missing if statement in OpenSSL leaked the passwords, private keys, and emails of half the internet.",
+        priorityScore: 99
+      },
+      {
+        topic: "Fast Inverse Square Root: The 0x5f3759df Hack That Built 3D Gaming",
+        category: "CS Lore",
+        targetLength: "short",
+        rationale: "Inside John Carmack and Quake III's legendary floating-point bit manipulation hack that computed 1/sqrt(x) 4x faster.",
+        searchEvidence: "fast inverse square root quake 0x5f3759df hack explained",
+        educationalVisuals: ["IEEE 754 float bit shifts", "Newton-Raphson tangent line", "Quake vector lighting"],
+        hookAngle: "In 1999, Quake 3 shocked the gaming world with lightning-fast 3D graphics using an impossible magic constant.",
+        priorityScore: 98
+      },
+      {
+        topic: "The Therac-25 Tragedy: The Deadliest Race Condition in Software History",
+        category: "CS Lore",
+        targetLength: "short",
+        rationale: "Microsecond timing flaw where an unsynchronized 8-bit counter overflowed, dispensing fatal radiation doses.",
+        searchEvidence: "therac 25 race condition bug software engineering ethics",
+        educationalVisuals: ["Thread interleaving race diagram", "Hardware interlock bypass", "Console command state machine"],
+        hookAngle: "In 1986, six cancer patients were killed not by hardware failure, but by a software race condition that occurred in less than 8 seconds.",
+        priorityScore: 97
+      },
+      {
         topic: "How Hash Tables Resolve Collisions: Separate Chaining vs Open Addressing",
         category: "DSA",
         targetLength: "short",
