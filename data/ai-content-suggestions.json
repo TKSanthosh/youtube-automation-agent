@@ -1,139 +1,138 @@
 {
-  "updated_at": "2026-11-21T19:27:18.231Z",
+  "updated_at": "2026-11-21T19:43:11.134Z",
   "total_suggestions": 7,
   "suggestions": [
     {
-      "id": "sugg_1795289237769_omzq5g",
+      "id": "sugg_1795290190564_2fdgob",
       "topic": "Python GIL Explained: Why Multi-Threading Fails You",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Python developers continuously hit CPU-bound performance bottlenecks and are baffled when threading doesn't utilize multi-core processors. Explaining the Global Interpreter Lock cleanly captures massive search volume and long-tail retention.",
+      "rationale": "Python developers continuously hit CPU-bound scaling walls when moving to multi-threading, searching desperately for the Global Interpreter Lock mechanics to optimize their concurrent execution pipelines.",
       "search_evidence": "python gil explained",
       "educational_visuals": [
-        "Animated system flows",
         "State transitions",
-        "Code execution visualization"
-      ],
-      "hook_angle": "Why does adding more threads to your Python script actually make it run slower? Let's expose the Global Interpreter Lock.",
-      "channel_affinity_score": 100,
-      "trend_score": 95,
-      "priority_score": 97,
-      "status": "pending",
-      "created_at": "2026-11-21T19:27:17.769Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795289237967_p7igbj",
-      "topic": "Docker Multi-Stage Builds: Slash Container Sizes 90%",
-      "category": "Docker",
-      "target_length": "short",
-      "rationale": "Bloated production images with build tools and dependencies plague modern software deployment. Developers actively search for multi-stage build optimization to speed up CI/CD pipelines.",
-      "search_evidence": "docker multi-stage builds",
-      "educational_visuals": [
-        "Architecture diagrams",
         "Data-flow diagrams"
       ],
-      "hook_angle": "Your production Docker image is 1.2 Gigabytes because you left your compiler inside it. Here is how to shrink it to 40 megabytes.",
+      "hook_angle": "Why does adding 4 more threads to your Python script make it run slower instead of faster? Let's expose the GIL.",
       "channel_affinity_score": 100,
-      "trend_score": 92,
-      "priority_score": 94,
+      "trend_score": 95,
+      "priority_score": 98,
       "status": "pending",
-      "created_at": "2026-11-21T19:27:17.967Z",
+      "created_at": "2026-11-21T19:43:10.564Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795289237991_bcrxkj",
+      "id": "sugg_1795290190702_9bwmh3",
       "topic": "LSM Trees vs B-Trees: How Databases Write at Scale",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "Core architectural tradeoff between read and write performance in storage engines. System design interview candidates and backend engineers constantly look for a clear, intuitive breakdown.",
+      "rationale": "High-growth backend engineers are constantly tested on storage engine internals; comparing LSM trees and B-trees unlocks deep system design clarity for high-throughput write workloads.",
       "search_evidence": "lsm tree vs b tree",
       "educational_visuals": [
         "Trees and graphs",
-        "Animated system flows"
+        "Architecture diagrams"
       ],
-      "hook_angle": "Why do LSM-trees completely destroy B-trees when it comes to write-heavy workloads like logging and time-series data?",
+      "hook_angle": "Your database writes are bottlenecking because you are using a 1970s data structure for a 2026 write-heavy cloud workload.",
       "channel_affinity_score": 100,
-      "trend_score": 94,
-      "priority_score": 93,
+      "trend_score": 92,
+      "priority_score": 96,
       "status": "pending",
-      "created_at": "2026-11-21T19:27:17.991Z",
+      "created_at": "2026-11-21T19:43:10.702Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795289238195_vaoj7",
-      "topic": "Stop Disk Lookups: How Bloom Filters Save Databases",
+      "id": "sugg_1795290190808_7x1cp",
+      "topic": "Docker Multi-Stage Builds: Slash Image Sizes by 90%",
+      "category": "Docker",
+      "target_length": "short",
+      "rationale": "DevOps engineers and developers struggle with bloated production containers containing unnecessary compilers, prompting huge search volume for lean multi-stage build patterns.",
+      "search_evidence": "docker multi-stage builds",
+      "educational_visuals": [
+        "Animated system flows",
+        "Code execution visualization"
+      ],
+      "hook_angle": "Stop deploying 1-gigabyte Docker images to production when half of it is just the compiler you used to build your app.",
+      "channel_affinity_score": 100,
+      "trend_score": 90,
+      "priority_score": 94,
+      "status": "pending",
+      "created_at": "2026-11-21T19:43:10.808Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795290190936_bj93ns",
+      "topic": "Redis Bloom Filters: Prevent Cache Stampedes Instantly",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "Redis and distributed systems rely heavily on probabilistic data structures to optimize lookups. Viewers search for 'bloom filter redis' to understand how to avoid costly disk reads.",
+      "rationale": "Backend teams scaling to millions of requests need probabilistic data structures like Bloom filters to stop cache-missing database hammerings without blowing up RAM.",
       "search_evidence": "bloom filter redis",
       "educational_visuals": [
         "Data-flow diagrams",
-        "Code execution visualization"
+        "Architecture diagrams"
       ],
-      "hook_angle": "How does Redis tell you a key definitely doesn't exist without scanning millions of records on disk? Enter the Bloom Filter.",
-      "channel_affinity_score": 100,
-      "trend_score": 91,
-      "priority_score": 92,
+      "hook_angle": "When a million requests for non-existent users hit your cache, your database crashes. Here is how a 1-byte math trick saves your cluster.",
+      "channel_affinity_score": 95,
+      "trend_score": 88,
+      "priority_score": 91,
       "status": "pending",
-      "created_at": "2026-11-21T19:27:18.195Z",
+      "created_at": "2026-11-21T19:43:10.936Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795289238202_3o09v",
-      "topic": "Circuit Breakers in Microservices: Stop Cascading Failures",
+      "id": "sugg_1795290191056_y8g0z",
+      "topic": "Circuit Breaker Pattern: Bulletproof Your Microservices",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "Microservice resilience is a top operational challenge. Developers searching for circuit breaker patterns need practical architecture templates to prevent total system outages.",
+      "rationale": "Microservice cascading failures plague distributed systems architectures; developers actively search for resilient state-machine patterns to isolate unstable downstream APIs.",
       "search_evidence": "circuit breaker pattern microservices",
       "educational_visuals": [
         "State transitions",
         "Animated system flows"
       ],
-      "hook_angle": "One slow third-party API just brought down your entire microservice cluster. Here is how the Circuit Breaker pattern isolates the blast radius.",
-      "channel_affinity_score": 100,
-      "trend_score": 93,
-      "priority_score": 91,
+      "hook_angle": "One single slow microservice can take down your entire enterprise architecture. Here is how the Circuit Breaker stops the domino effect.",
+      "channel_affinity_score": 90,
+      "trend_score": 91,
+      "priority_score": 90,
       "status": "pending",
-      "created_at": "2026-11-21T19:27:18.202Z",
+      "created_at": "2026-11-21T19:43:11.056Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795289238225_zufk4",
-      "topic": "Stack vs Heap Memory: Where Does Your Data Actually Live?",
+      "id": "sugg_1795290191128_71e0lr",
+      "topic": "Stack vs Heap Memory: Where Does Your Code Live?",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "Fundamental computer science concept that bridges low-level memory management with everyday application bugs like stack overflows and memory leaks.",
+      "rationale": "A foundational computer science concept that puzzles mid-level developers regarding pointer invalidation, memory leaks, and performance overhead differences.",
       "search_evidence": "stack vs heap memory allocation",
+      "educational_visuals": [
+        "Code execution visualization",
+        "Memory layout diagrams"
+      ],
+      "hook_angle": "Why does allocating an object on the heap feel like booking a flight, while the stack is like grabbing a sticky note off your desk?",
+      "channel_affinity_score": 95,
+      "trend_score": 85,
+      "priority_score": 89,
+      "status": "pending",
+      "created_at": "2026-11-21T19:43:11.128Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795290191132_a8sjqb",
+      "topic": "Python Strategy Design Pattern: Clean Up Giant If-Elses",
+      "category": "Python",
+      "target_length": "short",
+      "rationale": "Developers looking to refactor monolithic conditional blocks into modular, maintainable, and extensible Pythonic object-oriented architectures.",
+      "search_evidence": "strategy design pattern python",
       "educational_visuals": [
         "Architecture diagrams",
         "Code execution visualization"
       ],
-      "hook_angle": "Why does returning a local variable pointer crash your program? Let's look inside the Stack and Heap memory architecture.",
+      "hook_angle": "If your Python function has 15 nested if-else statements handling payment gateways, your codebase is a ticking time bomb.",
       "channel_affinity_score": 95,
-      "trend_score": 90,
-      "priority_score": 89,
-      "status": "pending",
-      "created_at": "2026-11-21T19:27:18.225Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795289238227_fb0h1d",
-      "topic": "Mastering the Strategy Pattern in Python & Clean Code",
-      "category": "Python",
-      "target_length": "short",
-      "rationale": "Software engineers struggle with giant if-else conditionals when business logic scales. The Strategy design pattern provides clean polymorphism that developers actively search to implement.",
-      "search_evidence": "strategy design pattern python",
-      "educational_visuals": [
-        "Trees and graphs",
-        "Code execution visualization"
-      ],
-      "hook_angle": "Stop writing 500-line if-else blocks. Here is how the Strategy Design Pattern makes your codebase bulletproof and extensible.",
-      "channel_affinity_score": 95,
-      "trend_score": 88,
+      "trend_score": 87,
       "priority_score": 88,
       "status": "pending",
-      "created_at": "2026-11-21T19:27:18.227Z",
+      "created_at": "2026-11-21T19:43:11.132Z",
       "used_at": null
     }
   ]
