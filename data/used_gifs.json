@@ -38,7 +38,8 @@
     "https://media.tenor.com/qc8QHhSMfngAAAAM/bepalzo-monkey.gif",
     "https://media.tenor.com/VykXHUu1WgsAAAAM/scaler-create-impact.gif",
     "https://media.tenor.com/xuvMuMgtLTwAAAAM/fang-gang-fangsters.gif",
-    "https://media.tenor.com/DUlvPVrPZrwAAAAM/hacker-pc.gif"
+    "https://media.tenor.com/DUlvPVrPZrwAAAAM/hacker-pc.gif",
+    "https://media.tenor.com/cotOa0s4tYwAAAAM/before-after.gif"
   ],
   "history": [
     {
@@ -313,6 +314,13 @@
       "query": "coding meme",
       "downloadedAt": "2026-11-21T17:56:12.875Z",
       "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1795283756638_coding_meme.gif"
+    },
+    {
+      "url": "https://media.tenor.com/cotOa0s4tYwAAAAM/before-after.gif",
+      "topic": "How a Single TCP SACK Packet Panics UNIX Kernels",
+      "query": "coding meme",
+      "downloadedAt": "2026-11-21T18:07:09.495Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1795284429072_coding_meme.gif"
     }
   ]
 }

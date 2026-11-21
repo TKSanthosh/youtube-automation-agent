@@ -284,6 +284,24 @@ async function run() {
           url: youtubeUrl,
           durationSec: Math.round((Date.now() - cycleStart) / 1000)
         });
+
+        // 7. Multi-Platform: Publish to Instagram Reels (if credentials configured)
+        if (process.env.INSTAGRAM_SESSION_ID && fsSync.existsSync(videoPath)) {
+          try {
+            const { InstagramReelsPublisher } = require('../utils/instagram-reels-publisher');
+            const igPublisher = new InstagramReelsPublisher();
+            const igResult = await igPublisher.publishReel({
+              videoPath,
+              caption: script.title,
+              hashtags: seo.hashtags || []
+            });
+            if (igResult.success) {
+              console.log(chalk.magenta.bold(`   📸 INSTAGRAM REEL PUBLISHED SUCCESSFULLY`));
+            }
+          } catch (igErr) {
+            logger.warn(`Instagram Reel publishing notice: ${igErr.message}`);
+          }
+        }
       } catch (uploadError) {
         if (isQuotaExceededError(uploadError)) {
           console.log(chalk.yellow.bold(`\n⚠️  GOOGLE YOUTUBE UPLOAD LIMIT REACHED (Daily quota exhausted).`));

@@ -96,6 +96,10 @@ jobs:
           YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
           DEFAULT_PRIVACY_STATUS: ${{ secrets.DEFAULT_PRIVACY_STATUS || 'public' }}
           
+          # Instagram Credentials (Multi-Platform Reels Publishing)
+          INSTAGRAM_SESSION_ID: ${{ secrets.INSTAGRAM_SESSION_ID }}
+          INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
+          
           # Video Engine Settings
           VIDEO_PROVIDER: "slideshow"
           VIDEO_RESOLUTION: "1080p"
