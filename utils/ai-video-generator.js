@@ -2699,36 +2699,12 @@ class AIVideoGenerator {
             <div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div>
             <div class="particle p4"></div><div class="particle p5"></div>
           </div>
-          <div class="teacher-hud">
-            <div class="teacher-avatar-pod">
-              ${this.renderAITeacherAvatar(idx)}
-              <div class="teacher-live-pill"><span class="live-dot"></span> LIVE INSTRUCTOR</div>
-            </div>
-            <div class="teacher-details">
-              <div class="teacher-meta-row">
-                <div class="teacher-name-group">
-                  <span class="teacher-title">TECH INSTRUCTOR</span>
-                  <span class="teacher-tag">Senior Software Engineer</span>
-                </div>
-                <div class="voice-equalizer">
-                  <span class="eq-bar eq-1"></span>
-                  <span class="eq-bar eq-2"></span>
-                  <span class="eq-bar eq-3"></span>
-                  <span class="eq-bar eq-4"></span>
-                  <span class="eq-bar eq-5"></span>
-                </div>
-              </div>
-              <div class="teacher-bubble">
-                <span class="bubble-quote">“</span>${this.escapeHTML(this.getTeacherSpeechPrompt(slide, idx, script.title))}<span class="bubble-quote">”</span>
-              </div>
-            </div>
-          </div>
           <div class="section-card">
               <div class="top-badge" style="background: ${badge.color}22; border-color: ${badge.color}66; color: ${badge.color};">${this.escapeHTML(badge.label)}</div>
               <h2 class="section-header">${this.escapeHTML(this.stripEmojis(slide.headline || slide.title || `Chapter ${idx + 1}`))}</h2>
               ${visualBlockHTML}
               ${bulletsHTML ? `<div class="bullet-container">${bulletsHTML}</div>` : ''}
-              <div class="teacher-takeaway-bar">
+              <div class="tech-takeaway-bar">
                 <span class="takeaway-icon">💡</span>
                 <span class="takeaway-text">PRO TIP: ${this.escapeHTML(this.getSlideFooterTip(slide, idx))}</span>
               </div>
@@ -2824,7 +2800,7 @@ class AIVideoGenerator {
             top: 0; left: 0;
             width: 1080px;
             height: 1920px;
-            padding: 55px 60px 180px 60px;
+            padding: 95px 60px 180px 60px;
             display: none;
             flex-direction: column;
             justify-content: flex-start;
@@ -2834,149 +2810,6 @@ class AIVideoGenerator {
         .slide.active {
             display: flex;
             opacity: 1;
-        }
-
-        /* AI Girl Teacher Studio HUD */
-        .teacher-hud {
-            position: relative;
-            z-index: 5;
-            width: 100%;
-            max-width: 960px;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.92));
-            border: 2px solid ${theme.accent};
-            border-radius: 24px;
-            padding: 16px 22px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-top: 10px;
-            margin-bottom: 18px;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.65), 0 0 35px rgba(${theme.accentRGB}, 0.25);
-            animation: pulse-glow 3.5s ease-in-out infinite;
-        }
-
-        .teacher-avatar-pod {
-            position: relative;
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            border: 3px solid ${theme.accent};
-            background: #090d16;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            box-shadow: 0 0 25px rgba(${theme.accentRGB}, 0.45);
-        }
-
-        .teacher-svg {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-        }
-
-        .teacher-live-pill {
-            position: absolute;
-            bottom: -8px;
-            background: #ef4444;
-            color: #ffffff;
-            font-size: 11px;
-            font-weight: 900;
-            letter-spacing: 1.2px;
-            text-transform: uppercase;
-            padding: 3px 9px;
-            border-radius: 9999px;
-            border: 2px solid #0f172a;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.5);
-            white-space: nowrap;
-        }
-
-        .live-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #ffffff;
-            animation: cursor-blink 1s infinite;
-        }
-
-        .teacher-details {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            flex-grow: 1;
-            min-width: 0;
-        }
-
-        .teacher-meta-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            border-bottom: 1px solid rgba(${theme.accentRGB}, 0.25);
-            padding-bottom: 5px;
-        }
-
-        .teacher-name-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .teacher-title {
-            font-size: 19px;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            color: #f8fafc;
-        }
-
-        .teacher-tag {
-            font-size: 14px;
-            font-weight: 700;
-            color: ${theme.accent};
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .voice-equalizer {
-            display: flex;
-            align-items: flex-end;
-            gap: 4px;
-            height: 18px;
-        }
-
-        .eq-bar {
-            width: 4px;
-            background: ${theme.accent};
-            border-radius: 2px;
-            animation: eq-bounce 1.2s ease-in-out infinite;
-        }
-        .eq-1 { height: 14px; animation-delay: 0.1s; }
-        .eq-2 { height: 8px;  animation-delay: 0.3s; }
-        .eq-3 { height: 18px; animation-delay: 0.2s; }
-        .eq-4 { height: 10px; animation-delay: 0.4s; }
-        .eq-5 { height: 16px; animation-delay: 0.25s; }
-
-        @keyframes eq-bounce {
-            0%, 100% { transform: scaleY(0.4); opacity: 0.6; }
-            50% { transform: scaleY(1.0); opacity: 1; }
-        }
-
-        .teacher-bubble {
-            font-size: 20px;
-            font-weight: 600;
-            line-height: 1.35;
-            color: #e2e8f0;
-            font-style: italic;
-        }
-
-        .bubble-quote {
-            color: ${theme.accent};
-            font-size: 22px;
-            font-weight: 900;
         }
 
         /* Incident Card styling for Hook slide */
@@ -3153,7 +2986,7 @@ class AIVideoGenerator {
             flex-shrink: 0;
             display: inline-block;
         }
-        .teacher-takeaway-bar {
+        .tech-takeaway-bar {
             width: 100%;
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.88));
             border: 1.5px solid ${theme.accent}77;
