@@ -239,6 +239,12 @@ async function run() {
 
       console.log(chalk.green(`   🎬 Video rendered successfully (${(fsSync.statSync(videoPath).size / 1024 / 1024).toFixed(2)} MB)`));
 
+      // Preserve a temporary copy for Instagram Reels publishing before YouTube cleanup unlinks videoPath
+      const igVideoPath = path.join(path.dirname(videoPath), 'ig_' + path.basename(videoPath));
+      if (process.env.INSTAGRAM_SESSION_ID && fsSync.existsSync(videoPath)) {
+        try { fsSync.copyFileSync(videoPath, igVideoPath); } catch (_) {}
+      }
+
       // 6. Direct Upload to YouTube
       logger.info('Uploading directly to YouTube...');
       const scheduleEntry = {
@@ -286,12 +292,13 @@ async function run() {
         });
 
         // 7. Multi-Platform: Publish to Instagram Reels (if credentials configured)
-        if (process.env.INSTAGRAM_SESSION_ID && fsSync.existsSync(videoPath)) {
+        const targetUploadPath = fsSync.existsSync(igVideoPath) ? igVideoPath : (fsSync.existsSync(videoPath) ? videoPath : null);
+        if (process.env.INSTAGRAM_SESSION_ID && targetUploadPath) {
           try {
             const { InstagramReelsPublisher } = require('../utils/instagram-reels-publisher');
             const igPublisher = new InstagramReelsPublisher();
             const igResult = await igPublisher.publishReel({
-              videoPath,
+              videoPath: targetUploadPath,
               caption: script.title,
               hashtags: seo.hashtags || []
             });
@@ -300,6 +307,8 @@ async function run() {
             }
           } catch (igErr) {
             logger.warn(`Instagram Reel publishing notice: ${igErr.message}`);
+          } finally {
+            try { if (fsSync.existsSync(igVideoPath)) fsSync.unlinkSync(igVideoPath); } catch (_) {}
           }
         }
       } catch (uploadError) {
