@@ -8,6 +8,14 @@ const GEMINI_MODELS = [
 ];
 const GEMINI_DEFAULT_MODEL = process.env.GEMINI_MODEL || GEMINI_MODELS[0];
 
+const OPENROUTER_FREE_MODELS = [
+  'particle-ai/particle-1:free',
+  'liquid/lfm-3-1.7b:free',
+  'baidu/ernie-5.5-flash-preview:free',
+  'recursive/flint-v1.0:free',
+  'nvidia/nemotron-3.5-lightning:free'
+];
+
 const PROVIDERS = {
   openai: {
     name: 'OpenAI',
@@ -19,14 +27,8 @@ const PROVIDERS = {
   openrouter: {
     name: 'OpenRouter',
     baseURL: 'https://openrouter.ai/api/v1',
-    defaultModel: process.env.OPENROUTER_MODEL || 'particle-ai/particle-1:free',
-    models: [
-      'particle-ai/particle-1:free',
-      'liquid/lfm-3-1.7b:free',
-      'baidu/ernie-5.5-flash-preview:free',
-      'recursive/flint-v1.0:free',
-      'nvidia/nemotron-3.5-lightning:free'
-    ],
+    defaultModel: 'openai/gpt-5.6-sol',
+    models: ['openai/gpt-5.6-sol', 'anthropic/claude-fable-5', 'google/gemini-3.7-flash', 'moonshotai/kimi-k3', 'z-ai/glm-5.3'],
     envKey: 'OPENROUTER_API_KEY',
   },
   kimi: {
@@ -111,14 +113,8 @@ class AITextService {
         'X-Title': 'YouTube Automation Agent',
       };
       this.isFreeTierOpenRouter = true;
-      this.openRouterModels = preset.models || [
-        'nvidia/nemotron-3.5-lightning:free',
-        'inclusionai/ling-3.2-flash:free',
-        'google/gemma-4-26b-a4b-it:free',
-        'baidu/ernie-5.5-flash-preview:free',
-        'liquid/lfm-3-1.7b:free',
-        'nvidia/nemotron-3-ultra-550b-a55b:free'
-      ];
+      this.openRouterModels = OPENROUTER_FREE_MODELS;
+      this.model = model || process.env.OPENROUTER_MODEL || OPENROUTER_FREE_MODELS[0];
     }
     this.client = new OpenAI(options);
     this.model = model || preset.defaultModel;
