@@ -34,7 +34,11 @@
     "https://media.tenor.com/KCh3fB-aAaYAAAAM/waiting-for-help-waiting.gif",
     "https://media.tenor.com/yiaAYqLlJfoAAAAM/software-engineer-develop.gif",
     "https://media.tenor.com/7UTHFDjsMhIAAAAM/pkers-server.gif",
-    "https://media.tenor.com/2l4p482TgAoAAAAM/computer-lol.gif"
+    "https://media.tenor.com/2l4p482TgAoAAAAM/computer-lol.gif",
+    "https://media.tenor.com/qc8QHhSMfngAAAAM/bepalzo-monkey.gif",
+    "https://media.tenor.com/VykXHUu1WgsAAAAM/scaler-create-impact.gif",
+    "https://media.tenor.com/xuvMuMgtLTwAAAAM/fang-gang-fangsters.gif",
+    "https://media.tenor.com/DUlvPVrPZrwAAAAM/hacker-pc.gif"
   ],
   "history": [
     {
@@ -281,6 +285,34 @@
       "query": "programmer computer reaction",
       "downloadedAt": "2026-11-21T17:34:19.285Z",
       "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1795282459034_programmer_computer_.gif"
+    },
+    {
+      "url": "https://media.tenor.com/qc8QHhSMfngAAAAM/bepalzo-monkey.gif",
+      "topic": "Why Redis Is Single-Threaded Yet Blazing Fast: Epoll Demystified",
+      "query": "software engineer stress",
+      "downloadedAt": "2026-11-21T17:41:59.775Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1795282919457_software_engineer_st.gif"
+    },
+    {
+      "url": "https://media.tenor.com/VykXHUu1WgsAAAAM/scaler-create-impact.gif",
+      "topic": "Stop Cache Stampedes: Consistent Hashing Demystified",
+      "query": "developer coding coffee",
+      "downloadedAt": "2026-11-21T17:48:08.805Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1795283288589_developer_coding_cof.gif"
+    },
+    {
+      "url": "https://media.tenor.com/xuvMuMgtLTwAAAAM/fang-gang-fangsters.gif",
+      "topic": "Mastering Lamport's Bakery Algorithm: Pure Software Mutual Exclusion",
+      "query": "programmer mind blown",
+      "downloadedAt": "2026-11-21T17:53:27.033Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1795283606823_programmer_mind_blow.gif"
+    },
+    {
+      "url": "https://media.tenor.com/DUlvPVrPZrwAAAAM/hacker-pc.gif",
+      "topic": "How Xerox PARC's BitBLT Saved Your CPU",
+      "query": "coding meme",
+      "downloadedAt": "2026-11-21T17:56:12.875Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1795283756638_coding_meme.gif"
     }
   ]
 }

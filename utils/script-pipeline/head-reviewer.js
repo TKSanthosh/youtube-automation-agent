@@ -17,7 +17,7 @@ EVALUATION CRITERIA:
 2. Natural Teacher Delivery (20%): Does the narration speak directly to the viewer with real developer analogies? Does it strictly avoid reading slides verbatim?
 3. Technical Accuracy (20%): Are terminology, algorithms, and complexity strictly correct?
 4. Visual Potential & Pacing (20%): Does each chapter feature explicit diagrams and data flows rather than static walls of text?
-5. Practical Value & Timing (15%): Does it show real-world code and industry usage? Does it fit the strict duration window (340-370 words, 2.5-3m for Shorts)?
+5. Practical Value & Timing (15%): Does it show real-world code and industry usage? Does it fit the strict duration window (90-110 words, 35-45s for Shorts)?
 
 Script Overview:
 Title: ${script.title}

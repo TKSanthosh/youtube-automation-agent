@@ -183,20 +183,20 @@ async function run() {
 
       const strategy = await strategyAgent.generateContentStrategy(topicForCycle);
       
-      // Apply target length and visual blueprints (Strictly Shorts/Reels 2:30-3:00 min)
+      // Apply target length and visual blueprints (Strictly Viral Shorts/Reels 35-45 sec)
       const targetLen = (options.length && options.length !== 'autonomous_ai')
         ? options.length
         : 'short';
       
       const lengthLabels = {
-        short: '2:30-3:00 minutes (Reels/Shorts)',
+        short: '35-45 seconds (Viral High-Retention Shorts)',
         medium: '8-12 minutes',
         long: '15-20 minutes',
         extended: '20-30 minutes'
       };
 
       strategy.requestedLengthKey = targetLen;
-      strategy.requestedLength = lengthLabels[targetLen] || '2:30-3:00 minutes (Reels/Shorts)';
+      strategy.requestedLength = lengthLabels[targetLen] || '35-45 seconds (Viral High-Retention Shorts)';
       if (topSugg) {
         if (topSugg.educational_visuals) strategy.visualGuidance = topSugg.educational_visuals;
         if (topSugg.hook_angle) strategy.hookAngle = topSugg.hook_angle;

@@ -84,7 +84,7 @@ class ScriptWriterAgent {
           pipelineScript.sections = pipelineScript.sections || [];
           pipelineScript.mainContent = pipelineScript.mainContent || { sections: pipelineScript.sections };
           pipelineScript.keywords = pipelineScript.keywords || strategy.keywords || [];
-          pipelineScript.duration = '2:55';
+          pipelineScript.duration = isExtendedForm ? '25:00' : '0:42';
           pipelineScript.slides = this.normalizeAISlides(
             { slides: pipelineScript.slides, sections: pipelineScript.sections },
             strategy
@@ -169,112 +169,115 @@ Our channel rule: THIS video MUST surpass our previous upload (previous quality 
 - Mandatory Upgrades: ${Array.isArray(strategy.qualityDirectives.mandatoryUpgrades) ? strategy.qualityDirectives.mandatoryUpgrades.join('; ') : 'Tighter pacing, zero delay in hook.'}
 ` : '';
 
-    const prompt = `You are a renowned computer science educator creating a captivating 3-minute YouTube Short on: "${strategy.topic}".
-Channel Style: A brilliant blend of FIRESHIP (fast-paced developer wit, programming history/lore & hilarious relatable dev memes), BYTEBYTEGO (crystal-clear visual diagrams & DSA/architecture mental models), and JAVASCRIPT MASTERY (sleek syntax-highlighted code walkthroughs).
-Your goal is to make this video captivating, deeply educational, and free of generic corporate buzzwords. Junior engineers will love the humor and clarity, while staff engineers will respect the depth.
+    const prompt = `You are a renowned computer science educator creating a high-velocity, viral YouTube Short on: "${strategy.topic}".
+Channel Style: A brilliant blend of FIRESHIP (ultra-fast developer wit & relatable dev memes), BYTEBYTEGO (crystal-clear architecture & DSA mental models), and JAVASCRIPT MASTERY (clean syntax-highlighted code).
+Your goal: Maximize Viewer Retention (APV > 100%) and Viewed vs. Swiped Away (VVSA > 80%). Every single second must earn the right to exist.
 ${evoBlock}
-CRITICAL CONSTRAINTS FOR 3-MINUTE YOUTUBE SHORTS (2:45 to 3:00 MINUTES):
-- Video duration MUST be strictly between 2:45 and 3:00 minutes (165 to 178 seconds).
-- Total narration across all 5 slides MUST be 360 to 385 words (~70-80 words per slide at ~130-135 wpm speech pacing).
-- Zero fluff, zero generic boilerplate, zero throat-clearing greetings.
-- STRICT EMOJI BAN: Do NOT include any emojis anywhere in headlines, captions, subtexts, or bullet points. Use clean, professional engineering typography only.
+CRITICAL VIRAL CONSTRAINTS FOR 35-45 SECOND YOUTUBE SHORTS:
+- Total video duration MUST be strictly between 35 and 45 seconds.
+- Total narration across all 5 slides MUST be 90 to 110 words total (~18-22 words per slide at ~150 wpm energetic speech pacing).
+- Zero introductory fluff: NO "Hey guys", NO "In this video", NO greetings.
+- STRICT EMOJI BAN: Do NOT include any emojis anywhere in headlines, captions, subtexts, or bullet points. Use clean, professional typography only.
+- ZERO-SECOND HOOK (Slide 1): Frame 0 MUST state a high-stakes metric, crash, or counter-intuitive claim within 1.5 seconds.
+- SEAMLESS INFINITE LOOP (Slide 5): The final sentence MUST end with an open-ended lead-in that phonetically and grammatically connects directly back to the very first word of Slide 1, encouraging viewers to rewatch.
+- SUBSCRIBER TRIGGER: Slide 5 includes a rapid 1-second CTA: "Subscribe to master daily senior engineering concepts."
 
-THE 5 PROGRESSIVE SLIDES (Total: 360-385 words):
-1. Slide 1 (type: "history_lore"): Programming History / Lore & High-Stakes Hook (~70-75 words)
-   - Story hook: When was this discovered, created, or broken? (e.g., Bell Labs 1972, Netscape 1995, Apollo 11 1969, Tony Hoare 1965, or the historical origin of the problem).
-   - Talk like Fireship: fast, punchy, cynical, fascinating.
-2. Slide 2 (type: "meme"): Developer Comedy Meme & The Relatable Pain Point (~60-65 words)
-   - Relatable developer struggle: Debugging at 2 AM, burning production servers, "works on my machine", junior vs senior dev.
-   - Include a meme object with type ("server_on_fire" | "works_on_my_machine" | "spiderman_pointing" | "two_buttons" | "doge_cheems"), comic uppercase caption, and subtext.
-3. Slide 3 (type: "dsa_architecture"): Under-The-Hood DSA & Architecture Mental Model (~80-85 words)
-   - ByteByteGo style: Explain the core mechanics (memory layout, Big-O, bucket arrays, cache lines, state machine transitions) without hand-waving.
-   - Include a diagram object with dsaType ("hash_table" | "binary_tree" | "stack_heap" | "circuit_breaker" | "cache_hierarchy") and flowLabel.
-4. Slide 4 (type: "code"): Clean Code Implementation Walkthrough (~80-85 words)
-   - JavaScript Mastery style: Real, clean syntax (TypeScript, Python, C, or Go).
-   - Narration walks through the code on screen line-by-line ("Notice on line 3...", "Instead of a naive loop...").
-5. Slide 5 (type: "takeaway"): Senior Staff Engineer Golden Rule of Thumb (~70-75 words)
-   - One actionable golden rule that separates tutorial hell from senior architecture.
-   - Smooth loop anchor back to the start.
+THE 5 RAPID PROGRESSIVE SLIDES (Total: 90-110 words, ~7-8 seconds each):
+1. Slide 1 (type: "history_lore"): High-Stakes Hook & Lore Trigger (18-22 words, ~7-8s)
+   - Shocking fact, origin milestone, or production incident (Bell Labs, Apollo 11, Mars Rover, Linux kernel).
+   - Hook viewers instantly so they do not swipe away.
+2. Slide 2 (type: "meme"): Developer Comedy Meme & The Relatable Struggle (18-22 words, ~7-8s)
+   - The hilarious developer pain point: Debugging at 2 AM, burning production servers, "works on my machine".
+   - Include a meme object with type, comic uppercase caption, and subtext.
+3. Slide 3 (type: "dsa_architecture"): Under-The-Hood DSA & Architecture Mental Model (20-24 words, ~8s)
+   - ByteByteGo style: Explain the core mechanics (memory layout, Big-O, bucket arrays, cache lines, state machine).
+   - Include a diagram object with dsaType and flowLabel.
+4. Slide 4 (type: "code"): Clean Code Syntax Highlight (18-22 words, ~7-8s)
+   - Real, clean syntax (TypeScript, Python, C, Go, or Rust).
+   - Narration highlights the exact line that solves the bottleneck.
+5. Slide 5 (type: "takeaway"): Golden Rule of Thumb + Seamless Loop Anchor + Subscribe CTA (18-22 words, ~7-8s)
+   - One actionable senior engineering takeaway.
+   - Micro-CTA: "Subscribe for daily senior dev secrets."
+   - Ends with an open loop sentence that rolls straight into Slide 1's opening.
 
 Return ONLY valid JSON matching this exact structure:
 {
-  "title": "Compelling CS title under 70 characters",
-  "hook": "Opening statement capturing the singular, specific real-world problem or lore milestone (no greetings)",
+  "title": "High-CTR CS Short Title under 55 characters",
+  "hook": "Visceral opening statement stopping the swipe in under 1.5 seconds (no greetings)",
   "slides": [
     {
       "slideNumber": 1,
       "type": "history_lore",
-      "headline": "01. Origin & Computing Lore",
+      "headline": "01. The $500M Discovery",
       "historicMilestone": "BELL LABS • 1972",
       "bulletPoints": [
-        "Historical origin and discovery",
-        "Why naive approaches broke early computing"
+        "Why naive approaches broke early computing",
+        "The hidden bottleneck exposed"
       ],
       "codeSnippet": "",
-      "teacherNarration": "Conversational, witty, energetic history/lore explanation hook (70-75 words)."
+      "teacherNarration": "Punchy, shocking hook arresting viewer immediately. Zero fluff (18-22 words)."
     },
     {
       "slideNumber": 2,
       "type": "meme",
-      "headline": "02. The 2 AM Developer Reality",
+      "headline": "02. The 2 AM Production Reality",
       "meme": {
         "type": "server_on_fire",
         "caption": "WHEN YOUR NAIVE CODE HITS PRODUCTION TRAFFIC",
         "subtext": "Everything worked perfectly on localhost"
       },
       "bulletPoints": [
-        "The painful developer struggle",
-        "Why localhost tests deceive you"
+        "Why localhost benchmarks deceive you",
+        "The real-world latency spike"
       ],
       "codeSnippet": "",
-      "teacherNarration": "Relatable developer comedy narration explaining the pain and nightmare (60-65 words)."
+      "teacherNarration": "Relatable developer humor explaining the nightmare failure (18-22 words)."
     },
     {
       "slideNumber": 3,
       "type": "dsa_architecture",
       "headline": "03. Under The Hood: Mental Model",
       "bulletPoints": [
-        "Memory layout and data pointers",
-        "Time & Space complexity mechanics"
+        "Hardware-level memory alignment",
+        "O(1) cache line traversal"
       ],
       "diagram": {
-        "title": "Data Flow & Memory Mechanics",
-        "dsaType": "hash_table",
+        "title": "Hardware Memory Traversal",
+        "dsaType": "cache_hierarchy",
         "nodes": [
-          {"name": "Hash Function", "role": "Key -> Hash Code", "icon": "01"},
-          {"name": "Bucket Array", "role": "Index Modulo", "icon": "02"},
-          {"name": "Collision Chain", "role": "Linked List / Tree", "icon": "03"},
-          {"name": "Memory Buffer", "role": "Heap Allocation", "icon": "04"}
+          {"name": "L1 Cache", "role": "64-Byte Lines", "icon": "01"},
+          {"name": "RAM Controller", "role": "Contiguous Fetch", "icon": "02"},
+          {"name": "Register Bank", "role": "Zero Wait-States", "icon": "03"}
         ],
-        "flowLabel": "Key -> Hash Function -> Bucket Index -> Collision Chain"
+        "flowLabel": "Registers -> L1 Cache Line -> Contiguous RAM"
       },
       "codeSnippet": "",
-      "teacherNarration": "ByteByteGo-style clear explanation of the mechanics and Big-O reality (80-85 words)."
+      "teacherNarration": "Crystal clear explanation of memory and algorithmic efficiency (20-24 words)."
     },
     {
       "slideNumber": 4,
       "type": "code",
       "headline": "04. Clean Implementation",
       "bulletPoints": [
-        "Idiomatic pattern implementation",
-        "Edge-case and collision handling"
+        "Contiguous cache-aligned structure",
+        "Zero-allocation hot loop"
       ],
-      "codeSnippet": "// 8-12 lines of clean code",
-      "teacherNarration": "Teacher walks through the code shown on screen line by line explaining why each line matters (80-85 words)."
+      "codeSnippet": "// 6-8 lines of clean syntax",
+      "teacherNarration": "Fast breakdown of the optimized code pattern (18-22 words)."
     },
     {
       "slideNumber": 5,
       "type": "takeaway",
       "headline": "05. Staff Engineer Golden Rule",
       "bulletPoints": [
-        "Core production gotcha to avoid",
-        "Key architectural rule of thumb"
+        "Golden rule of thumb for senior architects",
+        "Subscribe for daily engineering insights"
       ],
       "codeSnippet": "",
-      "teacherNarration": "Memorable concluding rule of thumb providing complete pedagogical closure and resolution without generic subscribe begging (70-75 words)."
+      "teacherNarration": "Senior takeaway plus subscribe trigger, ending with a loop lead-in flowing into Slide 1 (18-22 words)."
     }
   ],
-  "conclusion": "One-line golden rule of thumb for senior engineers"
+  "conclusion": "One-line senior rule connecting into the loop"
 }`;
 
     try {
@@ -290,7 +293,7 @@ Return ONLY valid JSON matching this exact structure:
         content: s.bulletPoints,
         codeSnippet: s.codeSnippet,
         spokenNarration: s.teacherNarration,
-        duration: Math.ceil(((s.teacherNarration || '').split(/\s+/).filter(Boolean).length / 135) * 60)
+        duration: Math.ceil(((s.teacherNarration || '').split(/\s+/).filter(Boolean).length / 150) * 60)
       }));
 
       if (!parsed.title || slides.length === 0) {
@@ -424,12 +427,14 @@ Return ONLY valid JSON matching this exact structure:
     const narration = String(slide.teacherNarration || slide.spokenNarration || slide.narration || '').trim();
     const wordCount = narration.split(/\s+/).filter(Boolean).length;
 
-    // If narration is already well-paced for YouTube Shorts (65 to 92 words), preserve it!
-    if (wordCount >= 65 && wordCount <= 92) return narration;
+    // Viral sweet spot for 35-45s Shorts: 18 to 26 words per slide (~7-8 seconds)
+    if (wordCount >= 14 && wordCount <= 32) return narration;
 
-    if (wordCount > 92) {
-      return narration.split(/\s+/).slice(0, 85).join(' ') + '.';
+    if (wordCount > 32) {
+      return narration.split(/\s+/).slice(0, 24).join(' ') + '.';
     }
+
+    if (wordCount > 0) return narration;
 
     // Generate authentic, topic-tailored explanation for the specific slide role
     return this.generateAuthenticCSNarration(slide, topic, idx);

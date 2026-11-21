@@ -27,7 +27,7 @@ Ruthlessly evaluate against these 11 questions:
 8. Are there enough concrete visual cues and code demonstrations?
 9. Are transitions between sections natural or jarring?
 10. Will a beginner genuinely understand the mechanism after watching?
-11. Is the script strictly timed (for Shorts: 340-370 words, ~155-170s, strictly between 2m30s and 3m)?
+11. Is the script strictly timed (for Shorts: 90-110 words, strictly between 35s and 45s)?
 
 Provide a JSON response:
 {
