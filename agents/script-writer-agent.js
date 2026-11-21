@@ -409,17 +409,17 @@ Return ONLY valid JSON matching this exact structure:
       }
     }
 
-    // Default Computer Science Masterclass (Fireship / ByteByteGo style)
+    // Default Computer Science Viral Short (Fireship / ByteByteGo style - strictly 20-24 words each)
     if (idx === 0) {
-      return `Computing history is defined by how engineers conquer complexity. When ${topicClean} was first conceptualized, early computer scientists were constrained by tight hardware registers, forcing pioneers to invent clean architectural abstractions that still govern modern software today. Understanding these fundamental origins is the difference between blindly copy-pasting code and truly designing resilient production systems that withstand real-world scale.`;
+      return `When ${topicClean} was first engineered, naive systems burned ninety percent of CPU cycles waiting on unaligned data lookups.`;
     } else if (idx === 1) {
-      return `The two in the morning developer reality: textbook solutions look flawless in local development environments, but the instant real production traffic hits, race conditions and subtle bottlenecks emerge. It worked on my machine, so why is the production server currently on fire? Every engineer has experienced the panic of watching staging-tested code crumble under live user load. Let's see what is actually happening.`;
+      return `It worked perfectly on localhost, but the moment real production traffic hit, latency spiked and the server caught fire.`;
     } else if (idx === 2) {
-      return `Let's examine the under-the-hood mental model displayed on your screen. Notice the flow of data across system boundaries. Instead of tight synchronous coupling, modern architecture isolates state transitions, managing state changes through deterministic state boundaries, memory barriers, and explicit invariant verification to guarantee that failures in one component never cascade across your distributed topology.`;
+      return `Here is the mental model on your screen: modern architecture eliminates redundant polling by replacing linear scans with event-driven callbacks.`;
     } else if (idx === 3) {
-      return `Now let's walk through the clean production implementation on your screen. Notice on line one how we declare explicit type safety and boundary guards. As we trace through the execution handler, every state mutation is isolated, preventing unintended side effects, handling timeout edge cases gracefully, and guaranteeing thread-safe, predictable execution across concurrent worker threads.`;
+      return `Look at line one of our clean implementation: we allocate contiguous memory upfront, guaranteeing constant O(1) retrieval speed.`;
     } else {
-      return `Here is the golden rule senior staff engineers live by: prioritize maintainable, predictable architecture over clever premature optimizations. Design systems around failure-tolerant boundaries, enforce explicit invariants, and profile physical memory before guessing. Master these core computer science principles and your software will scale effortlessly under high-throughput production load.`;
+      return `The senior rule: profile physical cache lines before optimizing. Subscribe for daily engineering secrets, and notice how...`;
     }
   }
 
