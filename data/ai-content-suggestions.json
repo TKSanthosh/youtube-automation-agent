@@ -1,138 +1,157 @@
 {
-  "updated_at": "2026-11-12T00:13:45.137Z",
-  "total_suggestions": 7,
+  "updated_at": "2026-11-21T17:21:33.691Z",
+  "total_suggestions": 8,
   "suggestions": [
     {
-      "id": "sugg_1794442425130_z4vpkj",
+      "id": "sugg_1795281693684_vgx7t",
       "topic": "Python GIL Explained: Why Multi-Threading Lies to You",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Python developers continuously hit CPU-bound performance bottlenecks and thread contention issues without realizing the CPython Interpreter Lock is serializing their bytecode execution.",
+      "rationale": "Developers constantly hit performance bottlenecks in Python when multithreading fails to utilize multi-core CPUs due to the Global Interpreter Lock, making this one of the highest-intent searches in Python performance engineering.",
       "search_evidence": "python gil explained",
       "educational_visuals": [
-        "Architecture diagrams",
-        "Code execution visualization"
+        "State transitions",
+        "Data-flow diagrams"
       ],
-      "hook_angle": "Your multi-threaded Python app is actually running on a single CPU core—here is the exact hardware-level reason why.",
+      "hook_angle": "Your multi-threaded Python code is running on exactly ONE CPU core right now—here is why.",
       "channel_affinity_score": 100,
       "trend_score": 95,
-      "priority_score": 97,
+      "priority_score": 98,
       "status": "pending",
-      "created_at": "2026-11-12T00:13:45.130Z",
+      "created_at": "2026-11-21T17:21:33.684Z",
       "used_at": null
     },
     {
-      "id": "sugg_1794442425132_limr2q",
-      "topic": "LSM Trees vs B-Trees: How Databases Write at Scale",
+      "id": "sugg_1795281693686_vo8mad",
+      "topic": "Docker Multi-Stage Builds: Slash Container Sizes by 90%",
+      "category": "Docker",
+      "target_length": "short",
+      "rationale": "Bloated production container images plague deployment pipelines. Developers actively search for multi-stage build patterns to strip out compiler toolchains from final production runtime images.",
+      "search_evidence": "docker multi-stage builds",
+      "educational_visuals": [
+        "Architecture diagrams",
+        "Animated system flows"
+      ],
+      "hook_angle": "Stop shipping 1-gigabyte Docker images containing compilers your production server doesn't even need.",
+      "channel_affinity_score": 100,
+      "trend_score": 92,
+      "priority_score": 95,
+      "status": "pending",
+      "created_at": "2026-11-21T17:21:33.686Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795281693686_0n89et",
+      "topic": "B+ Trees in DBMS: How Databases Index Millions of Rows",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "System design interviews and production engineering architecture reviews heavily hinge on understanding write-heavy storage engines (LSM) versus read-heavy indexed structures (B-Tree).",
-      "search_evidence": "lsm tree vs b tree",
+      "rationale": "Database indexing is a core system design interview topic. Understanding how B+ Trees minimize disk I/O operations directly addresses queries about database performance tuning.",
+      "search_evidence": "b+tree index files",
       "educational_visuals": [
         "Trees and graphs",
         "Data-flow diagrams"
       ],
-      "hook_angle": "Why does Cassandra write data 10x faster than Postgres? The secret lies inside the LSM Tree disk write architecture.",
-      "channel_affinity_score": 95,
-      "trend_score": 98,
-      "priority_score": 96,
-      "status": "pending",
-      "created_at": "2026-11-12T00:13:45.132Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1794442425133_q0402",
-      "topic": "Kubernetes Pod Lifecycle: Debugging Crashes Like a Pro",
-      "category": "Kubernetes",
-      "target_length": "short",
-      "rationale": "Managing production container orchestration requires absolute mastery over pod phases, initialization steps, probe execution, and graceful termination signals.",
-      "search_evidence": "kubernetes pod lifecycle",
-      "educational_visuals": [
-        "State transitions",
-        "Animated system flows"
-      ],
-      "hook_angle": "Why did Kubernetes kill your container right when it started? Unlocking the exact 8-stage pod lifecycle state machine.",
-      "channel_affinity_score": 96,
+      "hook_angle": "How does a database find one row among 100 million in less than 3 disk seeks? Meet the B+ Tree.",
+      "channel_affinity_score": 100,
       "trend_score": 94,
-      "priority_score": 95,
+      "priority_score": 94,
       "status": "pending",
-      "created_at": "2026-11-12T00:13:45.133Z",
+      "created_at": "2026-11-21T17:21:33.686Z",
       "used_at": null
     },
     {
-      "id": "sugg_1794442425132_w3ly15",
-      "topic": "Docker Multi-Stage Builds: Slash Image Sizes by 90%",
-      "category": "Docker",
-      "target_length": "short",
-      "rationale": "Engineers struggle with bloated container images containing build compilers and dependency caches that introduce security vulnerabilities and slow CI/CD pipeline deployments.",
-      "search_evidence": "docker multi-stage builds",
-      "educational_visuals": [
-        "Animated system flows",
-        "Architecture diagrams"
-      ],
-      "hook_angle": "Stop shipping 1GB Docker containers to production. Multi-stage builds strip your image down to just the compiled binary.",
-      "channel_affinity_score": 98,
-      "trend_score": 92,
-      "priority_score": 95,
-      "status": "pending",
-      "created_at": "2026-11-12T00:13:45.132Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1794442425133_d81hel",
-      "topic": "Bloom Filters in Redis: O(1) Probabilistic Caching",
+      "id": "sugg_1795281693687_pcvmx",
+      "topic": "Bloom Filters in Redis: O(1) Probabilistic Set Membership",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "High-throughput web systems need ultra-fast lookups to prevent cache stampedes and database hits for non-existent keys without wasting gigabytes of RAM.",
+      "rationale": "Distributed systems engineers face massive memory constraints when checking if an item exists in large datasets, driving high interest in probabilistic data structures like Bloom filters.",
       "search_evidence": "bloom filter redis",
       "educational_visuals": [
         "Data-flow diagrams",
         "Code execution visualization"
       ],
-      "hook_angle": "How Redis checks if a user exists across 1 billion items using only a few bytes of memory—without a single database lookup.",
-      "channel_affinity_score": 94,
+      "hook_angle": "Check if a user exists across a billion records using only a few kilobytes of memory with zero false negatives.",
+      "channel_affinity_score": 100,
       "trend_score": 90,
       "priority_score": 92,
       "status": "pending",
-      "created_at": "2026-11-12T00:13:45.133Z",
+      "created_at": "2026-11-21T17:21:33.687Z",
       "used_at": null
     },
     {
-      "id": "sugg_1794442425134_glnb0h",
-      "topic": "Circuit Breaker Pattern: Protecting Microservices Failures",
+      "id": "sugg_1795281693687_vqthop",
+      "topic": "Stack vs Heap Memory: Where Does Your Code Live?",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "Distributed system engineers face cascading downstream outages when third-party APIs or microservices hang, requiring robust fault-tolerance state wrappers.",
+      "rationale": "Memory allocation fundamentals are critical across all programming languages. Developers search for clear mental models distinguishing stack frame lifecycles from dynamic heap allocation.",
+      "search_evidence": "stack vs heap memory allocation",
+      "educational_visuals": [
+        "Architecture diagrams",
+        "Code execution visualization"
+      ],
+      "hook_angle": "Why did your program throw a stack overflow instead of a heap overflow? The answer lies in how memory is structured.",
+      "channel_affinity_score": 95,
+      "trend_score": 91,
+      "priority_score": 91,
+      "status": "pending",
+      "created_at": "2026-11-21T17:21:33.687Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795281693688_vqfh88",
+      "topic": "Circuit Breaker Pattern in Microservices Architecture",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Preventing cascading failures across distributed microservices is a top architectural challenge, making the circuit breaker pattern an essential high-retention tutorial topic.",
       "search_evidence": "circuit breaker pattern microservices",
       "educational_visuals": [
         "State transitions",
         "Animated system flows"
       ],
-      "hook_angle": "One slow database call can take down your entire microservice mesh. Here is how the Circuit Breaker pattern stops cascading failures.",
-      "channel_affinity_score": 92,
-      "trend_score": 91,
-      "priority_score": 91,
+      "hook_angle": "When one microservice crashes, why does your entire user dashboard go down? You need a Circuit Breaker.",
+      "channel_affinity_score": 100,
+      "trend_score": 89,
+      "priority_score": 90,
       "status": "pending",
-      "created_at": "2026-11-12T00:13:45.134Z",
+      "created_at": "2026-11-21T17:21:33.688Z",
       "used_at": null
     },
     {
-      "id": "sugg_1794442425134_huxsu9",
+      "id": "sugg_1795281693688_rrf5w",
       "topic": "Strategy Design Pattern in Python: Clean Polymorphism",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Developers frequently write messy, unmaintainable if-else conditional chains for business logic variations when clean object-oriented design patterns offer an elegant decoupling solution.",
-      "search_evidence": "strategy design pattern python",
+      "rationale": "Long nested conditional blocks (if/elif/else) ruin clean codebases. Developers actively search for clean design patterns like Strategy to encapsulate interchangeable algorithms.",
+      "search_evidence": "strategy pattern python",
       "educational_visuals": [
-        "Code execution visualization",
-        "Architecture diagrams"
+        "Architecture diagrams",
+        "Code execution visualization"
       ],
-      "hook_angle": "Stop writing massive if-else blocks for algorithm variations. The Strategy Pattern turns ugly conditionals into clean polymorphic classes.",
-      "channel_affinity_score": 90,
-      "trend_score": 89,
+      "hook_angle": "Stop writing 50-line if-else chains. Replace them with the Strategy Pattern in clean Python.",
+      "channel_affinity_score": 100,
+      "trend_score": 88,
       "priority_score": 89,
       "status": "pending",
-      "created_at": "2026-11-12T00:13:45.134Z",
+      "created_at": "2026-11-21T17:21:33.688Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795281693688_38t62o",
+      "topic": "How Hash Tables Work Under the Hood: Collisions & Resizing",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Hash tables are fundamental data structures, yet developers struggle with internal mechanics like hash collision resolution and dynamic array resizing overhead.",
+      "search_evidence": "how hash tables work",
+      "educational_visuals": [
+        "Data-flow diagrams",
+        "Code execution visualization"
+      ],
+      "hook_angle": "O(1) lookups sound like magic until two keys hash to the exact same bucket. Here is how hash tables survive collisions.",
+      "channel_affinity_score": 95,
+      "trend_score": 88,
+      "priority_score": 88,
+      "status": "pending",
+      "created_at": "2026-11-21T17:21:33.688Z",
       "used_at": null
     }
   ]
