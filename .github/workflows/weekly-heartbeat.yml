@@ -1,9 +1,9 @@
 name: Weekly Repository Heartbeat & Keepalive
 
 on:
-  # Schedule: Runs automatically every Monday at 04:00 AM UTC
+  # Schedule: Runs automatically every Monday at 04:15 AM UTC
   schedule:
-    - cron: '0 4 * * 1'
+    - cron: '15 4 * * 1'
 
   # Manual Trigger: Allows 1-click execution anytime from GitHub Actions UI
   workflow_dispatch:

@@ -1,9 +1,10 @@
 name: Autonomous YouTube Automation Pipeline (End-to-End Cloud)
 
 on:
-  # Schedule: Runs daily at global peak viewer engagement window (14:00 UTC / 7:30 PM IST)
+  # Schedule: Runs daily at global peak viewer engagement window (14:15 UTC / 7:45 PM IST)
+  # Uses :15 minute offset to bypass top-of-the-hour GitHub Actions runner queue congestion
   schedule:
-    - cron: '0 14 * * *'
+    - cron: '15 14 * * *'
 
   # Manual Trigger: 1-click execution from GitHub website or GitHub mobile app
   workflow_dispatch:
@@ -109,7 +110,11 @@ jobs:
           fi
           
           echo "🎬 Running Production Command: $CMD"
-          eval $CMD
+          eval $CMD || {
+            echo "⚠️ Production cycle encountered a transient error. Retrying once in 15 seconds..."
+            sleep 15
+            eval $CMD
+          }
 
       # ── Phase 3: Commit Evolutionary State & Suggestions Back to Repository ──
       - name: Commit & Push Quality Evolution State & Suggestions Back to Repo
