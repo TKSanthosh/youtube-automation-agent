@@ -49,6 +49,10 @@ class SEOOptimizerAgent {
         tags = await this.generateTags(script, strategy);
       }
 
+      title = String(title || script.title || 'Technical Masterclass').trim();
+      description = String(description || '').trim();
+      tags = Array.isArray(tags) ? tags.map(t => String(t || '').trim()).filter(Boolean) : [];
+
       // Series Alignment: Inject series roadmap, episode numbering, and cliffhanger links
       if (strategy.seriesPlan) {
         const sp = strategy.seriesPlan;
@@ -548,8 +552,11 @@ Keep tags under YouTube's 500 character total guidance. Avoid fabricated statist
     };
   }
 
-  async calculateSEOScore(title, description, tags) {
+  async calculateSEOScore(title = '', description = '', tags = []) {
     let score = 0;
+    title = String(title || '');
+    description = String(description || '');
+    tags = Array.isArray(tags) ? tags.map(t => String(t || '').trim()).filter(Boolean) : [];
     
     // Title scoring (30 points max)
     if (title.length >= 60 && title.length <= 70) score += 10;
@@ -566,12 +573,12 @@ Keep tags under YouTube's 500 character total guidance. Avoid fabricated statist
     if (description.includes('TIMESTAMPS')) score += 5;
     if (description.includes('http')) score += 5; // Contains links
     if (description.split('\n').length > 10) score += 5; // Well formatted
-    if (description.substring(0, 125).includes(tags[0])) score += 5; // Primary keyword in first 125 chars
+    if (tags[0] && description.substring(0, 125).includes(tags[0])) score += 5; // Primary keyword in first 125 chars
     
     // Tags scoring (30 points max)
     if (tags.length >= 10) score += 10;
     if (tags.length >= 15) score += 5;
-    if (tags.some(tag => tag.split(' ').length > 2)) score += 5; // Long-tail keywords
+    if (tags.some(tag => tag && String(tag).split(' ').length > 2)) score += 5; // Long-tail keywords
     if (tags.join('').length <= 500) score += 5; // Within character limit
     if (new Set(tags).size === tags.length) score += 5; // No duplicates
     
