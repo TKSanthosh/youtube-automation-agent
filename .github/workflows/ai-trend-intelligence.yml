@@ -1,10 +1,6 @@
 name: AI Trend & Engagement Intelligence Agent
 
 on:
-  # Run 4 times daily (every 6 hours) at peak global viewer engagement windows
-  schedule:
-    - cron: '0 0,6,12,18 * * *'
-
   # Manual on-demand execution via GitHub UI, mobile app, or API
   workflow_dispatch:
     inputs:
