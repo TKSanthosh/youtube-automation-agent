@@ -1,28 +1,28 @@
 {
-  "iterationNumber": 1,
-  "videoId": "youtube-1",
-  "title": "A",
+  "iterationNumber": 2,
+  "videoId": "8gl1KbXU2To",
+  "title": "[DART & FLUTTER #2] Flutter 3 Trees: Widget vs Element vs RenderObject",
   "category": "tech",
   "targetLength": "short",
   "metricsAnalyzed": {
-    "analyzedAt": "2026-11-21T19:18:03.848Z",
+    "analyzedAt": "2026-11-21T19:34:37.672Z",
     "videoDurationSeconds": null,
     "totalScenes": null
   },
-  "contentCritique": "Video 'A' establishes a foundational baseline for our tech short format, but suffers from an empty hook preview and lacks the kinetic visual pacing required to maximize early retention in the YouTube Shorts algorithm. Pedagogical density is acceptable for an introductory baseline, but lacks hard technical implementation steps to drive engagement and replay value.",
-  "lessonsLearned": "Future iterations cannot rely on implied context; the first 2 seconds must aggressively front-load a high-impact technical problem with synchronized kinetic text. To maintain our strict upward quality trajectory, every subsequent upload must exhibit increased information density and dynamic visual scaffolding.",
+  "contentCritique": "Iteration #2: Narration and concept were strong, but hook delay and transition pacing can be tightened. Text must match spoken audio phonemes instantly with zero silence.",
+  "lessonsLearned": "Viewers drop off when intro takes more than 2 seconds. The next video must reveal the core conflict within the first 1.5 seconds and include side-by-side architecture comparisons.",
   "enhancementDirectives": {
-    "hookRule": "Zero-frame introduction: Eliminate all verbal or visual throat-clearing. Start directly on a high-contrast architectural bottleneck or broken terminal output within 0.5 seconds.",
-    "audioTextSyncRule": "Frame-accurate synchronization: On-screen kinetic typography must trigger on the exact audio transient of the spoken keyword.",
-    "pedagogicalDensity": "Mandatory inclusion of at least one concrete code snippet, terminal command, or structural schema per 5 seconds of runtime.",
-    "visualGuidelines": "Incorporate rapid scaling, split-screen architecture breakdowns, and color-coded state transitions to maintain high visual throughput.",
+    "hookRule": "Start immediately with the high-stakes problem in under 1.5 seconds. Zero 'Hello guys' or channel pleasantries.",
+    "audioTextSyncRule": "Subtitles and visual text cards must render synchronously with audio words. Zero silence buffer.",
+    "pedagogicalDensity": "Include at least one concrete code snippet or system diagram comparing before vs after.",
+    "visualGuidelines": "High-contrast dark mode background with syntax highlighting and kinetic highlight arrows.",
     "mandatoryUpgrades": [
-      "Implement a sub-2-second visual pattern interrupt right at frame 0.",
-      "Increase code/architecture walkthrough density by 20% compared to Video A.",
-      "Apply dynamic kinetic motion tracking to all key technical terms on screen.",
-      "End with an abrupt, high-retention loop-back closing statement."
+      "Cut intro delay to under 1.5 seconds (Iteration #2 standard)",
+      "Enforce 15% higher technical density with real architecture benchmarks",
+      "Ensure slide transitions occur within 3-5 seconds of spoken concept shifts"
     ]
   },
-  "qualityScore": 8.1,
-  "appliedToNext": false
+  "qualityScore": 8.4,
+  "appliedToNext": false,
+  "id": "enh_1795289677672_5130o"
 }
