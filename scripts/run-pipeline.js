@@ -17,6 +17,10 @@ const { Logger } = require('../utils/logger');
 
 const logger = new Logger('DirectPipeline');
 
+process.on('unhandledRejection', (reason) => {
+  logger.warn(`Handled background unhandledRejection: ${reason?.message || reason}`);
+});
+
 function parseArgs() {
   const args = process.argv.slice(2);
   const options = {

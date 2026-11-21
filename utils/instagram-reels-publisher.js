@@ -75,35 +75,55 @@ class InstagramReelsPublisher {
 
       // Click "Create" or "+"
       console.log('   📤 Opening creation dialog...');
-      const createSelector = 'svg[aria-label="New post"], svg[aria-label="Create"], [aria-label="New post"], a:has-text("Create")';
-      await page.waitForSelector(createSelector, { timeout: 15000 });
-      await page.click(createSelector);
+      const createLocator = page.locator('a[href="#"]:has-text("Create"), [aria-label="New post"], a:has-text("Create"), svg[aria-label="New post"], svg[aria-label="Create"], div[role="button"]:has-text("Create")').first();
+      await createLocator.waitFor({ state: 'visible', timeout: 15000 });
+      await createLocator.click();
       await page.waitForTimeout(2000);
 
-      // If a dropdown shows ("Post"), click it
+      // In modern Instagram Web, clicking Create opens a menu with "Post"
       try {
-        const postOption = await page.$('span:has-text("Post"), [role="menuitem"]:has-text("Post")');
-        if (postOption) await postOption.click();
-        await page.waitForTimeout(1500);
+        const postOption = page.locator('span:has-text("Post"), [role="menuitem"]:has-text("Post"), div[role="button"]:has-text("Post"), svg[aria-label="Post"]').first();
+        if (await postOption.isVisible({ timeout: 4000 }).catch(() => false)) {
+          await postOption.click();
+          await page.waitForTimeout(2000);
+        }
       } catch (_) {}
 
       // File upload
       console.log('   📁 Uploading 9:16 vertical video...');
-      const fileInputSelector = 'input[type="file"]';
+      let uploaded = false;
+
+      // 1. Direct file input (Instagram attaches a hidden input[type="file"] in the modal)
       try {
-        await page.waitForSelector(fileInputSelector, { state: 'attached', timeout: 20000 });
-        await page.setInputFiles(fileInputSelector, videoPath);
+        const fileInput = page.locator('input[type="file"]').first();
+        await fileInput.waitFor({ state: 'attached', timeout: 12000 });
+        await fileInput.setInputFiles(videoPath);
+        uploaded = true;
       } catch (uploadErr) {
         console.log(`   Notice: direct file input wait: ${uploadErr.message}. Trying 'Select from computer'...`);
-        const fileChooserPromise = page.waitForEvent('filechooser', { timeout: 15000 });
-        const selectBtn = await page.$('button:has-text("Select from computer"), [role="button"]:has-text("Select from computer")');
-        if (selectBtn) {
-          await selectBtn.click();
-          const fileChooser = await fileChooserPromise;
-          await fileChooser.setFiles(videoPath);
-        } else {
-          throw uploadErr;
+      }
+
+      // 2. Fallback: "Select from computer" button with filechooser event
+      if (!uploaded) {
+        try {
+          const selectBtn = page.locator('button:has-text("Select from computer"), [role="button"]:has-text("Select from computer"), button:has-text("Select from device")').first();
+          if (await selectBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
+            const [fileChooser] = await Promise.all([
+              page.waitForEvent('filechooser', { timeout: 10000 }).catch(() => null),
+              selectBtn.click()
+            ]);
+            if (fileChooser) {
+              await fileChooser.setFiles(videoPath);
+              uploaded = true;
+            }
+          }
+        } catch (selErr) {
+          console.log(`   Notice: select button filechooser failed: ${selErr.message}`);
         }
+      }
+
+      if (!uploaded) {
+        throw new Error('Failed to attach video to Instagram creation dialog');
       }
       await page.waitForTimeout(5000);
 
