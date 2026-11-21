@@ -1,23 +1,24 @@
 {
-  "updated_at": "2026-11-21T17:21:33.691Z",
+  "updated_at": "2026-11-21T18:43:31.980Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1795281693684_vgx7t",
-    "topic": "Python GIL Explained: Why Multi-Threading Lies to You",
-    "category": "Python",
+    "id": "sugg_1795286611974_cqsu2o",
+    "topic": "Heartbleed Explained: The Missing Bounds Check That Leaked the Internet",
+    "category": "CS Lore",
     "target_length": "short",
-    "rationale": "Developers constantly hit performance bottlenecks in Python when multithreading fails to utilize multi-core CPUs due to the Global Interpreter Lock, making this one of the highest-intent searches in Python performance engineering.",
-    "search_evidence": "python gil explained",
+    "rationale": "Anatomy of the OpenSSL vulnerability: how an unchecked 64KB length field leaked TLS private keys across the web.",
+    "search_evidence": "heartbleed openssl vulnerability explained buffer overread",
     "educational_visuals": [
-      "State transitions",
-      "Data-flow diagrams"
+      "Memory bounds check",
+      "Heartbeat packet topology",
+      "Hex dump inspection"
     ],
-    "hook_angle": "Your multi-threaded Python code is running on exactly ONE CPU core right now—here is why.",
-    "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 98,
+    "hook_angle": "In 2014, a single missing if statement in OpenSSL leaked the passwords, private keys, and emails of half the internet.",
+    "channel_affinity_score": 85,
+    "trend_score": 99,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-11-21T17:21:33.684Z",
+    "created_at": "2026-11-21T18:43:31.974Z",
     "used_at": null
   }
 }

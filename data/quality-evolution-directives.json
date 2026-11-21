@@ -1,28 +1,28 @@
 {
   "iterationNumber": 1,
-  "videoId": "youtube-1",
-  "title": "A",
+  "videoId": "wjVE-lxvfas",
+  "title": "Mastering Heartbleed Explained: The Missing OpenSSL Bounds Check That Leaked Server Memory: Computer Science Deep Dive",
   "category": "tech",
   "targetLength": "short",
   "metricsAnalyzed": {
-    "analyzedAt": "2026-11-21T18:23:06.551Z",
+    "analyzedAt": "2026-11-21T18:47:34.532Z",
     "videoDurationSeconds": null,
     "totalScenes": null
   },
-  "contentCritique": "Video 'A' establishes a foundational tech short format, but lacks an immediate visual anchor in the first two seconds, resulting in potential early drop-off. The pacing is acceptable, yet the pedagogical density can be significantly amplified with tangible code snippets or architectural flows rather than high-level concepts.",
-  "lessonsLearned": "Relying on a blank or neutral hook fails to trigger YouTube Short's loop/retention signals. Future iterations must front-load high-contrast UI, code, or a controversial tech problem within the first 1.5 seconds to maximize AVDR (Average View Duration Ratio).",
+  "contentCritique": "Iteration #1: Narration and concept were strong, but hook delay and transition pacing can be tightened. Text must match spoken audio phonemes instantly with zero silence.",
+  "lessonsLearned": "Viewers drop off when intro takes more than 2 seconds. The next video must reveal the core conflict within the first 1.5 seconds and include side-by-side architecture comparisons.",
   "enhancementDirectives": {
-    "hookRule": "Zero tolerance for introductory fluff. Start mid-action with a live terminal output, failing build, or high-contrast architecture diagram at t=0.0s.",
-    "audioTextSyncRule": "Enforce strict word-level caption highlighting synced precisely with voiceover audio transients to maintain sub-second cognitive pacing.",
-    "pedagogicalDensity": "Boost technical density by incorporating at least two explicit code-to-architecture mappings per 15-second block.",
-    "visualGuidelines": "Implement dynamic kinetic zoom, pan effects, and color-coded syntax highlighting to drive visual progression and eliminate static frames.",
+    "hookRule": "Start immediately with the high-stakes problem in under 1.5 seconds. Zero 'Hello guys' or channel pleasantries.",
+    "audioTextSyncRule": "Subtitles and visual text cards must render synchronously with audio words. Zero silence buffer.",
+    "pedagogicalDensity": "Include at least one concrete code snippet or system diagram comparing before vs after.",
+    "visualGuidelines": "High-contrast dark mode background with syntax highlighting and kinetic highlight arrows.",
     "mandatoryUpgrades": [
-      "Incorporate a split-screen visual layout showing code execution and resulting system state simultaneously.",
-      "Reduce total runtime by 15% to eliminate any lingering transitional dead air.",
-      "Add a visual progress bar or chapter indicator at the bottom edge to anchor viewer orientation.",
-      "Ensure the script hook addresses a specific, painful developer bottleneck within the first 1.5 seconds."
+      "Cut intro delay to under 1.5 seconds (Iteration #1 standard)",
+      "Enforce 15% higher technical density with real architecture benchmarks",
+      "Ensure slide transitions occur within 3-5 seconds of spoken concept shifts"
     ]
   },
-  "qualityScore": 8.1,
-  "appliedToNext": false
+  "qualityScore": 8.2,
+  "appliedToNext": false,
+  "id": "enh_1795286854532_v0i4sc"
 }
