@@ -197,49 +197,15 @@ class AIVideoGenerator {
       return {
         voice: process.env.GEMINI_TTS_VOICE,
         model: process.env.GEMINI_TTS_MODEL || 'gemini-3.8-flash-tts',
-        gender: 'custom'
+        gender: 'male'
       };
     }
 
-    const fsSync = require('fs');
-    const path = require('path');
-    const stateFile = path.join(__dirname, '..', 'data', 'voice_state.json');
-
-    const voices = [
-      { name: 'Aoede', desc: 'Expressive, energetic modern female presenter', gender: 'female' },
-      { name: 'Kore', desc: 'Approachable, clear articulate female mentor', gender: 'female' },
-      { name: 'Puck', desc: 'Warm, natural conversational instructor', gender: 'male' },
-      { name: 'Charon', desc: 'Deep, resonant authoritative senior architect', gender: 'male' }
-    ];
-
-    let geminiIndex = 0;
-    try {
-      if (fsSync.existsSync(stateFile)) {
-        const raw = JSON.parse(fsSync.readFileSync(stateFile, 'utf8'));
-        geminiIndex = Number.isInteger(raw.geminiIndex) ? raw.geminiIndex : 0;
-      }
-    } catch (_e) {}
-
-    const selected = voices[geminiIndex % voices.length];
-    const nextIdx = (geminiIndex + 1) % voices.length;
-
-    try {
-      let state = {};
-      if (fsSync.existsSync(stateFile)) {
-        try { state = JSON.parse(fsSync.readFileSync(stateFile, 'utf8')); } catch (_e) {}
-      }
-      state.geminiIndex = nextIdx;
-      state.lastGeminiVoice = selected.name;
-      state.lastGeminiGender = selected.gender;
-      state.updatedAt = new Date().toISOString();
-      fsSync.mkdirSync(path.dirname(stateFile), { recursive: true });
-      fsSync.writeFileSync(stateFile, JSON.stringify(state, null, 2));
-    } catch (_e) {}
-
+    // Standard fixed male voice fallback
     return {
-      voice: selected.name,
+      voice: 'Puck',
       model: process.env.GEMINI_TTS_MODEL || 'gemini-3.8-flash-tts',
-      gender: selected.gender
+      gender: 'male'
     };
   }
 
@@ -300,12 +266,13 @@ class AIVideoGenerator {
   }
 
   getRotatedVoice(options = {}) {
+    const STANDARD_VOICE = 'en-US-AndrewNeural'; // Fixed standard 1st male tech voice across all slides and videos
     const validEdgeVoiceRegex = /^[a-z]{2}-[A-Z]{2}-[\w]+Neural$/;
     if (options.voice && validEdgeVoiceRegex.test(options.voice)) {
-      return { voice: options.voice, gender: options.gender || 'custom' };
+      return { voice: options.voice, gender: options.gender || 'gents' };
     }
     if (process.env.MSEDGE_TTS_VOICE && validEdgeVoiceRegex.test(process.env.MSEDGE_TTS_VOICE)) {
-      return { voice: process.env.MSEDGE_TTS_VOICE, gender: 'custom' };
+      return { voice: process.env.MSEDGE_TTS_VOICE, gender: 'gents' };
     }
 
     const fsSync = require('fs');
@@ -322,43 +289,6 @@ class AIVideoGenerator {
       }
     } catch (_e) {}
 
-    // Elite humanized tech presenter voices (Edge TTS Neural)
-    // Dynamic cadence, natural pitch inflection, zero robotic monotony
-    const techPresenterVoices = [
-      'en-US-GuyNeural',         // Dynamic, conversational, charismatic tech presenter (Fireship style)
-      'en-US-ChristopherNeural', // Warm, authoritative senior engineer storyteller
-      'en-US-AndrewNeural'       // Modern, sharp tech educator
-    ];
-    const ladiesVoices = [
-      'en-US-AvaNeural',         // Crisp, energetic modern female tech presenter
-      'en-US-JennyNeural',        // Warm, natural conversational female mentor
-      'en-US-EmmaNeural'         // Clear, articulate female educator
-    ];
-
-    let voiceIndex = 0;
-
-    try {
-      if (fsSync.existsSync(stateFile)) {
-        const raw = JSON.parse(fsSync.readFileSync(stateFile, 'utf8'));
-        voiceIndex = Number.isInteger(raw.voiceIndex) ? raw.voiceIndex : (Number.isInteger(raw.ladiesIndex) ? raw.ladiesIndex : 0);
-      }
-    } catch (_e) {
-      // Ignore read error
-    }
-
-    let selectedVoice = '';
-    let selectedGender = 'ladies';
-
-    // Default to female teacher voice unless explicitly overridden
-    if (options.gender === 'gents') {
-      selectedVoice = techPresenterVoices[voiceIndex % techPresenterVoices.length];
-      selectedGender = 'gents';
-    } else {
-      selectedVoice = ladiesVoices[voiceIndex % ladiesVoices.length];
-      selectedGender = 'ladies';
-    }
-    const nextVoiceIndex = (voiceIndex + 1) % (selectedGender === 'gents' ? techPresenterVoices.length : ladiesVoices.length);
-
     try {
       let existingState = {};
       if (fsSync.existsSync(stateFile)) {
@@ -367,17 +297,16 @@ class AIVideoGenerator {
       fsSync.mkdirSync(path.dirname(stateFile), { recursive: true });
       fsSync.writeFileSync(stateFile, JSON.stringify({
         ...existingState,
-        lastGender: selectedGender,
-        lastVoice: selectedVoice,
-        voiceIndex: nextVoiceIndex,
-        ladiesIndex: nextVoiceIndex,
+        lockedVoice: STANDARD_VOICE,
+        lastGender: 'gents',
+        lastVoice: STANDARD_VOICE,
+        voiceIndex: 0,
+        gentIndex: 0,
         updatedAt: new Date().toISOString()
       }, null, 2));
-    } catch (_e) {
-      // Ignore write error
-    }
+    } catch (_e) {}
 
-    return { voice: selectedVoice, gender: selectedGender };
+    return { voice: STANDARD_VOICE, gender: 'gents' };
   }
 
   getRotatedTheme() {
@@ -1876,36 +1805,36 @@ class AIVideoGenerator {
 
   renderAITeacherAvatar(slideIndex = 0) {
     const emotions = [
-      { mood: 'alert', mouth: 'M 74 95 Q 80 98 86 95', blush: 0.2, eyeOpen: true },
-      { mood: 'smirk', mouth: 'M 73 93 Q 80 101 87 93 Z', blush: 0.35, eyeOpen: true },
-      { mood: 'analyze', mouth: 'M 75 95 L 85 95', blush: 0.2, eyeOpen: true },
-      { mood: 'teach', mouth: 'M 74 94 Q 80 99 86 94', blush: 0.25, eyeOpen: true },
-      { mood: 'mentor', mouth: 'M 73 93 Q 80 102 87 93 Z', blush: 0.3, eyeOpen: true }
+      { mood: 'alert', mouth: 'M 74 95 Q 80 97 86 95', eyeOpen: true },
+      { mood: 'focus', mouth: 'M 73 94 Q 80 98 87 94', eyeOpen: true },
+      { mood: 'analyze', mouth: 'M 75 95 L 85 95', eyeOpen: true },
+      { mood: 'teach', mouth: 'M 74 94 Q 80 98 86 94', eyeOpen: true },
+      { mood: 'insight', mouth: 'M 73 93 Q 80 99 87 93', eyeOpen: true }
     ];
     const emo = emotions[slideIndex % emotions.length] || emotions[0];
 
     return `
     <svg viewBox="0 0 160 160" class="teacher-svg" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="ariaHairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#2a1636" />
-          <stop offset="60%" stop-color="#4c1d68" />
-          <stop offset="100%" stop-color="#24122f" />
+        <linearGradient id="techHairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1e293b" />
+          <stop offset="60%" stop-color="#0f172a" />
+          <stop offset="100%" stop-color="#020617" />
         </linearGradient>
-        <linearGradient id="ariaSkinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#fde8db" />
-          <stop offset="100%" stop-color="#f6cca9" />
+        <linearGradient id="techSkinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#f8fafc" />
+          <stop offset="100%" stop-color="#cbd5e1" />
         </linearGradient>
-        <linearGradient id="ariaJacketGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id="techJacketGrad" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stop-color="#0f172a" />
           <stop offset="50%" stop-color="#1e293b" />
           <stop offset="100%" stop-color="#090d16" />
         </linearGradient>
-        <linearGradient id="ariaCyberGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <linearGradient id="techCyberGrad" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stop-color="#06b6d4" />
           <stop offset="100%" stop-color="#3b82f6" />
         </linearGradient>
-        <filter id="ariaGlow" x="-20%" y="-20%" width="140%" height="140%">
+        <filter id="techGlow" x="-20%" y="-20%" width="140%" height="140%">
           <feGaussianBlur stdDeviation="3" result="blur" />
           <feComposite in="SourceGraphic" in2="blur" operator="over" />
         </filter>
@@ -1913,82 +1842,60 @@ class AIVideoGenerator {
 
       <!-- Background Halo -->
       <circle cx="80" cy="80" r="77" fill="#090d16" />
-      <circle cx="80" cy="80" r="75" fill="none" stroke="url(#ariaCyberGrad)" stroke-width="2.5" opacity="0.8" />
-
-      <!-- Back Hair Layer -->
-      <path d="M 38 72 C 34 110, 44 140, 52 155 C 55 130, 48 105, 52 85 Z" fill="url(#ariaHairGrad)" />
-      <path d="M 122 72 C 126 110, 116 140, 108 155 C 105 130, 112 105, 108 85 Z" fill="url(#ariaHairGrad)" />
+      <circle cx="80" cy="80" r="75" fill="none" stroke="url(#techCyberGrad)" stroke-width="2.5" opacity="0.85" />
 
       <!-- Cyber Tech Hoodie / Shoulders -->
-      <path d="M 22 160 C 22 124, 46 112, 80 112 C 114 112, 138 124, 138 160 Z" fill="url(#ariaJacketGrad)" stroke="#334155" stroke-width="1.5" />
+      <path d="M 22 160 C 22 120, 46 110, 80 110 C 114 110, 138 120, 138 160 Z" fill="url(#techJacketGrad)" stroke="#334155" stroke-width="1.5" />
       <!-- Cyber Neon Collar Trim -->
-      <path d="M 62 118 L 80 142 L 98 118" fill="none" stroke="url(#ariaCyberGrad)" stroke-width="2.5" stroke-linecap="round" />
-      <!-- Teacher ID Badge / Core -->
-      <polygon points="80,138 85,145 80,152 75,145" fill="#38bdf8" filter="url(#ariaGlow)" />
+      <path d="M 62 116 L 80 140 L 98 116" fill="none" stroke="url(#techCyberGrad)" stroke-width="2.5" stroke-linecap="round" />
+      <!-- Tech Badge / Pulse Core -->
+      <polygon points="80,136 85,143 80,150 75,143" fill="#38bdf8" filter="url(#techGlow)" />
 
       <!-- Neck -->
-      <rect x="71" y="98" width="18" height="20" rx="3" fill="url(#ariaSkinGrad)" />
-      <path d="M 71 106 Q 80 112 89 106" fill="none" stroke="#e09880" stroke-width="1.5" />
+      <rect x="71" y="96" width="18" height="20" rx="3" fill="url(#techSkinGrad)" />
+      <path d="M 71 104 Q 80 110 89 104" fill="none" stroke="#94a3b8" stroke-width="1.2" />
 
       <!-- Face -->
-      <path d="M 50 68 C 50 96, 62 108, 80 108 C 98 108, 110 96, 110 68 C 110 44, 98 36, 80 36 C 62 36, 50 44, 50 68 Z" fill="url(#ariaSkinGrad)" />
+      <path d="M 52 66 C 52 94, 63 106, 80 106 C 97 106, 108 94, 108 66 C 108 42, 97 34, 80 34 C 63 34, 52 42, 52 66 Z" fill="url(#techSkinGrad)" />
 
-      <!-- Cute Cheek Blush -->
-      <ellipse cx="58" cy="82" rx="6.5" ry="3.5" fill="#f43f5e" opacity="${emo.blush}" />
-      <ellipse cx="102" cy="82" rx="6.5" ry="3.5" fill="#f43f5e" opacity="${emo.blush}" />
+      <!-- Expressive Tech Eyes -->
+      <ellipse cx="65" cy="74" rx="4" ry="4.5" fill="#0f172a" />
+      <circle cx="64" cy="72.5" r="1.5" fill="#ffffff" />
+      <ellipse cx="95" cy="74" rx="4" ry="4.5" fill="#0f172a" />
+      <circle cx="94" cy="72.5" r="1.5" fill="#ffffff" />
 
-      <!-- Expressive Anime-style Eyes -->
-      <!-- Left Eye -->
-      <ellipse cx="64" cy="74" rx="4.5" ry="5.5" fill="#1e293b" />
-      <ellipse cx="64" cy="74" rx="3.5" ry="4.5" fill="#2563eb" />
-      <circle cx="62.5" cy="72" r="1.8" fill="#ffffff" />
-      <circle cx="65.5" cy="76" r="0.8" fill="#ffffff" />
-      <!-- Right Eye -->
-      <ellipse cx="96" cy="74" rx="4.5" ry="5.5" fill="#1e293b" />
-      <ellipse cx="96" cy="74" rx="3.5" ry="4.5" fill="#2563eb" />
-      <circle cx="94.5" cy="72" r="1.8" fill="#ffffff" />
-      <circle cx="97.5" cy="76" r="0.8" fill="#ffffff" />
+      <!-- Confident Eyebrows -->
+      <path d="M 58 66 Q 65 63 72 65" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" />
+      <path d="M 88 65 Q 95 63 102 66" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" />
 
-      <!-- Eyelashes / Eyebrows -->
-      <path d="M 57 69 Q 64 66 71 69" fill="none" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
-      <path d="M 89 69 Q 96 66 103 69" fill="none" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
-      <path d="M 58 64 Q 65 61 71 63" fill="none" stroke="#4c1d68" stroke-width="1.5" stroke-linecap="round" />
-      <path d="M 89 63 Q 95 61 102 64" fill="none" stroke="#4c1d68" stroke-width="1.5" stroke-linecap="round" />
+      <!-- Minimal Nose -->
+      <path d="M 79 79 Q 80 82 78 83" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-linecap="round" />
 
-      <!-- Nose -->
-      <path d="M 79 80 Q 80 83 78 84" fill="none" stroke="#d97706" stroke-width="1.2" stroke-linecap="round" />
+      <!-- Controlled Mouth Expression -->
+      <path d="${emo.mouth}" fill="none" stroke="#334155" stroke-width="2" stroke-linecap="round" />
 
-      <!-- Animated Mouth Expression -->
-      <path d="${emo.mouth}" fill="${emo.mouth.includes('Z') ? '#e11d48' : 'none'}" stroke="#e11d48" stroke-width="2.2" stroke-linecap="round" />
-
-      <!-- Chic Modern Tech Glasses -->
-      <rect x="52" y="66" width="24" height="15" rx="3.5" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="1.8" />
-      <rect x="84" y="66" width="24" height="15" rx="3.5" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="1.8" />
+      <!-- Modern Cyber Tech Smart Glasses -->
+      <rect x="54" y="66" width="22" height="15" rx="3" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.8" />
+      <rect x="84" y="66" width="22" height="15" rx="3" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.8" />
       <line x1="76" y1="72" x2="84" y2="72" stroke="#38bdf8" stroke-width="1.8" />
-      <!-- AR Glare Reflection -->
-      <line x1="55" y1="68" x2="63" y2="76" stroke="#ffffff" stroke-width="1.5" opacity="0.65" stroke-linecap="round" />
-      <line x1="87" y1="68" x2="95" y2="76" stroke="#ffffff" stroke-width="1.5" opacity="0.65" stroke-linecap="round" />
+      <line x1="56" y1="68" x2="63" y2="76" stroke="#ffffff" stroke-width="1.2" opacity="0.7" stroke-linecap="round" />
+      <line x1="86" y1="68" x2="93" y2="76" stroke="#ffffff" stroke-width="1.2" opacity="0.7" stroke-linecap="round" />
 
-      <!-- Front Hair & Bangs -->
-      <path d="M 46 62 Q 62 38 80 38 Q 98 38 114 62 C 110 50 102 40 90 37 C 80 34 68 36 58 40 C 49 44 46 53 46 62 Z" fill="url(#ariaHairGrad)" />
-      <!-- Side Bangs Framing Face -->
-      <path d="M 45 60 C 43 78, 47 98, 52 110 C 49 92, 47 75, 49 62 Z" fill="url(#ariaHairGrad)" />
-      <path d="M 115 60 C 117 78, 113 98, 108 110 C 111 92, 113 75, 111 62 Z" fill="url(#ariaHairGrad)" />
-      <!-- Hair Violet Highlights -->
-      <path d="M 58 42 Q 72 36 86 43" fill="none" stroke="#c084fc" stroke-width="2" opacity="0.8" stroke-linecap="round" />
-      <path d="M 49 68 Q 47 88 51 102" fill="none" stroke="#c084fc" stroke-width="1.5" opacity="0.7" stroke-linecap="round" />
+      <!-- Modern Short Haircut -->
+      <path d="M 50 60 C 50 36, 62 30, 80 30 C 98 30, 110 36, 110 60 C 104 46, 94 36, 80 36 C 66 36, 56 46, 50 60 Z" fill="url(#techHairGrad)" />
+      <path d="M 52 48 Q 66 38 82 42 Q 98 38 108 48" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.6" stroke-linecap="round" />
 
       <!-- Studio Streaming Headset & Mic -->
-      <path d="M 42 64 A 40 40 0 0 1 118 64" fill="none" stroke="#1e293b" stroke-width="4.5" stroke-linecap="round" />
-      <path d="M 42 64 A 40 40 0 0 1 118 64" fill="none" stroke="url(#ariaCyberGrad)" stroke-width="1.5" stroke-dasharray="6,4" />
+      <path d="M 44 64 A 38 38 0 0 1 116 64" fill="none" stroke="#1e293b" stroke-width="4.5" stroke-linecap="round" />
+      <path d="M 44 64 A 38 38 0 0 1 116 64" fill="none" stroke="url(#techCyberGrad)" stroke-width="1.5" stroke-dasharray="6,4" />
       <!-- Left Earcup -->
-      <rect x="36" y="58" width="10" height="22" rx="4" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5" />
+      <rect x="38" y="58" width="10" height="22" rx="4" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5" />
       <!-- Right Earcup -->
-      <rect x="114" y="58" width="10" height="22" rx="4" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5" />
+      <rect x="112" y="58" width="10" height="22" rx="4" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5" />
       <!-- Microphone Boom with Active LED -->
-      <path d="M 42 74 Q 46 95 68 95" fill="none" stroke="#334155" stroke-width="2.4" stroke-linecap="round" />
-      <circle cx="69" cy="95" r="3.5" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
-      <circle cx="69" cy="95" r="1.6" fill="#22c55e" filter="url(#ariaGlow)" />
+      <path d="M 44 74 Q 48 94 68 94" fill="none" stroke="#334155" stroke-width="2.4" stroke-linecap="round" />
+      <circle cx="69" cy="94" r="3.5" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
+      <circle cx="69" cy="94" r="1.6" fill="#22c55e" filter="url(#techGlow)" />
     </svg>`;
   }
 
@@ -2795,12 +2702,12 @@ class AIVideoGenerator {
           <div class="teacher-hud">
             <div class="teacher-avatar-pod">
               ${this.renderAITeacherAvatar(idx)}
-              <div class="teacher-live-pill"><span class="live-dot"></span> AI TEACHER</div>
+              <div class="teacher-live-pill"><span class="live-dot"></span> LIVE INSTRUCTOR</div>
             </div>
             <div class="teacher-details">
               <div class="teacher-meta-row">
                 <div class="teacher-name-group">
-                  <span class="teacher-title">TEACHER ARIA</span>
+                  <span class="teacher-title">TECH INSTRUCTOR</span>
                   <span class="teacher-tag">Senior Software Engineer</span>
                 </div>
                 <div class="voice-equalizer">

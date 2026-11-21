@@ -19,8 +19,14 @@ const PROVIDERS = {
   openrouter: {
     name: 'OpenRouter',
     baseURL: 'https://openrouter.ai/api/v1',
-    defaultModel: 'openai/gpt-5.6-sol',
-    models: ['openai/gpt-5.6-sol', 'anthropic/claude-fable-5', 'google/gemini-3.7-flash', 'moonshotai/kimi-k3', 'z-ai/glm-5.3'],
+    defaultModel: process.env.OPENROUTER_MODEL || 'particle-ai/particle-1:free',
+    models: [
+      'particle-ai/particle-1:free',
+      'liquid/lfm-3-1.7b:free',
+      'baidu/ernie-5.5-flash-preview:free',
+      'recursive/flint-v1.0:free',
+      'nvidia/nemotron-3.5-lightning:free'
+    ],
     envKey: 'OPENROUTER_API_KEY',
   },
   kimi: {
@@ -58,6 +64,11 @@ class AITextService {
   }
 
   _init(credentials) {
+    if (credentials.credentials && !credentials.aiProvider) {
+      this.logger.warn('Unwrapped credential object provided — text generation unavailable');
+      return;
+    }
+
     const provider = credentials.aiProvider?.provider;
     const apiKey = credentials.aiProvider?.apiKey;
     const model = credentials.aiProvider?.model;
@@ -66,10 +77,20 @@ class AITextService {
       return this._initOpenAICompatible(PROVIDERS[provider], apiKey, model);
     }
 
-    // Prioritize 100% Free Tier: Google Gemini first
+    // Prioritize OpenRouter when explicitly selected or when OPENROUTER_API_KEY is configured
+    if ((process.env.AI_PROVIDER === 'openrouter' || !process.env.GEMINI_API_KEY) && process.env.OPENROUTER_API_KEY) {
+      return this._initOpenAICompatible(PROVIDERS.openrouter, process.env.OPENROUTER_API_KEY, process.env.OPENROUTER_MODEL);
+    }
+
+    // Google Gemini
     const geminiKey = credentials.gemini?.apiKey || process.env.GEMINI_API_KEY;
     if (geminiKey) {
       return this._initGemini(geminiKey, credentials.gemini?.model);
+    }
+
+    // OpenRouter fallback or other presets
+    if (process.env.OPENROUTER_API_KEY) {
+      return this._initOpenAICompatible(PROVIDERS.openrouter, process.env.OPENROUTER_API_KEY, process.env.OPENROUTER_MODEL);
     }
 
     for (const [, preset] of Object.entries(PROVIDERS)) {
@@ -83,7 +104,23 @@ class AITextService {
   }
 
   _initOpenAICompatible(preset, apiKey, model) {
-    this.client = new OpenAI({ apiKey, baseURL: preset.baseURL });
+    const options = { apiKey, baseURL: preset.baseURL };
+    if (preset.name === 'OpenRouter') {
+      options.defaultHeaders = {
+        'HTTP-Referer': 'https://github.com/TKSanthosh/youtube-automation-agent',
+        'X-Title': 'YouTube Automation Agent',
+      };
+      this.isFreeTierOpenRouter = true;
+      this.openRouterModels = preset.models || [
+        'nvidia/nemotron-3.5-lightning:free',
+        'inclusionai/ling-3.2-flash:free',
+        'google/gemma-4-26b-a4b-it:free',
+        'baidu/ernie-5.5-flash-preview:free',
+        'liquid/lfm-3-1.7b:free',
+        'nvidia/nemotron-3-ultra-550b-a55b:free'
+      ];
+    }
+    this.client = new OpenAI(options);
     this.model = model || preset.defaultModel;
     this.providerName = preset.name;
     this.logger.info(`${preset.name} initialized (model: ${this.model})`);
@@ -127,6 +164,26 @@ class AITextService {
       throw new Error('No AI text provider configured');
     }
 
+    if (this.isFreeTierOpenRouter) {
+      const candidates = [model, ...(this.openRouterModels || []).filter(m => m !== model)];
+      let lastErr = null;
+      for (const candidateModel of candidates) {
+        try {
+          const response = await this.client.chat.completions.create({
+            model: candidateModel,
+            messages: [{ role: 'user', content: prompt }],
+            temperature,
+            max_tokens: maxTokens,
+          });
+          return this._extractContent(response);
+        } catch (err) {
+          lastErr = err;
+          this.logger.warn(`OpenRouter model ${candidateModel} notice: ${err.status || err.message} — trying next free candidate...`);
+        }
+      }
+      throw lastErr || new Error('All OpenRouter free tier candidate models failed');
+    }
+
     const params = {
       model,
       messages: [{ role: 'user', content: prompt }],
@@ -160,13 +217,12 @@ class AITextService {
   }
 
   _extractContent(response) {
-    const content =
-      response &&
-      response.choices &&
-      response.choices[0] &&
-      response.choices[0].message
-        ? response.choices[0].message.content
-        : null;
+    const choice = response?.choices?.[0];
+    const message = choice?.message;
+    let content = message?.content;
+    if ((!content || !content.trim()) && message?.reasoning) {
+      content = message.reasoning;
+    }
 
     if (typeof content !== 'string' || !content.trim()) {
       // A null/empty body used to surface as cryptic "Unexpected end of JSON input"
