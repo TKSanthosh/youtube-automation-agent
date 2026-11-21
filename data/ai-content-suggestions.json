@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-11-21T18:43:31.980Z",
+  "updated_at": "2026-11-21T18:51:51.372Z",
   "total_suggestions": 9,
   "suggestions": [
     {
-      "id": "sugg_1795286611974_cqsu2o",
+      "id": "sugg_1795287111360_s2otlh",
       "topic": "Heartbleed Explained: The Missing Bounds Check That Leaked the Internet",
       "category": "CS Lore",
       "target_length": "short",
@@ -19,11 +19,11 @@
       "trend_score": 99,
       "priority_score": 99,
       "status": "pending",
-      "created_at": "2026-11-21T18:43:31.974Z",
+      "created_at": "2026-11-21T18:51:51.360Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795286611976_qcrgtf",
+      "id": "sugg_1795287111365_3b8g2",
       "topic": "How Hash Tables Resolve Collisions: Separate Chaining vs Open Addressing",
       "category": "DSA",
       "target_length": "short",
@@ -39,11 +39,11 @@
       "trend_score": 98,
       "priority_score": 98,
       "status": "pending",
-      "created_at": "2026-11-21T18:43:31.976Z",
+      "created_at": "2026-11-21T18:51:51.365Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795286611975_27tkaw",
+      "id": "sugg_1795287111363_c500g",
       "topic": "Fast Inverse Square Root: The 0x5f3759df Hack That Built 3D Gaming",
       "category": "CS Lore",
       "target_length": "short",
@@ -59,11 +59,11 @@
       "trend_score": 98,
       "priority_score": 98,
       "status": "pending",
-      "created_at": "2026-11-21T18:43:31.975Z",
+      "created_at": "2026-11-21T18:51:51.363Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795286611976_bwi8o",
+      "id": "sugg_1795287111367_8lnec",
       "topic": "Brendan Eich Created JavaScript in 10 Days: The Lore & The Bugs",
       "category": "CS Lore",
       "target_length": "short",
@@ -78,11 +78,11 @@
       "trend_score": 97,
       "priority_score": 97,
       "status": "pending",
-      "created_at": "2026-11-21T18:43:31.976Z",
+      "created_at": "2026-11-21T18:51:51.367Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795286611975_7nzx8f",
+      "id": "sugg_1795287111364_sb7ev",
       "topic": "The Therac-25 Tragedy: The Deadliest Race Condition in Software History",
       "category": "CS Lore",
       "target_length": "short",
@@ -98,11 +98,11 @@
       "trend_score": 97,
       "priority_score": 97,
       "status": "pending",
-      "created_at": "2026-11-21T18:43:31.975Z",
+      "created_at": "2026-11-21T18:51:51.364Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795286611976_wt6c4q",
+      "id": "sugg_1795287111366_d2osw",
       "topic": "Why Quicksort Beats Mergesort in Practice: CPU L1/L2 Cache Lines",
       "category": "DSA",
       "target_length": "short",
@@ -118,11 +118,11 @@
       "trend_score": 96,
       "priority_score": 96,
       "status": "pending",
-      "created_at": "2026-11-21T18:43:31.976Z",
+      "created_at": "2026-11-21T18:51:51.366Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795286611978_glpkoe",
+      "id": "sugg_1795287111369_0tw0zk",
       "topic": "Memory Management: Stack vs Heap Allocation & Pointer Dereferencing",
       "category": "System Design",
       "target_length": "short",
@@ -138,11 +138,11 @@
       "trend_score": 95,
       "priority_score": 95,
       "status": "pending",
-      "created_at": "2026-11-21T18:43:31.978Z",
+      "created_at": "2026-11-21T18:51:51.369Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795286611977_fqwpj9",
+      "id": "sugg_1795287111367_061ca",
       "topic": "Tony Hoare's Billion Dollar Mistake: Why Null Pointers Exist",
       "category": "CS Lore",
       "target_length": "short",
@@ -157,11 +157,11 @@
       "trend_score": 95,
       "priority_score": 95,
       "status": "pending",
-      "created_at": "2026-11-21T18:43:31.977Z",
+      "created_at": "2026-11-21T18:51:51.367Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795286611977_btp6t",
+      "id": "sugg_1795287111368_9ye6d",
       "topic": "Observer Pattern vs Pub-Sub: The Critical Event-Driven Difference",
       "category": "Design Patterns",
       "target_length": "short",
@@ -177,7 +177,7 @@
       "trend_score": 94,
       "priority_score": 94,
       "status": "pending",
-      "created_at": "2026-11-21T18:43:31.977Z",
+      "created_at": "2026-11-21T18:51:51.368Z",
       "used_at": null
     }
   ]
