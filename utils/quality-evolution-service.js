@@ -8,7 +8,8 @@ class QualityEvolutionService {
     this.db = db;
     this.options = options;
     this.logger = new Logger('QualityEvolutionService');
-    this.aiTextService = options.aiTextService || new AITextService(options.credentials || {});
+    const creds = options.credentials?.getAllCredentials ? options.credentials.getAllCredentials() : (options.credentials || {});
+    this.aiTextService = options.aiTextService || new AITextService(creds);
     this.directivesFilePath = path.join(__dirname, '..', 'data', 'quality-evolution-directives.json');
   }
 

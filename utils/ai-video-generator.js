@@ -1587,6 +1587,89 @@ class AIVideoGenerator {
             pointer-events: none;
         }
         
+        /* Series Top Badge */
+        .series-top-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(90deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9));
+            border: 1.5px solid ${theme.accent};
+            border-radius: 9999px;
+            padding: 8px 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        .series-pulse-dot {
+            color: #eab308;
+            font-size: 18px;
+            animation: cursor-blink 1.2s infinite;
+        }
+        .series-badge-label {
+            font-size: 17px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            color: #38bdf8;
+            text-transform: uppercase;
+        }
+        .series-episode-num {
+            background: ${theme.accent};
+            color: #0f172a;
+            font-size: 15px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            padding: 3px 10px;
+            border-radius: 9999px;
+        }
+
+        /* Binge Cliffhanger Container for Next Episode */
+        .binge-cliffhanger-container {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.94));
+            border: 2px solid #eab308;
+            border-radius: 20px;
+            padding: 18px 22px;
+            margin-top: 14px;
+            box-shadow: 0 12px 35px rgba(234, 179, 8, 0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        .binge-header-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .binge-bolt {
+            font-size: 20px;
+            color: #eab308;
+        }
+        .binge-label {
+            font-size: 16px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            color: #fde047;
+            text-transform: uppercase;
+        }
+        .binge-teaser-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f8fafc;
+            line-height: 1.35;
+        }
+        .binge-cta-pill {
+            background: rgba(234, 179, 8, 0.18);
+            border: 1px solid rgba(234, 179, 8, 0.5);
+            color: #fef08a;
+            font-size: 17px;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 10px;
+            margin-top: 4px;
+            text-align: center;
+        }
+
         .top-badge {
             display: inline-flex;
             align-items: center;
@@ -1801,126 +1884,6 @@ class AIVideoGenerator {
     </div>
 </body>
 </html>`;
-  }
-
-  renderAITeacherAvatar(slideIndex = 0) {
-    const emotions = [
-      { mood: 'alert', mouth: 'M 74 95 Q 80 97 86 95', eyeOpen: true },
-      { mood: 'focus', mouth: 'M 73 94 Q 80 98 87 94', eyeOpen: true },
-      { mood: 'analyze', mouth: 'M 75 95 L 85 95', eyeOpen: true },
-      { mood: 'teach', mouth: 'M 74 94 Q 80 98 86 94', eyeOpen: true },
-      { mood: 'insight', mouth: 'M 73 93 Q 80 99 87 93', eyeOpen: true }
-    ];
-    const emo = emotions[slideIndex % emotions.length] || emotions[0];
-
-    return `
-    <svg viewBox="0 0 160 160" class="teacher-svg" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="techHairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#1e293b" />
-          <stop offset="60%" stop-color="#0f172a" />
-          <stop offset="100%" stop-color="#020617" />
-        </linearGradient>
-        <linearGradient id="techSkinGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#f8fafc" />
-          <stop offset="100%" stop-color="#cbd5e1" />
-        </linearGradient>
-        <linearGradient id="techJacketGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#0f172a" />
-          <stop offset="50%" stop-color="#1e293b" />
-          <stop offset="100%" stop-color="#090d16" />
-        </linearGradient>
-        <linearGradient id="techCyberGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#06b6d4" />
-          <stop offset="100%" stop-color="#3b82f6" />
-        </linearGradient>
-        <filter id="techGlow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="3" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
-      </defs>
-
-      <!-- Background Halo -->
-      <circle cx="80" cy="80" r="77" fill="#090d16" />
-      <circle cx="80" cy="80" r="75" fill="none" stroke="url(#techCyberGrad)" stroke-width="2.5" opacity="0.85" />
-
-      <!-- Cyber Tech Hoodie / Shoulders -->
-      <path d="M 22 160 C 22 120, 46 110, 80 110 C 114 110, 138 120, 138 160 Z" fill="url(#techJacketGrad)" stroke="#334155" stroke-width="1.5" />
-      <!-- Cyber Neon Collar Trim -->
-      <path d="M 62 116 L 80 140 L 98 116" fill="none" stroke="url(#techCyberGrad)" stroke-width="2.5" stroke-linecap="round" />
-      <!-- Tech Badge / Pulse Core -->
-      <polygon points="80,136 85,143 80,150 75,143" fill="#38bdf8" filter="url(#techGlow)" />
-
-      <!-- Neck -->
-      <rect x="71" y="96" width="18" height="20" rx="3" fill="url(#techSkinGrad)" />
-      <path d="M 71 104 Q 80 110 89 104" fill="none" stroke="#94a3b8" stroke-width="1.2" />
-
-      <!-- Face -->
-      <path d="M 52 66 C 52 94, 63 106, 80 106 C 97 106, 108 94, 108 66 C 108 42, 97 34, 80 34 C 63 34, 52 42, 52 66 Z" fill="url(#techSkinGrad)" />
-
-      <!-- Expressive Tech Eyes -->
-      <ellipse cx="65" cy="74" rx="4" ry="4.5" fill="#0f172a" />
-      <circle cx="64" cy="72.5" r="1.5" fill="#ffffff" />
-      <ellipse cx="95" cy="74" rx="4" ry="4.5" fill="#0f172a" />
-      <circle cx="94" cy="72.5" r="1.5" fill="#ffffff" />
-
-      <!-- Confident Eyebrows -->
-      <path d="M 58 66 Q 65 63 72 65" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" />
-      <path d="M 88 65 Q 95 63 102 66" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" />
-
-      <!-- Minimal Nose -->
-      <path d="M 79 79 Q 80 82 78 83" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-linecap="round" />
-
-      <!-- Controlled Mouth Expression -->
-      <path d="${emo.mouth}" fill="none" stroke="#334155" stroke-width="2" stroke-linecap="round" />
-
-      <!-- Modern Cyber Tech Smart Glasses -->
-      <rect x="54" y="66" width="22" height="15" rx="3" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.8" />
-      <rect x="84" y="66" width="22" height="15" rx="3" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.8" />
-      <line x1="76" y1="72" x2="84" y2="72" stroke="#38bdf8" stroke-width="1.8" />
-      <line x1="56" y1="68" x2="63" y2="76" stroke="#ffffff" stroke-width="1.2" opacity="0.7" stroke-linecap="round" />
-      <line x1="86" y1="68" x2="93" y2="76" stroke="#ffffff" stroke-width="1.2" opacity="0.7" stroke-linecap="round" />
-
-      <!-- Modern Short Haircut -->
-      <path d="M 50 60 C 50 36, 62 30, 80 30 C 98 30, 110 36, 110 60 C 104 46, 94 36, 80 36 C 66 36, 56 46, 50 60 Z" fill="url(#techHairGrad)" />
-      <path d="M 52 48 Q 66 38 82 42 Q 98 38 108 48" fill="none" stroke="#38bdf8" stroke-width="1.5" opacity="0.6" stroke-linecap="round" />
-
-      <!-- Studio Streaming Headset & Mic -->
-      <path d="M 44 64 A 38 38 0 0 1 116 64" fill="none" stroke="#1e293b" stroke-width="4.5" stroke-linecap="round" />
-      <path d="M 44 64 A 38 38 0 0 1 116 64" fill="none" stroke="url(#techCyberGrad)" stroke-width="1.5" stroke-dasharray="6,4" />
-      <!-- Left Earcup -->
-      <rect x="38" y="58" width="10" height="22" rx="4" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5" />
-      <!-- Right Earcup -->
-      <rect x="112" y="58" width="10" height="22" rx="4" fill="#0f172a" stroke="#06b6d4" stroke-width="1.5" />
-      <!-- Microphone Boom with Active LED -->
-      <path d="M 44 74 Q 48 94 68 94" fill="none" stroke="#334155" stroke-width="2.4" stroke-linecap="round" />
-      <circle cx="69" cy="94" r="3.5" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
-      <circle cx="69" cy="94" r="1.6" fill="#22c55e" filter="url(#techGlow)" />
-    </svg>`;
-  }
-
-  getTeacherSpeechPrompt(slide, idx, scriptTitle = '') {
-    if (slide.teacherCue) return this.stripEmojis(slide.teacherCue);
-    if (slide.teacherNarration) {
-      const firstSentence = String(slide.teacherNarration).split(/[.?!]/)[0].trim();
-      if (firstSentence && firstSentence.length <= 110) {
-        return this.stripEmojis(firstSentence);
-      }
-    }
-
-    switch (idx) {
-      case 0:
-        return 'Watch closely: this single unhandled edge case secretly crashes high-traffic backends.';
-      case 1:
-        return 'Dev reality check: 0 bugs in local tests, but production is on fire at 3 AM! Let us debug why.';
-      case 2:
-        return 'Under the hood: here is the exact runtime memory pipeline causing the silent failure.';
-      case 3:
-        return 'Clean implementation: here is the production-grade fix used by senior staff engineers.';
-      case 4:
-      default:
-        return 'Golden engineering principle: always enforce deterministic boundaries over silent crashes.';
-    }
   }
 
   getTopicIncidentMetric(topic = '') {
@@ -2549,6 +2512,10 @@ class AIVideoGenerator {
 
   createMultiSlideShortsHTML(script, visualAssets = []) {
     const theme = this.getRotatedTheme();
+    const seriesPlan = script.seriesPlan || (script.mainContent && script.mainContent.seriesPlan) || null;
+    const seriesBadge = seriesPlan ? seriesPlan.seriesBadge : 'TECH MASTERCLASS';
+    const seriesEpisode = seriesPlan ? seriesPlan.episode : 1;
+    const seriesTotalEpisodes = seriesPlan ? seriesPlan.totalEpisodes : 5;
 
     const slideBadges = [
       { label: '01. CORE BOTTLENECK', color: '#ef4444' },
@@ -2657,8 +2624,10 @@ class AIVideoGenerator {
           </div>
         `;
       } else if (isTakeawaySlide) {
-        const rawTakeaway = script.conclusion?.finalThought || script.conclusion || 'Prioritize deterministic failure boundaries over premature optimization.';
+        const rawTakeaway = slide.takeawayPrinciple || script.conclusion?.finalThought || script.conclusion || 'Prioritize deterministic failure boundaries over premature optimization.';
         const takeawayPrinciple = this.stripEmojis(rawTakeaway);
+        const nextTeaser = seriesPlan?.nextTeaser || 'Next Episode: Advanced Memory & Concurrency Boundaries';
+        const nextEpNum = seriesPlan ? (seriesPlan.episode % seriesPlan.totalEpisodes) + 1 : 2;
         visualBlockHTML = `
           <div class="takeaway-card-shorts">
             <div class="takeaway-header">
@@ -2666,16 +2635,13 @@ class AIVideoGenerator {
             </div>
             <div class="takeaway-principle">"${this.escapeHTML(takeawayPrinciple)}"</div>
           </div>
-          <div class="subscriber-cta-banner">
-            <div class="cta-pulse-icon">
-              <svg viewBox="0 0 24 24" fill="#ffffff" width="28" height="28">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
+          <div class="binge-cliffhanger-container">
+            <div class="binge-header-row">
+              <span class="binge-bolt">⚡</span>
+              <span class="binge-label">NEXT IN EPISODE ${nextEpNum}:</span>
             </div>
-            <div class="cta-text-group">
-              <div class="cta-title">SUBSCRIBE FOR DAILY CS &amp; SYSTEM DESIGN</div>
-              <div class="cta-sub">Join 100K+ engineers mastering the internals</div>
-            </div>
+            <div class="binge-teaser-text">${this.escapeHTML(nextTeaser)}</div>
+            <div class="binge-cta-pill">🔔 Follow @bytebybytedevtk for Episode ${nextEpNum} tomorrow!</div>
           </div>
         `;
       }
@@ -2700,6 +2666,11 @@ class AIVideoGenerator {
             <div class="particle p4"></div><div class="particle p5"></div>
           </div>
           <div class="section-card">
+              <div class="series-top-pill">
+                <span class="series-pulse-dot">⚡</span>
+                <span class="series-badge-label">${this.escapeHTML(seriesBadge)}</span>
+                <span class="series-episode-num">EPISODE ${seriesEpisode} / ${seriesTotalEpisodes}</span>
+              </div>
               <div class="top-badge" style="background: ${badge.color}22; border-color: ${badge.color}66; color: ${badge.color};">${this.escapeHTML(badge.label)}</div>
               <h2 class="section-header">${this.escapeHTML(this.stripEmojis(slide.headline || slide.title || `Chapter ${idx + 1}`))}</h2>
               ${visualBlockHTML}
@@ -2922,6 +2893,89 @@ class AIVideoGenerator {
           pointer-events: none;
           z-index: 0;
           font-family: monospace;
+        }
+
+        /* Series Top Badge */
+        .series-top-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(90deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.9));
+            border: 1.5px solid ${theme.accent};
+            border-radius: 9999px;
+            padding: 8px 20px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        .series-pulse-dot {
+            color: #eab308;
+            font-size: 18px;
+            animation: cursor-blink 1.2s infinite;
+        }
+        .series-badge-label {
+            font-size: 17px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            color: #38bdf8;
+            text-transform: uppercase;
+        }
+        .series-episode-num {
+            background: ${theme.accent};
+            color: #0f172a;
+            font-size: 15px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            padding: 3px 10px;
+            border-radius: 9999px;
+        }
+
+        /* Binge Cliffhanger Container for Next Episode */
+        .binge-cliffhanger-container {
+            width: 100%;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.94));
+            border: 2px solid #eab308;
+            border-radius: 20px;
+            padding: 18px 22px;
+            margin-top: 14px;
+            box-shadow: 0 12px 35px rgba(234, 179, 8, 0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        .binge-header-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .binge-bolt {
+            font-size: 20px;
+            color: #eab308;
+        }
+        .binge-label {
+            font-size: 16px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            color: #fde047;
+            text-transform: uppercase;
+        }
+        .binge-teaser-text {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f8fafc;
+            line-height: 1.35;
+        }
+        .binge-cta-pill {
+            background: rgba(234, 179, 8, 0.18);
+            border: 1px solid rgba(234, 179, 8, 0.5);
+            color: #fef08a;
+            font-size: 17px;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 10px;
+            margin-top: 4px;
+            text-align: center;
         }
 
         .top-badge {

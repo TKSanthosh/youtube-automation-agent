@@ -90,46 +90,61 @@ class InstagramReelsPublisher {
       // File upload
       console.log('   📁 Uploading 9:16 vertical video...');
       const fileInputSelector = 'input[type="file"]';
-      await page.waitForSelector(fileInputSelector, { timeout: 15000 });
-      await page.setInputFiles(fileInputSelector, videoPath);
-      await page.waitForTimeout(4000);
+      try {
+        await page.waitForSelector(fileInputSelector, { state: 'attached', timeout: 20000 });
+        await page.setInputFiles(fileInputSelector, videoPath);
+      } catch (uploadErr) {
+        console.log(`   Notice: direct file input wait: ${uploadErr.message}. Trying 'Select from computer'...`);
+        const fileChooserPromise = page.waitForEvent('filechooser', { timeout: 15000 });
+        const selectBtn = await page.$('button:has-text("Select from computer"), [role="button"]:has-text("Select from computer")');
+        if (selectBtn) {
+          await selectBtn.click();
+          const fileChooser = await fileChooserPromise;
+          await fileChooser.setFiles(videoPath);
+        } else {
+          throw uploadErr;
+        }
+      }
+      await page.waitForTimeout(5000);
 
       // If "Video posts are now shared as reels" modal appears, click OK
       try {
-        const okBtn = await page.$('button:has-text("OK")');
+        const okBtn = await page.$('button:has-text("OK"), button:has-text("Dismiss")');
         if (okBtn) {
           await okBtn.click();
           await page.waitForTimeout(1000);
         }
       } catch (_) {}
 
-      // Ensure 9:16 aspect ratio
+      // Ensure 9:16 / Original vertical aspect ratio
       try {
-        const cropBtn = await page.$('svg[aria-label="Select crop"], button[aria-label="Select crop"]');
+        const cropBtn = await page.$('button[aria-label="Select crop"], svg[aria-label="Select crop"], [aria-label="Select Crop"]');
         if (cropBtn) {
           await cropBtn.click();
-          await page.waitForTimeout(800);
-          const ratio916 = await page.$('button:has-text("9:16"), span:has-text("9:16")');
-          if (ratio916) {
-            await ratio916.click();
-            await page.waitForTimeout(800);
+          await page.waitForTimeout(1000);
+          const ratioBtn = await page.$('button:has-text("9:16"), span:has-text("9:16"), button:has-text("Original"), span:has-text("Original")');
+          if (ratioBtn) {
+            await ratioBtn.click();
+            await page.waitForTimeout(1000);
           }
         }
       } catch (_) {}
 
       // Step 1: Click "Next" (Media -> Filters/Cover)
       console.log('   ⚙️  Configuring Reel specifications...');
-      const nextBtnSelector = 'div[role="button"]:has-text("Next"), button:has-text("Next")';
-      await page.waitForSelector(nextBtnSelector, { timeout: 15000 });
+      const nextBtnSelector = 'div[role="button"]:has-text("Next"), button:has-text("Next"), [aria-label="Next"]';
+      await page.waitForSelector(nextBtnSelector, { state: 'visible', timeout: 25000 });
       await page.click(nextBtnSelector);
-      await page.waitForTimeout(2500);
+      await page.waitForTimeout(3000);
 
       // Step 2: Click "Next" (Filters/Cover -> Caption)
-      const nextBtn2 = await page.$(nextBtnSelector);
-      if (nextBtn2) {
-        await nextBtn2.click();
-        await page.waitForTimeout(2500);
-      }
+      try {
+        const nextBtn2 = await page.waitForSelector(nextBtnSelector, { state: 'visible', timeout: 10000 });
+        if (nextBtn2) {
+          await nextBtn2.click();
+          await page.waitForTimeout(3000);
+        }
+      } catch (_) {}
 
       // Step 3: Write Caption and Hashtags
       console.log('   ✍️  Adding caption and high-reach hashtags...');

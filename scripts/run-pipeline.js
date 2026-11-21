@@ -149,13 +149,15 @@ async function run() {
     let youtubeUrl = null;
 
     try {
-      // 1. Generate Strategy & Topic
-      logger.info('Brainstorming topic & strategy...');
-      let topicForCycle = options.topic
-        ? (options.count > 1 ? `${options.topic} (Part ${i})` : options.topic)
-        : null;
+      // 1. Generate Strategy & Topic via Series Masterclass Engine
+      logger.info('Brainstorming topic & strategy with Series Engine...');
+      const { SeriesService } = require('../utils/series-service');
+      const seriesService = new SeriesService();
+      const seriesPlan = seriesService.getNextEpisodePlan(options.topic);
 
-      // Ingest top AI suggestion from Trend Intelligence Agent if no topic was manually provided
+      let topicForCycle = options.topic || (seriesPlan ? seriesPlan.topic : null);
+
+      // Ingest top AI suggestion from Trend Intelligence Agent if no topic was manually provided and not running series
       let topSugg = null;
       if (!topicForCycle) {
         try {
@@ -182,6 +184,7 @@ async function run() {
       }
 
       const strategy = await strategyAgent.generateContentStrategy(topicForCycle);
+      strategy.seriesPlan = seriesPlan;
       
       // Apply target length and visual blueprints (Strictly Viral Shorts/Reels 35-45 sec)
       const targetLen = (options.length && options.length !== 'autonomous_ai')
@@ -208,6 +211,10 @@ async function run() {
       // 2. Generate Script
       logger.info('Writing script & narration...');
       const script = await scriptAgent.generateScript(strategy);
+      script.seriesPlan = seriesPlan;
+      if (seriesPlan) {
+        script.title = `[${seriesPlan.seriesBadge} #${seriesPlan.episode}] ${seriesPlan.topic}`;
+      }
       console.log(chalk.white(`   📝 Title: ${script.title}`));
 
       // 3. Generate Thumbnail
@@ -290,6 +297,16 @@ async function run() {
           url: youtubeUrl,
           durationSec: Math.round((Date.now() - cycleStart) / 1000)
         });
+
+        // Advance Series Episode State for continuous viewer bingeing
+        if (seriesPlan?.seriesId) {
+          try {
+            seriesService.advanceToNextEpisode(seriesPlan.seriesId);
+            console.log(chalk.cyan(`   📈 Advanced series: "${seriesPlan.seriesName}" for the next cycle`));
+          } catch (advErr) {
+            logger.warn(`Series advancement notice: ${advErr.message}`);
+          }
+        }
 
         // 7. Multi-Platform: Publish to Instagram Reels (if credentials configured)
         const targetUploadPath = fsSync.existsSync(igVideoPath) ? igVideoPath : (fsSync.existsSync(videoPath) ? videoPath : null);

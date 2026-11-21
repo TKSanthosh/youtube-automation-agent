@@ -1,7 +1,11 @@
 {
   "usedUrls": [
     "https://media.tenor.com/wF4r4cPcu08AAAAM/gitmerge.gif",
-    "https://media.tenor.com/JCPZu3L6K4cAAAAM/coffee-coffee-time.gif"
+    "https://media.tenor.com/JCPZu3L6K4cAAAAM/coffee-coffee-time.gif",
+    "https://media.tenor.com/SoBzDkrJuNUAAAAM/cat-hack.gif",
+    "https://media.tenor.com/2ObfdQUkkh8AAAAM/bug-fix-fixing-bugs-in-your-code.gif",
+    "https://media.tenor.com/ZmJsg0dpt5QAAAAM/shanmukh-shanmukh-jaswanth.gif",
+    "https://media.tenor.com/_0WsYiHDa5wAAAAM/github-git.gif"
   ],
   "history": [
     {
@@ -17,6 +21,34 @@
       "query": "developer coding coffee",
       "downloadedAt": "2026-11-21T18:48:16.329Z",
       "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1795286866838_developer_coding_cof.gif"
+    },
+    {
+      "url": "https://media.tenor.com/SoBzDkrJuNUAAAAM/cat-hack.gif",
+      "topic": "Mastering Fast Inverse Square Root: The 0x5f3759df Hack That Built 3D Gaming: Computer Science Deep Dive",
+      "query": "hackerman typing fast meme",
+      "downloadedAt": "2026-11-21T18:55:08.245Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1795287306409_hackerman_typing_fas.gif"
+    },
+    {
+      "url": "https://media.tenor.com/2ObfdQUkkh8AAAAM/bug-fix-fixing-bugs-in-your-code.gif",
+      "topic": "Mastering Brendan Eich Created JavaScript in 10 Days: The Lore & The Bugs: Computer Science Deep Dive",
+      "query": "coding bug meme",
+      "downloadedAt": "2026-11-21T19:01:43.303Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1795287690017_coding_bug_meme.gif"
+    },
+    {
+      "url": "https://media.tenor.com/ZmJsg0dpt5QAAAAM/shanmukh-shanmukh-jaswanth.gif",
+      "topic": "Mastering The Therac-25 Tragedy: The Deadliest Race Condition in Software History: Computer Science Deep Dive",
+      "query": "software engineer stress",
+      "downloadedAt": "2026-11-21T19:07:57.810Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1795288077444_software_engineer_st.gif"
+    },
+    {
+      "url": "https://media.tenor.com/_0WsYiHDa5wAAAAM/github-git.gif",
+      "topic": "Mastering Why Quicksort Beats Mergesort in Practice: CPU L1/L2 Cache Lines: Computer Science Deep Dive",
+      "query": "git merge conflict meme",
+      "downloadedAt": "2026-11-21T19:14:37.862Z",
+      "filePath": "C:\\antigravity_projects\\youtube-automation-agent\\assets\\memes\\dynamic_1795288476867_git_merge_conflict_m.gif"
     }
   ]
 }

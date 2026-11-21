@@ -527,32 +527,45 @@ Return ONLY valid JSON matching this exact structure:
       });
     }
 
-    const dsaType = this.getTopicDSAType(topic);
-    const codeSnippet = this.getTopicCodeSnippet(topic);
+    const seriesPlan = strategy?.seriesPlan || null;
+    const dsaType = seriesPlan?.dsaType || this.getTopicDSAType(topic);
+    const codeSnippet = seriesPlan?.codeSnippet || this.getTopicCodeSnippet(topic);
     const memeData = this.getTopicMeme(topic);
 
-    return rawSlides.slice(0, 5).map((slide, idx) => ({
-      slideNumber: idx + 1,
-      type: defaultTypes[idx],
-      headline: (slide.headline && !['question', 'background', 'explanation', 'examples', 'implications'].includes(String(slide.headline).toLowerCase()))
-        ? String(slide.headline).trim()
-        : (slide.title && !['question', 'background', 'explanation', 'examples', 'implications', 'deep dive', 'real-world examples', 'what this means'].includes(String(slide.title).toLowerCase()))
-          ? String(slide.title).trim()
-          : defaultHeadlines[idx],
-      historicMilestone: slide.historicMilestone || (idx === 0 ? 'COMPUTER SCIENCE LORE' : null),
-      meme: (idx === 1) ? (slide.meme && slide.meme.caption ? slide.meme : memeData) : null,
-      bulletPoints: Array.isArray(slide.bulletPoints)
-        ? slide.bulletPoints.map(b => String(b).trim()).filter(Boolean)
-        : (Array.isArray(slide.content) ? slide.content.slice(0, 3).map(c => String(c).trim()) : [String(slide.headline || slide.title || '')]),
-      diagram: (idx === 2) ? (slide.diagram && slide.diagram.dsaType ? slide.diagram : {
-        title: 'System Mechanics & Data Flow',
-        dsaType,
-        flowLabel: 'Input -> State Machine -> Execution Engine'
-      }) : null,
-      codeSnippet: (idx === 3) ? String(slide.codeSnippet && slide.codeSnippet.length > 20 ? slide.codeSnippet : codeSnippet).trim() : '',
-      question: slide.question ? String(slide.question).trim() : null,
-      teacherNarration: this.ensurePedagogicalNarrationDepth(slide, topic, idx)
-    }));
+    return rawSlides.slice(0, 5).map((slide, idx) => {
+      let teacherNarration = this.ensurePedagogicalNarrationDepth(slide, topic, idx);
+      if (idx === 4 && seriesPlan?.cliffhangerNarration) {
+        teacherNarration = seriesPlan.cliffhangerNarration;
+      } else if (idx === 0 && seriesPlan?.hookAngle) {
+        teacherNarration = seriesPlan.hookAngle;
+      }
+
+      return {
+        slideNumber: idx + 1,
+        type: defaultTypes[idx],
+        headline: (idx === 0 && seriesPlan?.problemHeadline)
+          ? seriesPlan.problemHeadline
+          : ((slide.headline && !['question', 'background', 'explanation', 'examples', 'implications'].includes(String(slide.headline).toLowerCase()))
+            ? String(slide.headline).trim()
+            : (slide.title && !['question', 'background', 'explanation', 'examples', 'implications', 'deep dive', 'real-world examples', 'what this means'].includes(String(slide.title).toLowerCase()))
+              ? String(slide.title).trim()
+              : defaultHeadlines[idx]),
+        historicMilestone: slide.historicMilestone || (idx === 0 ? 'COMPUTER SCIENCE LORE' : null),
+        meme: (idx === 1) ? (slide.meme && slide.meme.caption ? slide.meme : memeData) : null,
+        bulletPoints: Array.isArray(slide.bulletPoints)
+          ? slide.bulletPoints.map(b => String(b).trim()).filter(Boolean)
+          : (Array.isArray(slide.content) ? slide.content.slice(0, 3).map(c => String(c).trim()) : [String(slide.headline || slide.title || '')]),
+        diagram: (idx === 2) ? (slide.diagram && slide.diagram.dsaType ? slide.diagram : {
+          title: 'System Mechanics & Data Flow',
+          dsaType,
+          flowLabel: seriesPlan?.dsaFlow || 'Input -> State Machine -> Execution Engine'
+        }) : null,
+        codeSnippet: (idx === 3) ? String(slide.codeSnippet && slide.codeSnippet.length > 20 ? slide.codeSnippet : codeSnippet).trim() : '',
+        question: slide.question ? String(slide.question).trim() : null,
+        takeawayPrinciple: (idx === 4 && seriesPlan?.keyPrinciple) ? seriesPlan.keyPrinciple : null,
+        teacherNarration
+      };
+    });
   }
 
   normalizeAISections(sections, strategy) {

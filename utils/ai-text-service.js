@@ -9,11 +9,14 @@ const GEMINI_MODELS = [
 const GEMINI_DEFAULT_MODEL = process.env.GEMINI_MODEL || GEMINI_MODELS[0];
 
 const OPENROUTER_FREE_MODELS = [
-  'particle-ai/particle-1:free',
   'liquid/lfm-3-1.7b:free',
+  'inclusionai/ling-3.2-flash:free',
   'baidu/ernie-5.5-flash-preview:free',
+  'particle-ai/particle-1:free',
   'recursive/flint-v1.0:free',
-  'nvidia/nemotron-3.5-lightning:free'
+  'nvidia/nemotron-3.5-lightning:free',
+  'google/gemma-4-31b-it:free',
+  'google/gemma-4-26b-a4b-it:free'
 ];
 
 const PROVIDERS = {
@@ -66,7 +69,7 @@ class AITextService {
   }
 
   _init(credentials) {
-    if (credentials.credentials && !credentials.aiProvider) {
+    if (credentials && credentials.credentials && !credentials.aiProvider) {
       this.logger.warn('Unwrapped credential object provided — text generation unavailable');
       return;
     }
@@ -115,9 +118,10 @@ class AITextService {
       this.isFreeTierOpenRouter = true;
       this.openRouterModels = OPENROUTER_FREE_MODELS;
       this.model = model || process.env.OPENROUTER_MODEL || OPENROUTER_FREE_MODELS[0];
+    } else {
+      this.model = model || preset.defaultModel;
     }
     this.client = new OpenAI(options);
-    this.model = model || preset.defaultModel;
     this.providerName = preset.name;
     this.logger.info(`${preset.name} initialized (model: ${this.model})`);
   }
@@ -175,8 +179,34 @@ class AITextService {
         } catch (err) {
           lastErr = err;
           this.logger.warn(`OpenRouter model ${candidateModel} notice: ${err.status || err.message} — trying next free candidate...`);
+          if (String(err.message).includes('free-models-per-day') || String(err.message).includes('daily_limit')) {
+            this.logger.info('OpenRouter free-models-per-day limit reached. Proceeding to fallback immediately...');
+            break;
+          }
         }
       }
+
+      // If all OpenRouter free models encounter rate limit (429) or failure, fall back to Google Gemini if available
+      const geminiKey = process.env.GEMINI_API_KEY;
+      if (geminiKey) {
+        try {
+          this.logger.info('Falling back to Google Gemini as secondary provider...');
+          const { GoogleGenAI } = require('@google/genai');
+          const geminiInstance = new GoogleGenAI({ apiKey: geminiKey });
+          const geminiRes = await geminiInstance.models.generateContent({
+            model: 'gemini-3.5-flash-lite',
+            contents: prompt,
+            config: { maxOutputTokens: maxTokens }
+          });
+          const text = geminiRes && geminiRes.text;
+          if (typeof text === 'string' && text.trim()) {
+            return text;
+          }
+        } catch (geminiErr) {
+          this.logger.warn(`Gemini fallback notice: ${geminiErr.message}`);
+        }
+      }
+
       throw lastErr || new Error('All OpenRouter free tier candidate models failed');
     }
 

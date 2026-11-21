@@ -138,6 +138,7 @@ jobs:
                   data/ai-content-suggestions.json \
                   data/theme_state.json \
                   data/voice_state.json \
+                  data/series_state.json \
                   data/trend-insights.json || true
           
           if git diff --staged --quiet; then

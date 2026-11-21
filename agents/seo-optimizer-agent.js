@@ -48,6 +48,19 @@ class SEOOptimizerAgent {
         // Extract and optimize tags
         tags = await this.generateTags(script, strategy);
       }
+
+      // Series Alignment: Inject series roadmap, episode numbering, and cliffhanger links
+      if (strategy.seriesPlan) {
+        const sp = strategy.seriesPlan;
+        title = `[${sp.seriesBadge} #${sp.episode}] ${sp.topic}`;
+        const nextEpNum = (sp.episode % sp.totalEpisodes) + 1;
+        const seriesHeader = `⚡ Part ${sp.episode} of the ${sp.seriesName} (${sp.episode}/${sp.totalEpisodes})\n👉 Follow & Subscribe for Episode ${nextEpNum} tomorrow: ${sp.nextTeaser}\n\n`;
+        description = `${seriesHeader}${description}`;
+        const seriesTags = [sp.language, `${sp.language}Tutorial`, `${sp.language}Developer`, `${sp.language}Masterclass`];
+        for (const st of seriesTags) {
+          if (!tags.includes(st)) tags.push(st);
+        }
+      }
       
       // Operator Directive: ALL videos must be strictly uploaded to the SHORTS section
       if (!title.toLowerCase().includes('#shorts')) {
