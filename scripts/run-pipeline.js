@@ -256,7 +256,28 @@ async function run() {
         try { fsSync.copyFileSync(videoPath, igVideoPath); } catch (_) {}
       }
 
-      // 6. Direct Upload to YouTube
+      // 6. Multi-Platform: Publish to Instagram Reels (Decoupled from YouTube quota)
+      const targetUploadPath = fsSync.existsSync(igVideoPath) ? igVideoPath : (fsSync.existsSync(videoPath) ? videoPath : null);
+      if (process.env.INSTAGRAM_SESSION_ID && targetUploadPath) {
+        try {
+          const { InstagramReelsPublisher } = require('../utils/instagram-reels-publisher');
+          const igPublisher = new InstagramReelsPublisher();
+          const igResult = await igPublisher.publishReel({
+            videoPath: targetUploadPath,
+            caption: script.title,
+            hashtags: seo.hashtags || []
+          });
+          if (igResult.success) {
+            console.log(chalk.magenta.bold(`   📸 INSTAGRAM REEL PUBLISHED SUCCESSFULLY`));
+          }
+        } catch (igErr) {
+          logger.warn(`Instagram Reel publishing notice: ${igErr.message}`);
+        } finally {
+          try { if (fsSync.existsSync(igVideoPath)) fsSync.unlinkSync(igVideoPath); } catch (_) {}
+        }
+      }
+
+      // 7. Direct Upload to YouTube
       logger.info('Uploading directly to YouTube...');
       const scheduleEntry = {
         productionId: productionData.id,
@@ -309,27 +330,6 @@ async function run() {
             console.log(chalk.cyan(`   📈 Advanced series: "${seriesPlan.seriesName}" for the next cycle`));
           } catch (advErr) {
             logger.warn(`Series advancement notice: ${advErr.message}`);
-          }
-        }
-
-        // 7. Multi-Platform: Publish to Instagram Reels (if credentials configured)
-        const targetUploadPath = fsSync.existsSync(igVideoPath) ? igVideoPath : (fsSync.existsSync(videoPath) ? videoPath : null);
-        if (process.env.INSTAGRAM_SESSION_ID && targetUploadPath) {
-          try {
-            const { InstagramReelsPublisher } = require('../utils/instagram-reels-publisher');
-            const igPublisher = new InstagramReelsPublisher();
-            const igResult = await igPublisher.publishReel({
-              videoPath: targetUploadPath,
-              caption: script.title,
-              hashtags: seo.hashtags || []
-            });
-            if (igResult.success) {
-              console.log(chalk.magenta.bold(`   📸 INSTAGRAM REEL PUBLISHED SUCCESSFULLY`));
-            }
-          } catch (igErr) {
-            logger.warn(`Instagram Reel publishing notice: ${igErr.message}`);
-          } finally {
-            try { if (fsSync.existsSync(igVideoPath)) fsSync.unlinkSync(igVideoPath); } catch (_) {}
           }
         }
       } catch (uploadError) {
