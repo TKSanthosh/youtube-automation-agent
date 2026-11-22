@@ -1,9 +1,9 @@
 {
-  "updated_at": "2026-11-22T10:27:38.789Z",
+  "updated_at": "2026-11-22T10:34:51.943Z",
   "total_suggestions": 9,
   "suggestions": [
     {
-      "id": "sugg_1795343258783_7q6dl5",
+      "id": "sugg_1795343691933_ccqopc",
       "topic": "Heartbleed Explained: The Missing Bounds Check That Leaked the Internet",
       "category": "CS Lore",
       "target_length": "short",
@@ -19,11 +19,11 @@
       "trend_score": 99,
       "priority_score": 99,
       "status": "pending",
-      "created_at": "2026-11-22T10:27:38.783Z",
+      "created_at": "2026-11-22T10:34:51.933Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795343258785_1enhpi",
+      "id": "sugg_1795343691936_c6vooo",
       "topic": "How Hash Tables Resolve Collisions: Separate Chaining vs Open Addressing",
       "category": "DSA",
       "target_length": "short",
@@ -39,11 +39,11 @@
       "trend_score": 98,
       "priority_score": 98,
       "status": "pending",
-      "created_at": "2026-11-22T10:27:38.785Z",
+      "created_at": "2026-11-22T10:34:51.936Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795343258784_c7m75s",
+      "id": "sugg_1795343691935_wctcvm6",
       "topic": "Fast Inverse Square Root: The 0x5f3759df Hack That Built 3D Gaming",
       "category": "CS Lore",
       "target_length": "short",
@@ -59,11 +59,11 @@
       "trend_score": 98,
       "priority_score": 98,
       "status": "pending",
-      "created_at": "2026-11-22T10:27:38.784Z",
+      "created_at": "2026-11-22T10:34:51.935Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795343258786_umvkn",
+      "id": "sugg_1795343691938_8f82v",
       "topic": "Brendan Eich Created JavaScript in 10 Days: The Lore & The Bugs",
       "category": "CS Lore",
       "target_length": "short",
@@ -78,11 +78,11 @@
       "trend_score": 97,
       "priority_score": 97,
       "status": "pending",
-      "created_at": "2026-11-22T10:27:38.786Z",
+      "created_at": "2026-11-22T10:34:51.938Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795343258785_18xvm",
+      "id": "sugg_1795343691936_qwzvgn",
       "topic": "The Therac-25 Tragedy: The Deadliest Race Condition in Software History",
       "category": "CS Lore",
       "target_length": "short",
@@ -98,11 +98,11 @@
       "trend_score": 97,
       "priority_score": 97,
       "status": "pending",
-      "created_at": "2026-11-22T10:27:38.785Z",
+      "created_at": "2026-11-22T10:34:51.936Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795343258786_tbxrxr",
+      "id": "sugg_1795343691937_4cvmrj",
       "topic": "Why Quicksort Beats Mergesort in Practice: CPU L1/L2 Cache Lines",
       "category": "DSA",
       "target_length": "short",
@@ -118,30 +118,11 @@
       "trend_score": 96,
       "priority_score": 96,
       "status": "pending",
-      "created_at": "2026-11-22T10:27:38.786Z",
+      "created_at": "2026-11-22T10:34:51.937Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795343258786_egv40c",
-      "topic": "Tony Hoare's Billion Dollar Mistake: Why Null Pointers Exist",
-      "category": "CS Lore",
-      "target_length": "short",
-      "rationale": "The origin story of null references in 1965 ALGOL W and why modern languages like Rust and Swift eliminated them.",
-      "search_evidence": "tony hoare billion dollar mistake null pointer history",
-      "educational_visuals": [
-        "Architecture diagrams",
-        "Code execution visualization"
-      ],
-      "hook_angle": "In 1965, a computer scientist made a single design choice that has cost the software industry over a billion dollars in crashes.",
-      "channel_affinity_score": 85,
-      "trend_score": 95,
-      "priority_score": 95,
-      "status": "pending",
-      "created_at": "2026-11-22T10:27:38.787Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795343258787_fwj4u",
+      "id": "sugg_1795343691939_yybd8t",
       "topic": "Memory Management: Stack vs Heap Allocation & Pointer Dereferencing",
       "category": "System Design",
       "target_length": "short",
@@ -157,11 +138,30 @@
       "trend_score": 95,
       "priority_score": 95,
       "status": "pending",
-      "created_at": "2026-11-22T10:27:38.787Z",
+      "created_at": "2026-11-22T10:34:51.939Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795343258787_m17isk",
+      "id": "sugg_1795343691938_p5341d",
+      "topic": "Tony Hoare's Billion Dollar Mistake: Why Null Pointers Exist",
+      "category": "CS Lore",
+      "target_length": "short",
+      "rationale": "The origin story of null references in 1965 ALGOL W and why modern languages like Rust and Swift eliminated them.",
+      "search_evidence": "tony hoare billion dollar mistake null pointer history",
+      "educational_visuals": [
+        "Architecture diagrams",
+        "Code execution visualization"
+      ],
+      "hook_angle": "In 1965, a computer scientist made a single design choice that has cost the software industry over a billion dollars in crashes.",
+      "channel_affinity_score": 85,
+      "trend_score": 95,
+      "priority_score": 95,
+      "status": "pending",
+      "created_at": "2026-11-22T10:34:51.938Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795343691939_rg0a2o",
       "topic": "Observer Pattern vs Pub-Sub: The Critical Event-Driven Difference",
       "category": "Design Patterns",
       "target_length": "short",
@@ -177,7 +177,7 @@
       "trend_score": 94,
       "priority_score": 94,
       "status": "pending",
-      "created_at": "2026-11-22T10:27:38.787Z",
+      "created_at": "2026-11-22T10:34:51.939Z",
       "used_at": null
     }
   ]

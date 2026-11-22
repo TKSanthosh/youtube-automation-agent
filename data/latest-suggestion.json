@@ -1,8 +1,8 @@
 {
-  "updated_at": "2026-11-22T10:27:38.789Z",
+  "updated_at": "2026-11-22T10:34:51.943Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1795343258783_7q6dl5",
+    "id": "sugg_1795343691933_ccqopc",
     "topic": "Heartbleed Explained: The Missing Bounds Check That Leaked the Internet",
     "category": "CS Lore",
     "target_length": "short",
@@ -18,7 +18,7 @@
     "trend_score": 99,
     "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-11-22T10:27:38.783Z",
+    "created_at": "2026-11-22T10:34:51.933Z",
     "used_at": null
   }
 }
