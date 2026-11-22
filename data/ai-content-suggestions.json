@@ -1,119 +1,125 @@
 {
-  "updated_at": "2026-11-22T10:42:03.876Z",
+  "updated_at": "2026-11-22T10:49:24.424Z",
   "total_suggestions": 6,
   "suggestions": [
     {
-      "id": "sugg_1795344123214_ihyep",
-      "topic": "Python GIL Explained: Why Threads Don't Use Multi-Cores",
+      "id": "sugg_1795344564418_2lnlca",
+      "topic": "Python GIL Explained: Why Multi-Threading Lies To You",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Python developers frequently hit performance ceilings when scaling CPU-bound tasks, making the Global Interpreter Lock one of the most searched core mechanics. Maximizes watch time by debunking common multithreading myths.",
+      "rationale": "Python developers frequently hit performance ceilings when scaling CPU-bound tasks with threads. Explaining the Global Interpreter Lock clears up massive confusion around why multi-threading fails to use multiple cores.",
       "search_evidence": "python gil explained",
       "educational_visuals": [
         "Architecture diagrams",
-        "Data-flow diagrams"
-      ],
-      "hook_angle": "Why does adding more CPU cores to your Python multithreading script actually make it run slower?",
-      "channel_affinity_score": 95,
-      "trend_score": 92,
-      "priority_score": 94,
-      "status": "pending",
-      "created_at": "2026-11-22T10:42:03.214Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795344123342_yskpee",
-      "topic": "LSM Trees vs B-Trees: How Databases Write at Scale",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "High-throughput database architecture relies on understanding how storage engines handle write amplification. This topic bridges foundational data structures with real-world distributed database performance.",
-      "search_evidence": "lsm tree vs b tree",
-      "educational_visuals": [
-        "Trees and graphs",
-        "Animated system flows"
-      ],
-      "hook_angle": "B-Trees are great, but why do modern databases like Cassandra and RocksDB use LSM Trees for massive write loads?",
-      "channel_affinity_score": 90,
-      "trend_score": 95,
-      "priority_score": 93,
-      "status": "pending",
-      "created_at": "2026-11-22T10:42:03.342Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795344123700_s37wm6",
-      "topic": "The Circuit Breaker Pattern in Microservices Architecture",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "Distributed systems fail unpredictably. The circuit breaker pattern prevents cascading failures across microservices, making it an essential architectural tool for production-ready backend engineering.",
-      "search_evidence": "circuit breaker pattern microservices",
-      "educational_visuals": [
-        "Animated system flows",
-        "State transitions"
-      ],
-      "hook_angle": "When one microservice crashes, why does your entire application suddenly go down like a row of dominoes?",
-      "channel_affinity_score": 94,
-      "trend_score": 91,
-      "priority_score": 92,
-      "status": "pending",
-      "created_at": "2026-11-22T10:42:03.700Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795344123471_iyd3w",
-      "topic": "Bloom Filters in Redis: Stop Checking Empty Database Rows",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "Engineers scaling cache layers face massive memory overhead when checking for non-existent keys. Bloom filters offer a probabilistic approach that dramatically cuts down expensive database lookups.",
-      "search_evidence": "bloom filter redis",
-      "educational_visuals": [
         "Data-flow diagrams",
         "Code execution visualization"
       ],
-      "hook_angle": "How can a probabilistic data structure use only a few kilobytes of memory to save your database from millions of dead queries?",
-      "channel_affinity_score": 92,
-      "trend_score": 89,
-      "priority_score": 91,
+      "hook_angle": "Your multi-threaded Python code is running on a single core, and you don't even know why.",
+      "channel_affinity_score": 100,
+      "trend_score": 95,
+      "priority_score": 98,
       "status": "pending",
-      "created_at": "2026-11-22T10:42:03.471Z",
+      "created_at": "2026-11-22T10:49:24.418Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795344123840_qz8jrt",
-      "topic": "Strategy Design Pattern in Python: Clean Up Your If-Else Chains",
-      "category": "Python",
-      "target_length": "short",
-      "rationale": "Codebases riddled with massive conditional branches are painful to maintain. Demonstrating the strategy pattern in Python offers an immediate, highly practical refactoring win for developers.",
-      "search_evidence": "strategy design pattern python",
-      "educational_visuals": [
-        "Code execution visualization",
-        "Architecture diagrams"
-      ],
-      "hook_angle": "Are you tired of maintaining a 500-line if-else statement? Here is how senior devs use the Strategy Pattern to clean it up.",
-      "channel_affinity_score": 91,
-      "trend_score": 88,
-      "priority_score": 90,
-      "status": "pending",
-      "created_at": "2026-11-22T10:42:03.840Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795344123494_q60oss",
-      "topic": "Stack vs Heap Memory: Where Does Your Code Live?",
+      "id": "sugg_1795344564421_p8qgia",
+      "topic": "Microservices Circuit Breakers: Stop Cascading Failures",
       "category": "System Design",
       "target_length": "short",
-      "rationale": "Core memory management concepts are a perennial bottleneck for both junior and senior developers debugging segmentation faults, memory leaks, and performance degradation.",
-      "search_evidence": "stack vs heap memory allocation",
+      "rationale": "Distributed systems failure modes are critical learning paths; developers urgently look for resilient patterns to isolate dying downstream dependencies.",
+      "search_evidence": "circuit breaker pattern microservices",
+      "educational_visuals": [
+        "State transitions",
+        "Architecture diagrams",
+        "Timelines"
+      ],
+      "hook_angle": "One slow third-party API just brought down your entire microservices architecture. Here is how to stop it.",
+      "channel_affinity_score": 95,
+      "trend_score": 96,
+      "priority_score": 95,
+      "status": "pending",
+      "created_at": "2026-11-22T10:49:24.421Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795344564420_j7ooz",
+      "topic": "Redis Bloom Filters: Stop Cache Stampedes Instantly",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Engineers battling malicious or non-existent key lookups crashing databases need probabilistic data structures to guard their cache layers efficiently.",
+      "search_evidence": "bloom filter redis",
+      "educational_visuals": [
+        "Data-flow diagrams",
+        "Architecture diagrams",
+        "Code execution visualization"
+      ],
+      "hook_angle": "How do top-tier apps check if a user exists in milliseconds without querying the database?",
+      "channel_affinity_score": 95,
+      "trend_score": 94,
+      "priority_score": 94,
+      "status": "pending",
+      "created_at": "2026-11-22T10:49:24.420Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795344564421_2p05m",
+      "topic": "Python Strategy Pattern: Clean Up Massive If-Else Chains",
+      "category": "Python",
+      "target_length": "short",
+      "rationale": "Developers looking to write clean, maintainable, enterprise-grade Python seek out behavioral design patterns to replace sprawling conditional logic.",
+      "search_evidence": "strategy design pattern python",
       "educational_visuals": [
         "Architecture diagrams",
+        "Code execution visualization",
+        "Data-flow diagrams"
+      ],
+      "hook_angle": "Stop writing 500-line if-else statements. Use this clean design pattern instead.",
+      "channel_affinity_score": 95,
+      "trend_score": 89,
+      "priority_score": 92,
+      "status": "pending",
+      "created_at": "2026-11-22T10:49:24.421Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795344564420_c7ffhc",
+      "topic": "B-Trees vs LSM-Trees: Database Storage Engines Decoded",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "High-scale backend engineers constantly debate read-heavy B-Tree indexes versus write-heavy LSM-Trees used in modern distributed databases like Cassandra and RocksDB.",
+      "search_evidence": "lsm tree vs b tree",
+      "educational_visuals": [
+        "Trees and graphs",
+        "Animated system flows",
         "State transitions"
       ],
-      "hook_angle": "Stop guessing why your program threw a stack overflow error—let's look at how RAM actually allocates your variables.",
-      "channel_affinity_score": 88,
-      "trend_score": 90,
-      "priority_score": 89,
+      "hook_angle": "Why does Cassandra write data 10x faster than PostgreSQL, but make reads painfully expensive?",
+      "channel_affinity_score": 90,
+      "trend_score": 92,
+      "priority_score": 91,
       "status": "pending",
-      "created_at": "2026-11-22T10:42:03.494Z",
+      "created_at": "2026-11-22T10:49:24.420Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795344564421_ay70vc",
+      "topic": "Stack vs Heap Memory: Where Does Your Data Live?",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Fundamental memory allocation confusion plagues junior and mid-level developers transitioning to low-level optimization in compiled and interpreted languages.",
+      "search_evidence": "stack vs heap memory allocation",
+      "educational_visuals": [
+        "Animated system flows",
+        "Memory layout diagrams",
+        "State transitions"
+      ],
+      "hook_angle": "Your function just returned a pointer to local stack memory, and your production server is about to segfault.",
+      "channel_affinity_score": 90,
+      "trend_score": 90,
+      "priority_score": 90,
+      "status": "pending",
+      "created_at": "2026-11-22T10:49:24.421Z",
       "used_at": null
     }
   ]
