@@ -86,40 +86,51 @@ class InstagramReelsPublisher {
 
       // Click "Create" or "+"
       console.log('   📤 Opening creation dialog...');
-      await page.evaluate(() => {
-        const a = document.querySelector('a[role="link"]:has(svg[aria-label="New post"])') || document.querySelector('svg[aria-label="New post"]')?.closest('a');
-        if (a) {
-          a.focus();
-          a.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
-          a.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
-          a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-        }
-      });
-      await page.waitForTimeout(2000);
-
-      // Fallback click on Create if menu didn't open
-      try {
-        const createLocator = page.locator('a[href="#"]:has-text("Create"), [aria-label="New post"], a:has-text("Create"), svg[aria-label="New post"], svg[aria-label="Create"]').first();
-        if (await createLocator.isVisible({ timeout: 2000 }).catch(() => false)) {
-          await createLocator.click({ force: true }).catch(() => null);
-          await page.waitForTimeout(2000);
-        }
-      } catch (_) {}
-
-      // In modern Instagram Web, clicking Create opens a menu with "Post"
+      let menuOpened = false;
       try {
         await page.evaluate(() => {
+          const a = document.querySelector('a[role="link"]:has(svg[aria-label="New post"])') || document.querySelector('svg[aria-label="New post"]')?.closest('a');
+          if (a) {
+            a.focus();
+            a.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+            a.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+            a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+          }
+        });
+        await page.waitForTimeout(2500);
+
+        // In modern Instagram Web, clicking Create opens a menu with "Post"
+        const clickedPost = await page.evaluate(() => {
           const all = Array.from(document.querySelectorAll('*'));
-          const postEl = all.find(el => el.innerText === 'Post' && el.children.length === 0);
+          const postEl = all.find(el => (el.innerText === 'Post' || el.innerText === 'Create') && el.children.length === 0);
           if (postEl) {
             const target = postEl.closest('a') || postEl.closest('div[role="button"]') || postEl;
             target.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
             target.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
             target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+            return true;
           }
+          return false;
         });
-        await page.waitForTimeout(2000);
+        if (clickedPost) menuOpened = true;
+        await page.waitForTimeout(2500);
       } catch (_) {}
+
+      // If menu was not opened by dispatch, try direct Playwright click
+      if (!menuOpened) {
+        try {
+          const createLocator = page.locator('a[role="link"]:has(svg[aria-label="New post"]), a:has-text("Create"), svg[aria-label="New post"]').first();
+          if (await createLocator.isVisible({ timeout: 3000 }).catch(() => false)) {
+            await createLocator.click();
+            await page.waitForTimeout(2000);
+            const postLocator = page.locator('span:has-text("Post"), a:has-text("Post")').first();
+            if (await postLocator.isVisible({ timeout: 3000 }).catch(() => false)) {
+              await postLocator.click();
+              await page.waitForTimeout(2000);
+            }
+          }
+        } catch (_) {}
+      }
 
       // File upload
       console.log('   📁 Uploading 9:16 vertical video...');
