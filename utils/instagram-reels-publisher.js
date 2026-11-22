@@ -44,7 +44,7 @@ class InstagramReelsPublisher {
     try {
       const context = await browser.newContext({
         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-        viewport: { width: 1280, height: 900 }
+        viewport: { width: 1440, height: 960 }
       });
 
       const cookies = [
@@ -73,10 +73,24 @@ class InstagramReelsPublisher {
       await page.goto('https://www.instagram.com/', { waitUntil: 'domcontentloaded', timeout: 45000 });
       await page.waitForTimeout(3000);
 
+      const pageUrl = page.url();
+      const pageTitle = await page.title().catch(() => 'Instagram');
+      console.log(`   🌐 Connected: ${pageUrl} ("${pageTitle}")`);
+
       // Verify login state
-      if (page.url().includes('/accounts/login')) {
+      if (pageUrl.includes('/accounts/login')) {
         throw new Error('Instagram session ID has expired. Please update INSTAGRAM_SESSION_ID secret.');
       }
+
+      // Dismiss Cookie Consent & Interstitial banners common on cloud runners
+      try {
+        const consentBtn = await page.$('button:has-text("Allow all cookies"), button:has-text("Allow essential and optional cookies"), button:has-text("Decline optional cookies"), button:has-text("Accept All"), button:has-text("Only allow essential cookies")');
+        if (consentBtn) {
+          console.log('   🍪 Dismissing Instagram cookie consent banner...');
+          await consentBtn.click();
+          await page.waitForTimeout(2000);
+        }
+      } catch (_) {}
 
       // Dismiss any popups ("Turn on Notifications", "Save Login Info")
       try {
@@ -88,14 +102,19 @@ class InstagramReelsPublisher {
       console.log('   📤 Opening creation dialog...');
       let menuOpened = false;
       try {
-        await page.evaluate(() => {
-          const a = document.querySelector('a[role="link"]:has(svg[aria-label="New post"])') || document.querySelector('svg[aria-label="New post"]')?.closest('a');
-          if (a) {
-            a.focus();
-            a.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
-            a.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
-            a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        const clickedCreate = await page.evaluate(() => {
+          const createBtn = document.querySelector('a[role="link"]:has(svg[aria-label="New post"])') 
+            || document.querySelector('svg[aria-label="New post"]')?.closest('a')
+            || document.querySelector('svg[aria-label="Create"]')?.closest('a')
+            || Array.from(document.querySelectorAll('a, button, div[role="button"]')).find(el => el.innerText.trim() === 'Create');
+          if (createBtn) {
+            createBtn.focus();
+            createBtn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+            createBtn.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+            createBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+            return true;
           }
+          return false;
         });
         await page.waitForTimeout(2500);
 
@@ -112,7 +131,7 @@ class InstagramReelsPublisher {
           }
           return false;
         });
-        if (clickedPost) menuOpened = true;
+        if (clickedPost || clickedCreate) menuOpened = true;
         await page.waitForTimeout(2500);
       } catch (_) {}
 
@@ -138,6 +157,14 @@ class InstagramReelsPublisher {
 
       // 1. Direct file input (Instagram attaches a hidden input[type="file"] in the modal)
       try {
+        const fileInput = page.locator('input[type="file"]').first();
+        await fileInput.waitFor({ state: 'attached', timeout: 12000 });
+        await fileInput.setInputFiles(videoPath);
+        uploaded = true;
+      } catch (uploadErr) {
+        const debugText = await page.evaluate(() => document.body.innerText.slice(0, 300).replace(/\n+/g, ' ')).catch(() => '');
+        console.log(`   Notice: direct file input wait: ${uploadErr.message}. URL: ${page.url()} | Page preview: "${debugText}"`);
+      }
         const fileInput = page.locator('input[type="file"]').first();
         await fileInput.waitFor({ state: 'attached', timeout: 12000 });
         await fileInput.setInputFiles(videoPath);
