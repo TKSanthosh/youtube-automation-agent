@@ -163,14 +163,7 @@ class InstagramReelsPublisher {
         uploaded = true;
       } catch (uploadErr) {
         const debugText = await page.evaluate(() => document.body.innerText.slice(0, 300).replace(/\n+/g, ' ')).catch(() => '');
-        console.log(`   Notice: direct file input wait: ${uploadErr.message}. URL: ${page.url()} | Page preview: "${debugText}"`);
-      }
-        const fileInput = page.locator('input[type="file"]').first();
-        await fileInput.waitFor({ state: 'attached', timeout: 12000 });
-        await fileInput.setInputFiles(videoPath);
-        uploaded = true;
-      } catch (uploadErr) {
-        console.log(`   Notice: direct file input wait: ${uploadErr.message}. Trying 'Select from computer'...`);
+        console.log(`   Notice: direct file input wait: ${uploadErr.message}. URL: ${page.url()} | Page preview: "${debugText}". Trying 'Select from computer'...`);
       }
 
       // 2. Fallback: "Select from computer" button with filechooser event
