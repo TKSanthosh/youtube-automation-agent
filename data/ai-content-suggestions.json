@@ -1,183 +1,119 @@
 {
-  "updated_at": "2026-11-22T10:34:51.943Z",
-  "total_suggestions": 9,
+  "updated_at": "2026-11-22T10:42:03.876Z",
+  "total_suggestions": 6,
   "suggestions": [
     {
-      "id": "sugg_1795343691933_ccqopc",
-      "topic": "Heartbleed Explained: The Missing Bounds Check That Leaked the Internet",
-      "category": "CS Lore",
+      "id": "sugg_1795344123214_ihyep",
+      "topic": "Python GIL Explained: Why Threads Don't Use Multi-Cores",
+      "category": "Python",
       "target_length": "short",
-      "rationale": "Anatomy of the OpenSSL vulnerability: how an unchecked 64KB length field leaked TLS private keys across the web.",
-      "search_evidence": "heartbleed openssl vulnerability explained buffer overread",
-      "educational_visuals": [
-        "Memory bounds check",
-        "Heartbeat packet topology",
-        "Hex dump inspection"
-      ],
-      "hook_angle": "In 2014, a single missing if statement in OpenSSL leaked the passwords, private keys, and emails of half the internet.",
-      "channel_affinity_score": 85,
-      "trend_score": 99,
-      "priority_score": 99,
-      "status": "pending",
-      "created_at": "2026-11-22T10:34:51.933Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795343691936_c6vooo",
-      "topic": "How Hash Tables Resolve Collisions: Separate Chaining vs Open Addressing",
-      "category": "DSA",
-      "target_length": "short",
-      "rationale": "Core DSA interview question with massive developer interest; visual mental model of bucket arrays and linked lists.",
-      "search_evidence": "hash table collision resolution separate chaining vs open addressing",
-      "educational_visuals": [
-        "Trees and graphs",
-        "Data-flow diagrams",
-        "Code execution visualization"
-      ],
-      "hook_angle": "What happens when two different keys hash to the exact same memory bucket?",
-      "channel_affinity_score": 85,
-      "trend_score": 98,
-      "priority_score": 98,
-      "status": "pending",
-      "created_at": "2026-11-22T10:34:51.936Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795343691935_wctcvm6",
-      "topic": "Fast Inverse Square Root: The 0x5f3759df Hack That Built 3D Gaming",
-      "category": "CS Lore",
-      "target_length": "short",
-      "rationale": "Inside John Carmack and Quake III's legendary floating-point bit manipulation hack that computed 1/sqrt(x) 4x faster.",
-      "search_evidence": "fast inverse square root quake 0x5f3759df hack explained",
-      "educational_visuals": [
-        "IEEE 754 float bit shifts",
-        "Newton-Raphson tangent line",
-        "Quake vector lighting"
-      ],
-      "hook_angle": "In 1999, Quake 3 shocked the gaming world with lightning-fast 3D graphics using an impossible magic constant.",
-      "channel_affinity_score": 85,
-      "trend_score": 98,
-      "priority_score": 98,
-      "status": "pending",
-      "created_at": "2026-11-22T10:34:51.935Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795343691938_8f82v",
-      "topic": "Brendan Eich Created JavaScript in 10 Days: The Lore & The Bugs",
-      "category": "CS Lore",
-      "target_length": "short",
-      "rationale": "Fireship-style programming lore explaining why JS has quirky behaviors like typeof null === 'object'.",
-      "search_evidence": "brendan eich javascript 10 days history quirks",
-      "educational_visuals": [
-        "Timelines",
-        "Code execution visualization"
-      ],
-      "hook_angle": "In May 1995, one engineer created the language running the entire internet in just 10 days.",
-      "channel_affinity_score": 85,
-      "trend_score": 97,
-      "priority_score": 97,
-      "status": "pending",
-      "created_at": "2026-11-22T10:34:51.938Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795343691936_qwzvgn",
-      "topic": "The Therac-25 Tragedy: The Deadliest Race Condition in Software History",
-      "category": "CS Lore",
-      "target_length": "short",
-      "rationale": "Microsecond timing flaw where an unsynchronized 8-bit counter overflowed, dispensing fatal radiation doses.",
-      "search_evidence": "therac 25 race condition bug software engineering ethics",
-      "educational_visuals": [
-        "Thread interleaving race diagram",
-        "Hardware interlock bypass",
-        "Console command state machine"
-      ],
-      "hook_angle": "In 1986, six cancer patients were killed not by hardware failure, but by a software race condition that occurred in less than 8 seconds.",
-      "channel_affinity_score": 85,
-      "trend_score": 97,
-      "priority_score": 97,
-      "status": "pending",
-      "created_at": "2026-11-22T10:34:51.936Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795343691937_4cvmrj",
-      "topic": "Why Quicksort Beats Mergesort in Practice: CPU L1/L2 Cache Lines",
-      "category": "DSA",
-      "target_length": "short",
-      "rationale": "Classic Big-O paradox: both are O(N log N), but Quicksort is 3x faster due to hardware cache locality.",
-      "search_evidence": "why quicksort is faster than mergesort cache locality",
-      "educational_visuals": [
-        "Animated system flows",
-        "Architecture diagrams",
-        "Comparisons"
-      ],
-      "hook_angle": "On paper, Mergesort and Quicksort have the exact same time complexity. So why is Quicksort 3 times faster?",
-      "channel_affinity_score": 85,
-      "trend_score": 96,
-      "priority_score": 96,
-      "status": "pending",
-      "created_at": "2026-11-22T10:34:51.937Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795343691939_yybd8t",
-      "topic": "Memory Management: Stack vs Heap Allocation & Pointer Dereferencing",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "Fundamental computer science concept explaining stack frames, heap pointers, and memory leaks.",
-      "search_evidence": "stack vs heap memory allocation computer science",
-      "educational_visuals": [
-        "State transitions",
-        "Animated system flows",
-        "Code execution visualization"
-      ],
-      "hook_angle": "Every variable you declare lives in one of two memory realms: the blazing-fast Stack or the dynamic Heap.",
-      "channel_affinity_score": 85,
-      "trend_score": 95,
-      "priority_score": 95,
-      "status": "pending",
-      "created_at": "2026-11-22T10:34:51.939Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795343691938_p5341d",
-      "topic": "Tony Hoare's Billion Dollar Mistake: Why Null Pointers Exist",
-      "category": "CS Lore",
-      "target_length": "short",
-      "rationale": "The origin story of null references in 1965 ALGOL W and why modern languages like Rust and Swift eliminated them.",
-      "search_evidence": "tony hoare billion dollar mistake null pointer history",
+      "rationale": "Python developers frequently hit performance ceilings when scaling CPU-bound tasks, making the Global Interpreter Lock one of the most searched core mechanics. Maximizes watch time by debunking common multithreading myths.",
+      "search_evidence": "python gil explained",
       "educational_visuals": [
         "Architecture diagrams",
-        "Code execution visualization"
+        "Data-flow diagrams"
       ],
-      "hook_angle": "In 1965, a computer scientist made a single design choice that has cost the software industry over a billion dollars in crashes.",
-      "channel_affinity_score": 85,
-      "trend_score": 95,
-      "priority_score": 95,
-      "status": "pending",
-      "created_at": "2026-11-22T10:34:51.938Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795343691939_rg0a2o",
-      "topic": "Observer Pattern vs Pub-Sub: The Critical Event-Driven Difference",
-      "category": "Design Patterns",
-      "target_length": "short",
-      "rationale": "ByteByteGo-style architecture comparison: tight coupling vs message broker decoupling.",
-      "search_evidence": "observer pattern vs publish subscribe pattern system design",
-      "educational_visuals": [
-        "Architecture diagrams",
-        "Data-flow diagrams",
-        "Comparisons"
-      ],
-      "hook_angle": "Junior developers think Observer and Pub-Sub are identical. Senior engineers know the event broker changes everything.",
-      "channel_affinity_score": 85,
-      "trend_score": 94,
+      "hook_angle": "Why does adding more CPU cores to your Python multithreading script actually make it run slower?",
+      "channel_affinity_score": 95,
+      "trend_score": 92,
       "priority_score": 94,
       "status": "pending",
-      "created_at": "2026-11-22T10:34:51.939Z",
+      "created_at": "2026-11-22T10:42:03.214Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795344123342_yskpee",
+      "topic": "LSM Trees vs B-Trees: How Databases Write at Scale",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "High-throughput database architecture relies on understanding how storage engines handle write amplification. This topic bridges foundational data structures with real-world distributed database performance.",
+      "search_evidence": "lsm tree vs b tree",
+      "educational_visuals": [
+        "Trees and graphs",
+        "Animated system flows"
+      ],
+      "hook_angle": "B-Trees are great, but why do modern databases like Cassandra and RocksDB use LSM Trees for massive write loads?",
+      "channel_affinity_score": 90,
+      "trend_score": 95,
+      "priority_score": 93,
+      "status": "pending",
+      "created_at": "2026-11-22T10:42:03.342Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795344123700_s37wm6",
+      "topic": "The Circuit Breaker Pattern in Microservices Architecture",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Distributed systems fail unpredictably. The circuit breaker pattern prevents cascading failures across microservices, making it an essential architectural tool for production-ready backend engineering.",
+      "search_evidence": "circuit breaker pattern microservices",
+      "educational_visuals": [
+        "Animated system flows",
+        "State transitions"
+      ],
+      "hook_angle": "When one microservice crashes, why does your entire application suddenly go down like a row of dominoes?",
+      "channel_affinity_score": 94,
+      "trend_score": 91,
+      "priority_score": 92,
+      "status": "pending",
+      "created_at": "2026-11-22T10:42:03.700Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795344123471_iyd3w",
+      "topic": "Bloom Filters in Redis: Stop Checking Empty Database Rows",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Engineers scaling cache layers face massive memory overhead when checking for non-existent keys. Bloom filters offer a probabilistic approach that dramatically cuts down expensive database lookups.",
+      "search_evidence": "bloom filter redis",
+      "educational_visuals": [
+        "Data-flow diagrams",
+        "Code execution visualization"
+      ],
+      "hook_angle": "How can a probabilistic data structure use only a few kilobytes of memory to save your database from millions of dead queries?",
+      "channel_affinity_score": 92,
+      "trend_score": 89,
+      "priority_score": 91,
+      "status": "pending",
+      "created_at": "2026-11-22T10:42:03.471Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795344123840_qz8jrt",
+      "topic": "Strategy Design Pattern in Python: Clean Up Your If-Else Chains",
+      "category": "Python",
+      "target_length": "short",
+      "rationale": "Codebases riddled with massive conditional branches are painful to maintain. Demonstrating the strategy pattern in Python offers an immediate, highly practical refactoring win for developers.",
+      "search_evidence": "strategy design pattern python",
+      "educational_visuals": [
+        "Code execution visualization",
+        "Architecture diagrams"
+      ],
+      "hook_angle": "Are you tired of maintaining a 500-line if-else statement? Here is how senior devs use the Strategy Pattern to clean it up.",
+      "channel_affinity_score": 91,
+      "trend_score": 88,
+      "priority_score": 90,
+      "status": "pending",
+      "created_at": "2026-11-22T10:42:03.840Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795344123494_q60oss",
+      "topic": "Stack vs Heap Memory: Where Does Your Code Live?",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Core memory management concepts are a perennial bottleneck for both junior and senior developers debugging segmentation faults, memory leaks, and performance degradation.",
+      "search_evidence": "stack vs heap memory allocation",
+      "educational_visuals": [
+        "Architecture diagrams",
+        "State transitions"
+      ],
+      "hook_angle": "Stop guessing why your program threw a stack overflow error—let's look at how RAM actually allocates your variables.",
+      "channel_affinity_score": 88,
+      "trend_score": 90,
+      "priority_score": 89,
+      "status": "pending",
+      "created_at": "2026-11-22T10:42:03.494Z",
       "used_at": null
     }
   ]
