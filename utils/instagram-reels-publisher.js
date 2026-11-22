@@ -249,11 +249,23 @@ class InstagramReelsPublisher {
       await page.keyboard.type(fullCaption, { delay: 10 });
       await page.waitForTimeout(2000);
 
-      // Step 4: Click "Share"
+      // Step 4: Click "Share" in the creation modal header
       console.log('   🚀 Publishing Reel to Instagram feed...');
-      const shareSelector = 'div[role="button"]:has-text("Share"), button:has-text("Share")';
-      await page.waitForSelector(shareSelector, { timeout: 15000 });
-      await page.click(shareSelector);
+      const shareSelector = 'div[role="dialog"] div[role="button"]:has-text("Share"), div[role="dialog"] button:has-text("Share")';
+      await page.waitForSelector(shareSelector, { state: 'visible', timeout: 20000 });
+      await page.evaluate(() => {
+        const dialog = document.querySelector('div[role="dialog"]');
+        if (!dialog) return;
+        const allButtons = Array.from(dialog.querySelectorAll('div[role="button"], button'));
+        const shareBtn = allButtons.find(b => b.innerText.trim() === 'Share');
+        if (shareBtn) {
+          shareBtn.focus();
+          shareBtn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+          shareBtn.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+          shareBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        }
+      });
+      await page.locator(shareSelector).first().click({ force: true }).catch(() => null);
 
       // Step 5: Wait for confirmation modal
       console.log('   ⏳ Waiting for Instagram upload processing...');
