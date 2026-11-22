@@ -118,10 +118,10 @@ class InstagramReelsPublisher {
         });
         await page.waitForTimeout(2500);
 
-        // In modern Instagram Web, clicking Create opens a menu with "Post"
+        // In modern Instagram Web, clicking Create opens a menu popup with "Post"
         const clickedPost = await page.evaluate(() => {
           const all = Array.from(document.querySelectorAll('*'));
-          const postEl = all.find(el => (el.innerText === 'Post' || el.innerText === 'Create') && el.children.length === 0);
+          const postEl = all.find(el => el.innerText === 'Post' && el.children.length === 0);
           if (postEl) {
             const target = postEl.closest('a') || postEl.closest('div[role="button"]') || postEl;
             target.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
@@ -131,7 +131,7 @@ class InstagramReelsPublisher {
           }
           return false;
         });
-        if (clickedPost || clickedCreate) menuOpened = true;
+        if (clickedPost) menuOpened = true;
         await page.waitForTimeout(2500);
       } catch (_) {}
 
