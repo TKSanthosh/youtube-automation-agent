@@ -2841,7 +2841,7 @@ class AIVideoGenerator {
     const slidesHTML = slidesList.map((slide, idx) => {
       const asset = (visualAssets && visualAssets.length > 0) ? visualAssets[idx % visualAssets.length] : null;
       const badge = slideBadges[idx] || slideBadges[slideBadges.length - 1];
-      const deco = slideDecorations[idx] || '';
+      const _deco = slideDecorations[idx] || '';
 
       const isHookSlide = idx === 0;
       const isMemeSlide = idx === 1 || slide.type === 'meme';
@@ -3961,7 +3961,7 @@ class AIVideoGenerator {
     }
   }
 
-  async verifySegmentVideoIntegrity(segmentPath, expectedDuration) {
+  async verifySegmentVideoIntegrity(segmentPath, _expectedDuration) {
     const fsSync = require('fs');
     if (!fsSync.existsSync(segmentPath)) {
       return { valid: false, reason: 'Segment video file does not exist' };

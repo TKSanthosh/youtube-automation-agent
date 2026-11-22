@@ -282,7 +282,7 @@ const SERIES_CATALOG = [
 ];
 
 class SeriesService {
-  constructor(options = {}) {
+  constructor(_options = {}) {
     this.logger = new Logger('SeriesService');
     this.stateFilePath = path.join(__dirname, '..', 'data', 'series_state.json');
   }

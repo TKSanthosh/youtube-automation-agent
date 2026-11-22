@@ -1,3 +1,4 @@
+/* global MouseEvent */
 const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
@@ -98,7 +99,7 @@ class InstagramReelsPublisher {
       console.log('   📤 Opening creation dialog...');
       let menuOpened = false;
       try {
-        const clickedCreate = await page.evaluate(() => {
+        const _clickedCreate = await page.evaluate(() => {
           const createBtn = document.querySelector('a[role="link"]:has(svg[aria-label="New post"])') 
             || document.querySelector('svg[aria-label="New post"]')?.closest('a')
             || document.querySelector('svg[aria-label="Create"]')?.closest('a')
