@@ -186,26 +186,28 @@ class AIVideoGenerator {
   }
 
   getRotatedGeminiVoice(options = {}) {
-    if (options.voice) {
+    const validGeminiVoices = ['Puck', 'Charon', 'Kore', 'Fenrir', 'Aoede'];
+    if (options.voice && validGeminiVoices.includes(options.voice)) {
       return {
         voice: options.voice,
         model: options.model || process.env.GEMINI_TTS_MODEL || 'gemini-3.8-flash-tts',
-        gender: options.gender || 'male'
+        gender: options.gender || (['Kore', 'Aoede'].includes(options.voice) ? 'female' : 'male')
       };
     }
-    if (process.env.GEMINI_TTS_VOICE) {
+    if (process.env.GEMINI_TTS_VOICE && validGeminiVoices.includes(process.env.GEMINI_TTS_VOICE)) {
       return {
         voice: process.env.GEMINI_TTS_VOICE,
         model: process.env.GEMINI_TTS_MODEL || 'gemini-3.8-flash-tts',
-        gender: 'male'
+        gender: ['Kore', 'Aoede'].includes(process.env.GEMINI_TTS_VOICE) ? 'female' : 'male'
       };
     }
 
-    // Standard fixed male voice fallback
+    // Map external/Edge voices to standard Gemini male voice
+    const isFemale = options.gender === 'ladies' || options.gender === 'female';
     return {
-      voice: 'Puck',
-      model: process.env.GEMINI_TTS_MODEL || 'gemini-3.8-flash-tts',
-      gender: 'male'
+      voice: isFemale ? 'Kore' : 'Puck', // Standard fixed male instructor persona
+      model: options.model || process.env.GEMINI_TTS_MODEL || 'gemini-3.8-flash-tts',
+      gender: isFemale ? 'female' : 'male'
     };
   }
 
@@ -409,7 +411,25 @@ class AIVideoGenerator {
   async generateMsEdgeTTS(text, outputPath, voiceName = 'en-US-GuyNeural', options = {}) {
     this.logger.info(`Synthesizing neural voice via MsEdgeTTS (${voiceName})...`);
     const { MsEdgeTTS, OUTPUT_FORMAT } = require('msedge-tts');
-    const cleanText = (text || '').replace(/\s+/g, ' ').trim();
+    
+    // Sanitize text for Edge TTS SSML websocket parser:
+    // 1. Replace XML-sensitive characters & angle brackets
+    // 2. Expand hyphens between words (e.g. single-threaded -> single threaded) to avoid MS websocket drop
+    // 3. Normalize technical phrases that trigger MS content safety drops (e.g. race condition -> data race condition)
+    const cleanText = (text || '')
+      .replace(/&amp;/g, ' and ')
+      .replace(/&#39;/g, '')
+      .replace(/&quot;/g, '')
+      .replace(/&lt;/g, 'less than')
+      .replace(/&gt;/g, 'greater than')
+      .replace(/&/g, ' and ')
+      .replace(/[<>]/g, ' ')
+      .replace(/-/g, ' ')
+      .replace(/\brace condition\b/gi, 'data race condition')
+      .replace(/\bmutex\b/gi, 'lock')
+      .replace(/\s+/g, ' ')
+      .trim();
+
     if (!cleanText) throw new Error('Cannot synthesize empty text');
 
     const fsSync = require('fs');
@@ -2247,21 +2267,283 @@ class AIVideoGenerator {
       </div>`;
     }
 
+    if (type === 'actor_concurrency' || type === 'dart_isolates') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+          <rect x="25" y="30" width="220" height="155" rx="12" fill="#1e293b" stroke="#38bdf8" stroke-width="2" />
+          <text x="135" y="54" font-size="13" font-weight="900" text-anchor="middle" fill="#60a5fa">MAIN ISOLATE (UI THREAD)</text>
+          <rect x="40" y="66" width="190" height="28" rx="6" fill="#0f172a" stroke="#3b82f6" stroke-width="1.5" />
+          <text x="135" y="85" font-size="11" font-weight="700" text-anchor="middle" fill="#93c5fd">UI Event Loop &amp; 60 FPS Paint</text>
+          <rect x="40" y="100" width="190" height="38" rx="6" fill="#1e1e38" stroke="#6366f1" stroke-width="1.5" />
+          <text x="135" y="116" font-size="11" font-weight="800" text-anchor="middle" fill="#a5b4fc">HEAP A (Private Memory)</text>
+          <text x="135" y="131" font-size="10" text-anchor="middle" fill="#94a3b8">Widgets, Elements, State</text>
+          <rect x="40" y="144" width="190" height="26" rx="6" fill="#064e3b" stroke="#10b981" stroke-width="1.5" />
+          <text x="135" y="161" font-size="11" font-weight="800" text-anchor="middle" fill="#6ee7b7">ReceivePort listener</text>
+
+          <rect x="295" y="30" width="220" height="155" rx="12" fill="#1e293b" stroke="#10b981" stroke-width="2" />
+          <text x="405" y="54" font-size="13" font-weight="900" text-anchor="middle" fill="#34d399">WORKER ISOLATE (BACKGROUND)</text>
+          <rect x="310" y="66" width="190" height="28" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="1.5" />
+          <text x="405" y="85" font-size="11" font-weight="700" text-anchor="middle" fill="#a7f3d0">Heavy JSON Parsing / Compute</text>
+          <rect x="310" y="100" width="190" height="38" rx="6" fill="#1e2a24" stroke="#10b981" stroke-width="1.5" />
+          <text x="405" y="116" font-size="11" font-weight="800" text-anchor="middle" fill="#6ee7b7">HEAP B (Zero Shared Heap)</text>
+          <text x="405" y="131" font-size="10" text-anchor="middle" fill="#94a3b8">Independent GC Lifecycle</text>
+          <rect x="310" y="144" width="190" height="26" rx="6" fill="#78350f" stroke="#f59e0b" stroke-width="1.5" />
+          <text x="405" y="161" font-size="11" font-weight="800" text-anchor="middle" fill="#fde047">SendPort transmitter</text>
+
+          <line x1="245" y1="105" x2="295" y2="105" stroke="#f59e0b" stroke-width="3" stroke-dasharray="4,2" />
+          <polygon points="295,105 285,100 285,110" fill="#f59e0b" />
+          <polygon points="245,105 255,100 255,110" fill="#f59e0b" />
+
+          <rect x="25" y="195" width="490" height="48" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="2" />
+          <text x="270" y="216" font-size="13" font-weight="900" text-anchor="middle" fill="#38bdf8">DART ACTOR MODEL: ZERO SHARED MEMORY</text>
+          <text x="270" y="233" font-size="11" font-weight="600" text-anchor="middle" fill="#94a3b8">Data copied across ports • Zero race conditions • Zero mutex locks</text>
+        </svg>
+      </div>`;
+    }
+
+    if (type === 'event_loop') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+          <rect x="30" y="30" width="140" height="150" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2" />
+          <text x="100" y="52" font-size="12" font-weight="900" text-anchor="middle" fill="#60a5fa">SYNC CALL STACK</text>
+          <rect x="42" y="65" width="116" height="30" rx="6" fill="#0f172a" stroke="#3b82f6" stroke-width="1.5" />
+          <text x="100" y="84" font-size="10" font-weight="700" text-anchor="middle" fill="#93c5fd">main()</text>
+          <rect x="42" y="102" width="116" height="30" rx="6" fill="#0f172a" stroke="#3b82f6" stroke-width="1.5" />
+          <text x="100" y="121" font-size="10" font-weight="700" text-anchor="middle" fill="#93c5fd">syncCode()</text>
+
+          <rect x="200" y="30" width="140" height="150" rx="10" fill="#78350f" stroke="#f59e0b" stroke-width="2" />
+          <text x="270" y="52" font-size="12" font-weight="900" text-anchor="middle" fill="#fde047">MICROTASK QUEUE</text>
+          <rect x="212" y="65" width="116" height="30" rx="6" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5" />
+          <text x="270" y="84" font-size="10" font-weight="700" text-anchor="middle" fill="#fde047">scheduleMicrotask</text>
+          <text x="270" y="115" font-size="11" font-weight="900" text-anchor="middle" fill="#f87171">DRAINED FIRST!</text>
+          <text x="270" y="132" font-size="9" text-anchor="middle" fill="#fca5a5">Blocks Event Queue</text>
+
+          <rect x="370" y="30" width="140" height="150" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="2" />
+          <text x="440" y="52" font-size="12" font-weight="900" text-anchor="middle" fill="#6ee7b7">EVENT QUEUE</text>
+          <rect x="382" y="65" width="116" height="30" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="1.5" />
+          <text x="440" y="84" font-size="10" font-weight="700" text-anchor="middle" fill="#a7f3d0">Timer / I/O</text>
+          <rect x="382" y="102" width="116" height="30" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="1.5" />
+          <text x="440" y="121" font-size="10" font-weight="700" text-anchor="middle" fill="#a7f3d0">vsync UI Paint</text>
+
+          <rect x="25" y="195" width="490" height="48" rx="10" fill="#1e293b" stroke="#ef4444" stroke-width="2" />
+          <text x="270" y="216" font-size="13" font-weight="900" text-anchor="middle" fill="#f87171">DART EVENT LOOP: SYNC -&gt; MICROTASKS -&gt; EVENTS</text>
+          <text x="270" y="233" font-size="11" font-weight="600" text-anchor="middle" fill="#94a3b8">Unbounded microtasks starve UI frames and produce 30 FPS jitter</text>
+        </svg>
+      </div>`;
+    }
+
+    if (type === 'tree_hierarchy') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+          <rect x="25" y="30" width="150" height="150" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2" />
+          <text x="100" y="55" font-size="12" font-weight="900" text-anchor="middle" fill="#60a5fa">1. WIDGET TREE</text>
+          <text x="100" y="78" font-size="11" font-weight="700" text-anchor="middle" fill="#93c5fd">Immutable Blueprint</text>
+          <text x="100" y="102" font-size="10" text-anchor="middle" fill="#cbd5e1">Cheap to throw away</text>
+          <text x="100" y="125" font-size="10" text-anchor="middle" fill="#94a3b8">Rebuilt every frame</text>
+          <rect x="35" y="142" width="130" height="26" rx="6" fill="#1e3a5f" />
+          <text x="100" y="159" font-size="10" font-weight="700" text-anchor="middle" fill="#60a5fa">Configuration</text>
+
+          <rect x="195" y="30" width="150" height="150" rx="10" fill="#78350f" stroke="#f59e0b" stroke-width="2" />
+          <text x="270" y="55" font-size="12" font-weight="900" text-anchor="middle" fill="#fde047">2. ELEMENT TREE</text>
+          <text x="270" y="78" font-size="11" font-weight="700" text-anchor="middle" fill="#fde047">Structural Identity</text>
+          <text x="270" y="102" font-size="10" text-anchor="middle" fill="#cbd5e1">Manages State Lifecycle</text>
+          <text x="270" y="125" font-size="10" text-anchor="middle" fill="#94a3b8">Survives widget rebuilds</text>
+          <rect x="205" y="142" width="130" height="26" rx="6" fill="#78350f" />
+          <text x="270" y="159" font-size="10" font-weight="700" text-anchor="middle" fill="#fde047">Identity &amp; State</text>
+
+          <rect x="365" y="30" width="150" height="150" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="2" />
+          <text x="440" y="55" font-size="12" font-weight="900" text-anchor="middle" fill="#6ee7b7">3. RENDER TREE</text>
+          <text x="440" y="78" font-size="11" font-weight="700" text-anchor="middle" fill="#a7f3d0">Layout &amp; Painting</text>
+          <text x="440" y="102" font-size="10" text-anchor="middle" fill="#cbd5e1">Computes Box Constraints</text>
+          <text x="440" y="125" font-size="10" text-anchor="middle" fill="#94a3b8">Paints to GPU</text>
+          <rect x="375" y="142" width="130" height="26" rx="6" fill="#064e3b" />
+          <text x="440" y="159" font-size="10" font-weight="700" text-anchor="middle" fill="#6ee7b7">Pixels on Screen</text>
+
+          <line x1="175" y1="105" x2="195" y2="105" stroke="#f59e0b" stroke-width="3" />
+          <line x1="345" y1="105" x2="365" y2="105" stroke="#10b981" stroke-width="3" />
+
+          <rect x="25" y="195" width="490" height="48" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="2" />
+          <text x="270" y="216" font-size="13" font-weight="900" text-anchor="middle" fill="#38bdf8">FLUTTER ARCHITECTURE: SEPARATION OF CONCERNS</text>
+          <text x="270" y="233" font-size="11" font-weight="600" text-anchor="middle" fill="#94a3b8">Elements compare Widget key &amp; runtimeType to avoid expensive re-layouts</text>
+        </svg>
+      </div>`;
+    }
+
+    if (type === 'scheduler_mn') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+          <rect x="30" y="25" width="140" height="155" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="2" />
+          <text x="100" y="48" font-size="13" font-weight="900" text-anchor="middle" fill="#6ee7b7">G (GOROUTINES)</text>
+          <text x="100" y="70" font-size="11" font-weight="700" text-anchor="middle" fill="#a7f3d0">2KB Initial Stack</text>
+          <rect x="42" y="80" width="116" height="26" rx="6" fill="#0f172a" />
+          <text x="100" y="97" font-size="10" text-anchor="middle" fill="#cbd5e1">G1, G2 ... G100K</text>
+          <rect x="42" y="112" width="116" height="26" rx="6" fill="#0f172a" />
+          <text x="100" y="129" font-size="10" text-anchor="middle" fill="#cbd5e1">Dynamic Segmented</text>
+          <text x="100" y="162" font-size="10" font-weight="800" text-anchor="middle" fill="#6ee7b7">Userspace Task</text>
+
+          <rect x="200" y="25" width="140" height="155" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2" />
+          <text x="270" y="48" font-size="13" font-weight="900" text-anchor="middle" fill="#60a5fa">P (LOGICAL CORES)</text>
+          <text x="270" y="70" font-size="11" font-weight="700" text-anchor="middle" fill="#93c5fd">GOMAXPROCS</text>
+          <rect x="212" y="80" width="116" height="26" rx="6" fill="#0f172a" />
+          <text x="270" y="97" font-size="10" text-anchor="middle" fill="#cbd5e1">Local Run Queue (256)</text>
+          <rect x="212" y="112" width="116" height="26" rx="6" fill="#0f172a" />
+          <text x="270" y="129" font-size="10" text-anchor="middle" fill="#cbd5e1">Work-Stealing Balancer</text>
+          <text x="270" y="162" font-size="10" font-weight="800" text-anchor="middle" fill="#60a5fa">Context Dispatcher</text>
+
+          <rect x="370" y="25" width="140" height="155" rx="10" fill="#78350f" stroke="#f59e0b" stroke-width="2" />
+          <text x="440" y="48" font-size="13" font-weight="900" text-anchor="middle" fill="#fde047">M (OS THREADS)</text>
+          <text x="440" y="70" font-size="11" font-weight="700" text-anchor="middle" fill="#fde047">Kernel OS Threads</text>
+          <rect x="382" y="80" width="116" height="26" rx="6" fill="#0f172a" />
+          <text x="440" y="97" font-size="10" text-anchor="middle" fill="#cbd5e1">2MB System Stack</text>
+          <rect x="382" y="112" width="116" height="26" rx="6" fill="#0f172a" />
+          <text x="440" y="129" font-size="10" text-anchor="middle" fill="#cbd5e1">Pinned to Hardware CPU</text>
+          <text x="440" y="162" font-size="10" font-weight="800" text-anchor="middle" fill="#fde047">Execution Runtime</text>
+
+          <line x1="170" y1="102" x2="200" y2="102" stroke="#10b981" stroke-width="3" />
+          <line x1="340" y1="102" x2="370" y2="102" stroke="#3b82f6" stroke-width="3" />
+
+          <rect x="25" y="195" width="490" height="48" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2" />
+          <text x="270" y="216" font-size="13" font-weight="900" text-anchor="middle" fill="#34d399">GO M:N SCHEDULER: 100,000 GOROUTINES IN 200MB RAM</text>
+          <text x="270" y="233" font-size="11" font-weight="600" text-anchor="middle" fill="#94a3b8">Work-stealing balances idle processors with zero kernel interrupt overhead</text>
+        </svg>
+      </div>`;
+    }
+
+    if (type === 'channel_buffer') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+          <rect x="30" y="40" width="130" height="120" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2" />
+          <text x="95" y="70" font-size="13" font-weight="900" text-anchor="middle" fill="#60a5fa">PRODUCER</text>
+          <text x="95" y="95" font-size="11" font-weight="700" text-anchor="middle" fill="#93c5fd">Goroutine A</text>
+          <text x="95" y="125" font-size="12" font-weight="800" text-anchor="middle" fill="#e2e8f0">ch &lt;- val</text>
+
+          <rect x="185" y="40" width="170" height="120" rx="10" fill="#78350f" stroke="#f59e0b" stroke-width="2" />
+          <text x="270" y="65" font-size="13" font-weight="900" text-anchor="middle" fill="#fde047">CHANNEL BUFFER</text>
+          <rect x="200" y="80" width="40" height="40" rx="6" fill="#1e293b" stroke="#f59e0b" />
+          <text x="220" y="105" font-size="12" font-weight="900" text-anchor="middle" fill="#fde047">[1]</text>
+          <rect x="250" y="80" width="40" height="40" rx="6" fill="#1e293b" stroke="#f59e0b" />
+          <text x="270" y="105" font-size="12" font-weight="900" text-anchor="middle" fill="#fde047">[2]</text>
+          <rect x="300" y="80" width="40" height="40" rx="6" fill="#1e293b" stroke="#475569" stroke-dasharray="4,2" />
+          <text x="320" y="105" font-size="12" font-weight="900" text-anchor="middle" fill="#64748b">[ ]</text>
+          <text x="270" y="145" font-size="10" text-anchor="middle" fill="#fde047">make(chan int, 3)</text>
+
+          <rect x="380" y="40" width="130" height="120" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2" />
+          <text x="445" y="70" font-size="13" font-weight="900" text-anchor="middle" fill="#34d399">CONSUMER</text>
+          <text x="445" y="95" font-size="11" font-weight="700" text-anchor="middle" fill="#a7f3d0">Goroutine B</text>
+          <text x="445" y="125" font-size="12" font-weight="800" text-anchor="middle" fill="#e2e8f0">&lt;- ch</text>
+
+          <line x1="160" y1="100" x2="185" y2="100" stroke="#f59e0b" stroke-width="3" />
+          <line x1="355" y1="100" x2="380" y2="100" stroke="#10b981" stroke-width="3" />
+
+          <rect x="25" y="195" width="490" height="48" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="2" />
+          <text x="270" y="216" font-size="13" font-weight="900" text-anchor="middle" fill="#fde047">GO CHANNELS: THREAD-SAFE SYNCHRONIZATION</text>
+          <text x="270" y="233" font-size="11" font-weight="600" text-anchor="middle" fill="#94a3b8">Unbuffered channels synchronize lockstep; buffered channels decouple rates</text>
+        </svg>
+      </div>`;
+    }
+
+    if (type === 'flyweight_cache') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+          <rect x="30" y="30" width="160" height="150" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2" />
+          <text x="110" y="55" font-size="12" font-weight="900" text-anchor="middle" fill="#60a5fa">CONST CONSTRUCTORS</text>
+          <rect x="42" y="70" width="136" height="32" rx="6" fill="#0f172a" stroke="#3b82f6" />
+          <text x="110" y="90" font-size="10" font-weight="700" text-anchor="middle" fill="#93c5fd">const EdgeInsets(16)</text>
+          <rect x="42" y="112" width="136" height="32" rx="6" fill="#0f172a" stroke="#3b82f6" />
+          <text x="110" y="132" font-size="10" font-weight="700" text-anchor="middle" fill="#93c5fd">const EdgeInsets(16)</text>
+          <text x="110" y="165" font-size="10" font-weight="700" text-anchor="middle" fill="#60a5fa">500 Identical Widgets</text>
+
+          <rect x="210" y="55" width="120" height="100" rx="10" fill="#78350f" stroke="#f59e0b" stroke-width="2" />
+          <text x="270" y="80" font-size="11" font-weight="900" text-anchor="middle" fill="#fde047">CANONICAL</text>
+          <text x="270" y="96" font-size="11" font-weight="900" text-anchor="middle" fill="#fde047">MAP TABLE</text>
+          <text x="270" y="125" font-size="10" text-anchor="middle" fill="#fef08a">Deduplication</text>
+
+          <rect x="350" y="30" width="160" height="150" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="2" />
+          <text x="430" y="55" font-size="12" font-weight="900" text-anchor="middle" fill="#34d399">SHARED HEAP POINTER</text>
+          <rect x="362" y="75" width="136" height="50" rx="6" fill="#0f172a" stroke="#10b981" stroke-width="2" />
+          <text x="430" y="96" font-size="11" font-weight="800" text-anchor="middle" fill="#4ade80">Addr: 0x7ffe4200</text>
+          <text x="430" y="114" font-size="10" text-anchor="middle" fill="#cbd5e1">1 Single Instance</text>
+          <text x="430" y="165" font-size="10" font-weight="800" text-anchor="middle" fill="#34d399">identical(a, b) === TRUE</text>
+
+          <line x1="190" y1="86" x2="210" y2="86" stroke="#f59e0b" stroke-width="2.5" />
+          <line x1="190" y1="128" x2="210" y2="128" stroke="#f59e0b" stroke-width="2.5" />
+          <line x1="330" y1="105" x2="350" y2="105" stroke="#10b981" stroke-width="3" />
+
+          <rect x="25" y="195" width="490" height="48" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2" />
+          <text x="270" y="216" font-size="13" font-weight="900" text-anchor="middle" fill="#34d399">CANONICALIZATION: ZERO REDUNDANT ALLOCATIONS</text>
+          <text x="270" y="233" font-size="11" font-weight="600" text-anchor="middle" fill="#94a3b8">Flutter VM reuses compile-time constants across entire application trees</text>
+        </svg>
+      </div>`;
+    }
+
+    if (type === 'binary_tree') {
+      return `
+      <div class="dsa-svg-wrapper">
+        <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#334155" stroke-width="2" />
+          <circle cx="270" cy="60" r="30" fill="#1e293b" stroke="#3b82f6" stroke-width="3" />
+          <text x="270" y="67" font-size="15" font-weight="900" text-anchor="middle" fill="#60a5fa">ROOT [50]</text>
+          <line x1="245" y1="85" x2="160" y2="135" stroke="#3b82f6" stroke-width="3" />
+          <line x1="295" y1="85" x2="380" y2="135" stroke="#3b82f6" stroke-width="3" />
+          <text x="185" y="105" font-size="12" font-weight="800" fill="#f59e0b">&lt; 50 (Left)</text>
+          <text x="345" y="105" font-size="12" font-weight="800" fill="#10b981">&gt; 50 (Right)</text>
+          <circle cx="150" cy="160" r="26" fill="#1e293b" stroke="#f59e0b" stroke-width="2.5" />
+          <text x="150" y="167" font-size="13" font-weight="800" text-anchor="middle" fill="#fde047">[25]</text>
+          <circle cx="390" cy="160" r="26" fill="#1e293b" stroke="#10b981" stroke-width="2.5" />
+          <text x="390" y="167" font-size="13" font-weight="800" text-anchor="middle" fill="#4ade80">[75]</text>
+          <text x="270" y="235" font-size="12" font-weight="700" text-anchor="middle" fill="#94a3b8">Logarithmic Search: O(log N) Time Complexity</text>
+        </svg>
+      </div>`;
+    }
+
+    // Dynamic, sleek multi-stage architectural pipeline fallback for any general topic
+    const rawTitle = String(topic || 'System Pipeline Architecture').replace(/[^\w\s-]/g, '').trim();
+    const displayTitle = rawTitle.length > 40 ? rawTitle.substring(0, 37) + '...' : rawTitle;
     return `
     <div class="dsa-svg-wrapper">
       <svg viewBox="0 0 540 270" class="dsa-svg" xmlns="http://www.w3.org/2000/svg">
-        <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#334155" stroke-width="2" />
-        <circle cx="270" cy="60" r="30" fill="#1e293b" stroke="#3b82f6" stroke-width="3" />
-        <text x="270" y="67" font-size="15" font-weight="900" text-anchor="middle" fill="#60a5fa">ROOT [50]</text>
-        <line x1="245" y1="85" x2="160" y2="135" stroke="#3b82f6" stroke-width="3" />
-        <line x1="295" y1="85" x2="380" y2="135" stroke="#3b82f6" stroke-width="3" />
-        <text x="185" y="105" font-size="12" font-weight="800" fill="#f59e0b">&lt; 50 (Left)</text>
-        <text x="345" y="105" font-size="12" font-weight="800" fill="#10b981">&gt; 50 (Right)</text>
-        <circle cx="150" cy="160" r="26" fill="#1e293b" stroke="#f59e0b" stroke-width="2.5" />
-        <text x="150" y="167" font-size="13" font-weight="800" text-anchor="middle" fill="#fde047">[25]</text>
-        <circle cx="390" cy="160" r="26" fill="#1e293b" stroke="#10b981" stroke-width="2.5" />
-        <text x="390" y="167" font-size="13" font-weight="800" text-anchor="middle" fill="#4ade80">[75]</text>
-        <text x="270" y="235" font-size="12" font-weight="700" text-anchor="middle" fill="#94a3b8">Logarithmic Search: O(log N) Time Complexity</text>
+        <rect x="10" y="10" width="520" height="250" rx="16" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+        
+        <!-- Node 1: Input -->
+        <rect x="30" y="55" width="130" height="95" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2" />
+        <text x="95" y="80" font-size="11" font-weight="900" text-anchor="middle" fill="#60a5fa">STAGE 01</text>
+        <text x="95" y="105" font-size="12" font-weight="800" text-anchor="middle" fill="#ffffff">Client Ingress</text>
+        <text x="95" y="125" font-size="10" text-anchor="middle" fill="#93c5fd">Payload Stream</text>
+
+        <!-- Node 2: Processing Engine -->
+        <rect x="205" y="55" width="130" height="95" rx="10" fill="#78350f" stroke="#f59e0b" stroke-width="2" />
+        <text x="270" y="80" font-size="11" font-weight="900" text-anchor="middle" fill="#fde047">STAGE 02</text>
+        <text x="270" y="105" font-size="12" font-weight="800" text-anchor="middle" fill="#ffffff">Core Runtime</text>
+        <text x="270" y="125" font-size="10" text-anchor="middle" fill="#fef08a">Logic Execution</text>
+
+        <!-- Node 3: State / Sink -->
+        <rect x="380" y="55" width="130" height="95" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="2" />
+        <text x="445" y="80" font-size="11" font-weight="900" text-anchor="middle" fill="#6ee7b7">STAGE 03</text>
+        <text x="445" y="105" font-size="12" font-weight="800" text-anchor="middle" fill="#ffffff">Verified State</text>
+        <text x="445" y="125" font-size="10" text-anchor="middle" fill="#a7f3d0">Zero Data Race</text>
+
+        <!-- Connectors -->
+        <line x1="160" y1="102" x2="205" y2="102" stroke="#f59e0b" stroke-width="3" stroke-dasharray="4,2" />
+        <polygon points="205,102 195,97 195,107" fill="#f59e0b" />
+        <line x1="335" y1="102" x2="380" y2="102" stroke="#10b981" stroke-width="3" stroke-dasharray="4,2" />
+        <polygon points="380,102 370,97 370,107" fill="#10b981" />
+
+        <!-- Bottom Status -->
+        <rect x="25" y="195" width="490" height="48" rx="10" fill="#1e293b" stroke="#38bdf8" stroke-width="2" />
+        <text x="270" y="216" font-size="12" font-weight="900" text-anchor="middle" fill="#38bdf8">${displayTitle.toUpperCase()}</text>
+        <text x="270" y="233" font-size="11" font-weight="600" text-anchor="middle" fill="#94a3b8">Deterministic execution boundaries • Zero memory corruption</text>
       </svg>
     </div>`;
   }
@@ -2271,35 +2553,43 @@ class AIVideoGenerator {
     const lines = String(code).trim().split('\n');
     const formattedLines = lines.map((line, lIdx) => {
       const lineNum = String(lIdx + 1).padStart(2, '0');
-      let text = this.escapeHTML(line);
+      let text = line;
       let commentPart = '';
       if (text.includes('//')) {
         const cIdx = text.indexOf('//');
-        commentPart = `<span class="syn-comment">${text.slice(cIdx)}</span>`;
+        const rawComment = text.slice(cIdx);
+        const safeComment = rawComment.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        commentPart = `<span class="syn-comment">${safeComment}</span>`;
         text = text.slice(0, cIdx);
       } else if (text.includes('#')) {
         const cIdx = text.indexOf('#');
-        commentPart = `<span class="syn-comment">${text.slice(cIdx)}</span>`;
+        const rawComment = text.slice(cIdx);
+        const safeComment = rawComment.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        commentPart = `<span class="syn-comment">${safeComment}</span>`;
         text = text.slice(0, cIdx);
       }
 
-      // 1. Temporarily replace string literals with placeholder tokens so keyword regex doesn't match inside quotes
+      // 1. Temporarily replace string literals with placeholder tokens directly from raw text (clean quotes!)
       const stringPlaceholders = [];
-      text = text.replace(/(["'`].*?["'`])/g, (match) => {
+      text = text.replace(/(['"`].*?['"`])/g, (match) => {
         const token = `___STR_TOKEN_${stringPlaceholders.length}___`;
-        stringPlaceholders.push(`<span class="syn-str">${match}</span>`);
+        const safeStr = match.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        stringPlaceholders.push(`<span class="syn-str">${safeStr}</span>`);
         return token;
       });
 
-      // 2. Keyword highlighting
-      const keywords = ['const', 'let', 'var', 'function', 'class', 'return', 'async', 'await', 'if', 'else', 'for', 'while', 'import', 'from', 'export', 'try', 'catch', 'new', 'throw', 'switch', 'case', 'break', 'typedef', 'struct', 'def', 'with', 'as', 'in', 'lambda', 'yield'];
+      // 2. Escape HTML on remaining non-string code
+      text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+      // 3. Keyword highlighting
+      const keywords = ['const', 'let', 'var', 'function', 'class', 'return', 'async', 'await', 'if', 'else', 'for', 'while', 'import', 'from', 'export', 'try', 'catch', 'new', 'throw', 'switch', 'case', 'break', 'typedef', 'struct', 'def', 'with', 'as', 'in', 'lambda', 'yield', 'void', 'final', 'package', 'type', 'select', 'default', 'go'];
       const kwRegex = new RegExp(`\\b(${keywords.join('|')})\\b`, 'g');
       text = text.replace(kwRegex, '<span class="syn-kw">$1</span>');
 
-      // 3. Number highlighting
+      // 4. Number highlighting
       text = text.replace(/\b(\d+)\b/g, '<span class="syn-num">$1</span>');
 
-      // 4. Restore strings
+      // 5. Restore strings
       stringPlaceholders.forEach((replacement, sIdx) => {
         text = text.replace(`___STR_TOKEN_${sIdx}___`, replacement);
       });
@@ -2380,6 +2670,12 @@ class AIVideoGenerator {
 
   getTopicDSAType(topic = '') {
     const t = String(topic).toLowerCase();
+    if (t.includes('isolate') || t.includes('actor') || t.includes('dart isolate')) return 'actor_concurrency';
+    if (t.includes('event loop') || t.includes('microtask') || t.includes('event queue')) return 'event_loop';
+    if (t.includes('3 trees') || t.includes('three trees') || (t.includes('widget') && t.includes('element'))) return 'tree_hierarchy';
+    if (t.includes('goroutine') || t.includes('m:n') || t.includes('scheduler')) return 'scheduler_mn';
+    if (t.includes('channel') || t.includes('buffered channel') || t.includes('unbuffered')) return 'channel_buffer';
+    if (t.includes('canonical') || (t.includes('const') && t.includes('constructor'))) return 'flyweight_cache';
     if (t.includes('heartbleed') || t.includes('openssl') || t.includes('bounds check') || t.includes('over-read') || t.includes('leak') || t.includes('tls') || t.includes('secret')) return 'heartbleed';
     if (t.includes('morris') || t.includes('buffer overflow') || t.includes('stack smashing') || t.includes('exploit') || t.includes('worm') || t.includes('shellcode') || t.includes('overflow')) return 'buffer_overflow';
     if (t.includes('therac') || t.includes('race condition') || t.includes('concurrency') || t.includes('deadlock') || t.includes('mutex') || t.includes('semaphore') || t.includes('dijkstra')) return 'race_condition';
@@ -2389,7 +2685,7 @@ class AIVideoGenerator {
     if (t.includes('raft') || t.includes('paxos') || t.includes('consensus') || t.includes('split-brain') || t.includes('quorum') || t.includes('leader')) return 'distributed_consensus';
     if (t.includes('stack') || t.includes('heap') || t.includes('pointer') || t.includes('null') || t.includes('allocation') || t.includes('dereferencing')) return 'stack_heap';
     if (t.includes('circuit') || t.includes('rate limit') || t.includes('microservice') || t.includes('token bucket') || t.includes('failover') || t.includes('resilience')) return 'circuit_breaker';
-    if (t.includes('tree') || t.includes('b-tree') || t.includes('binary') || t.includes('index') || t.includes('search') || t.includes('graph')) return 'binary_tree';
+    if (t.includes('binary tree') || t.includes('binary search') || t.includes('b-tree') || t.includes('bst') || t.includes('red-black') || t.includes('avl')) return 'binary_tree';
     if (t.includes('hash') || t.includes('collision') || t.includes('chaining') || t.includes('addressing')) return 'hash_table';
     return 'system_flowchart';
   }
@@ -2612,13 +2908,26 @@ class AIVideoGenerator {
         `;
       } else if (isCodeSlide) {
         const codeSnippet = slide.codeSnippet || this.getTopicCodeSnippet(script.title || slide.headline);
+        const lang = (seriesPlan?.language || '').toLowerCase();
+        let codeFileName = 'terminal / solution.ts';
+        if (lang.includes('dart') || /dart|flutter/i.test(script.title || '')) {
+          codeFileName = 'terminal / isolate_worker.dart';
+        } else if (lang.includes('go') || /go|golang/i.test(script.title || '')) {
+          codeFileName = 'terminal / worker.go';
+        } else if (lang.includes('java') || /java|jvm/i.test(script.title || '')) {
+          codeFileName = 'terminal / Solution.java';
+        } else if (lang.includes('js') || /javascript|node|v8/i.test(script.title || '')) {
+          codeFileName = 'terminal / engine_internals.js';
+        } else if (lang.includes('python') || /python/i.test(script.title || '')) {
+          codeFileName = 'terminal / script.py';
+        }
         visualBlockHTML = `
           <div class="code-container">
             <div class="code-header">
               <span class="dot red"></span>
               <span class="dot yellow"></span>
               <span class="dot green"></span>
-              <span class="file-title">terminal / solution.ts</span>
+              <span class="file-title">${this.escapeHTML(codeFileName)}</span>
             </div>
             ${this.renderCodeSyntaxHTML(codeSnippet)}
           </div>

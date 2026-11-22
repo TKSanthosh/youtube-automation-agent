@@ -25,10 +25,21 @@ class InstagramReelsPublisher {
     console.log(`\n📸 Starting Instagram Reel Publication...`);
     console.log(`   File: ${path.basename(videoPath)} (${(fs.statSync(videoPath).size / 1024 / 1024).toFixed(2)} MB)`);
 
-    const browser = await chromium.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+    let browser;
+    try {
+      browser = await chromium.launch({
+        channel: 'chrome',
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+      console.log('   🚀 Launched Chrome browser engine for full H.264 video codec support.');
+    } catch (launchErr) {
+      console.log(`   Notice: system chrome channel unavailable (${launchErr.message}), falling back to default chromium...`);
+      browser = await chromium.launch({
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
+    }
 
     try {
       const context = await browser.newContext({
@@ -75,18 +86,39 @@ class InstagramReelsPublisher {
 
       // Click "Create" or "+"
       console.log('   📤 Opening creation dialog...');
-      const createLocator = page.locator('a[href="#"]:has-text("Create"), [aria-label="New post"], a:has-text("Create"), svg[aria-label="New post"], svg[aria-label="Create"], div[role="button"]:has-text("Create")').first();
-      await createLocator.waitFor({ state: 'visible', timeout: 15000 });
-      await createLocator.click();
+      await page.evaluate(() => {
+        const a = document.querySelector('a[role="link"]:has(svg[aria-label="New post"])') || document.querySelector('svg[aria-label="New post"]')?.closest('a');
+        if (a) {
+          a.focus();
+          a.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+          a.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+          a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        }
+      });
       await page.waitForTimeout(2000);
+
+      // Fallback click on Create if menu didn't open
+      try {
+        const createLocator = page.locator('a[href="#"]:has-text("Create"), [aria-label="New post"], a:has-text("Create"), svg[aria-label="New post"], svg[aria-label="Create"]').first();
+        if (await createLocator.isVisible({ timeout: 2000 }).catch(() => false)) {
+          await createLocator.click({ force: true }).catch(() => null);
+          await page.waitForTimeout(2000);
+        }
+      } catch (_) {}
 
       // In modern Instagram Web, clicking Create opens a menu with "Post"
       try {
-        const postOption = page.locator('span:has-text("Post"), [role="menuitem"]:has-text("Post"), div[role="button"]:has-text("Post"), svg[aria-label="Post"]').first();
-        if (await postOption.isVisible({ timeout: 4000 }).catch(() => false)) {
-          await postOption.click();
-          await page.waitForTimeout(2000);
-        }
+        await page.evaluate(() => {
+          const all = Array.from(document.querySelectorAll('*'));
+          const postEl = all.find(el => el.innerText === 'Post' && el.children.length === 0);
+          if (postEl) {
+            const target = postEl.closest('a') || postEl.closest('div[role="button"]') || postEl;
+            target.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+            target.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+            target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+          }
+        });
+        await page.waitForTimeout(2000);
       } catch (_) {}
 
       // File upload
@@ -126,6 +158,15 @@ class InstagramReelsPublisher {
         throw new Error('Failed to attach video to Instagram creation dialog');
       }
       await page.waitForTimeout(5000);
+
+      // Check for upload error modal
+      const modalText = await page.evaluate(() => {
+        const modal = document.querySelector('[role="dialog"]');
+        return modal ? modal.innerText : '';
+      });
+      if (modalText.includes("couldn't be uploaded") || modalText.includes("could not be read")) {
+        throw new Error(`Instagram rejected video format or codec: ${modalText.substring(0, 150)}`);
+      }
 
       // If "Video posts are now shared as reels" modal appears, click OK
       try {
