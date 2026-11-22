@@ -222,20 +222,40 @@ class InstagramReelsPublisher {
         }
       } catch (_) {}
 
-      // Step 1: Click "Next" (Media -> Filters/Cover)
+      // Step 1: Click "Next" in creation dialog header (Media -> Filters/Cover)
       console.log('   ⚙️  Configuring Reel specifications...');
-      const nextBtnSelector = 'div[role="button"]:has-text("Next"), button:has-text("Next"), [aria-label="Next"]';
-      await page.waitForSelector(nextBtnSelector, { state: 'visible', timeout: 25000 });
-      await page.click(nextBtnSelector);
+      const dialogNextSelector = 'div[role="dialog"] div[role="button"]:has-text("Next"), div[role="dialog"] button:has-text("Next")';
+      await page.waitForSelector(dialogNextSelector, { state: 'visible', timeout: 25000 });
+      await page.evaluate(() => {
+        const dialog = document.querySelector('div[role="dialog"]');
+        if (!dialog) return;
+        const nextBtn = Array.from(dialog.querySelectorAll('div[role="button"], button')).find(b => b.innerText.trim() === 'Next');
+        if (nextBtn) {
+          nextBtn.focus();
+          nextBtn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+          nextBtn.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+          nextBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        }
+      });
+      await page.locator(dialogNextSelector).first().click({ force: true }).catch(() => null);
       await page.waitForTimeout(3000);
 
-      // Step 2: Click "Next" (Filters/Cover -> Caption)
+      // Step 2: Click "Next" in creation dialog header (Filters/Cover -> Caption)
       try {
-        const nextBtn2 = await page.waitForSelector(nextBtnSelector, { state: 'visible', timeout: 10000 });
-        if (nextBtn2) {
-          await nextBtn2.click();
-          await page.waitForTimeout(3000);
-        }
+        await page.waitForSelector(dialogNextSelector, { state: 'visible', timeout: 10000 });
+        await page.evaluate(() => {
+          const dialog = document.querySelector('div[role="dialog"]');
+          if (!dialog) return;
+          const nextBtn = Array.from(dialog.querySelectorAll('div[role="button"], button')).find(b => b.innerText.trim() === 'Next');
+          if (nextBtn) {
+            nextBtn.focus();
+            nextBtn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+            nextBtn.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+            nextBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+          }
+        });
+        await page.locator(dialogNextSelector).first().click({ force: true }).catch(() => null);
+        await page.waitForTimeout(3000);
       } catch (_) {}
 
       // Step 3: Write Caption and Hashtags
@@ -243,7 +263,7 @@ class InstagramReelsPublisher {
       const tagsList = Array.isArray(hashtags) ? hashtags.join(' ') : String(hashtags || '');
       const fullCaption = `${caption || ''}\n\n${tagsList}\n#reels #coding #softwareengineering #developer #tech`.trim();
 
-      const captionSelector = 'div[aria-label="Write a caption..."], div[role="textbox"][contenteditable="true"]';
+      const captionSelector = 'div[role="dialog"] div[aria-label="Write a caption..."], div[role="dialog"] div[role="textbox"][contenteditable="true"]';
       await page.waitForSelector(captionSelector, { timeout: 15000 });
       await page.click(captionSelector);
       await page.keyboard.type(fullCaption, { delay: 10 });
