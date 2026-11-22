@@ -1,125 +1,138 @@
 {
-  "updated_at": "2026-11-22T10:56:43.328Z",
-  "total_suggestions": 6,
+  "updated_at": "2026-11-22T11:04:59.387Z",
+  "total_suggestions": 7,
   "suggestions": [
     {
-      "id": "sugg_1795345002923_wpftnw",
-      "topic": "Python GIL Explained: Why Threads Don't Use Multi-Cores",
+      "id": "sugg_1795345499383_99p2u",
+      "topic": "Python GIL Explained: Why Threads Don't Use Multi-Core",
       "category": "Python",
       "target_length": "short",
-      "rationale": "Python developers frequently hit performance bottlenecks when scaling CPU-bound tasks, making the GIL one of the most heavily searched concurrency concepts with exceptional loop-retention potential.",
+      "rationale": "The Global Interpreter Lock is a classic stumbling block for Python developers moving into concurrent programming, driving massive search volume and curiosity.",
       "search_evidence": "python gil explained",
       "educational_visuals": [
-        "Architecture diagrams",
-        "Code execution visualization",
-        "State transitions"
-      ],
-      "hook_angle": "Why does your 8-core CPU run your Python multi-threaded script on just ONE core? Let's expose the Global Interpreter Lock.",
-      "channel_affinity_score": 95,
-      "trend_score": 92,
-      "priority_score": 94,
-      "status": "pending",
-      "created_at": "2026-11-22T10:56:42.923Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795345003061_6ox4v4",
-      "topic": "LSM Trees vs B-Trees: How Databases Write at Scale",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "High-throughput database engines rely heavily on Log-Structured Merge-trees vs traditional B-Trees; developers searching for this architectural difference expect deep, clear storage engine trade-offs.",
-      "search_evidence": "lsm tree vs b tree",
-      "educational_visuals": [
         "Animated system flows",
-        "Data-flow diagrams",
-        "Trees and graphs"
-      ],
-      "hook_angle": "Why do write-heavy databases like Cassandra and RocksDB completely reject traditional B-Trees? The answer is LSM Trees.",
-      "channel_affinity_score": 90,
-      "trend_score": 94,
-      "priority_score": 92,
-      "status": "pending",
-      "created_at": "2026-11-22T10:56:43.061Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795345003325_3edzu",
-      "topic": "Python Strategy Design Pattern: Clean Up Conditional Spaghetti",
-      "category": "Python",
-      "target_length": "short",
-      "rationale": "Developers looking to replace massive if-else blocks with clean architectural patterns search for language-specific implementations like the Strategy Pattern in Python.",
-      "search_evidence": "strategy design pattern python",
-      "educational_visuals": [
-        "Architecture diagrams",
-        "Code execution visualization",
-        "Data-flow diagrams"
-      ],
-      "hook_angle": "Tired of maintaining 500-line if-else blocks in your Python codebase? Let's refactor them instantly using the Strategy Pattern.",
-      "channel_affinity_score": 94,
-      "trend_score": 88,
-      "priority_score": 91,
-      "status": "pending",
-      "created_at": "2026-11-22T10:56:43.325Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795345003289_gf6o9jj",
-      "topic": "Stack vs Heap Memory: Where Does Your Data Actually Live?",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "Fundamental memory management questions constantly drive high search volumes across junior and mid-level developers trying to debug segmentation faults and memory leaks.",
-      "search_evidence": "stack vs heap memory allocation",
-      "educational_visuals": [
-        "State transitions",
-        "Code execution visualization",
-        "Data-flow diagrams"
-      ],
-      "hook_angle": "Stop guessing why your program threw a stack overflow. Let's trace exactly how variables are allocated in Stack vs Heap memory.",
-      "channel_affinity_score": 88,
-      "trend_score": 95,
-      "priority_score": 91,
-      "status": "pending",
-      "created_at": "2026-11-22T10:56:43.289Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795345003324_92ny2f",
-      "topic": "Circuit Breaker Pattern: Keep Microservices from Crashing",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "Resilience patterns are critical for distributed backend systems, making microservice failure isolation via circuit breakers an evergreen high-intent search topic.",
-      "search_evidence": "circuit breaker pattern microservices",
-      "educational_visuals": [
-        "Animated system flows",
-        "State transitions",
-        "Architecture diagrams"
-      ],
-      "hook_angle": "When a downstream database dies, why does your entire microservices architecture collapse like dominoes? You need a Circuit Breaker.",
-      "channel_affinity_score": 91,
-      "trend_score": 90,
-      "priority_score": 90,
-      "status": "pending",
-      "created_at": "2026-11-22T10:56:43.324Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795345003165_v634a9",
-      "topic": "Save RAM with Redis Bloom Filters: O(1) Probabilistic Sets",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "Distributed caching optimization is a top priority for senior engineers; Bloom filters solve memory exhaustion issues at scale while maintaining instant lookup speeds.",
-      "search_evidence": "bloom filter redis",
-      "educational_visuals": [
-        "Data-flow diagrams",
-        "Architecture diagrams",
         "Code execution visualization"
       ],
-      "hook_angle": "How do you check if a user ID exists among 10 billion records using only a fraction of a megabyte of RAM? Enter Redis Bloom Filters.",
-      "channel_affinity_score": 92,
+      "hook_angle": "Why does adding 8 CPU cores to your Python script make it run slower? The Global Interpreter Lock is secretly sabotaging you.",
+      "channel_affinity_score": 100,
+      "trend_score": 95,
+      "priority_score": 97,
+      "status": "pending",
+      "created_at": "2026-11-22T11:04:59.383Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795345499381_bz4n9",
+      "topic": "Docker Multi-Stage Builds: Slash Container Sizes by 90%",
+      "category": "Docker",
+      "target_length": "short",
+      "rationale": "Developers continually struggle with bloated production images containing build-time dependencies, making this an extremely high-intent search trend for optimizing CI/CD pipelines.",
+      "search_evidence": "docker multi-stage builds",
+      "educational_visuals": [
+        "Architecture diagrams",
+        "Data-flow diagrams"
+      ],
+      "hook_angle": "Your production Docker image is 1.2 gigabytes because you left your compiler inside it. Let's fix that in 2 minutes.",
+      "channel_affinity_score": 100,
+      "trend_score": 92,
+      "priority_score": 96,
+      "status": "pending",
+      "created_at": "2026-11-22T11:04:59.381Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795345499384_n31soe",
+      "topic": "Bloom Filters in Redis: Stop Database Lookups Instantly",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Big data systems rely on probabilistic data structures to save millions of disk reads, making this an elite system design interview and production topic.",
+      "search_evidence": "bloom filter redis",
+      "educational_visuals": [
+        "Architecture diagrams",
+        "State transitions"
+      ],
+      "hook_angle": "How does Redis check if a username exists across billions of records using only a few kilobytes of memory without touching disk?",
+      "channel_affinity_score": 100,
+      "trend_score": 91,
+      "priority_score": 95,
+      "status": "pending",
+      "created_at": "2026-11-22T11:04:59.384Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795345499383_z9p6va",
+      "topic": "LSM Tree vs B-Tree: How Databases Store Your Data",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "High-scale storage engine internals drive deep technical curiosity among backend engineers designing write-heavy vs read-heavy distributed databases.",
+      "search_evidence": "lsm tree vs b tree",
+      "educational_visuals": [
+        "Trees and graphs",
+        "Data-flow diagrams"
+      ],
+      "hook_angle": "MySQL uses B-Trees, but Cassandra uses LSM-Trees. Choosing the wrong one will completely destroy your database write performance.",
+      "channel_affinity_score": 100,
       "trend_score": 89,
+      "priority_score": 94,
+      "status": "pending",
+      "created_at": "2026-11-22T11:04:59.383Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795345499384_tgvi6",
+      "topic": "Circuit Breaker Pattern: Bulletproof Your Microservices",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Microservice resilience is critical for modern backend architectures; engineers constantly search for ways to prevent cascading failures across distributed systems.",
+      "search_evidence": "circuit breaker pattern microservices",
+      "educational_visuals": [
+        "State transitions",
+        "Animated system flows"
+      ],
+      "hook_angle": "When one microservice crashes, why does your entire e-commerce app go down? You need a circuit breaker before production explodes.",
+      "channel_affinity_score": 100,
+      "trend_score": 88,
+      "priority_score": 93,
+      "status": "pending",
+      "created_at": "2026-11-22T11:04:59.384Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795345499385_fi56wb",
+      "topic": "Stack vs Heap Memory: Where Does Your Code Live?",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Memory allocation fundamentals are foundational for systems programming and debugging insidious memory leaks or segmentation faults.",
+      "search_evidence": "stack vs heap memory allocation",
+      "educational_visuals": [
+        "Code execution visualization",
+        "Architecture diagrams"
+      ],
+      "hook_angle": "Stop guessing why your program threw a stack overflow. Let's look inside RAM and map out exactly how Stack and Heap memory work.",
+      "channel_affinity_score": 100,
+      "trend_score": 90,
+      "priority_score": 92,
+      "status": "pending",
+      "created_at": "2026-11-22T11:04:59.385Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795345499385_gakcx",
+      "topic": "Strategy Design Pattern in Python: Clean Up If-Else Hell",
+      "category": "Python",
+      "target_length": "short",
+      "rationale": "Junior to mid-level developers actively search for architectural patterns to refactor massive conditional statement blocks into maintainable polymorphic code.",
+      "search_evidence": "strategy design pattern python",
+      "educational_visuals": [
+        "Trees and graphs",
+        "Code execution visualization"
+      ],
+      "hook_angle": "If your Python class has a 50-line if-elif-else chain, you are committing a cardinal design sin. Here is the Strategy Pattern fix.",
+      "channel_affinity_score": 100,
+      "trend_score": 87,
       "priority_score": 90,
       "status": "pending",
-      "created_at": "2026-11-22T10:56:43.165Z",
+      "created_at": "2026-11-22T11:04:59.385Z",
       "used_at": null
     }
   ]
