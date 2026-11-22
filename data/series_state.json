@@ -1,6 +1,6 @@
 {
   "active_series_id": "dart_internals",
-  "current_episode": 4,
+  "current_episode": 5,
   "total_episodes": 5,
   "history": [
     {
@@ -17,6 +17,11 @@
       "seriesId": "dart_internals",
       "episode": 4,
       "timestamp": "2026-11-21T19:46:40.063Z"
+    },
+    {
+      "seriesId": "dart_internals",
+      "episode": 5,
+      "timestamp": "2026-11-22T20:48:08.642Z"
     }
   ]
 }
