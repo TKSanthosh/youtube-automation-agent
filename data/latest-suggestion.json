@@ -1,23 +1,24 @@
 {
-  "updated_at": "2026-11-22T10:19:22.805Z",
+  "updated_at": "2026-11-22T10:27:38.789Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1795342762799_mlyj3o",
-    "topic": "Python GIL Decoded: True Multithreading Realities",
-    "category": "Python",
+    "id": "sugg_1795343258783_7q6dl5",
+    "topic": "Heartbleed Explained: The Missing Bounds Check That Leaked the Internet",
+    "category": "CS Lore",
     "target_length": "short",
-    "rationale": "Directly targets high-volume search queries regarding the Global Interpreter Lock, helping developers understand how CPython manages thread execution and memory safety.",
-    "search_evidence": "python gil explained",
+    "rationale": "Anatomy of the OpenSSL vulnerability: how an unchecked 64KB length field leaked TLS private keys across the web.",
+    "search_evidence": "heartbleed openssl vulnerability explained buffer overread",
     "educational_visuals": [
-      "State transitions",
-      "Code execution visualization"
+      "Memory bounds check",
+      "Heartbeat packet topology",
+      "Hex dump inspection"
     ],
-    "hook_angle": "Why does your multithreaded Python code run slower than single-threaded code? Blame the GIL.",
-    "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 98,
+    "hook_angle": "In 2014, a single missing if statement in OpenSSL leaked the passwords, private keys, and emails of half the internet.",
+    "channel_affinity_score": 85,
+    "trend_score": 99,
+    "priority_score": 99,
     "status": "pending",
-    "created_at": "2026-11-22T10:19:22.799Z",
+    "created_at": "2026-11-22T10:27:38.783Z",
     "used_at": null
   }
 }
