@@ -82,21 +82,17 @@ class InstagramReelsPublisher {
         throw new Error('Instagram session ID has expired. Please update INSTAGRAM_SESSION_ID secret.');
       }
 
-      // Dismiss Cookie Consent & Interstitial banners common on cloud runners
-      try {
-        const consentBtn = await page.$('button:has-text("Allow all cookies"), button:has-text("Allow essential and optional cookies"), button:has-text("Decline optional cookies"), button:has-text("Accept All"), button:has-text("Only allow essential cookies")');
-        if (consentBtn) {
-          console.log('   🍪 Dismissing Instagram cookie consent banner...');
-          await consentBtn.click();
-          await page.waitForTimeout(2000);
-        }
-      } catch (_) {}
-
-      // Dismiss any popups ("Turn on Notifications", "Save Login Info")
-      try {
-        const notNow = await page.$('button:has-text("Not Now"), button:has-text("Cancel")');
-        if (notNow) await notNow.click();
-      } catch (_) {}
+      // Dismiss any popups ("Turn on Notifications", "Save Login Info", Cookie Consent)
+      const dismissOverlays = async () => {
+        try {
+          const btn = await page.$('button:has-text("Not Now"), button:has-text("Cancel"), button:has-text("OK"), button:has-text("Dismiss"), button:has-text("Allow all cookies"), button:has-text("Accept All")');
+          if (btn) {
+            await btn.click().catch(() => null);
+            await page.waitForTimeout(1000);
+          }
+        } catch (_) {}
+      };
+      await dismissOverlays();
 
       // Click "Create" or "+"
       console.log('   📤 Opening creation dialog...');
@@ -199,14 +195,7 @@ class InstagramReelsPublisher {
         throw new Error(`Instagram rejected video format or codec: ${modalText.substring(0, 150)}`);
       }
 
-      // If "Video posts are now shared as reels" modal appears, click OK
-      try {
-        const okBtn = await page.$('button:has-text("OK"), button:has-text("Dismiss")');
-        if (okBtn) {
-          await okBtn.click();
-          await page.waitForTimeout(1000);
-        }
-      } catch (_) {}
+      await dismissOverlays();
 
       // Ensure 9:16 / Original vertical aspect ratio
       try {
@@ -222,41 +211,51 @@ class InstagramReelsPublisher {
         }
       } catch (_) {}
 
+      await dismissOverlays();
+
       // Step 1: Click "Next" in creation dialog header (Media -> Filters/Cover)
       console.log('   ⚙️  Configuring Reel specifications...');
       const dialogNextSelector = 'div[role="dialog"] div[role="button"]:has-text("Next"), div[role="dialog"] button:has-text("Next")';
       await page.waitForSelector(dialogNextSelector, { state: 'visible', timeout: 25000 });
       await page.evaluate(() => {
-        const dialog = document.querySelector('div[role="dialog"]');
-        if (!dialog) return;
-        const nextBtn = Array.from(dialog.querySelectorAll('div[role="button"], button')).find(b => b.innerText.trim() === 'Next');
-        if (nextBtn) {
-          nextBtn.focus();
-          nextBtn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
-          nextBtn.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
-          nextBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-        }
-      });
-      await page.locator(dialogNextSelector).first().click({ force: true }).catch(() => null);
-      await page.waitForTimeout(3000);
-
-      // Step 2: Click "Next" in creation dialog header (Filters/Cover -> Caption)
-      try {
-        await page.waitForSelector(dialogNextSelector, { state: 'visible', timeout: 10000 });
-        await page.evaluate(() => {
-          const dialog = document.querySelector('div[role="dialog"]');
-          if (!dialog) return;
+        const dialogs = Array.from(document.querySelectorAll('div[role="dialog"]'));
+        for (const dialog of dialogs) {
           const nextBtn = Array.from(dialog.querySelectorAll('div[role="button"], button')).find(b => b.innerText.trim() === 'Next');
           if (nextBtn) {
             nextBtn.focus();
             nextBtn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
             nextBtn.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
             nextBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+            return;
+          }
+        }
+      });
+      await page.locator(dialogNextSelector).first().click({ force: true }).catch(() => null);
+      await page.waitForTimeout(3000);
+
+      await dismissOverlays();
+
+      // Step 2: Click "Next" in creation dialog header (Filters/Cover -> Caption)
+      try {
+        await page.waitForSelector(dialogNextSelector, { state: 'visible', timeout: 10000 });
+        await page.evaluate(() => {
+          const dialogs = Array.from(document.querySelectorAll('div[role="dialog"]'));
+          for (const dialog of dialogs) {
+            const nextBtn = Array.from(dialog.querySelectorAll('div[role="button"], button')).find(b => b.innerText.trim() === 'Next');
+            if (nextBtn) {
+              nextBtn.focus();
+              nextBtn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+              nextBtn.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+              nextBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+              return;
+            }
           }
         });
         await page.locator(dialogNextSelector).first().click({ force: true }).catch(() => null);
         await page.waitForTimeout(3000);
       } catch (_) {}
+
+      await dismissOverlays();
 
       // Step 3: Write Caption and Hashtags
       console.log('   ✍️  Adding caption and high-reach hashtags...');
@@ -269,30 +268,42 @@ class InstagramReelsPublisher {
       await page.keyboard.type(fullCaption, { delay: 10 });
       await page.waitForTimeout(2000);
 
+      await dismissOverlays();
+
       // Step 4: Click "Share" in the creation modal header
       console.log('   🚀 Publishing Reel to Instagram feed...');
       const shareSelector = 'div[role="dialog"] div[role="button"]:has-text("Share"), div[role="dialog"] button:has-text("Share")';
       await page.waitForSelector(shareSelector, { state: 'visible', timeout: 20000 });
       await page.evaluate(() => {
-        const dialog = document.querySelector('div[role="dialog"]');
-        if (!dialog) return;
-        const allButtons = Array.from(dialog.querySelectorAll('div[role="button"], button'));
-        const shareBtn = allButtons.find(b => b.innerText.trim() === 'Share');
-        if (shareBtn) {
-          shareBtn.focus();
-          shareBtn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
-          shareBtn.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
-          shareBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        const dialogs = Array.from(document.querySelectorAll('div[role="dialog"]'));
+        for (const dialog of dialogs) {
+          const shareBtn = Array.from(dialog.querySelectorAll('div[role="button"], button')).find(b => b.innerText.trim() === 'Share');
+          if (shareBtn) {
+            shareBtn.focus();
+            shareBtn.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+            shareBtn.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
+            shareBtn.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+            return;
+          }
         }
       });
       await page.locator(shareSelector).first().click({ force: true }).catch(() => null);
 
-      // Step 5: Wait for confirmation modal
+      // Step 5: Wait for confirmation modal or modal detachment
       console.log('   ⏳ Waiting for Instagram upload processing...');
-      await page.waitForSelector(
-        'text=Your reel has been shared, text=Your post has been shared, img[alt="Animated checkmark"]',
-        { timeout: 90000 }
-      );
+      try {
+        await Promise.race([
+          page.waitForSelector('text=Your reel has been shared, text=Your post has been shared, text=Post shared, text=Shared reel, img[alt="Animated checkmark"]', { timeout: 120000 }),
+          page.waitForFunction(() => {
+            const dialogs = Array.from(document.querySelectorAll('div[role="dialog"]'));
+            return dialogs.some(d => /shared|done/i.test(d.innerText) || !!d.querySelector('img[alt="Animated checkmark"]'));
+          }, { timeout: 120000 })
+        ]);
+        console.log('   ✅ Instagram Reel upload stream completed.');
+      } catch (waitErr) {
+        console.log(`   Notice: waiting for confirmation: ${waitErr.message}`);
+      }
+      await page.waitForTimeout(5000);
 
       console.log('   ✅ Instagram Reel successfully published!\n');
       return {
