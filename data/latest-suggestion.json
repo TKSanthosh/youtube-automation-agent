@@ -1,24 +1,24 @@
 {
-  "updated_at": "2026-11-22T10:49:24.424Z",
+  "updated_at": "2026-11-22T10:56:43.328Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1795344564418_2lnlca",
-    "topic": "Python GIL Explained: Why Multi-Threading Lies To You",
+    "id": "sugg_1795345002923_wpftnw",
+    "topic": "Python GIL Explained: Why Threads Don't Use Multi-Cores",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Python developers frequently hit performance ceilings when scaling CPU-bound tasks with threads. Explaining the Global Interpreter Lock clears up massive confusion around why multi-threading fails to use multiple cores.",
+    "rationale": "Python developers frequently hit performance bottlenecks when scaling CPU-bound tasks, making the GIL one of the most heavily searched concurrency concepts with exceptional loop-retention potential.",
     "search_evidence": "python gil explained",
     "educational_visuals": [
       "Architecture diagrams",
-      "Data-flow diagrams",
-      "Code execution visualization"
+      "Code execution visualization",
+      "State transitions"
     ],
-    "hook_angle": "Your multi-threaded Python code is running on a single core, and you don't even know why.",
-    "channel_affinity_score": 100,
-    "trend_score": 95,
-    "priority_score": 98,
+    "hook_angle": "Why does your 8-core CPU run your Python multi-threaded script on just ONE core? Let's expose the Global Interpreter Lock.",
+    "channel_affinity_score": 95,
+    "trend_score": 92,
+    "priority_score": 94,
     "status": "pending",
-    "created_at": "2026-11-22T10:49:24.418Z",
+    "created_at": "2026-11-22T10:56:42.923Z",
     "used_at": null
   }
 }
