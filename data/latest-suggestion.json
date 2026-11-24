@@ -1,24 +1,23 @@
 {
-  "updated_at": "2026-11-24T01:43:06.034Z",
+  "updated_at": "2026-11-24T23:30:58.522Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1795484586027_mnn5f",
-    "topic": "Heartbleed Explained: The Missing Bounds Check That Leaked the Internet",
-    "category": "CS Lore",
+    "id": "sugg_1795563058516_nf6sf9",
+    "topic": "Python GIL Explained: Why Multi-Threading Lies to You",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "Anatomy of the OpenSSL vulnerability: how an unchecked 64KB length field leaked TLS private keys across the web.",
-    "search_evidence": "heartbleed openssl vulnerability explained buffer overread",
+    "rationale": "Python developers constantly hit CPU-bound bottlenecks when using threads and search for the Global Interpreter Lock to understand why their multi-threaded code never uses multiple cores.",
+    "search_evidence": "python gil explained",
     "educational_visuals": [
-      "Memory bounds check",
-      "Heartbeat packet topology",
-      "Hex dump inspection"
+      "State transitions",
+      "Code execution visualization"
     ],
-    "hook_angle": "In 2014, a single missing if statement in OpenSSL leaked the passwords, private keys, and emails of half the internet.",
-    "channel_affinity_score": 85,
-    "trend_score": 99,
-    "priority_score": 99,
+    "hook_angle": "Why does adding more threads to your Python script make it run slower instead of faster? The answer is hiding inside CPython's dirty little secret.",
+    "channel_affinity_score": 100,
+    "trend_score": 95,
+    "priority_score": 97,
     "status": "pending",
-    "created_at": "2026-11-24T01:43:06.027Z",
+    "created_at": "2026-11-24T23:30:58.516Z",
     "used_at": null
   }
 }

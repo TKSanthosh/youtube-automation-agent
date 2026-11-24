@@ -1,183 +1,138 @@
 {
-  "updated_at": "2026-11-24T01:43:06.034Z",
-  "total_suggestions": 9,
+  "updated_at": "2026-11-24T23:30:58.522Z",
+  "total_suggestions": 7,
   "suggestions": [
     {
-      "id": "sugg_1795484586027_mnn5f",
-      "topic": "Heartbleed Explained: The Missing Bounds Check That Leaked the Internet",
-      "category": "CS Lore",
+      "id": "sugg_1795563058516_nf6sf9",
+      "topic": "Python GIL Explained: Why Multi-Threading Lies to You",
+      "category": "Python",
       "target_length": "short",
-      "rationale": "Anatomy of the OpenSSL vulnerability: how an unchecked 64KB length field leaked TLS private keys across the web.",
-      "search_evidence": "heartbleed openssl vulnerability explained buffer overread",
-      "educational_visuals": [
-        "Memory bounds check",
-        "Heartbeat packet topology",
-        "Hex dump inspection"
-      ],
-      "hook_angle": "In 2014, a single missing if statement in OpenSSL leaked the passwords, private keys, and emails of half the internet.",
-      "channel_affinity_score": 85,
-      "trend_score": 99,
-      "priority_score": 99,
-      "status": "pending",
-      "created_at": "2026-11-24T01:43:06.027Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795484586030_sepmd",
-      "topic": "How Hash Tables Resolve Collisions: Separate Chaining vs Open Addressing",
-      "category": "DSA",
-      "target_length": "short",
-      "rationale": "Core DSA interview question with massive developer interest; visual mental model of bucket arrays and linked lists.",
-      "search_evidence": "hash table collision resolution separate chaining vs open addressing",
-      "educational_visuals": [
-        "Trees and graphs",
-        "Data-flow diagrams",
-        "Code execution visualization"
-      ],
-      "hook_angle": "What happens when two different keys hash to the exact same memory bucket?",
-      "channel_affinity_score": 85,
-      "trend_score": 98,
-      "priority_score": 98,
-      "status": "pending",
-      "created_at": "2026-11-24T01:43:06.030Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795484586029_l40bd9",
-      "topic": "Fast Inverse Square Root: The 0x5f3759df Hack That Built 3D Gaming",
-      "category": "CS Lore",
-      "target_length": "short",
-      "rationale": "Inside John Carmack and Quake III's legendary floating-point bit manipulation hack that computed 1/sqrt(x) 4x faster.",
-      "search_evidence": "fast inverse square root quake 0x5f3759df hack explained",
-      "educational_visuals": [
-        "IEEE 754 float bit shifts",
-        "Newton-Raphson tangent line",
-        "Quake vector lighting"
-      ],
-      "hook_angle": "In 1999, Quake 3 shocked the gaming world with lightning-fast 3D graphics using an impossible magic constant.",
-      "channel_affinity_score": 85,
-      "trend_score": 98,
-      "priority_score": 98,
-      "status": "pending",
-      "created_at": "2026-11-24T01:43:06.029Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795484586031_jbrxa8",
-      "topic": "Brendan Eich Created JavaScript in 10 Days: The Lore & The Bugs",
-      "category": "CS Lore",
-      "target_length": "short",
-      "rationale": "Fireship-style programming lore explaining why JS has quirky behaviors like typeof null === 'object'.",
-      "search_evidence": "brendan eich javascript 10 days history quirks",
-      "educational_visuals": [
-        "Timelines",
-        "Code execution visualization"
-      ],
-      "hook_angle": "In May 1995, one engineer created the language running the entire internet in just 10 days.",
-      "channel_affinity_score": 85,
-      "trend_score": 97,
-      "priority_score": 97,
-      "status": "pending",
-      "created_at": "2026-11-24T01:43:06.031Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795484586029_u2x87t",
-      "topic": "The Therac-25 Tragedy: The Deadliest Race Condition in Software History",
-      "category": "CS Lore",
-      "target_length": "short",
-      "rationale": "Microsecond timing flaw where an unsynchronized 8-bit counter overflowed, dispensing fatal radiation doses.",
-      "search_evidence": "therac 25 race condition bug software engineering ethics",
-      "educational_visuals": [
-        "Thread interleaving race diagram",
-        "Hardware interlock bypass",
-        "Console command state machine"
-      ],
-      "hook_angle": "In 1986, six cancer patients were killed not by hardware failure, but by a software race condition that occurred in less than 8 seconds.",
-      "channel_affinity_score": 85,
-      "trend_score": 97,
-      "priority_score": 97,
-      "status": "pending",
-      "created_at": "2026-11-24T01:43:06.029Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795484586030_oti1e4",
-      "topic": "Why Quicksort Beats Mergesort in Practice: CPU L1/L2 Cache Lines",
-      "category": "DSA",
-      "target_length": "short",
-      "rationale": "Classic Big-O paradox: both are O(N log N), but Quicksort is 3x faster due to hardware cache locality.",
-      "search_evidence": "why quicksort is faster than mergesort cache locality",
-      "educational_visuals": [
-        "Animated system flows",
-        "Architecture diagrams",
-        "Comparisons"
-      ],
-      "hook_angle": "On paper, Mergesort and Quicksort have the exact same time complexity. So why is Quicksort 3 times faster?",
-      "channel_affinity_score": 85,
-      "trend_score": 96,
-      "priority_score": 96,
-      "status": "pending",
-      "created_at": "2026-11-24T01:43:06.030Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795484586032_lvfkxi",
-      "topic": "Memory Management: Stack vs Heap Allocation & Pointer Dereferencing",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "Fundamental computer science concept explaining stack frames, heap pointers, and memory leaks.",
-      "search_evidence": "stack vs heap memory allocation computer science",
+      "rationale": "Python developers constantly hit CPU-bound bottlenecks when using threads and search for the Global Interpreter Lock to understand why their multi-threaded code never uses multiple cores.",
+      "search_evidence": "python gil explained",
       "educational_visuals": [
         "State transitions",
-        "Animated system flows",
         "Code execution visualization"
       ],
-      "hook_angle": "Every variable you declare lives in one of two memory realms: the blazing-fast Stack or the dynamic Heap.",
-      "channel_affinity_score": 85,
+      "hook_angle": "Why does adding more threads to your Python script make it run slower instead of faster? The answer is hiding inside CPython's dirty little secret.",
+      "channel_affinity_score": 100,
       "trend_score": 95,
-      "priority_score": 95,
+      "priority_score": 97,
       "status": "pending",
-      "created_at": "2026-11-24T01:43:06.032Z",
+      "created_at": "2026-11-24T23:30:58.516Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795484586031_vt4yl7",
-      "topic": "Tony Hoare's Billion Dollar Mistake: Why Null Pointers Exist",
-      "category": "CS Lore",
+      "id": "sugg_1795563058517_oyzj7",
+      "topic": "Docker Multi-Stage Builds: Slash Image Size by 90%",
+      "category": "Docker",
       "target_length": "short",
-      "rationale": "The origin story of null references in 1965 ALGOL W and why modern languages like Rust and Swift eliminated them.",
-      "search_evidence": "tony hoare billion dollar mistake null pointer history",
+      "rationale": "Developers struggle with bloated production containers carrying build tools and compilers; multi-stage builds are the definitive industry standard for lean deployments.",
+      "search_evidence": "docker multi-stage builds",
       "educational_visuals": [
         "Architecture diagrams",
-        "Code execution visualization"
+        "Data-flow diagrams"
       ],
-      "hook_angle": "In 1965, a computer scientist made a single design choice that has cost the software industry over a billion dollars in crashes.",
-      "channel_affinity_score": 85,
-      "trend_score": 95,
+      "hook_angle": "Stop shipping 1-gigabyte Docker images to production just because your compiler needed to run for 30 seconds.",
+      "channel_affinity_score": 100,
+      "trend_score": 92,
       "priority_score": 95,
       "status": "pending",
-      "created_at": "2026-11-24T01:43:06.031Z",
+      "created_at": "2026-11-24T23:30:58.517Z",
       "used_at": null
     },
     {
-      "id": "sugg_1795484586031_rukqz4",
-      "topic": "Observer Pattern vs Pub-Sub: The Critical Event-Driven Difference",
-      "category": "Design Patterns",
+      "id": "sugg_1795563058519_ln3y9",
+      "topic": "Circuit Breaker Pattern: Protect Your Microservices",
+      "category": "System Design",
       "target_length": "short",
-      "rationale": "ByteByteGo-style architecture comparison: tight coupling vs message broker decoupling.",
-      "search_evidence": "observer pattern vs publish subscribe pattern system design",
+      "rationale": "Distributed systems fail unpredictably; without fault-tolerance patterns, a single slow downstream service can cascade and take down an entire enterprise backend.",
+      "search_evidence": "circuit breaker pattern microservices",
       "educational_visuals": [
-        "Architecture diagrams",
-        "Data-flow diagrams",
-        "Comparisons"
+        "State transitions",
+        "Architecture diagrams"
       ],
-      "hook_angle": "Junior developers think Observer and Pub-Sub are identical. Senior engineers know the event broker changes everything.",
-      "channel_affinity_score": 85,
-      "trend_score": 94,
+      "hook_angle": "When one microservice crashes, why does your entire application suddenly throw cascading 500 errors?",
+      "channel_affinity_score": 90,
+      "trend_score": 96,
       "priority_score": 94,
       "status": "pending",
-      "created_at": "2026-11-24T01:43:06.031Z",
+      "created_at": "2026-11-24T23:30:58.519Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795563058518_3a6qus",
+      "topic": "Bloom Filters in Redis: Stop Database Cache Misses",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Engineers scaling large distributed systems battle catastrophic cache penetration; probabilistic data structures like Bloom filters provide an elegant space-efficient safeguard.",
+      "search_evidence": "bloom filter redis",
+      "educational_visuals": [
+        "Data-flow diagrams",
+        "Animated system flows"
+      ],
+      "hook_angle": "How can you check if a user exists across a billion records in memory without using more than a few kilobytes of RAM?",
+      "channel_affinity_score": 95,
+      "trend_score": 91,
+      "priority_score": 93,
+      "status": "pending",
+      "created_at": "2026-11-24T23:30:58.518Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795563058520_2cxvh",
+      "topic": "Strategy Pattern in Python: Kill Complex If-Else Chains",
+      "category": "Python",
+      "target_length": "short",
+      "rationale": "Growing codebases become unmaintainable spaghetti monsters filled with nested conditional statements; behavioral design patterns offer clean, extensible polymorphism.",
+      "search_evidence": "strategy design pattern python",
+      "educational_visuals": [
+        "Architecture diagrams",
+        "Code execution visualization"
+      ],
+      "hook_angle": "If your Python function has a 50-line conditional block checking payment types, you are writing legacy code.",
+      "channel_affinity_score": 95,
+      "trend_score": 90,
+      "priority_score": 92,
+      "status": "pending",
+      "created_at": "2026-11-24T23:30:58.520Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795563058518_7hml0e",
+      "topic": "LSM Tree vs B-Tree: How Databases Store Your Data",
+      "category": "Databases",
+      "target_length": "short",
+      "rationale": "High-throughput system design interviews and real-world database tuning require deep comprehension of write-heavy vs read-heavy storage engine mechanics.",
+      "search_evidence": "lsm tree vs b tree",
+      "educational_visuals": [
+        "Trees and graphs",
+        "Animated system flows"
+      ],
+      "hook_angle": "Why do NoSQL databases like Cassandra write data instantly while traditional SQL databases grind your disk IO to a halt?",
+      "channel_affinity_score": 90,
+      "trend_score": 94,
+      "priority_score": 92,
+      "status": "pending",
+      "created_at": "2026-11-24T23:30:58.518Z",
+      "used_at": null
+    },
+    {
+      "id": "sugg_1795563058519_4n77c6",
+      "topic": "Stack vs Heap Memory: Where Does Your Code Live?",
+      "category": "System Design",
+      "target_length": "short",
+      "rationale": "Memory management fundamentals are heavily searched by engineers transitioning from high-level scripting languages to systems programming and performance optimization.",
+      "search_evidence": "stack vs heap memory allocation",
+      "educational_visuals": [
+        "Code execution visualization",
+        "Architecture diagrams"
+      ],
+      "hook_angle": "Segmentation faults and stack overflows happen when you confuse the two memory zones where your variables actually live.",
+      "channel_affinity_score": 90,
+      "trend_score": 93,
+      "priority_score": 91,
+      "status": "pending",
+      "created_at": "2026-11-24T23:30:58.519Z",
       "used_at": null
     }
   ]
