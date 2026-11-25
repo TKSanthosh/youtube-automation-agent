@@ -1,11 +1,11 @@
 {
   "iterationNumber": 1,
-  "videoId": "LPUKjNrRwn4",
-  "title": "[DART & FLUTTER #5] Flutter Compilation: JIT Debugging vs AOT Production Speed",
+  "videoId": "LYp7EL2gWRI",
+  "title": "[GO CONCURRENCY #1] Goroutines vs OS Threads: Why Go Uses 2KB Stacks",
   "category": "tech",
   "targetLength": "short",
   "metricsAnalyzed": {
-    "analyzedAt": "2026-11-24T01:46:21.661Z",
+    "analyzedAt": "2026-11-25T23:12:58.361Z",
     "videoDurationSeconds": null,
     "totalScenes": null
   },
@@ -24,5 +24,5 @@
   },
   "qualityScore": 8.2,
   "appliedToNext": false,
-  "id": "enh_1795484781661_ie9bmf"
+  "id": "enh_1795648378361_tv775"
 }

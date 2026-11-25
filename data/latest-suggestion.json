@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-11-24T23:30:58.522Z",
+  "updated_at": "2026-11-25T23:09:36.769Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1795563058516_nf6sf9",
-    "topic": "Python GIL Explained: Why Multi-Threading Lies to You",
+    "id": "sugg_1795648176762_ryxra",
+    "topic": "Python GIL Explained: Why Multi-threading Lies to You",
     "category": "Python",
     "target_length": "short",
-    "rationale": "Python developers constantly hit CPU-bound bottlenecks when using threads and search for the Global Interpreter Lock to understand why their multi-threaded code never uses multiple cores.",
+    "rationale": "Python's Global Interpreter Lock is a classic bottleneck that confuses developers transitioning from languages like Java or C++. Breaking this down visually drives massive watch-time and loop retention on Shorts.",
     "search_evidence": "python gil explained",
     "educational_visuals": [
-      "State transitions",
+      "Animated system flows",
       "Code execution visualization"
     ],
-    "hook_angle": "Why does adding more threads to your Python script make it run slower instead of faster? The answer is hiding inside CPython's dirty little secret.",
+    "hook_angle": "Why does adding more threads to your Python script actually make it slower?",
     "channel_affinity_score": 100,
     "trend_score": 95,
-    "priority_score": 97,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-11-24T23:30:58.516Z",
+    "created_at": "2026-11-25T23:09:36.762Z",
     "used_at": null
   }
 }
