@@ -1,138 +1,24 @@
 {
-  "updated_at": "2026-11-25T23:09:36.769Z",
-  "total_suggestions": 7,
+  "updated_at": "2026-11-26T23:02:00.448Z",
+  "total_suggestions": 1,
   "suggestions": [
     {
-      "id": "sugg_1795648176762_ryxra",
-      "topic": "Python GIL Explained: Why Multi-threading Lies to You",
-      "category": "Python",
+      "id": "sugg_1795734120445_dq1hy8",
+      "topic": "...",
+      "category": "...",
       "target_length": "short",
-      "rationale": "Python's Global Interpreter Lock is a classic bottleneck that confuses developers transitioning from languages like Java or C++. Breaking this down visually drives massive watch-time and loop retention on Shorts.",
-      "search_evidence": "python gil explained",
+      "rationale": "...",
+      "search_evidence": "...",
       "educational_visuals": [
-        "Animated system flows",
-        "Code execution visualization"
+        "...",
+        "..."
       ],
-      "hook_angle": "Why does adding more threads to your Python script actually make it slower?",
-      "channel_affinity_score": 100,
-      "trend_score": 95,
-      "priority_score": 98,
-      "status": "pending",
-      "created_at": "2026-11-25T23:09:36.762Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795648176764_1eu23i",
-      "topic": "LSM Tree vs B-Tree: How Databases Store Your Data",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "High-intent system design queries around storage engines attract senior engineers and interview candidates. Comparing write-heavy vs read-heavy architectures provides instant high-value learning.",
-      "search_evidence": "lsm tree vs b tree",
-      "educational_visuals": [
-        "Trees and graphs",
-        "Data-flow diagrams"
-      ],
-      "hook_angle": "Postgres uses B-Trees, but Cassandra uses LSM Trees. Choosing the wrong one destroys write performance.",
-      "channel_affinity_score": 100,
-      "trend_score": 92,
-      "priority_score": 96,
-      "status": "pending",
-      "created_at": "2026-11-25T23:09:36.764Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795648176765_t18h9",
-      "topic": "Docker Multi-Stage Builds: Slash Image Size by 90%",
-      "category": "Docker",
-      "target_length": "short",
-      "rationale": "Bloated Docker images slow down CI/CD pipelines and security audits. Multi-stage builds are a universal best practice that every containerized workflow needs.",
-      "search_evidence": "docker multi-stage builds",
-      "educational_visuals": [
-        "Architecture diagrams",
-        "Data-flow diagrams"
-      ],
-      "hook_angle": "Your production Docker image is 1.2GB. Here is how to shrink it down to 40MB in two steps.",
-      "channel_affinity_score": 100,
-      "trend_score": 94,
-      "priority_score": 95,
-      "status": "pending",
-      "created_at": "2026-11-25T23:09:36.765Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795648176764_uq9uah",
-      "topic": "Bloom Filters in Redis: Stop Wasting RAM on Lookups",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "Developers scaling backend systems frequently hit cache-penetration bottlenecks. Demonstrating probabilistic data structures with Redis hooks viewers looking for production optimizations.",
-      "search_evidence": "bloom filter redis",
-      "educational_visuals": [
-        "Data-flow diagrams",
-        "Animated system flows"
-      ],
-      "hook_angle": "How does Redis check if a user exists across a billion records using only a few kilobytes of RAM?",
-      "channel_affinity_score": 100,
+      "hook_angle": "...",
+      "channel_affinity_score": 85,
       "trend_score": 90,
-      "priority_score": 94,
+      "priority_score": 88,
       "status": "pending",
-      "created_at": "2026-11-25T23:09:36.764Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795648176766_2tld47",
-      "topic": "Circuit Breaker Pattern: Save Microservices from Cascading Failures",
-      "category": "System Design",
-      "target_length": "short",
-      "rationale": "Distributed system resilience is a top interview and production topic. Explaining Closed, Open, and Half-Open states visually prevents outage domino effects.",
-      "search_evidence": "circuit breaker pattern microservices",
-      "educational_visuals": [
-        "State transitions",
-        "Animated system flows"
-      ],
-      "hook_angle": "One downstream API failure just took down your entire microservices architecture. Here is how to fix it.",
-      "channel_affinity_score": 100,
-      "trend_score": 91,
-      "priority_score": 93,
-      "status": "pending",
-      "created_at": "2026-11-25T23:09:36.766Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795648176765_g22we",
-      "topic": "Kubernetes Pod Lifecycle: Master Container States",
-      "category": "Kubernetes",
-      "target_length": "short",
-      "rationale": "Debugging crash loop backoffs requires deep understanding of K8s pod phases. A precise state-machine breakdown appeals directly to DevOps and platform engineers.",
-      "search_evidence": "kubernetes pod lifecycle",
-      "educational_visuals": [
-        "State transitions",
-        "Architecture diagrams"
-      ],
-      "hook_angle": "Stop guessing why your Kubernetes pod is stuck in ContainerCreating. Here is its exact lifecycle.",
-      "channel_affinity_score": 100,
-      "trend_score": 88,
-      "priority_score": 92,
-      "status": "pending",
-      "created_at": "2026-11-25T23:09:36.765Z",
-      "used_at": null
-    },
-    {
-      "id": "sugg_1795648176766_kihn7d",
-      "topic": "Strategy Pattern in Python: Clean Up Massive If-Else Chains",
-      "category": "Python",
-      "target_length": "short",
-      "rationale": "Junior-to-mid level Python developers constantly struggle with messy conditional logic. The Strategy design pattern provides an elegant, object-oriented refactoring path.",
-      "search_evidence": "strategy design pattern python",
-      "educational_visuals": [
-        "Code execution visualization",
-        "Architecture diagrams"
-      ],
-      "hook_angle": "Stop writing 200-line if-else blocks. Use this clean design pattern instead.",
-      "channel_affinity_score": 100,
-      "trend_score": 89,
-      "priority_score": 91,
-      "status": "pending",
-      "created_at": "2026-11-25T23:09:36.766Z",
+      "created_at": "2026-11-26T23:02:00.445Z",
       "used_at": null
     }
   ]
