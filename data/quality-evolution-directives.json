@@ -1,11 +1,11 @@
 {
   "iterationNumber": 1,
-  "videoId": "1Il4rOYeyUA",
-  "title": "[GO CONCURRENCY #2] Go Channels: Unbuffered vs Buffered Deadlock Mechanics",
+  "videoId": "T0T84dTkEys",
+  "title": "[GO CONCURRENCY #3] Go Mutex: Starvation Mode & Spinlock Contention",
   "category": "tech",
   "targetLength": "short",
   "metricsAnalyzed": {
-    "analyzedAt": "2026-11-26T23:04:55.072Z",
+    "analyzedAt": "2026-11-27T22:46:55.910Z",
     "videoDurationSeconds": null,
     "totalScenes": null
   },
@@ -24,5 +24,5 @@
   },
   "qualityScore": 8.2,
   "appliedToNext": false,
-  "id": "enh_1795734295072_u2xsp"
+  "id": "enh_1795819615910_4t98u"
 }

@@ -1,23 +1,23 @@
 {
-  "updated_at": "2026-11-26T23:02:00.448Z",
+  "updated_at": "2026-11-27T22:44:53.464Z",
   "has_suggestion": true,
   "suggestion": {
-    "id": "sugg_1795734120445_dq1hy8",
-    "topic": "...",
-    "category": "...",
+    "id": "sugg_1795819492639_1bg5sp",
+    "topic": "Python GIL Explained: Why Multi-Threading Lies to You",
+    "category": "Python",
     "target_length": "short",
-    "rationale": "...",
-    "search_evidence": "...",
+    "rationale": "Python developers constantly hit CPU-bound performance bottlenecks and are mystified why adding threads doesn't speed up execution. Explaining the Global Interpreter Lock satisfies massive active search volume.",
+    "search_evidence": "python gil explained",
     "educational_visuals": [
-      "...",
-      "..."
+      "Architecture diagrams",
+      "Code execution visualization"
     ],
-    "hook_angle": "...",
-    "channel_affinity_score": 85,
-    "trend_score": 90,
-    "priority_score": 88,
+    "hook_angle": "Your multi-threaded Python code is secretly running on a single CPU core—here is why the GIL is lying to you.",
+    "channel_affinity_score": 100,
+    "trend_score": 95,
+    "priority_score": 98,
     "status": "pending",
-    "created_at": "2026-11-26T23:02:00.445Z",
+    "created_at": "2026-11-27T22:44:52.639Z",
     "used_at": null
   }
 }

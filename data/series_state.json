@@ -1,6 +1,6 @@
 {
   "active_series_id": "go_internals",
-  "current_episode": 3,
+  "current_episode": 4,
   "total_episodes": 5,
   "history": [
     {
@@ -37,6 +37,11 @@
       "seriesId": "go_internals",
       "episode": 3,
       "timestamp": "2026-11-26T23:04:55.073Z"
+    },
+    {
+      "seriesId": "go_internals",
+      "episode": 4,
+      "timestamp": "2026-11-27T22:46:55.912Z"
     }
   ]
 }
